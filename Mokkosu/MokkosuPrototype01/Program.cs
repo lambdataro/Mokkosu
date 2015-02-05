@@ -22,7 +22,10 @@ namespace Mokkosu
             var parse_context = new ParseContext(lexer);
 
             var expr = Parser.Parse(parse_context);
+            var type = Typeinf.Start(expr);
+
             System.Console.WriteLine(expr);
+            System.Console.WriteLine(type);
         }
     }
 }

@@ -28,7 +28,14 @@ namespace Mokkosu
 
         public override string ToString()
         {
-            return string.Format("<{0}>", Id);
+            if (Var == null)
+            {
+                return string.Format("<{0}>", Id);
+            }
+            else
+            {
+                return Var.ToString();
+            }
         }
     }
 

@@ -136,7 +136,7 @@
 
         public override string ToString()
         {
-            return Name;
+            return string.Format("({0} : {1})", Name, VarType);
         }
     }
 
@@ -158,7 +158,7 @@
 
         public override string ToString()
         {
-            return string.Format("(\\{0} -> {1})", ArgName, Body);
+            return string.Format("(\\{0} : {1} -> {2})", ArgName, ArgType, Body);
         }
     }
 
@@ -202,7 +202,7 @@
 
         public override string ToString()
         {
-            return string.Format("(let {0} = {1} in {2})", VarName, E1, E2);
+            return string.Format("(let {0} : {1} = {2} in {3})", VarName, VarType, E1, E2);
         }
     }
 

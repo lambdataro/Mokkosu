@@ -69,9 +69,12 @@ namespace Mokkosu
             Tail = tail;
         }
 
-        public static Env<T> Empty()
+        public static Env<T> Empty
         {
-            return null;
+            get
+            {
+                return null;
+            }
         }
 
         public static bool IsEmpty(Env<T> assoc_list)

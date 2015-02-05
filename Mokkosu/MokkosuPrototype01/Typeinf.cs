@@ -11,8 +11,17 @@ namespace Mokkosu
     /// </summary>
     static class Typeinf
     {
-        public static void Start(SExpr expr)
+        /// <summary>
+        /// 式を型推論してその型を返す
+        /// </summary>
+        /// <param name="expr">型推論する式</param>
+        /// <returns>式の型</returns>
+        public static Type Start(SExpr expr)
         {
+            var type = new TypeVar();
+            var tenv = TEnv.Empty;
+            Inference(expr, type, tenv);
+            return type;
         }
 
         /// <summary>
@@ -72,46 +81,46 @@ namespace Mokkosu
                 Unification(t1.ArgType, t2.ArgType);
                 Unification(t1.RetType, t2.RetType);
             }
-            else if (type1 is TypeVar && type2 is TypeVar)
+            else if (type1 is TypeVar)
             {
                 var t1 = (TypeVar)type1;
-                var t2 = (TypeVar)type2;
-                // 同じ型変数
-                if (t1.Id == t2.Id)
+                if (type2 is TypeVar && t1.Id == ((TypeVar)type2).Id)
                 {
                     // 何もしない
                 }
-                // 片方が代入済み
-                else if (t1.Var != null)
-                {
-                    Unification(t1.Var, t2);
-                }
-                else if (t2.Var != null)
-                {
-                    Unification(t1, t2.Var);
-                }
-                // 片方が未代入
                 else if (t1.Var == null)
                 {
-                    if (OccursCheck(t1.Id, t2))
+                    if (OccursCheck(t1.Id, type2))
                     {
                         throw new Error("型エラー (出現違反");
                     }
                     else
                     {
-                        t1.Var = t2;
+                        t1.Var = type2;
                     }
                 }
-                else if (t2.Var == null)
+                else
                 {
-                    if (OccursCheck(t2.Id, t1))
+                    Unification(t1.Var, type2);
+                }
+            }
+            else if (type2 is TypeVar)
+            {
+                var t2 = (TypeVar)type2;
+                if (t2.Var == null)
+                {
+                    if (OccursCheck(t2.Id, type1))
                     {
                         throw new Error("型エラー (出現違反)");
                     }
                     else
                     {
-                        t2.Var = t1;
+                        t2.Var = type1;
                     }
+                }
+                else
+                {
+                    Unification(type1, t2.Var);
                 }
             }
             else
