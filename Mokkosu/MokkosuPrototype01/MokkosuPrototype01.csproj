@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Error.cs" />
     <Compile Include="InputStream.cs" />
+    <Compile Include="Lexer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
