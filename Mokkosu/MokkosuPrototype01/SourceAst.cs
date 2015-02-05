@@ -18,6 +18,11 @@
         {
             Value = Value;
         }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 
     /// <summary>
@@ -44,6 +49,11 @@
             : base(lhs, rhs)
         {
         }
+
+        public override string ToString()
+        {
+            return string.Format("({0} + {1})", Lhs, Rhs);
+        }
     }
 
     /// <summary>
@@ -54,6 +64,11 @@
         public SSub(SExpr lhs, SExpr rhs)
             : base(lhs, rhs)
         {
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0} - {1})", Lhs, Rhs);
         }
     }
 
@@ -66,6 +81,11 @@
             : base(lhs, rhs)
         {
         }
+
+        public override string ToString()
+        {
+            return string.Format("({0} * {1})", Lhs, Rhs);
+        }
     }
 
     /// <summary>
@@ -77,6 +97,11 @@
             : base(lhs, rhs)
         {
         }
+
+        public override string ToString()
+        {
+            return string.Format("({0} / {1})", Lhs, Rhs);
+        }
     }
 
     /// <summary>
@@ -87,6 +112,11 @@
         public SEq(SExpr lhs, SExpr rhs)
             : base(lhs, rhs)
         {
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0} == {1})", Lhs, Rhs);
         }
     }
 
@@ -100,6 +130,11 @@
         public SVar(string name)
         {
             Name = name;
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 
@@ -116,6 +151,11 @@
             ArgName = arg_name;
             Body = body;
         }
+
+        public override string ToString()
+        {
+            return string.Format("(\\{0} -> {1})", ArgName, Body);
+        }
     }
 
     /// <summary>
@@ -131,6 +171,11 @@
             FunExpr = fun_expr;
             ArgExpr = arg_expr;
         }
+
+        public override string ToString()
+        {
+            return string.Format("({0} {1})", FunExpr, ArgExpr);
+        }
     }
 
     class SLet : SExpr
@@ -144,6 +189,11 @@
             VarName = var_name;
             E1 = e1;
             E2 = e2;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(let {0} = {1} in {2})", VarName, E1, E2);
         }
     }
 
@@ -162,6 +212,11 @@
             ThenExpr = then_expr;
             ElseExpr = else_expr;
         }
+
+        public override string ToString()
+        {
+            return string.Format("(if {0} then {1} else {2})", CondExpr, ThenExpr, ElseExpr);
+        }
     }
 
     /// <summary>
@@ -174,6 +229,11 @@
         public SPrint(SExpr body)
         {
             Body = body;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(print {0})", Body);
         }
     }
 }
