@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mokkosu
 {
@@ -11,6 +12,12 @@ namespace Mokkosu
         {
         }
 
+        /// <summary>
+        /// 出現検査
+        /// </summary>
+        /// <param name="id">型変数ID</param>
+        /// <param name="type">型</param>
+        /// <returns>型に型変数IDが含まれていれば真そうでなければ偽</returns>
         static bool OccursCheck(int id, Type type)
         {
             if (type is TypeVar)
@@ -44,6 +51,11 @@ namespace Mokkosu
             }
         }
 
+        /// <summary>
+        /// 単一化
+        /// </summary>
+        /// <param name="type1">型1</param>
+        /// <param name="type2">型2</param>
         static void Unification(Type type1, Type type2)
         {
             if (type1 is IntType && type2 is IntType)
@@ -102,6 +114,72 @@ namespace Mokkosu
             else
             {
                 throw new Error("型エラー (単一化エラー)");
+            }
+        }
+
+        /// <summary>
+        /// 型中に自由に出現する型変数の集合を返す
+        /// </summary>
+        /// <param name="type">型</param>
+        /// <returns>自由に出現する型変数の集合</returns>
+        static ImmutableHashSet<int> FreeVars(Type type)
+        {
+            if (type is TypeVar)
+            {
+                var t = (TypeVar)type;
+                if (t.Var == null)
+                {
+                    return new ImmutableHashSet<int>(t.Id);
+                }
+                else
+                {
+                    return FreeVars(t.Var);
+                }
+            }
+            else if (type is IntType)
+            {
+                return new ImmutableHashSet<int>();
+            }
+            else if (type is FunType)
+            {
+                var t = (FunType)type;
+                var set1 = FreeVars(t.ArgType);
+                var set2 = FreeVars(t.RetType);
+                return ImmutableHashSet<int>.Union(set1, set2);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// 型スキーム中で自由に出現する型変数の集合を返す
+        /// </summary>
+        /// <param name="typescheme">型スキーム</param>
+        /// <returns>自由に出現する型変数の集合</returns>
+        static ImmutableHashSet<int> FreeVars(TypeScheme typescheme)
+        {
+            var set = FreeVars(typescheme.Type);
+            return ImmutableHashSet<int>.Diff(set, typescheme.Bounded);
+        }
+
+        /// <summary>
+        /// 型環境中で自由に出現する型変数の集合を返す
+        /// </summary>
+        /// <param name="tenv">型環境</param>
+        /// <returns>自由に出現する型変数の集合</returns>
+        static ImmutableHashSet<int> FreeVars(Env<TypeScheme> tenv)
+        {
+            if (Env<TypeScheme>.IsEmpty(tenv))
+            {
+                return new ImmutableHashSet<int>();
+            }
+            else
+            {
+                var set1 = FreeVars(tenv.Value);
+                var set2 = FreeVars(tenv.Tail);
+                return ImmutableHashSet<int>.Union(set1, set2);
             }
         }
     }
