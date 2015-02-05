@@ -50,6 +50,7 @@
     <Compile Include="SourceAst.cs" />
     <Compile Include="Type.cs" />
     <Compile Include="Typeinf.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
