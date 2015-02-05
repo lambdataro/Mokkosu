@@ -126,10 +126,12 @@
     class SVar : SExpr
     {
         public string Name { get; private set; }
+        public Type VarType { get; private set; }
 
         public SVar(string name)
         {
             Name = name;
+            VarType = new TypeVar();
         }
 
         public override string ToString()
@@ -144,11 +146,13 @@
     class SFun : SExpr
     {
         public string ArgName { get; private set; }
+        public Type ArgType { get; private set; }
         public SExpr Body { get; private set; }
 
         public SFun(string arg_name, SExpr body)
         {
             ArgName = arg_name;
+            ArgType = new TypeVar();
             Body = body;
         }
 
@@ -178,15 +182,20 @@
         }
     }
 
+    /// <summary>
+    /// let式
+    /// </summary>
     class SLet : SExpr
     {
-        public string VarName { get; set; }
+        public string VarName { get; private set; }
+        public Type VarType { get; private set; }
         public SExpr E1 { get; private set; }
         public SExpr E2 { get; private set; }
 
         public SLet(string var_name, SExpr e1, SExpr e2)
         {
             VarName = var_name;
+            VarType = new TypeVar();
             E1 = e1;
             E2 = e2;
         }

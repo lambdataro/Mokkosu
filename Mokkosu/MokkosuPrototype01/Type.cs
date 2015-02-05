@@ -37,6 +37,16 @@ namespace Mokkosu
     /// </summary>
     class IntType : Type
     {
+        public static Type _type = new IntType();
+
+        public static Type Type
+        {
+            get
+            {
+                return _type;
+            }
+        }
+
         public override string ToString()
         {
             return "Int";
@@ -70,6 +80,12 @@ namespace Mokkosu
     {
         public ImmutableHashSet<int> Bounded { get; private set; }
         public Type Type { get; private set; }
+
+        public TypeScheme(Type type)
+        {
+            Bounded = new ImmutableHashSet<int>();
+            Type = type;
+        }
 
         public TypeScheme(IEnumerable<int> bounded, Type type)
         {

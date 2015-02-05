@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Mokkosu
 {
+    using TEnv = Env<TypeScheme>;
+
     /// <summary>
     /// 型推論器
     /// </summary>
@@ -170,9 +172,9 @@ namespace Mokkosu
         /// </summary>
         /// <param name="tenv">型環境</param>
         /// <returns>自由に出現する型変数の集合</returns>
-        static ImmutableHashSet<int> FreeVars(Env<TypeScheme> tenv)
+        static ImmutableHashSet<int> FreeVars(TEnv tenv)
         {
-            if (Env<TypeScheme>.IsEmpty(tenv))
+            if (TEnv.IsEmpty(tenv))
             {
                 return new ImmutableHashSet<int>();
             }
@@ -190,7 +192,7 @@ namespace Mokkosu
         /// <param name="tenv">型環境</param>
         /// <param name="type">型</param>
         /// <returns>型スキーム</returns>
-        static TypeScheme Generalize(Env<TypeScheme> tenv, Type type)
+        static TypeScheme Generalize(TEnv tenv, Type type)
         {
             var tenv_fvs = FreeVars(tenv);
             var fvs = FreeVars(type);
@@ -253,7 +255,97 @@ namespace Mokkosu
             }
             else
             {
-                throw new NotImplementedException("Typeinf.MapTypeVar")
+                throw new NotImplementedException("Typeinf.MapTypeVar");
+            }
+        }
+
+        /// <summary>
+        /// 型推論 (Algorithm M)
+        /// </summary>
+        /// <param name="expr">型を推論する式</param>
+        /// <param name="type">文脈の型</param>
+        /// <param name="tenv">型環境</param>
+        static void Inference(SExpr expr, Type type, TEnv tenv)
+        {
+            if (expr is SConstInt)
+            {
+                Unification(type, IntType.Type);
+            }
+            else if (expr is SBinop)
+            {
+                var e = (SBinop)expr;
+                if (e is SAdd || e is SSub || e is SMul || e is SDiv)
+                {
+                    Inference(e.Lhs, IntType.Type, tenv);
+                    Inference(e.Rhs, IntType.Type, tenv);
+                    Unification(type, IntType.Type);
+                }
+                else if (e is SEq)
+                {
+                    Inference(e.Lhs, IntType.Type, tenv);
+                    Inference(e.Rhs, IntType.Type, tenv);
+                    Unification(type, IntType.Type);
+                }
+                else
+                {
+                    throw new NotImplementedException("Inference.Inference");
+                }
+            }
+            else if (expr is SVar)
+            {
+                var e = (SVar)expr;
+                TypeScheme typescheme;
+                if (TEnv.Lookup(tenv, e.Name, out typescheme))
+                {
+                    var t = Instantiate(typescheme);
+                    Unification(e.VarType, t);
+                    Unification(type, t);
+                }
+                else
+                {
+                    throw new Error(string.Format("変数{0}は未定義です", e.Name));
+                }
+            }
+            else if (expr is SFun)
+            {
+                var e = (SFun)expr;
+                var tenv2 = TEnv.Cons(e.ArgName, new TypeScheme(e.ArgType), tenv);
+                var ret_type = new TypeVar();
+                Inference(e.Body, ret_type, tenv2);
+                var fun_type = new FunType(e.ArgType, ret_type);
+                Unification(type, fun_type);
+            }
+            else if (expr is SApp)
+            {
+                var e = (SApp)expr;
+                var arg_type = new TypeVar();
+                var fun_type = new FunType(arg_type, type);
+                Inference(e.FunExpr, fun_type, tenv);
+                Inference(e.ArgExpr, arg_type, tenv);
+            }
+            else if (expr is SLet)
+            {
+                var e = (SLet)expr;
+                Inference(e.E1, e.VarType, tenv);
+                var tenv2 = TEnv.Cons(e.VarName, new TypeScheme(e.VarType), tenv);
+                Inference(e.E2, type, tenv2);
+            }
+            else if (expr is SIf)
+            {
+                var e = (SIf)expr;
+                Inference(e.CondExpr, IntType.Type, tenv);
+                Inference(e.ThenExpr, type, tenv);
+                Inference(e.ElseExpr, type, tenv);
+            }
+            else if (expr is SPrint)
+            {
+                var e = (SPrint)expr;
+                Inference(e.Body, IntType.Type, tenv);
+                Unification(type, IntType.Type);
+            }
+            else
+            {
+                throw new NotImplementedException("Inference.Inference");
             }
         }
     }
