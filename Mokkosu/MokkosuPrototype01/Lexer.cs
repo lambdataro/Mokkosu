@@ -10,9 +10,11 @@ namespace Mokkosu
         // 記号
         LP, RP,
         PLS, MNS, AST, SLS,
-        BS, ARROW,
+        EQEQ,
+        BS, ARROW, EQ,
         // キーワード
         PRINT, LET, IN,
+        IF, THEN, ELSE,
         // 制御記号
         EOF
     }
@@ -62,6 +64,9 @@ namespace Mokkosu
                 { "print", TokenType.PRINT },
                 { "let", TokenType.LET },
                 { "in", TokenType.IN },
+                { "if", TokenType.IF },
+                { "then", TokenType.THEN },
+                { "else", TokenType.ELSE },
             };
         }
 
@@ -160,6 +165,18 @@ namespace Mokkosu
                         else
                         {
                             return new Token(TokenType.MNS);
+                        }
+
+                    case '=':
+                        _strm.NextChar();
+                        if (_strm.Char == '=')
+                        {
+                            _strm.NextChar();
+                            return new Token(TokenType.EQEQ);
+                        }
+                        else
+                        {
+                            return new Token(TokenType.EQ);
                         }
 
                     default:

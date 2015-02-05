@@ -80,6 +80,17 @@
     }
 
     /// <summary>
+    /// 等しい
+    /// </summary>
+    class SEq : SBinop
+    {
+        public SEq(SExpr lhs, SExpr rhs)
+            : base(lhs, rhs)
+        {
+        }
+    }
+
+    /// <summary>
     /// 変数
     /// </summary>
     class SVar : SExpr
@@ -97,12 +108,12 @@
     /// </summary>
     class SFun : SExpr
     {
-        public string VarName { get; private set; }
+        public string ArgName { get; private set; }
         public SExpr Body { get; private set; }
 
-        public SFun(string var_name, SExpr body)
+        public SFun(string arg_name, SExpr body)
         {
-            VarName = var_name;
+            ArgName = arg_name;
             Body = body;
         }
     }
@@ -119,6 +130,37 @@
         {
             FunExpr = fun_expr;
             ArgExpr = arg_expr;
+        }
+    }
+
+    class SLet : SExpr
+    {
+        public string VarName { get; set; }
+        public SExpr E1 { get; private set; }
+        public SExpr E2 { get; private set; }
+
+        public SLet(string var_name, SExpr e1, SExpr e2)
+        {
+            VarName = var_name;
+            E1 = e1;
+            E2 = e2;
+        }
+    }
+
+    /// <summary>
+    /// If式
+    /// </summary>
+    class SIf : SExpr
+    {
+        public SExpr CondExpr { get; private set; }
+        public SExpr ThenExpr { get; private set; }
+        public SExpr ElseExpr { get; private set; }
+
+        public SIf(SExpr cond_expr, SExpr then_expr, SExpr else_expr)
+        {
+            CondExpr = cond_expr;
+            ThenExpr = then_expr;
+            ElseExpr = else_expr;
         }
     }
 

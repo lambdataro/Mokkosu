@@ -62,7 +62,62 @@
 
         static SExpr ParseExpr(ParseContext ctx)
         {
-            return ParseAddExpr(ctx);
+            return ParseFunExpr(ctx);
+        }
+
+        static SExpr ParseFunExpr(ParseContext ctx)
+        {
+            if (ctx.Tkn.Type == TokenType.BS)
+            {
+                ctx.ReadToken(TokenType.BS);
+                var arg_name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.ARROW);
+                var body = ParseFunExpr(ctx);
+                return new SFun(arg_name, body);
+            }
+            else if (ctx.Tkn.Type == TokenType.IF)
+            {
+                ctx.ReadToken(TokenType.IF);
+                var cond_expr = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.THEN);
+                var then_expr = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.ELSE);
+                var else_expr = ParseFunExpr(ctx);
+                return new SIf(cond_expr, then_expr, else_expr);
+            }
+            else if (ctx.Tkn.Type == TokenType.LET)
+            {
+                ctx.ReadToken(TokenType.LET);
+                var var_name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.EQ);
+                var e1 = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.IN);
+                var e2 = ParseFunExpr(ctx);
+                return new SLet(var_name, e1, e2);
+            }
+            else
+            {
+                return ParseCmpExpr(ctx);
+            }
+        }
+
+        static SExpr ParseCmpExpr(ParseContext ctx)
+        {
+            var lhs = ParseAddExpr(ctx);
+
+            while (ctx.Tkn.Type == TokenType.EQ)
+            {
+                var type = ctx.Tkn.Type;
+                ctx.NextToken();
+                var rhs = ParseAddExpr(ctx);
+                switch (type)
+                {
+                    case TokenType.EQEQ:
+                        lhs = new SEq(lhs, rhs);
+                        break;
+                }
+            }
+            return lhs;
         }
 
         static SExpr ParseAddExpr(ParseContext ctx)
