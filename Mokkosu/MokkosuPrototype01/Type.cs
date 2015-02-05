@@ -1,9 +1,15 @@
 ﻿namespace Mokkosu
 {
+    /// <summary>
+    /// 型の抽象クラス
+    /// </summary>
     abstract class Type
     {
     }
 
+    /// <summary>
+    /// 型変数
+    /// </summary>
     class TypeVar : Type
     {
         static int var_id = 0;
@@ -23,6 +29,9 @@
         }
     }
 
+    /// <summary>
+    /// 整数型
+    /// </summary>
     class IntType : Type
     {
         public override string ToString()
@@ -31,6 +40,9 @@
         }
     }
 
+    /// <summary>
+    /// 関数型
+    /// </summary>
     class FunType : Type
     {
         public Type ArgType { get; private set; }
