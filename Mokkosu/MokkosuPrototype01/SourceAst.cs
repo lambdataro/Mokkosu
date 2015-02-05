@@ -14,9 +14,9 @@
     {
         public int Value { get; private set; }
 
-        public SConstInt(int vlaue)
+        public SConstInt(int value)
         {
-            Value = Value;
+            Value = value;
         }
 
         public override string ToString()

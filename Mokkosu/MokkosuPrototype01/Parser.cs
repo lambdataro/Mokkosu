@@ -57,7 +57,9 @@
     {
         public static SExpr Parse(ParseContext ctx)
         {
-            return ParseExpr(ctx);
+            var expr = ParseExpr(ctx);
+            ctx.ReadToken(TokenType.EOF);
+            return expr;
         }
 
         static SExpr ParseExpr(ParseContext ctx)
@@ -146,18 +148,18 @@
         {
             var lhs = ParseAppExpr(ctx);
 
-            while (ctx.Tkn.Type == TokenType.PLS || ctx.Tkn.Type == TokenType.MNS)
+            while (ctx.Tkn.Type == TokenType.AST || ctx.Tkn.Type == TokenType.SLS)
             {
                 var type = ctx.Tkn.Type;
                 ctx.NextToken();
                 var rhs = ParseAppExpr(ctx);
                 switch (type)
                 {
-                    case TokenType.PLS:
-                        lhs = new SAdd(lhs, rhs);
+                    case TokenType.AST:
+                        lhs = new SMul(lhs, rhs);
                         break;
-                    case TokenType.MNS:
-                        lhs = new SSub(lhs, rhs);
+                    case TokenType.SLS:
+                        lhs = new SDiv(lhs, rhs);
                         break;
                 }
             }
