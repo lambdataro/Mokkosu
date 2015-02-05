@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+
 namespace Mokkosu
 {
     enum TokenType
@@ -11,11 +12,11 @@ namespace Mokkosu
         PLS, MNS, AST, SLS,
         BS, ARROW,
         // キーワード
-        PRINT,
+        PRINT, LET, IN,
         // 制御記号
         EOF
     }
-
+    
     class Token
     {
         public TokenType Type { get; private set; }
@@ -58,7 +59,9 @@ namespace Mokkosu
         {
             keywords = new Dictionary<string, TokenType>()
             {
-                { "print", TokenType.PRINT }
+                { "print", TokenType.PRINT },
+                { "let", TokenType.LET },
+                { "in", TokenType.IN },
             };
         }
 
