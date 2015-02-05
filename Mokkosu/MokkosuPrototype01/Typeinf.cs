@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mokkosu
 {
@@ -149,7 +150,7 @@ namespace Mokkosu
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("Typeinf.FreeVars");
             }
         }
 
@@ -180,6 +181,79 @@ namespace Mokkosu
                 var set1 = FreeVars(tenv.Value);
                 var set2 = FreeVars(tenv.Tail);
                 return ImmutableHashSet<int>.Union(set1, set2);
+            }
+        }
+
+        /// <summary>
+        /// 型に量化子(∀)を付ける
+        /// </summary>
+        /// <param name="tenv">型環境</param>
+        /// <param name="type">型</param>
+        /// <returns>型スキーム</returns>
+        static TypeScheme Generalize(Env<TypeScheme> tenv, Type type)
+        {
+            var tenv_fvs = FreeVars(tenv);
+            var fvs = FreeVars(type);
+            var bounded = ImmutableHashSet<int>.Diff(fvs, tenv_fvs);
+            return new TypeScheme(bounded.ToArray(), type);
+        }
+
+        /// <summary>
+        /// 型スキームからインスタンスを作成
+        /// </summary>
+        /// <param name="type_scheme">型スキーム</param>
+        /// <returns>新しい型</returns>
+        static Type Instantiate(TypeScheme type_scheme)
+        {
+            var map = new Dictionary<int, Type>();
+            foreach (var id in type_scheme.Bounded.ToArray())
+            {
+                map.Add(id, new TypeVar());
+            }
+            return MapTypeVar(map, type_scheme.Type);
+        }
+
+        /// <summary>
+        /// 写像にしたがって型変数を新しいものに置き換える
+        /// </summary>
+        /// <param name="map">型変数IDから型への写像</param>
+        /// <param name="type">型</param>
+        /// <returns>新しい型</returns>
+        static Type MapTypeVar(Dictionary<int, Type> map, Type type)
+        {
+            if (type is TypeVar)
+            {
+                var t = (TypeVar)type;
+                if (t.Var == null)
+                {
+                    if (map.ContainsKey(t.Id))
+                    {
+                        return map[t.Id];
+                    }
+                    else
+                    {
+                        return type;
+                    }
+                }
+                else
+                {
+                    return MapTypeVar(map, t.Var);
+                }
+            }
+            else if (type is IntType)
+            {
+                return type;
+            }
+            else if (type is FunType)
+            {
+                var t = (FunType)type;
+                var arg_t = MapTypeVar(map, t.ArgType);
+                var ret_t = MapTypeVar(map, t.RetType);
+                return new FunType(arg_t, ret_t);
+            }
+            else
+            {
+                throw new NotImplementedException("Typeinf.MapTypeVar")
             }
         }
     }
