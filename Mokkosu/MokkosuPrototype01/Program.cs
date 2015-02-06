@@ -23,9 +23,11 @@ namespace Mokkosu
 
             var expr = Parser.Parse(parse_context);
             var type = Typeinf.Start(expr);
+            var clos = ClosureConverter.Start(expr);
 
             System.Console.WriteLine(expr);
             System.Console.WriteLine(type);
+            System.Console.WriteLine(clos);
 
             Evaluator.Start(expr);
         }

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClosureConverter.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="Evaluator.cs" />
     <Compile Include="InputStream.cs" />

@@ -1,2 +1,1 @@
-﻿rec fact = \x -> if x == 0 then 1 else x * fact (x - 1) in
-print (fact 5)
+﻿print ((\x -> \y -> x * y) 3 4)

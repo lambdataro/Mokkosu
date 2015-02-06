@@ -92,7 +92,7 @@ namespace Mokkosu
                 if (v1 is FunValue)
                 {
                     var f = (FunValue)v1;
-                    var env2 = Env<Value>.Cons(f.VarName, v2, env);
+                    var env2 = Env<Value>.Cons(f.VarName, v2, f.Env);
                     return Eval(f.Body, env2);
                 }
                 else

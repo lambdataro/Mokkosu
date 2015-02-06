@@ -1,4 +1,5 @@
-﻿namespace Mokkosu
+﻿using System.Text;
+namespace Mokkosu
 {
     /// <summary>
     /// 式
@@ -134,6 +135,12 @@
             VarType = new TypeVar();
         }
 
+        public SVar(string name, Type type)
+        {
+            Name = name;
+            VarType = type;
+        }
+
         public override string ToString()
         {
             return string.Format("({0} : {1})", Name, VarType);
@@ -153,6 +160,13 @@
         {
             ArgName = arg_name;
             ArgType = new TypeVar();
+            Body = body;
+        }
+
+        public SFun(string arg_name, Type arg_type, SExpr body)
+        {
+            ArgName = arg_name;
+            ArgType = arg_type;
             Body = body;
         }
 
@@ -200,6 +214,14 @@
             E2 = e2;
         }
 
+        public SLet(string var_name, Type var_type, SExpr e1, SExpr e2)
+        {
+            VarName = var_name;
+            VarType = var_type;
+            E1 = e1;
+            E2 = e2;
+        }
+
         public override string ToString()
         {
             return string.Format("(let {0} : {1} = {2} in {3})", VarName, VarType, E1, E2);
@@ -220,6 +242,14 @@
         {
             VarName = var_name;
             VarType = new TypeVar();
+            E1 = e1;
+            E2 = e2;
+        }
+
+        public SRec(string var_name, Type var_type, SExpr e1, SExpr e2)
+        {
+            VarName = var_name;
+            VarType = var_type;
             E1 = e1;
             E2 = e2;
         }
@@ -267,6 +297,65 @@
         public override string ToString()
         {
             return string.Format("(print {0})", Body);
+        }
+    }
+
+    /// <summary>
+    /// 引数の値を取得する (クロージャ変換後に利用)
+    /// </summary>
+    class SGetArg : SExpr
+    {
+        public override string ToString()
+        {
+            return "<GetArg>";
+        }
+    }
+
+    /// <summary>
+    /// クロージャによって束縛された値を取得する (クロージャ変換後に利用)
+    /// </summary>
+    class SGetEnv : SExpr
+    {
+        public int Index { get; private set; }
+
+        public SGetEnv(int index)
+        {
+            Index = index;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("<GetEnv {0}>", Index);
+        }
+    }
+
+    /// <summary>
+    /// クロージャを作る (クロージャ変換後に利用)
+    /// </summary>
+    class SMakeClos : SExpr
+    {
+        public string ClosName { get; private set; }
+        public SExpr[] Args { get; private set; }
+
+        public SMakeClos(string clos_name, SExpr[] args)
+        {
+            ClosName = clos_name;
+            Args = args;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(MakeClos {0}{1})", ClosName, ArgsToString());
+        }
+
+        string ArgsToString()
+        {
+            var sb = new StringBuilder();
+            foreach (var expr in Args)
+            {
+                sb.AppendFormat(" {0}", expr);
+            }
+            return sb.ToString();
         }
     }
 }
