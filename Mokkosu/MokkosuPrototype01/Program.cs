@@ -26,6 +26,8 @@ namespace Mokkosu
 
             System.Console.WriteLine(expr);
             System.Console.WriteLine(type);
+
+            Evaluator.Start(expr);
         }
     }
 }

@@ -168,14 +168,32 @@
 
         static SExpr ParseAppExpr(ParseContext ctx)
         {
-            var lhs = ParseFactor(ctx);
-
-            while (ctx.Tkn.Type == TokenType.LP || ctx.Tkn.Type == TokenType.ID || ctx.Tkn.Type == TokenType.INT)
+            if (ctx.Tkn.Type == TokenType.PRINT)
             {
-                var rhs = ParseFactor(ctx);
-                lhs = new SApp(lhs, rhs);
+                ctx.ReadToken(TokenType.PRINT);
+                var arg = ParseFactor(ctx);
+                return new SPrint(arg);
             }
-            return lhs;
+            else
+            {
+                var lhs = ParseFactor(ctx);
+
+                while (ctx.Tkn.Type == TokenType.LP || ctx.Tkn.Type == TokenType.ID || ctx.Tkn.Type == TokenType.INT)
+                {
+                    if (ctx.Tkn.Type == TokenType.PRINT)
+                    {
+                        ctx.ReadToken(TokenType.PRINT);
+                        var arg = ParseFactor(ctx);
+                        lhs = new SPrint(arg);
+                    }
+                    else
+                    {
+                        var rhs = ParseFactor(ctx);
+                        lhs = new SApp(lhs, rhs);
+                    }
+                }
+                return lhs;
+            }
         }
 
         static SExpr ParseFactor(ParseContext ctx)
