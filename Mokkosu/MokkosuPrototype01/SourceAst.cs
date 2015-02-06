@@ -207,6 +207,30 @@
     }
 
     /// <summary>
+    /// rec式
+    /// </summary>
+    class SRec : SExpr
+    {
+        public string VarName { get; private set; }
+        public Type VarType { get; private set; }
+        public SExpr E1 { get; private set; }
+        public SExpr E2 { get; private set; }
+
+        public SRec(string var_name, SExpr e1, SExpr e2)
+        {
+            VarName = var_name;
+            VarType = new TypeVar();
+            E1 = e1;
+            E2 = e2;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(rec {0} : {1} = {2} in {3})", VarName, VarType, E1, E2);
+        }
+    }
+
+    /// <summary>
     /// If式
     /// </summary>
     class SIf : SExpr

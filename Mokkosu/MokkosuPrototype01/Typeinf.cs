@@ -339,6 +339,13 @@ namespace Mokkosu
                 var tenv2 = TEnv.Cons(e.VarName, new TypeScheme(e.VarType), tenv);
                 Inference(e.E2, type, tenv2);
             }
+            else if (expr is SRec)
+            {
+                var e = (SRec)expr;
+                var tenv2 = TEnv.Cons(e.VarName, new TypeScheme(e.VarType), tenv);
+                Inference(e.E1, e.VarType, tenv2);
+                Inference(e.E2, type, tenv2);
+            }
             else if (expr is SIf)
             {
                 var e = (SIf)expr;

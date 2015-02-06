@@ -97,6 +97,16 @@
                 var e2 = ParseFunExpr(ctx);
                 return new SLet(var_name, e1, e2);
             }
+            else if (ctx.Tkn.Type == TokenType.REC)
+            {
+                ctx.ReadToken(TokenType.REC);
+                var var_name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.EQ);
+                var e1 = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.IN);
+                var e2 = ParseFunExpr(ctx);
+                return new SRec(var_name, e1, e2);
+            }
             else
             {
                 return ParseCmpExpr(ctx);
@@ -107,7 +117,7 @@
         {
             var lhs = ParseAddExpr(ctx);
 
-            while (ctx.Tkn.Type == TokenType.EQ)
+            while (ctx.Tkn.Type == TokenType.EQEQ)
             {
                 var type = ctx.Tkn.Type;
                 ctx.NextToken();

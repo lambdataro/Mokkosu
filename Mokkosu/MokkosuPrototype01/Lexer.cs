@@ -13,7 +13,7 @@ namespace Mokkosu
         EQEQ,
         BS, ARROW, EQ,
         // キーワード
-        PRINT, LET, IN,
+        PRINT, LET, IN, REC,
         IF, THEN, ELSE,
         // 制御記号
         EOF
@@ -64,6 +64,7 @@ namespace Mokkosu
                 { "print", TokenType.PRINT },
                 { "let", TokenType.LET },
                 { "in", TokenType.IN },
+                { "rec", TokenType.REC },
                 { "if", TokenType.IF },
                 { "then", TokenType.THEN },
                 { "else", TokenType.ELSE },

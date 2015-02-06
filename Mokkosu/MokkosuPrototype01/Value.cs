@@ -4,6 +4,16 @@
     {
     }
 
+    class ValueRef : Value
+    {
+        public Value Value { get; set; }
+
+        public ValueRef()
+        {
+            Value = null;
+        }
+    }
+
     class IntValue : Value
     {
         public int Value { get; private set; }

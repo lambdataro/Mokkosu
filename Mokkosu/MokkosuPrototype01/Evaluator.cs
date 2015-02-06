@@ -73,6 +73,10 @@ namespace Mokkosu
                 var e = (SVar)expr;
                 Value v;
                 Env<Value>.Lookup(env, e.Name, out v);
+                while (v is ValueRef)
+                {
+                    v = ((ValueRef)v).Value;
+                }
                 return v;
             }
             else if (expr is SFun)
@@ -101,6 +105,14 @@ namespace Mokkosu
                 var e = (SLet)expr;
                 var v1 = Eval(e.E1, env);
                 var env2 = Env<Value>.Cons(e.VarName, v1, env);
+                return Eval(e.E2, env2);
+            }
+            else if (expr is SRec)
+            {
+                var e = (SRec)expr;
+                var v = new ValueRef();
+                var env2 = Env<Value>.Cons(e.VarName, v, env);
+                v.Value = Eval(e.E1, env2);
                 return Eval(e.E2, env2);
             }
             else if (expr is SIf)
