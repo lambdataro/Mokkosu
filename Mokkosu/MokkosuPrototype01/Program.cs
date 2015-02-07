@@ -29,6 +29,9 @@ namespace Mokkosu
             System.Console.WriteLine(type);
             System.Console.WriteLine(clos);
 
+            var assembly = CodeGenerator.Start("Test", clos);
+            assembly.Save("Test.exe");
+
             Evaluator.Start(expr);
         }
     }
