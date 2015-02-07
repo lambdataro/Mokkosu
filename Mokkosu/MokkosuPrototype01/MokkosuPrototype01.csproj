@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClosureConverter.cs" />
+    <Compile Include="CodeGenerator.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="Evaluator.cs" />
     <Compile Include="InputStream.cs" />

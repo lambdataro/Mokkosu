@@ -32,8 +32,8 @@ namespace Mokkosu
 
     class ClosureConversionResult
     {
-        public static Dictionary<string, SExpr> FunctionTable { get; private set; }
-        public static SExpr Main { get; private set; }
+        public Dictionary<string, SExpr> FunctionTable { get; private set; }
+        public SExpr Main { get; private set; }
 
         public ClosureConversionResult(Dictionary<string, SExpr> table, SExpr main)
         {
