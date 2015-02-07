@@ -336,7 +336,8 @@ namespace Mokkosu
             {
                 var e = (SLet)expr;
                 Inference(e.E1, e.VarType, tenv);
-                var tenv2 = TEnv.Cons(e.VarName, new TypeScheme(e.VarType), tenv);
+                var ts = Generalize(tenv, e.VarType);
+                var tenv2 = TEnv.Cons(e.VarName, ts, tenv);
                 Inference(e.E2, type, tenv2);
             }
             else if (expr is SRec)
@@ -344,6 +345,8 @@ namespace Mokkosu
                 var e = (SRec)expr;
                 var tenv2 = TEnv.Cons(e.VarName, new TypeScheme(e.VarType), tenv);
                 Inference(e.E1, e.VarType, tenv2);
+                var ts = Generalize(tenv, e.VarType);
+                var tenv3 = TEnv.Cons(e.VarName, ts, tenv);
                 Inference(e.E2, type, tenv2);
             }
             else if (expr is SIf)
