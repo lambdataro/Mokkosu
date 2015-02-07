@@ -1,4 +1,5 @@
-﻿namespace Mokkosu
+﻿using System.Collections.Generic;
+namespace Mokkosu
 {
     class ParseContext
     {
@@ -53,13 +54,123 @@
         }
     }
 
+    class Tag
+    {
+        public string Name { get; private set; }
+        public Type Type { get; private set; }
+        public List<Type> Args { get; private set; }
+
+        public Tag(string name, Type type, List<Type> args)
+        {
+            Name = name;
+            Type = type;
+            Args = args;
+        }
+    }
+
+    class ParseResult
+    {
+        public List<string> UserDefinedTypes { get; private set; }
+        public List<Tag> Tags { get; private set; }
+        public SExpr Main { get; private set; }
+
+        public ParseResult(List<string> user_defined_types, List<Tag> tags, SExpr main)
+        {
+            UserDefinedTypes = user_defined_types;
+            Tags = tags;
+            Main = main;
+        }
+    }
+
     static class Parser
     {
-        public static SExpr Parse(ParseContext ctx)
+        public static ParseResult Parse(ParseContext ctx)
         {
-            var expr = ParseExpr(ctx);
+            var user_defined_type = new List<string>();
+            var tags = new List<Tag>();
+            ParseData(ctx, out user_defined_type, out tags);
+            var main = ParseExpr(ctx);
             ctx.ReadToken(TokenType.EOF);
-            return expr;
+            return new ParseResult(user_defined_type, tags, main);
+        }
+
+        static void ParseData(ParseContext ctx, out List<string> types_out, out List<Tag> tags_out)
+        {
+            var types = new List<string>();
+            var tags = new List<Tag>();
+
+            while (ctx.Tkn.Type == TokenType.DATA)
+            {
+                ctx.ReadToken(TokenType.DATA);
+                var name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.EQ);
+                types.Add(name);
+                while (true)
+                {
+                    var tag = ParseDataLine(ctx, name);
+                    tags.Add(tag);
+                    if (ctx.Tkn.Type == TokenType.SC)
+                    {
+                        ctx.ReadToken(TokenType.SC);
+                        break;
+                    }
+                    ctx.ReadToken(TokenType.BAR);
+                }
+            }
+
+            types_out = types;
+            tags_out = tags;
+        }
+
+        static Tag ParseDataLine(ParseContext ctx, string type_name)
+        {
+            var name = ctx.ReadStrToken(TokenType.ID);
+            var args = new List<Type>();
+            while (ctx.Tkn.Type != TokenType.BAR && ctx.Tkn.Type != TokenType.SC)
+            {
+                var type = ParseTypeFactor(ctx);
+                args.Add(type);
+            }
+            return new Tag(name, new UserType(type_name), args);
+        }
+
+        static Type ParseTypeFactor(ParseContext ctx)
+        {
+            if (ctx.Tkn.Type == TokenType.LP)
+            {
+                var type = ParseTypeTerm(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return type;
+            }
+            else if (ctx.Tkn.Type == TokenType.ID)
+            {
+                var id = ctx.ReadStrToken(TokenType.ID); 
+                switch (id)
+                {
+                    case "Int":
+                        return new IntType();
+                    default:
+                        return new UserType(id);
+                }
+            }
+            else
+            {
+                throw new Error("構文エラー");
+            }
+        }
+
+        static Type ParseTypeTerm(ParseContext ctx)
+        {
+            var t1 = ParseTypeFactor(ctx);
+            if (ctx.Tkn.Type == TokenType.ARROW)
+            {
+                var t2 = ParseTypeTerm(ctx);
+                return new FunType(t1, t2);
+            }
+            else
+            {
+                return t1;
+            }
         }
 
         static SExpr ParseExpr(ParseContext ctx)

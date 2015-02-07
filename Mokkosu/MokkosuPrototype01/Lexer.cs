@@ -11,10 +11,11 @@ namespace Mokkosu
         LP, RP,
         PLS, MNS, AST, SLS,
         EQEQ,
-        BS, ARROW, EQ,
+        BS, ARROW, EQ, BAR, SC,
         // キーワード
         PRINT, LET, IN, REC,
         IF, THEN, ELSE,
+        DATA,
         // 制御記号
         EOF
     }
@@ -68,6 +69,7 @@ namespace Mokkosu
                 { "if", TokenType.IF },
                 { "then", TokenType.THEN },
                 { "else", TokenType.ELSE },
+                { "data", TokenType.DATA },
             };
         }
 
@@ -81,6 +83,8 @@ namespace Mokkosu
                 { '*', TokenType.AST },
                 { '/', TokenType.SLS },
                 { '\\', TokenType.BS },
+                { '|', TokenType.BAR },
+                { ';', TokenType.SC },
             };
         }
 

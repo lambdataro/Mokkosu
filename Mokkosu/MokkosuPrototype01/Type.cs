@@ -81,6 +81,24 @@ namespace Mokkosu
     }
 
     /// <summary>
+    /// ユーザ定義型
+    /// </summary>
+    class UserType : Type
+    {
+        public string Name { get; private set; }
+
+        public UserType(string name)
+        {
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
+    /// <summary>
     /// 型スキーム
     /// </summary>
     class TypeScheme

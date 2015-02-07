@@ -21,7 +21,8 @@ namespace Mokkosu
             var lexer = new Lexer(input_stream);
             var parse_context = new ParseContext(lexer);
 
-            var expr = Parser.Parse(parse_context);
+            var parse_result = Parser.Parse(parse_context);
+            var expr = parse_result.Main;
             var type = Typeinf.Start(expr);
             var clos = ClosureConverter.Start(expr);
 
