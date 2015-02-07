@@ -57,48 +57,6 @@ namespace Mokkosu
         }
     }
 
-    //class ImmutableList<T>
-    //    where T : IComparable<T>
-    //{
-    //    public T Value { get; private set; }
-    //    public ImmutableList<T> Tail { get; private set; }
-
-    //    public ImmutableList(T value, ImmutableList<T> tail)
-    //    {
-    //        Value = value;
-    //        Tail = tail;
-    //    }
-
-    //    public static ImmutableList<T> Empty
-    //    {
-    //        get
-    //        {
-    //            return null;
-    //        }
-    //    }
-
-    //    public static ImmutableList<T> Cons(T item, ImmutableList<T> tail)
-    //    {
-    //        return new ImmutableList<T>(item, tail);
-    //    }
-
-    //    public static int GetIndex(T item, ImmutableList<T> list)
-    //    {
-    //        if (item.CompareTo(list.Value) == 0)
-    //        {
-    //            return 0;
-    //        }
-    //        else if (list.Tail != null)
-    //        {
-    //            return 1 + GetIndex(item, list.Tail);
-    //        }
-    //        else
-    //        {
-    //            throw new Error("Not Found");
-    //        }
-    //    }
-    //}
-
     class Env<T>
     {
         public string Key { get; private set; }
