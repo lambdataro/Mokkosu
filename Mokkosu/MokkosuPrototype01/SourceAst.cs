@@ -358,4 +358,22 @@ namespace Mokkosu
             return sb.ToString();
         }
     }
+    
+    /// <summary>
+    /// クロージャでキャプチャされる変数の値を取得する専用の変数 (クロージャ変換後に利用)
+    /// </summary>
+    class SVarClos : SExpr
+    {
+        public string Name { get; private set; }
+
+        public SVarClos(string name)
+        {
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", Name);
+        }
+    }
 }

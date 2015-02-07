@@ -201,6 +201,26 @@ namespace Mokkosu
                     }
                 }
             }
+            else if (expr is SVarClos)
+            {
+                var e = (SVarClos)expr;
+                if (e.Name == ctx.ArgName)
+                {
+                    return new SGetArg();
+                }
+                else
+                {
+                    var index = ctx.GetCaptureIndex(e.Name);
+                    if (index == -1)
+                    {
+                        return e;
+                    }
+                    else
+                    {
+                        return new SGetEnv(index);
+                    }
+                }
+            }
             else if (expr is SFun)
             {
                 var e = (SFun)expr;
@@ -212,7 +232,7 @@ namespace Mokkosu
                 var body = Conv(e.Body, ctx2);
                 var name = GenName();
                 _function_table.Add(name, body);
-                var args = fv.Select(x => Conv(new SVar(x), ctx)).ToArray();
+                var args = fv.Select(x => Conv(new SVarClos(x), ctx)).ToArray();
                 return new SMakeClos(name, args);
             }
             else if (expr is SApp)
