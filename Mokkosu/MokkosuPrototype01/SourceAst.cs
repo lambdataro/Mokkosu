@@ -151,17 +151,20 @@ namespace Mokkosu
     {
         public string Name { get; private set; }
         public Type TagType { get; private set; }
+        public int ArgsCount { get; private set; }
 
-        public STag(string name)
+        public STag(string name, int args_count)
         {
             Name = name;
             TagType = new TypeVar();
+            ArgsCount = args_count;
         }
 
-        public STag(string name, Type type)
+        public STag(string name, int args_count, Type type)
         {
             Name = name;
             TagType = type;
+            ArgsCount = args_count;
         }
 
         public override string ToString()

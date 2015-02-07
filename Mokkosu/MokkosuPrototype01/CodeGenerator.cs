@@ -13,13 +13,22 @@ namespace Mokkosu
         public TypeBuilder TypeBuilder { get; private set; }
         public System.Type ValueRef {get; private set; }
         public FieldInfo ValueRefField { get; private set; }
+        public System.Type TagClass { get; private set; }
+        public FieldInfo TagName { get; private set; }
+        public FieldInfo TagArgs { get; private set; }
+        public FieldInfo TagCount { get; private set; }
 
         public CompileContext(TypeBuilder type_builder, 
-            System.Type value_ref, FieldInfo value_ref_field)
+            System.Type value_ref, FieldInfo value_ref_field,
+            System.Type tag_class, FieldInfo tag_name, FieldInfo tag_args, FieldInfo tag_count)
         {
             TypeBuilder = type_builder;
             ValueRef = value_ref;
             ValueRefField = value_ref_field;
+            TagClass = tag_class;
+            TagName = tag_name;
+            TagArgs = tag_args;
+            TagCount = tag_count;
         }
     }
 
@@ -43,6 +52,16 @@ namespace Mokkosu
                 typeof(object), FieldAttributes.Public);
             var value_ref_type = value_ref.CreateType();
 
+            // Tagクラス
+            var tag_class = module_builder.DefineType("Tag");
+            var tag_class_name = tag_class.DefineField("name",
+                typeof(string), FieldAttributes.Public);
+            var tag_class_args = tag_class.DefineField("args",
+                typeof(object[]), FieldAttributes.Public);
+            var tag_class_count = tag_class.DefineField("count",
+                typeof(int), FieldAttributes.Public);
+            var tag_class_type = tag_class.CreateType();
+
             // MokkosuProgramクラス
             var type_builder = module_builder.DefineType("MokkosuProgram");
 
@@ -52,7 +71,8 @@ namespace Mokkosu
             }
             DeclareFunction("MokkosuMain", type_builder);
 
-            var ctx = new CompileContext(type_builder, value_ref_type, value_ref_field);
+            var ctx = new CompileContext(type_builder, value_ref_type, value_ref_field,
+                tag_class_type, tag_class_name, tag_class_args, tag_class_count);
 
             foreach (var f in cc_result.FunctionTable)
             {
@@ -151,6 +171,21 @@ namespace Mokkosu
                 {
                     throw new NotImplementedException();
                 }
+            }
+            else if (expr is STag)
+            {
+                var e = (STag)expr;
+                il.Emit(OpCodes.Newobj, ctx.TagClass.GetConstructor(new System.Type[] { }));
+                il.Emit(OpCodes.Dup);
+                il.Emit(OpCodes.Dup);
+                il.Emit(OpCodes.Dup);
+                il.Emit(OpCodes.Ldstr, e.Name);
+                il.Emit(OpCodes.Stfld, ctx.TagName);
+                il.Emit(OpCodes.Ldc_I4, e.ArgsCount);
+                il.Emit(OpCodes.Newarr, typeof(object));
+                il.Emit(OpCodes.Stfld, ctx.TagArgs);
+                il.Emit(OpCodes.Ldc_I4_0);
+                il.Emit(OpCodes.Stfld, ctx.TagCount);
             }
             else if (expr is SApp)
             {

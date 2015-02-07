@@ -8,12 +8,12 @@ namespace Mokkosu
         Lexer _lexer;
 
         public Token Tkn { get; private set; }
-        public List<string> Tags { get; set; } 
+        public List<Tag> Tags { get; set; } 
 
         public ParseContext(Lexer lexer)
         {
             _lexer = lexer;
-            Tags = new List<string>();
+            Tags = new List<Tag>();
             NextToken();
         }
 
@@ -93,15 +93,10 @@ namespace Mokkosu
             var user_defined_type = new List<string>();
             var tags = new List<Tag>();
             ParseData(ctx, out user_defined_type, out tags);
-            ctx.Tags = TagNames(tags);
+            ctx.Tags = tags;
             var main = ParseExpr(ctx);
             ctx.ReadToken(TokenType.EOF);
             return new ParseResult(user_defined_type, tags, main);
-        }
-
-        static List<string> TagNames(List<Tag> tags)
-        {
-            return tags.Select<Tag, string>(tag => tag.Name).ToList<string>();
         }
 
         static void ParseData(ParseContext ctx, out List<string> types_out, out List<Tag> tags_out)
@@ -344,9 +339,10 @@ namespace Mokkosu
             else if (ctx.Tkn.Type == TokenType.ID)
             {
                 var name = ctx.ReadStrToken(TokenType.ID);
-                if (ctx.Tags.Contains(name))
+                var tags = ctx.Tags.FindAll(tag => tag.Name == name);
+                if (tags.Count == 1)
                 {
-                    return new STag(name);
+                    return new STag(name, tags.First().Args.Count);
                 }
                 else
                 {
