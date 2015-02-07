@@ -27,12 +27,6 @@ namespace Mokkosu
     {
         static Dictionary<string, MethodBuilder> _function_table;
         static string _runtime_dir = RuntimeEnvironment.GetRuntimeDirectory();
-        static int _field_name_count = 0;
-
-        static string GenFieldName()
-        {
-            return string.Format("field@{0:000}", ++_field_name_count);
-        }
 
         public static AssemblyBuilder Start(string name, ClosureConversionResult cc_result)
         {

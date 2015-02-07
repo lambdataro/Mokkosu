@@ -201,6 +201,10 @@ namespace Mokkosu
                     }
                 }
             }
+            else if (expr is STag)
+            {
+                return expr;
+            }
             else if (expr is SVarClos)
             {
                 var e = (SVarClos)expr;

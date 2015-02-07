@@ -147,6 +147,29 @@ namespace Mokkosu
         }
     }
 
+    class STag : SExpr
+    {
+        public string Name { get; private set; }
+        public Type TagType { get; private set; }
+
+        public STag(string name)
+        {
+            Name = name;
+            TagType = new TypeVar();
+        }
+
+        public STag(string name, Type type)
+        {
+            Name = name;
+            TagType = type;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0} : {1})", Name, TagType);
+        }
+    }
+
     /// <summary>
     /// ラムダ式
     /// </summary>

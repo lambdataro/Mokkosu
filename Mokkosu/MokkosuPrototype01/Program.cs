@@ -23,7 +23,7 @@ namespace Mokkosu
 
             var parse_result = Parser.Parse(parse_context);
             var expr = parse_result.Main;
-            var type = Typeinf.Start(expr);
+            var type = Typeinf.Start(expr, parse_result.Tags);
             var clos = ClosureConverter.Start(expr);
 
             System.Console.WriteLine(expr);
@@ -33,7 +33,7 @@ namespace Mokkosu
             var assembly = CodeGenerator.Start("Test", clos);
             assembly.Save("Test.exe");
 
-            Evaluator.Start(expr);
+            // Evaluator.Start(expr);
         }
     }
 }

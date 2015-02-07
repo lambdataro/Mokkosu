@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 namespace Mokkosu
 {
     class ParseContext
@@ -6,10 +8,12 @@ namespace Mokkosu
         Lexer _lexer;
 
         public Token Tkn { get; private set; }
+        public List<string> Tags { get; set; } 
 
         public ParseContext(Lexer lexer)
         {
             _lexer = lexer;
+            Tags = new List<string>();
             NextToken();
         }
 
@@ -89,9 +93,15 @@ namespace Mokkosu
             var user_defined_type = new List<string>();
             var tags = new List<Tag>();
             ParseData(ctx, out user_defined_type, out tags);
+            ctx.Tags = TagNames(tags);
             var main = ParseExpr(ctx);
             ctx.ReadToken(TokenType.EOF);
             return new ParseResult(user_defined_type, tags, main);
+        }
+
+        static List<string> TagNames(List<Tag> tags)
+        {
+            return tags.Select<Tag, string>(tag => tag.Name).ToList<string>();
         }
 
         static void ParseData(ParseContext ctx, out List<string> types_out, out List<Tag> tags_out)
@@ -334,7 +344,14 @@ namespace Mokkosu
             else if (ctx.Tkn.Type == TokenType.ID)
             {
                 var name = ctx.ReadStrToken(TokenType.ID);
-                return new SVar(name);
+                if (ctx.Tags.Contains(name))
+                {
+                    return new STag(name);
+                }
+                else
+                {
+                    return new SVar(name);
+                }
             }
             else
             {

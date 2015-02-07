@@ -11,17 +11,34 @@ namespace Mokkosu
     /// </summary>
     static class Typeinf
     {
-        /// <summary>
-        /// 式を型推論してその型を返す
-        /// </summary>
-        /// <param name="expr">型推論する式</param>
-        /// <returns>式の型</returns>
-        public static Type Start(SExpr expr)
+        public static Type Start(SExpr expr, List<Tag> tag_list)
         {
             var type = new TypeVar();
-            var tenv = TEnv.Empty;
+            var tenv = TagListToEnv(tag_list);
             Inference(expr, type, tenv);
             return type;
+        }
+
+        static Env<TypeScheme> TagListToEnv(List<Tag> tag_list)
+        {
+            var env = Env<TypeScheme>.Empty;
+            foreach (var tag in tag_list)
+            {
+                var ts = ArgsToType(tag.Args, tag.Type);
+                env = Env<TypeScheme>.Cons(tag.Name, ts, env);
+            }
+            return env;
+        }
+
+        static TypeScheme ArgsToType(List<Type> args, Type ret)
+        {
+            args.Reverse();
+            var type = ret;
+            foreach (var t in args)
+            {
+                type = new FunType(t, type);
+            }
+            return new TypeScheme(type);
         }
 
         /// <summary>
@@ -57,6 +74,10 @@ namespace Mokkosu
                 var t = (FunType)type;
                 return OccursCheck(id, t.ArgType) || OccursCheck(id, t.RetType);
             }
+            else if (type is UserType)
+            {
+                return false;
+            }
             else
             {
                 throw new NotImplementedException("Typeinf.Occur");
@@ -80,6 +101,19 @@ namespace Mokkosu
                 var t2 = (FunType)type2;
                 Unification(t1.ArgType, t2.ArgType);
                 Unification(t1.RetType, t2.RetType);
+            }
+            else if (type1 is UserType && type2 is UserType)
+            {
+                var t1 = (UserType)type1;
+                var t2 = (UserType)type2;
+                if (t1.Name == t2.Name)
+                {
+                    // 何もしない
+                }
+                else
+                {
+                    throw new Error("型エラー");
+                }
             }
             else if (type1 is TypeVar)
             {
@@ -158,6 +192,11 @@ namespace Mokkosu
                 var set1 = FreeVars(t.ArgType);
                 var set2 = FreeVars(t.RetType);
                 return ImmutableHashSet<int>.Union(set1, set2);
+            }
+            else if (type is UserType)
+            {
+                var t = (UserType)type;
+                return new ImmutableHashSet<int>();
             }
             else
             {
@@ -262,6 +301,10 @@ namespace Mokkosu
                 var ret_t = MapTypeVar(map, t.RetType);
                 return new FunType(arg_t, ret_t);
             }
+            else if (type is UserType)
+            {
+                return type;
+            }
             else
             {
                 throw new NotImplementedException("Typeinf.MapTypeVar");
@@ -313,6 +356,21 @@ namespace Mokkosu
                 else
                 {
                     throw new Error(string.Format("変数{0}は未定義です", e.Name));
+                }
+            }
+            else if (expr is STag)
+            {
+                var e = (STag)expr;
+                TypeScheme typescheme;
+                if (TEnv.Lookup(tenv, e.Name, out typescheme))
+                {
+                    var t = Instantiate(typescheme);
+                    Unification(e.TagType, t);
+                    Unification(type, t);
+                }
+                else
+                {
+                    throw new Error(string.Format("タグ{0}は未定義です", e.Name));
                 }
             }
             else if (expr is SFun)
