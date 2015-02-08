@@ -108,4 +108,24 @@
             return "()";
         }
     }
+
+    /// <summary>
+    /// 関数型
+    /// </summary>
+    class FunType : MType
+    {
+        public MType ArgType { get; private set; }
+        public MType RetType { get; private set; }
+
+        public FunType(MType arg_type, MType ret_type)
+        {
+            ArgType = arg_type;
+            RetType = ret_type;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0} -> {1})", ArgType, RetType);
+        }
+    }
 }
