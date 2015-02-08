@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main\Mokkosu.cs" />
+    <Compile Include="Utils\MEnv.cs" />
     <Compile Include="Utils\MError.cs" />
     <Compile Include="Utils\MSet.cs" />
     <None Include="Old\ClosureConverter.cs" />
