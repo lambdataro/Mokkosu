@@ -10,17 +10,26 @@ namespace Mokkosu.Lexer
     {
         InputStream _strm;
         Dictionary<string, TokenType> _keywords;
+        Dictionary<char, TokenType> _symbols;
 
         public Lexer(InputStream strm)
         {
             _strm = strm;
             _strm.NextChar();
             InitKeywords();
+            InitSymbols();
         }
 
         void InitKeywords()
         {
             _keywords = new Dictionary<string, TokenType>()
+            {
+            };
+        }
+
+        void InitSymbols()
+        {
+            _symbols = new Dictionary<char, TokenType>()
             {
             };
         }
@@ -204,6 +213,12 @@ namespace Mokkosu.Lexer
                 _strm.NextChar();
                 return new Token(TokenType.CHAR, c);
             }
+            else if (_symbols.ContainsKey(_strm.Char))
+            {
+                var type = _symbols[_strm.Char];
+                _strm.NextChar();
+                return new Token(type);
+            }
             else
             {
                 throw new MError(_strm.Pos + ": 構文エラー (不明な文字)");
@@ -256,9 +271,27 @@ namespace Mokkosu.Lexer
                     return '\t';
                 case 'v':
                     return '\v';
+                case 'u':
+                    return ReadUnicode();
                 default:
                     throw new MError(_strm.Pos + ": エスケープシーケンスが不正");
             }
+        }
+
+        char ReadUnicode()
+        {
+            _strm.NextChar();
+            var sb = new StringBuilder();
+            for (int i = 0; i < 4; i++)
+            {
+                if (!_strm.IsHexDigit())
+                {
+                    throw new MError(_strm.Pos + ": Unicodeエスケープシーケンスが不正");
+                }
+                sb.Append(_strm.Char);
+            }
+            var int_char = Convert.ToUInt32(sb.ToString(), 16);
+            return Convert.ToChar(int_char);
         }
     }
 }
