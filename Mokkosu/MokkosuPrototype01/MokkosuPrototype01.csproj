@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Main\Mokkosu.cs" />
     <Compile Include="Utils\MError.cs" />
+    <Compile Include="Utils\MSet.cs" />
     <None Include="Old\ClosureConverter.cs" />
     <None Include="Old\CodeGenerator.cs" />
     <None Include="Old\Error.cs" />
@@ -61,9 +63,7 @@
     <None Include="App.config" />
     <None Include="Old\Test.m" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Main\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
