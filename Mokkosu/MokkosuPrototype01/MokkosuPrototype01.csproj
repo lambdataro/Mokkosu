@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\InputStream.cs" />
+    <Compile Include="Input\SourceFile.cs" />
+    <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\Token.cs" />
     <Compile Include="Main\Mokkosu.cs" />
     <Compile Include="Utils\MEnv.cs" />
@@ -49,7 +52,6 @@
     <None Include="Old\ClosureConverter.cs" />
     <None Include="Old\CodeGenerator.cs" />
     <None Include="Old\Evaluator.cs" />
-    <None Include="Old\InputStream.cs" />
     <None Include="Old\Lexer.cs" />
     <None Include="Old\Parser.cs" />
     <None Include="Old\Program.cs" />

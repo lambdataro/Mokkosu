@@ -65,7 +65,7 @@ namespace Mokkosu.Input
             {
                 if (_ch == -1)
                 {
-                    throw new MError("構文エラー (予期しないファイル終端)");
+                    throw new MError(Pos + ": 構文エラー (予期しないファイル終端)");
                 }
                 else
                 {
@@ -95,6 +95,24 @@ namespace Mokkosu.Input
         public bool IsDigit()
         {
             return !IsEof() && char.IsDigit(Char);
+        }
+
+        public bool IsHexDigit()
+        {
+            return !IsEof() &&
+                (char.IsDigit(Char) ||
+                (Char >= 'a' && Char <= 'f') ||
+                (Char >= 'A' && Char <= 'F'));
+        }
+
+        public bool IsOctDigit()
+        {
+            return !IsEof() && Char >= '0' && Char <= '7';
+        }
+
+        public bool IsBinDigit()
+        {
+            return !IsEof() && (Char == '0' || Char == '1'); 
         }
 
         public bool IsIdStartChar()
