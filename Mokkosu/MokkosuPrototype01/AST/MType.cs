@@ -1,9 +1,15 @@
 ﻿namespace Mokkosu.AST
 {
+    /// <summary>
+    /// 型の抽象クラス
+    /// </summary>
     abstract class MType
     {
     }
 
+    /// <summary>
+    /// 型変数
+    /// </summary>
     class TypeVar : MType
     {
         static int var_id_counter = 0;
@@ -30,6 +36,9 @@
         }
     }
 
+    /// <summary>
+    /// ユーザ定義型
+    /// </summary>
     class UserType : MType
     {
         public string Name { get; private set; }
@@ -45,6 +54,9 @@
         }
     }
 
+    /// <summary>
+    /// 整数型
+    /// </summary>
     class IntType : MType
     {
         public override string ToString()
@@ -53,6 +65,9 @@
         }
     }
 
+    /// <summary>
+    /// 倍精度浮動小数点型
+    /// </summary>
     class DoubleType : MType
     {
         public override string ToString()
@@ -61,6 +76,9 @@
         }
     }
 
+    /// <summary>
+    /// 文字列型
+    /// </summary>
     class StringType : MType
     {
         public override string ToString()
@@ -69,6 +87,9 @@
         }
     }
 
+    /// <summary>
+    /// 文字型
+    /// </summary>
     class CharType : MType
     {
         public override string ToString()
@@ -77,6 +98,9 @@
         }
     }
 
+    /// <summary>
+    /// ユニット型
+    /// </summary>
     class UnitType : MType
     {
         public override string ToString()
