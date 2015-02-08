@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\MExpr.cs" />
     <Compile Include="Input\InputStream.cs" />
     <Compile Include="Input\SourceFile.cs" />
     <Compile Include="Lexer\Lexer.cs" />

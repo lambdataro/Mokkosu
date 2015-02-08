@@ -3,7 +3,7 @@
     enum TokenType
     {
         // 意味値を持つトークン
-        INT, DOUBLE, STR, CHAR, ID,
+        INT, DBL, STR, CHAR, ID,
         // 制御記号
         EOF
     }

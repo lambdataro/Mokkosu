@@ -142,7 +142,7 @@ namespace Mokkosu.Lexer
             if (is_double)
             {
                 var num = double.Parse(sb.ToString());
-                return new Token(TokenType.DOUBLE, num);
+                return new Token(TokenType.DBL, num);
             }
             else
             {
