@@ -25,6 +25,11 @@ namespace Mokkosu.Input
             return ch;
         }
 
+        public void Close()
+        {
+            _tr.Close();
+        }
+
         public override string ToString()
         {
             return string.Format("{0}({1})", _name, _line);
