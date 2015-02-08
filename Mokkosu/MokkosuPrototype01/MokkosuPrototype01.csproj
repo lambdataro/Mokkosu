@@ -41,26 +41,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClosureConverter.cs" />
-    <Compile Include="CodeGenerator.cs" />
-    <Compile Include="Error.cs" />
-    <Compile Include="Evaluator.cs" />
-    <Compile Include="InputStream.cs" />
-    <Compile Include="Lexer.cs" />
-    <Compile Include="Parser.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Utils\MError.cs" />
+    <None Include="Old\ClosureConverter.cs" />
+    <None Include="Old\CodeGenerator.cs" />
+    <None Include="Old\Error.cs" />
+    <None Include="Old\Evaluator.cs" />
+    <None Include="Old\InputStream.cs" />
+    <None Include="Old\Lexer.cs" />
+    <None Include="Old\Parser.cs" />
+    <None Include="Old\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SourceAst.cs" />
-    <Compile Include="Type.cs" />
-    <Compile Include="Typeinf.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="Value.cs" />
+    <None Include="Old\SourceAst.cs" />
+    <None Include="Old\Type.cs" />
+    <None Include="Old\Typeinf.cs" />
+    <None Include="Old\Utils.cs" />
+    <None Include="Old\Value.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Test.m">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Old\Test.m" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Main\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
