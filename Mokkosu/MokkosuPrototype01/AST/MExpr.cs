@@ -1,4 +1,5 @@
-﻿namespace Mokkosu.AST
+﻿using System.Collections.Generic;
+namespace Mokkosu.AST
 {
     abstract class MExpr
     {
@@ -69,6 +70,30 @@
         public override string ToString()
         {
             return "()";
+        }
+    }
+
+    class MTag : MExpr
+    {
+        public string Name { get; private set; }
+        public List<MExpr> Args { get; private set; }
+
+        public MTag(string name, List<MExpr> args)
+        {
+            Name = name;
+            Args = args;
+        }
+
+        public override string ToString()
+        {
+            if (Args.Count == 0)
+            {
+                return Name;
+            }
+            else
+            {
+                return string.Format("{0}({1})", Name, Utils.Utils.ListToString(Args));
+            }
         }
     }
 }

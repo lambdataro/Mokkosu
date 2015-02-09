@@ -98,6 +98,7 @@ namespace Mokkosu.Parser
                 }
                 ctx.ReadToken(TokenType.RP);
             }
+            ctx.NewTagName(name);
             return new TagDef(name, args);
         }
 
@@ -236,6 +237,30 @@ namespace Mokkosu.Parser
                     return expr;
                 }
             }
+            else if (ctx.Tkn.Type == TokenType.ID)
+            {
+                var str = ctx.ReadStrToken(TokenType.ID);
+                if (ctx.IsTagName(str))
+                {
+                    var args = new List<MExpr>();
+                    if (ctx.Tkn.Type == TokenType.LP)
+                    {
+                        ctx.ReadToken(TokenType.LP);
+                        args.Add(ParseExpr(ctx));
+                        while (ctx.Tkn.Type == TokenType.COM)
+                        {
+                            ctx.ReadToken(TokenType.COM);
+                            args.Add(ParseExpr(ctx));
+                        }
+                        ctx.ReadToken(TokenType.RP);
+                    }
+                    return new MTag(str, args);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
             else if (ctx.Tkn.Type == TokenType.INT)
             {
                 var num = ctx.ReadIntToken(TokenType.INT);
@@ -262,9 +287,5 @@ namespace Mokkosu.Parser
                 throw new MError();
             }
         }
-
-
-
-
     }
 }

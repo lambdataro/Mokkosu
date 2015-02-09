@@ -1,18 +1,21 @@
 ﻿using Mokkosu.Lexer;
 using Mokkosu.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace Mokkosu.Parser
 {
     class ParseContext
     {
         Lexer.Lexer _lexer;
+        HashSet<string> _tag_names;
 
         public Token Tkn { get; private set; }
 
         public ParseContext(Lexer.Lexer lexer)
         {
             _lexer = lexer;
+            _tag_names = new HashSet<string>();
             NextToken();
         }
 
@@ -92,6 +95,16 @@ namespace Mokkosu.Parser
         public void SyntaxError()
         {
             throw new MError(string.Format("{0}: 構文エラー", _lexer.Pos));
+        }
+
+        public void NewTagName(string name)
+        {
+            _tag_names.Add(name);
+        }
+
+        public bool IsTagName(string name)
+        {
+            return _tag_names.Contains(name);
         }
     }
 }
