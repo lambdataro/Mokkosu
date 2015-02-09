@@ -45,7 +45,7 @@
 
         public override string ToString()
         {
-            return Value;
+            return "\"" + Value + "\"";
         }
     }
 
@@ -60,7 +60,7 @@
 
         public override string ToString()
         {
-            return Value.ToString();
+            return "\'" + Value.ToString() + "\'";
         }
     }
 

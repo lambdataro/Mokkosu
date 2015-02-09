@@ -18,6 +18,10 @@ namespace Mokkosu.Parser
                 {
                     top_exprs.Add(ParseData(ctx));
                 }
+                else if (ctx.Tkn.Type == TokenType.DO)
+                {
+                    top_exprs.Add(ParseTopDo(ctx));
+                }
                 else
                 {
                     ctx.SyntaxError();
@@ -27,6 +31,12 @@ namespace Mokkosu.Parser
 
             return new ParseResult(top_exprs);
         }
+
+        #region Data文
+
+        //============================================================
+        // Data文
+        //============================================================
 
         static MUserTypeDef ParseData(ParseContext ctx)
         {
@@ -178,5 +188,83 @@ namespace Mokkosu.Parser
             }
             return list;
         }
+
+        #endregion
+
+        #region do文
+
+        //============================================================
+        // do文
+        //============================================================
+
+        static MTopDo ParseTopDo(ParseContext ctx)
+        {
+            ctx.ReadToken(TokenType.DO);
+
+            var expr = ParseExpr(ctx);
+
+            ctx.ReadToken(TokenType.SC);
+
+            return new MTopDo(expr);
+        }
+
+        #endregion
+
+        //============================================================
+        // 式
+        //============================================================
+
+        static MExpr ParseExpr(ParseContext ctx)
+        {
+            return ParseFactor(ctx);
+        }
+
+        static MExpr ParseFactor(ParseContext ctx)
+        {
+            if (ctx.Tkn.Type == TokenType.LP)
+            {
+                ctx.ReadToken(TokenType.LP);
+                if (ctx.Tkn.Type == TokenType.RP)
+                {
+                    ctx.ReadToken(TokenType.RP);
+                    return new MUnit();
+                }
+                else
+                {
+                    var expr = ParseExpr(ctx);
+                    ctx.ReadToken(TokenType.RP);
+                    return expr;
+                }
+            }
+            else if (ctx.Tkn.Type == TokenType.INT)
+            {
+                var num = ctx.ReadIntToken(TokenType.INT);
+                return new MInt(num);
+            }
+            else if (ctx.Tkn.Type == TokenType.DBL)
+            {
+                var num = ctx.ReadDoubleToken(TokenType.DBL);
+                return new MDouble(num);
+            }
+            else if (ctx.Tkn.Type == TokenType.STR)
+            {
+                var str = ctx.ReadStrToken(TokenType.STR);
+                return new MString(str);
+            }
+            else if (ctx.Tkn.Type == TokenType.CHAR)
+            {
+                var ch = ctx.ReadCharToken(TokenType.CHAR);
+                return new MChar(ch);
+            }
+            else
+            {
+                ctx.SyntaxError();
+                throw new MError();
+            }
+        }
+
+
+
+
     }
 }

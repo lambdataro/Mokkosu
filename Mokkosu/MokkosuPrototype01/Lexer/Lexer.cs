@@ -26,6 +26,7 @@ namespace Mokkosu.Lexer
             {
                 { "type", TokenType.TYPE },
                 { "and", TokenType.AND },
+                { "do", TokenType.DO },
             };
         }
 
@@ -220,16 +221,40 @@ namespace Mokkosu.Lexer
                 _strm.NextChar();
                 return NextStringLiteral();
             }
+            else if (_strm.Char == '@')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '\"')
+                {
+                    _strm.NextChar();
+                    return NextVerbatimStringLiteral();
+                }
+                else
+                {
+                    return new Token(TokenType.AT);
+                }
+            }
             else if (_strm.Char == '\'')
             {
                 _strm.NextChar();
-                var c = EscapeChar();
+                char ch;
+                if (_strm.Char == '\\')
+                {
+                    _strm.NextChar();
+                    ch = EscapeChar();
+                    _strm.NextChar();
+                }
+                else
+                {
+                    ch = _strm.Char;
+                    _strm.NextChar();
+                }
                 if (_strm.Char != '\'')
                 {
                     throw new MError(_strm.Pos + ": 文字定数が閉じていない");
                 }
                 _strm.NextChar();
-                return new Token(TokenType.CHAR, c);
+                return new Token(TokenType.CHAR, ch);                
             }
             else if (_strm.Char == '-')
             {
@@ -270,6 +295,18 @@ namespace Mokkosu.Lexer
                 {
                     sb.Append(_strm.Char);
                 }
+                _strm.NextChar();
+            }
+            _strm.NextChar();
+            return new Token(TokenType.STR, sb.ToString());
+        }
+
+        Token NextVerbatimStringLiteral()
+        {
+            var sb = new StringBuilder();
+            while (_strm.Char != '\"')
+            {
+                sb.Append(_strm.Char);
                 _strm.NextChar();
             }
             _strm.NextChar();
