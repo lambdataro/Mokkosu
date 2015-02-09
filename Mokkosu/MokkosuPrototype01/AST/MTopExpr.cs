@@ -45,7 +45,7 @@ namespace Mokkosu.AST
             var sb = new StringBuilder();
             sb.Append(Name);
             sb.Append("<");
-            TypeParams.ForEach(s => sb.AppendFormat("{0}, ", s));
+            sb.Append(Utils.Utils.ListToString(TypeParams));
             sb.Append("> = ");
             Tags.ForEach(def => sb.Append(def));
             return sb.ToString();
@@ -69,7 +69,7 @@ namespace Mokkosu.AST
             sb.Append(" | ");
             sb.Append(Name);
             sb.Append("(");
-            Args.ForEach(t => sb.AppendFormat("{0}, ", t));
+            sb.Append(Utils.Utils.ListToString(Args));
             sb.Append(")");
             return sb.ToString();
         }
