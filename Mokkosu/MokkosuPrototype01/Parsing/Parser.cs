@@ -1,10 +1,10 @@
 ﻿using Mokkosu.AST;
-using Mokkosu.Lexer;
+using Mokkosu.Lexing;
 using Mokkosu.Utils;
 using System;
 using System.Collections.Generic;
 
-namespace Mokkosu.Parser
+namespace Mokkosu.Parsing
 {
     static class Parser
     {

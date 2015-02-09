@@ -1,5 +1,6 @@
 ﻿using Mokkosu.Input;
-using Mokkosu.Parser;
+using Mokkosu.Lexing;
+using Mokkosu.Parsing;
 using System;
 
 namespace Mokkosu.Main
@@ -20,10 +21,10 @@ namespace Mokkosu.Main
                 input_stream.AddSourceFile(file);
             }
 
-            var lexer = new Lexer.Lexer(input_stream);
+            var lexer = new Lexer(input_stream);
             var parse_context = new ParseContext(lexer);
 
-            var parse_result = Parser.Parser.Start(parse_context);
+            var parse_result = Parser.Start(parse_context);
 
             foreach (var top_expr in parse_result.TopExprs)
             {

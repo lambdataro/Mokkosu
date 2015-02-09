@@ -1,4 +1,4 @@
-﻿namespace Mokkosu.Lexer
+﻿namespace Mokkosu.Lexing
 {
     enum TokenType
     {

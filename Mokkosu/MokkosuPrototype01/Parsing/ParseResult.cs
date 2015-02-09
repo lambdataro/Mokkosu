@@ -1,7 +1,7 @@
 ﻿using Mokkosu.AST;
 using System.Collections.Generic;
 
-namespace Mokkosu.Parser
+namespace Mokkosu.Parsing
 {
     class ParseResult
     {

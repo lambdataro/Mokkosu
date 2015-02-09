@@ -1,18 +1,18 @@
-﻿using Mokkosu.Lexer;
+﻿using Mokkosu.Lexing;
 using Mokkosu.Utils;
 using System;
 using System.Collections.Generic;
 
-namespace Mokkosu.Parser
+namespace Mokkosu.Parsing
 {
     class ParseContext
     {
-        Lexer.Lexer _lexer;
+        Lexer _lexer;
         HashSet<string> _tag_names;
 
         public Token Tkn { get; private set; }
 
-        public ParseContext(Lexer.Lexer lexer)
+        public ParseContext(Lexer lexer)
         {
             _lexer = lexer;
             _tag_names = new HashSet<string>();
