@@ -14,7 +14,7 @@ namespace Mokkosu.Parser
 
             while (ctx.Tkn.Type != TokenType.EOF)
             {
-                if (ctx.Tkn.Type == TokenType.DATA)
+                if (ctx.Tkn.Type == TokenType.TYPE)
                 {
                     top_exprs.Add(ParseData(ctx));
                 }
@@ -32,7 +32,7 @@ namespace Mokkosu.Parser
         {
             var items = new List<MUserTypeDefItem>();
 
-            ctx.ReadToken(TokenType.DATA);
+            ctx.ReadToken(TokenType.TYPE);
 
             items.Add(ParseDataItem(ctx));
 
@@ -55,7 +55,8 @@ namespace Mokkosu.Parser
             if (ctx.Tkn.Type == TokenType.LT)
             {
                 ctx.ReadToken(TokenType.LT);
-                type_params = ParseStrList(ctx, TokenType.GT);
+                type_params = ParseIdList(ctx);
+                ctx.ReadToken(TokenType.GT);
             }
 
             ctx.ReadToken(TokenType.EQ);
@@ -90,16 +91,15 @@ namespace Mokkosu.Parser
             return new TagDef(name, args);
         }
 
-        static List<string> ParseStrList(ParseContext ctx, TokenType end)
+        static List<string> ParseIdList(ParseContext ctx)
         {
             var list = new List<string>();
             list.Add(ctx.ReadStrToken(TokenType.ID));
-            while (ctx.Tkn.Type != end)
+            while (ctx.Tkn.Type == TokenType.COM)
             {
                 ctx.ReadToken(TokenType.COM);
                 list.Add(ctx.ReadStrToken(TokenType.ID));
             }
-            ctx.ReadToken(TokenType.GT);
             return list;
         }
 
@@ -147,7 +147,17 @@ namespace Mokkosu.Parser
                     case "String":
                         return new StringType();
                     default:
-                        return new UserType(name);
+                        if (ctx.Tkn.Type == TokenType.LT)
+                        {
+                            ctx.ReadToken(TokenType.LT);
+                            var args = ParseTypeList(ctx);
+                            ctx.ReadToken(TokenType.GT);
+                            return new UserType(name, args);
+                        }
+                        else
+                        {
+                            return new UserType(name);
+                        }
                 }
             }
             else
@@ -155,6 +165,18 @@ namespace Mokkosu.Parser
                 ctx.SyntaxError();
                 throw new MError();
             }
+        }
+
+        static List<MType> ParseTypeList(ParseContext ctx)
+        {
+            var list = new List<MType>();
+            list.Add(ParseType(ctx));
+            while (ctx.Tkn.Type == TokenType.COM)
+            {
+                ctx.ReadToken(TokenType.COM);
+                list.Add(ParseType(ctx));
+            }
+            return list;
         }
     }
 }

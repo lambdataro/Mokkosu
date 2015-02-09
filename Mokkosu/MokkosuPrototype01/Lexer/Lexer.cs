@@ -24,7 +24,7 @@ namespace Mokkosu.Lexer
         {
             _keywords = new Dictionary<string, TokenType>()
             {
-                { "data", TokenType.DATA },
+                { "type", TokenType.TYPE },
                 { "and", TokenType.AND },
             };
         }
@@ -195,7 +195,14 @@ namespace Mokkosu.Lexer
                 _strm.NextChar();
             }
             var str = sb.ToString();
-            return new Token(TokenType.ID, str);
+            if (_keywords.ContainsKey(str))
+            {
+                return new Token(_keywords[str]);
+            }
+            else
+            {
+                return new Token(TokenType.ID, str);
+            }
         }
 
         Token NextSymbolToken()

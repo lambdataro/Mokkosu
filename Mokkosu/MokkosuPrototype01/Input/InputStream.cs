@@ -37,13 +37,19 @@ namespace Mokkosu.Input
                 {
                     if (_source_stack.Count > 0)
                     {
-                        _current_srcfile.Close();
+                        if (_current_srcfile != null)
+                        {
+                            _current_srcfile.Close();
+                        }
                         _current_srcfile = _source_stack.Pop();
                         continue;
                     }
                     else if (_source_queue.Count > 0)
                     {
-                        _current_srcfile.Close();
+                        if (_current_srcfile != null)
+                        {
+                            _current_srcfile.Close();
+                        }
                         _current_srcfile = _source_queue.Dequeue();
                         continue;
                     }

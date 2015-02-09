@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+
 namespace Mokkosu.AST
 {
     abstract class MTopExpr
@@ -13,6 +15,15 @@ namespace Mokkosu.AST
         public MUserTypeDef(List<MUserTypeDefItem> items)
         {
             Items = items;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append("type:\n");
+            Items.ForEach(item => { sb.Append(item); sb.Append("\n"); });
+            sb.Append("end type.");
+            return sb.ToString();
         }
     }
 
@@ -28,6 +39,17 @@ namespace Mokkosu.AST
             TypeParams = type_params;
             Tags = tags;
         }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(Name);
+            sb.Append("<");
+            TypeParams.ForEach(s => sb.AppendFormat("{0}, ", s));
+            sb.Append("> = ");
+            Tags.ForEach(def => sb.Append(def));
+            return sb.ToString();
+        }
     }
 
     class TagDef
@@ -40,6 +62,17 @@ namespace Mokkosu.AST
             Name = name;
             Args = args;
         }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(" | ");
+            sb.Append(Name);
+            sb.Append("(");
+            Args.ForEach(t => sb.AppendFormat("{0}, ", t));
+            sb.Append(")");
+            return sb.ToString();
+        }
     }
 
     class MTopDo : MTopExpr
@@ -49,6 +82,11 @@ namespace Mokkosu.AST
         public MTopDo(MExpr expr)
         {
             Expr = expr;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("do {0};", Expr);
         }
     }
 }

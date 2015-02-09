@@ -1,4 +1,7 @@
-﻿namespace Mokkosu.AST
+﻿using System.Collections.Generic;
+using System.Text;
+
+namespace Mokkosu.AST
 {
     /// <summary>
     /// 型の抽象クラス
@@ -42,15 +45,30 @@
     class UserType : MType
     {
         public string Name { get; private set; }
+        public List<MType> Args { get; private set; }
 
         public UserType(string name)
         {
             Name = name;
+            Args = new List<MType>();
+        }
+
+        public UserType(string name, List<MType> args)
+        {
+            Name = name;
+            Args = args;
         }
 
         public override string ToString()
         {
-            return Name;
+            if (Args.Count == 0)
+            {
+                return Name;
+            }
+            else
+            {
+                return string.Format("{0}<{1}>", Name, Utils.Utils.ListToString(Args));
+            }
         }
     }
 

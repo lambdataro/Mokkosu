@@ -9,7 +9,7 @@
         LT, GT, EQ,
         LP, RP, MNS,
         // キーワード
-        DATA, AND,
+        TYPE, AND,
         // 制御記号
         EOF
     }
