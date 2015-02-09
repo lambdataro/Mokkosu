@@ -44,6 +44,7 @@
     <Compile Include="AST\MExpr.cs" />
     <Compile Include="AST\MTopExpr.cs" />
     <Compile Include="AST\MType.cs" />
+    <Compile Include="AST\MTypeScheme.cs" />
     <Compile Include="Input\InputStream.cs" />
     <Compile Include="Input\SourceFile.cs" />
     <Compile Include="Lexer\Lexer.cs" />
