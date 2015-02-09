@@ -53,6 +53,7 @@
     <Compile Include="Parsing\ParseContext.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\ParseResult.cs" />
+    <Compile Include="TypeInference\Typeinf.cs" />
     <Compile Include="Utils\MEnv.cs" />
     <Compile Include="Utils\MError.cs" />
     <Compile Include="Utils\MSet.cs" />
