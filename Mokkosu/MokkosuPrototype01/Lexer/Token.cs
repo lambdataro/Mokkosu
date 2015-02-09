@@ -4,6 +4,12 @@
     {
         // 意味値を持つトークン
         INT, DBL, STR, CHAR, ID,
+        // 記号
+        COM, COL, BAR, SC, ARROW,
+        LT, GT, EQ,
+        LP, RP, MNS,
+        // キーワード
+        DATA, AND,
         // 制御記号
         EOF
     }

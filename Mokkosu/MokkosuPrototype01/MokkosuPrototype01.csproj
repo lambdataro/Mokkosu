@@ -49,6 +49,9 @@
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\Token.cs" />
     <Compile Include="Main\Mokkosu.cs" />
+    <Compile Include="Parser\ParseContext.cs" />
+    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\ParseResult.cs" />
     <Compile Include="Utils\MEnv.cs" />
     <Compile Include="Utils\MError.cs" />
     <Compile Include="Utils\MSet.cs" />

@@ -24,6 +24,8 @@ namespace Mokkosu.Lexer
         {
             _keywords = new Dictionary<string, TokenType>()
             {
+                { "data", TokenType.DATA },
+                { "and", TokenType.AND },
             };
         }
 
@@ -31,6 +33,15 @@ namespace Mokkosu.Lexer
         {
             _symbols = new Dictionary<char, TokenType>()
             {
+                { ',', TokenType.COM },
+                { ':', TokenType.COL },
+                { '|', TokenType.BAR },
+                { ';', TokenType.SC },
+                { '<', TokenType.LT },
+                { '>', TokenType.GT },
+                { '=', TokenType.EQ },
+                { '(', TokenType.LP },
+                { ')', TokenType.RP },
             };
         }
 
@@ -212,6 +223,19 @@ namespace Mokkosu.Lexer
                 }
                 _strm.NextChar();
                 return new Token(TokenType.CHAR, c);
+            }
+            else if (_strm.Char == '-')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '>')
+                {
+                    _strm.NextChar();
+                    return new Token(TokenType.ARROW);
+                }
+                else
+                {
+                    return new Token(TokenType.MNS);
+                }
             }
             else if (_symbols.ContainsKey(_strm.Char))
             {

@@ -33,12 +33,22 @@ namespace Mokkosu.AST
     class TagDef
     {
         public string Name { get; private set; }
-        public List<Tuple<string, MType>> Args { get; private set; }
+        public List<MType> Args { get; private set; }
 
-        public TagDef(string name, List<Tuple<string, MType>> args)
+        public TagDef(string name, List<MType> args)
         {
             Name = name;
             Args = args;
+        }
+    }
+
+    class MTopDo : MTopExpr
+    {
+        public MExpr Expr { get; private set; }
+
+        public MTopDo(MExpr expr)
+        {
+            Expr = expr;
         }
     }
 }
