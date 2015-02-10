@@ -287,7 +287,7 @@ namespace Mokkosu.Parsing
             if (ctx.Tkn.Type == TokenType.BS)
             {
                 ctx.ReadToken(TokenType.BS);
-                var arg_pat = ParsePattern(ctx);
+                var arg_pat = ParsePatFactor(ctx);
                 ctx.ReadToken(TokenType.ARROW);
                 var body = ParseFunExpr(ctx);
                 return new MLambda(arg_pat, body);
@@ -497,7 +497,52 @@ namespace Mokkosu.Parsing
 
         static MPat ParsePattern(ParseContext ctx)
         {
-            return ParsePatFactor(ctx);
+            return ParseOrPat(ctx);
+        }
+        
+        static MPat ParseOrPat(ParseContext ctx)
+        {
+            var lhs = ParseAsPat(ctx);
+
+            while (ctx.Tkn.Type == TokenType.BAR)
+            {
+                ctx.ReadToken(TokenType.BAR);
+                var rhs = ParseAsPat(ctx);
+                lhs = new POr(lhs, rhs);
+            }
+
+            return lhs;
+        }
+
+        static MPat ParseAsPat(ParseContext ctx)
+        {
+            var pat = ParseConsPat(ctx);
+
+            if (ctx.Tkn.Type == TokenType.AS)
+            {
+                ctx.ReadToken(TokenType.AS);
+                var name = ctx.ReadStrToken(TokenType.ID);
+                return new PAs(pat, name);
+            }
+            else
+            {
+                return pat;
+            }
+        }
+
+        static MPat ParseConsPat(ParseContext ctx)
+        {
+            var lhs = ParsePatFactor(ctx);
+
+            if (ctx.Tkn.Type == TokenType.COLCOL)
+            {
+                var rhs = ParseConsPat(ctx);
+                return new PCons(lhs, rhs);
+            }
+            else
+            {
+                return lhs;
+            }
         }
 
         static MPat ParsePatFactor(ParseContext ctx)
@@ -509,13 +554,83 @@ namespace Mokkosu.Parsing
             }
             else if (ctx.Tkn.Type == TokenType.UB)
             {
+                ctx.ReadToken(TokenType.UB);
                 return new PWild();
+            }
+            else if (ctx.Tkn.Type == TokenType.INT)
+            {
+                var value = ctx.ReadIntToken(TokenType.INT);
+                return new PInt(value);
+            }
+            else if (ctx.Tkn.Type == TokenType.DBL)
+            {
+                var value = ctx.ReadDoubleToken(TokenType.DBL);
+                return new PDouble(value);
+            }
+            else if (ctx.Tkn.Type == TokenType.STR)
+            {
+                var value = ctx.ReadStrToken(TokenType.STR);
+                return new PString(value);
+            }
+            else if (ctx.Tkn.Type == TokenType.CHAR)
+            {
+                var value = ctx.ReadCharToken(TokenType.CHAR);
+                return new PChar(value);
+            }
+            else if (ctx.Tkn.Type == TokenType.LP)
+            {
+                ctx.ReadToken(TokenType.LP);
+                if (ctx.Tkn.Type == TokenType.RP)
+                {
+                    return new PUnit();
+                }
+                else
+                {
+                    var pat_list = ParsePatList(ctx);
+                    ctx.ReadToken(TokenType.RP);
+                    if (pat_list.Count == 1)
+                    {
+                        return pat_list[0];
+                    }
+                    else
+                    {
+                        return new PTuple(pat_list);
+                    }
+                }
+            }
+            else if (ctx.Tkn.Type == TokenType.TRUE)
+            {
+                ctx.ReadToken(TokenType.TRUE);
+                return new PBool(true);
+            }
+            else if (ctx.Tkn.Type == TokenType.FALSE)
+            {
+                ctx.ReadToken(TokenType.FALSE);
+                return new PBool(false);
+            }
+            else if (ctx.Tkn.Type == TokenType.LBK)
+            {
+                ctx.ReadToken(TokenType.LBK);
+                ctx.ReadToken(TokenType.RBK);
+                return new PNil();
             }
             else
             {
                 ctx.SyntaxError();
                 throw new MError();
             }
+        }
+
+        static List<MPat> ParsePatList(ParseContext ctx)
+        {
+            var list = new List<MPat>();
+            list.Add(ParsePattern(ctx));
+            while (ctx.Tkn.Type == TokenType.COM)
+            {
+                ctx.ReadToken(TokenType.COM);
+                list.Add(ParsePattern(ctx));
+            }
+            return list;
         }
 
         #endregion

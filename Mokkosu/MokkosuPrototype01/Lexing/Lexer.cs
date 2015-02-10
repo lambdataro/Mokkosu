@@ -35,6 +35,7 @@ namespace Mokkosu.Lexing
                 { "let", TokenType.LET },
                 { "fun", TokenType.FUN },
                 { "include", TokenType.INCLUDE },
+                { "as", TokenType.AS },
             };
         }
 
