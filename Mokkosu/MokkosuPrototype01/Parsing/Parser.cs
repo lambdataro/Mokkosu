@@ -22,6 +22,14 @@ namespace Mokkosu.Parsing
                 {
                     top_exprs.Add(ParseTopDo(ctx));
                 }
+                else if (ctx.Tkn.Type == TokenType.LET)
+                {
+                    top_exprs.Add(ParseTopLet(ctx));
+                }
+                else if (ctx.Tkn.Type == TokenType.FUN)
+                {
+                    top_exprs.Add(ParseTopFun(ctx));
+                }
                 else
                 {
                     ctx.SyntaxError();
@@ -201,13 +209,59 @@ namespace Mokkosu.Parsing
         static MTopDo ParseTopDo(ParseContext ctx)
         {
             ctx.ReadToken(TokenType.DO);
-
             var expr = ParseExpr(ctx);
-
             ctx.ReadToken(TokenType.SC);
-
             return new MTopDo(expr);
         }
+
+        #endregion
+
+        #region let文
+
+        //============================================================
+        // let文
+        //============================================================
+
+        static MTopLet ParseTopLet(ParseContext ctx)
+        {
+            ctx.ReadToken(TokenType.LET);
+            var pat = ParsePattern(ctx);
+            ctx.ReadToken(TokenType.EQ);
+            var expr = ParseExpr(ctx);
+            ctx.ReadToken(TokenType.SC);
+            return new MTopLet(pat, expr);
+        }
+
+        #endregion
+
+        #region fun文
+
+        //============================================================
+        // fun文
+        //============================================================
+
+        static MTopFun ParseTopFun(ParseContext ctx)
+        {
+            ctx.ReadToken(TokenType.FUN);
+            var items = new List<MTopFunItem>();
+            items.Add(ParseTopFunItem(ctx));
+            while (ctx.Tkn.Type == TokenType.AND)
+            {
+                ctx.ReadToken(TokenType.AND);
+                items.Add(ParseTopFunItem(ctx));
+            }
+            ctx.ReadToken(TokenType.SC);
+            return new MTopFun(items);
+        }
+
+        static MTopFunItem ParseTopFunItem(ParseContext ctx)
+        {
+            var name = ctx.ReadStrToken(TokenType.ID);
+            ctx.ReadToken(TokenType.EQ);
+            var expr = ParseExpr(ctx);
+            return new MTopFunItem(name, expr);
+        }
+
 
         #endregion
 
@@ -227,10 +281,10 @@ namespace Mokkosu.Parsing
             if (ctx.Tkn.Type == TokenType.BS)
             {
                 ctx.ReadToken(TokenType.BS);
-                var arg_name = ctx.ReadStrToken(TokenType.ID);
+                var arg_pat = ParsePattern(ctx);
                 ctx.ReadToken(TokenType.ARROW);
                 var body = ParseFunExpr(ctx);
-                return new MLambda(arg_name, body);
+                return new MLambda(arg_pat, body);
             }
             else if (ctx.Tkn.Type == TokenType.IF)
             {
@@ -386,10 +440,12 @@ namespace Mokkosu.Parsing
             }
             else if (ctx.Tkn.Type == TokenType.TRUE)
             {
+                ctx.ReadToken(TokenType.TRUE);
                 return new MBool(true);
             }
             else if (ctx.Tkn.Type == TokenType.FALSE)
             {
+                ctx.ReadToken(TokenType.FALSE);
                 return new MBool(false);
             }
             else

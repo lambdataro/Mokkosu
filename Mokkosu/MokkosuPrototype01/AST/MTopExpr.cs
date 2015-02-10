@@ -89,7 +89,72 @@ namespace Mokkosu.AST
 
         public override string ToString()
         {
-            return string.Format("do {0};", Expr);
+            return string.Format("do {0} : {1};", Expr, Type);
         }
     }
+
+    class MTopLet : MTopExpr
+    {
+        public MPat Pat { get; private set; }
+        public MExpr Expr { get; private set; }
+        public MType Type { get; private set; }
+
+        public MTopLet(MPat pat, MExpr expr)
+        {
+            Pat = pat;
+            Expr = expr;
+            Type = new TypeVar();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("let {0} = {1};", Pat, Expr);
+        }
+    }
+
+    class MTopFun : MTopExpr
+    {
+        public List<MTopFunItem> Items { get; private set; }
+
+        public MTopFun(List<MTopFunItem> items)
+        {
+            Items = items;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("=== fun ===");
+
+            foreach (var item in Items)
+            {
+                sb.AppendLine(item.ToString());
+            }
+
+            sb.Append("=== end fun. ===");
+
+            return sb.ToString();
+        }
+    }
+
+    class MTopFunItem
+    {
+        public string Name { get; private set; }
+        public MExpr Expr { get; private set; }
+        public MType Type { get; private set; }
+
+        public MTopFunItem(string name, MExpr expr)
+        {
+            Name = name;
+            Expr = expr;
+            Type = new TypeVar();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} : {1} = {2};", Name, Type, Expr);
+        }
+    }
+
 }

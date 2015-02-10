@@ -32,6 +32,8 @@ namespace Mokkosu.Lexing
                 { "pat", TokenType.PAT },
                 { "true", TokenType.TRUE },
                 { "false", TokenType.FALSE },
+                { "let", TokenType.LET },
+                { "fun", TokenType.FUN },
             };
         }
 

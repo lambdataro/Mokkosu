@@ -176,27 +176,27 @@ namespace Mokkosu.AST
     /// </summary>
     class MLambda : MExpr
     {
-        public string ArgName { get; private set; }
+        public MPat ArgPat { get; private set; }
         public MType ArgType { get; private set; }
         public MExpr Body { get; private set; }
 
-        public MLambda(string arg_name, MExpr body)
+        public MLambda(MPat arg_pat, MExpr body)
         {
-            ArgName = arg_name;
+            ArgPat = arg_pat;
             ArgType = new TypeVar();
             Body = body;
         }
 
-        public MLambda(string arg_name, MType arg_type, MExpr body)
+        public MLambda(MPat arg_pat, MType arg_type, MExpr body)
         {
-            ArgName = arg_name;
+            ArgPat = arg_pat;
             ArgType = arg_type;
             Body = body;
         }
 
         public override string ToString()
         {
-            return string.Format("(\\{0} : {1} -> {2})", ArgName, ArgType, Body);
+            return string.Format("(\\{0} : {1} -> {2})", ArgPat, ArgType, Body);
         }
     }
 

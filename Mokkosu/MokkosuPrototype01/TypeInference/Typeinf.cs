@@ -58,8 +58,17 @@ namespace Mokkosu.TypeInference
             else if (top_expr is MTopDo)
             {
                 TypeinfTopDo((MTopDo)top_expr, ctx);
-                var e = (MTopDo)top_expr;
-                System.Console.WriteLine("{0} : {1}", e.Expr, e.Type);
+                System.Console.WriteLine(top_expr);
+            }
+            else if (top_expr is MTopLet)
+            {
+                TypeinfTopLet((MTopLet)top_expr, ctx);
+                System.Console.WriteLine(top_expr);
+            }
+            else if (top_expr is MTopFun)
+            {
+                TypeinfTopFun((MTopFun)top_expr, ctx);
+                System.Console.WriteLine(top_expr);
             }
             else
             {
@@ -188,11 +197,53 @@ namespace Mokkosu.TypeInference
         /// <summary>
         /// トップレベルdoの型推論
         /// </summary>
-        /// <param name="top_do"></param>
-        /// <param name="ctx"></param>
+        /// <param name="top_do">トップレベルdo</param>
+        /// <param name="ctx">型推論文脈</param>
         static void TypeinfTopDo(MTopDo top_do, TypeInfContext ctx)
         {
             Inference(top_do.Expr, top_do.Type, ctx.TEnv, ctx);
+        }
+
+        /// <summary>
+        /// トップレベルletの型推論
+        /// </summary>
+        /// <param name="top_let">トップレベルlet</param>
+        /// <param name="ctx">型推論文脈</param>
+        static void TypeinfTopLet(MTopLet top_let, TypeInfContext ctx)
+        {
+            var tenv1 = InferencePat(top_let.Pat, top_let.Type, ctx.TEnv, ctx);
+            Inference(top_let.Expr, top_let.Type, ctx.TEnv, ctx);
+            ctx.TEnv = tenv1.Append(ctx.TEnv);
+        }
+
+        /// <summary>
+        /// トップレベルfunの型推論
+        /// </summary>
+        /// <param name="top_fun">トップレベルfun</param>
+        /// <param name="ctx">型推論文脈</param>
+        static void TypeinfTopFun(MTopFun top_fun, TypeInfContext ctx)
+        {
+            var tenv = ctx.TEnv;
+
+            foreach (var item in top_fun.Items)
+            {
+                tenv = tenv.Cons(item.Name, new MTypeScheme(item.Type));
+            }
+
+            foreach (var item in top_fun.Items)
+            {
+                Inference(item.Expr, item.Type, tenv, ctx);
+            }
+
+            var tenv2 = ctx.TEnv;
+
+            foreach (var item in top_fun.Items)
+            {
+                var ts = Generalize(ctx.TEnv, item.Type);
+                tenv2 = tenv2.Cons(item.Name, ts);
+            }
+
+            ctx.TEnv = tenv2;
         }
 
         /// <summary>
@@ -271,9 +322,10 @@ namespace Mokkosu.TypeInference
             else if (expr is MLambda)
             {
                 var e = (MLambda)expr;
-                var tenv2 = tenv.Cons(e.ArgName, new MTypeScheme(e.ArgType));
+                var tenv2 = InferencePat(e.ArgPat, e.ArgType, tenv, ctx);
+                var tenv3 = tenv2.Append(tenv);
                 var ret_type = new TypeVar();
-                Inference(e.Body, ret_type, tenv2, ctx);
+                Inference(e.Body, ret_type, tenv3, ctx);
                 var fun_type = new FunType(e.ArgType, ret_type);
                 Unification(type, fun_type);
             }

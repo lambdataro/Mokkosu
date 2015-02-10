@@ -11,7 +11,7 @@
         LP, RP, PLS, MNS, AST, SLS,
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
-        TRUE, FALSE,
+        TRUE, FALSE, LET, FUN,
         // 制御記号
         EOF
     }
