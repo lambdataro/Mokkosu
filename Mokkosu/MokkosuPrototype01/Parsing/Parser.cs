@@ -234,7 +234,7 @@ namespace Mokkosu.Parsing
             }
             else
             {
-                return ParseAppExpr(ctx);
+                return ParseAddExpr(ctx);
             }
         }
 
@@ -339,7 +339,7 @@ namespace Mokkosu.Parsing
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    return new MVar(str);
                 }
             }
             else if (ctx.Tkn.Type == TokenType.INT)
