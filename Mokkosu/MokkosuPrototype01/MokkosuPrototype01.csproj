@@ -58,14 +58,7 @@
     <Compile Include="Utils\MError.cs" />
     <Compile Include="Utils\MSet.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <None Include="Old\ClosureConverter.cs" />
-    <None Include="Old\CodeGenerator.cs" />
-    <None Include="Old\Parser.cs" />
-    <None Include="Old\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Old\SourceAst.cs" />
-    <None Include="Old\Typeinf.cs" />
-    <None Include="Old\Value.cs" />
     <None Include="Test\Test.m">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
