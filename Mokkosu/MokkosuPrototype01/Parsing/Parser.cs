@@ -30,6 +30,13 @@ namespace Mokkosu.Parsing
                 {
                     top_exprs.Add(ParseTopFun(ctx));
                 }
+                else if (ctx.Tkn.Type == TokenType.INCLUDE)
+                {
+                    ctx.ReadToken(TokenType.INCLUDE);
+                    var name = ctx.ReadStrToken(TokenType.STR);
+                    ctx.ReadToken(TokenType.SC);
+                    ctx.IncludeFile(name);
+                }
                 else
                 {
                     ctx.SyntaxError();

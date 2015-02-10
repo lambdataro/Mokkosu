@@ -34,6 +34,7 @@ namespace Mokkosu.Lexing
                 { "false", TokenType.FALSE },
                 { "let", TokenType.LET },
                 { "fun", TokenType.FUN },
+                { "include", TokenType.INCLUDE },
             };
         }
 
@@ -66,6 +67,11 @@ namespace Mokkosu.Lexing
             {
                 return _strm.Pos;
             }
+        }
+
+        public void IncludeFile(string name)
+        {
+            _strm.IncludeSourceFile(name);
         }
 
         public Token NextToken()

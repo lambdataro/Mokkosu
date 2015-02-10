@@ -106,5 +106,10 @@ namespace Mokkosu.Parsing
         {
             return _tag_names.Contains(name);
         }
+
+        public void IncludeFile(string name)
+        {
+            _lexer.IncludeFile(name);
+        }
     }
 }

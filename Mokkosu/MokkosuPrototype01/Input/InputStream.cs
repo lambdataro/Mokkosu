@@ -1,6 +1,7 @@
 ﻿using Mokkosu.Utils;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace Mokkosu.Input
 {
@@ -10,19 +11,42 @@ namespace Mokkosu.Input
         Stack<SourceFile> _source_stack = new Stack<SourceFile>();
         SourceFile _current_srcfile = null;
         int _ch = -1;
+        static string _exe_path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
         public void AddSourceFile(string fname)
         {
-            var tr = new StreamReader(fname);
-            var srcfile = new SourceFile(tr, fname);
-            _source_queue.Enqueue(srcfile);
+            if (File.Exists(fname))
+            {
+                var tr = new StreamReader(fname);
+                var srcfile = new SourceFile(tr, fname);
+                _source_queue.Enqueue(srcfile);
+            }
+            else
+            {
+                throw new MError("ソースファイル " + fname + "が見つかりません。");
+            }
         }
 
         public void IncludeSourceFile(string fname)
         {
-            _source_stack.Push(_current_srcfile);
-            var tr = new StreamReader(fname);
-            _current_srcfile = new SourceFile(tr, fname);
+            if (File.Exists(fname))
+            {
+                _source_stack.Push(_current_srcfile);
+                var tr = new StreamReader(fname);
+                _current_srcfile = new SourceFile(tr, fname);
+                return;
+            }
+
+            var path = Path.Combine(_exe_path, fname);
+            if (File.Exists(path))
+            {
+                _source_stack.Push(_current_srcfile);
+                var tr = new StreamReader(path);
+                _current_srcfile = new SourceFile(tr, fname);
+                return;
+            }
+
+            throw new MError("ソースファイル " + fname + "が見つかりません。");
         }
 
         public void NextChar()

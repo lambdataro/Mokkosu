@@ -12,7 +12,7 @@
         LBK, RBK, COLCOL,
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
-        TRUE, FALSE, LET, FUN,
+        TRUE, FALSE, LET, FUN, INCLUDE,
         // 制御記号
         EOF
     }
