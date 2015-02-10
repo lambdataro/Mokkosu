@@ -79,10 +79,12 @@ namespace Mokkosu.AST
     class MTopDo : MTopExpr
     {
         public MExpr Expr { get; private set; }
+        public MType Type { get; private set; }
 
         public MTopDo(MExpr expr)
         {
             Expr = expr;
+            Type = new TypeVar();
         }
 
         public override string ToString()

@@ -77,11 +77,13 @@ namespace Mokkosu.AST
     {
         public string Name { get; private set; }
         public List<MExpr> Args { get; private set; }
+        public int Index { get; set; }
 
         public MTag(string name, List<MExpr> args)
         {
             Name = name;
             Args = args;
+            Index = 0;
         }
 
         public override string ToString()

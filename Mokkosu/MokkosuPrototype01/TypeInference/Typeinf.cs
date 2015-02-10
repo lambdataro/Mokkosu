@@ -33,6 +33,12 @@ namespace Mokkosu.TypeInference
                 TypeinfUserTypeDef((MUserTypeDef)top_expr, ctx);
                 System.Console.WriteLine(ctx);
             }
+            else if (top_expr is MTopDo)
+            {
+                TypeinfTopDo((MTopDo)top_expr, ctx);
+                var e = (MTopDo)top_expr;
+                System.Console.WriteLine("{0} : {1}", e.Expr, e.Type);
+            }
             else
             {
                 throw new NotImplementedException();
@@ -155,6 +161,89 @@ namespace Mokkosu.TypeInference
             {
                 throw new NotImplementedException();
             }
+        }
+
+        /// <summary>
+        /// トップレベルdoの型推論
+        /// </summary>
+        /// <param name="top_do"></param>
+        /// <param name="ctx"></param>
+        static void TypeinfTopDo(MTopDo top_do, TypeInfContext ctx)
+        {
+            Inference(top_do.Expr, top_do.Type, ctx);
+        }
+
+        /// <summary>
+        /// 型推論 (Algorithm M)
+        /// </summary>
+        /// <param name="expr">型を推論する式</param>
+        /// <param name="type">文脈の型</param>
+        /// <param name="ctx">型推論文脈</param>
+        static void Inference(MExpr expr, MType type, TypeInfContext ctx)
+        {
+            if (expr is MInt)
+            {
+                Unification(type, new IntType());
+            }
+            else if (expr is MDouble)
+            {
+                Unification(type, new DoubleType());
+            }
+            else if (expr is MString)
+            {
+                Unification(type, new StringType());
+            }
+            else if (expr is MChar)
+            {
+                Unification(type, new CharType());
+            }
+            else if (expr is MUnit)
+            {
+                Unification(type, new UnitType());
+            }
+            else if (expr is MTag)
+            {
+                var e = (MTag)expr;
+                Tag tag;
+                if (ctx.TagEnv.Lookup(e.Name, out tag))
+                {
+                    tag = GeneralizeTag(tag);
+                    e.Index = tag.Index;
+                    if (e.Args.Count == tag.ArgTypes.Count)
+                    {
+                        for (int i = 0; i < e.Args.Count; i++)
+                        {
+                            Inference(e.Args[i], tag.ArgTypes[i], ctx);
+                        }
+                        Unification(type, tag.Type);
+                    }
+                    else
+                    {
+                        throw new MError("型エラー");
+                    }
+                }
+                else
+                {
+                    throw new MError("タグ" + e.Name + "は定義されていません");
+                }
+            }
+        }
+
+        /// <summary>
+        /// タグを汎化
+        /// </summary>
+        /// <param name="tag">汎化するタグ</param>
+        /// <returns>汎化後のタグ</returns>
+        static Tag GeneralizeTag(Tag tag)
+        {
+            var map = new Dictionary<int, MType>();
+            foreach (var id in tag.Bounded.ToArray())
+            {
+                map.Add(id, new TypeVar());
+            }
+            var arg_types = tag.ArgTypes.Select(t => MapTypeVar(map, t));
+            var type = MapTypeVar(map, tag.Type);
+            return new Tag(tag.Name, tag.Index, tag.Bounded, arg_types.ToList(), type);
         }
 
         /// <summary>
