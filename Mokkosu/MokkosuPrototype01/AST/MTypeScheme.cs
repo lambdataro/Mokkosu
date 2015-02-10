@@ -15,7 +15,7 @@ namespace Mokkosu.AST
             Type = type;
         }
 
-        public MTypeScheme(IEnumerable<int> bounded, TypeVar type)
+        public MTypeScheme(IEnumerable<int> bounded, MType type)
         {
             Bounded = new MSet<int>(bounded);
             Type = type;

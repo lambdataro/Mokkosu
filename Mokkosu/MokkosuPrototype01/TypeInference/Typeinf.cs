@@ -238,5 +238,83 @@ namespace Mokkosu.TypeInference
                 return set1.Union(set2);
             }
         }
+
+        /// <summary>
+        /// 型に量化子(∀)を付ける
+        /// </summary>
+        /// <param name="tenv"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        static MTypeScheme Generalize(TEnv tenv, MType type)
+        {
+            var tenv_fvs = FreeTypeVars(tenv);
+            var fvs = FreeTypeVars(type);
+            var bounded = fvs.Diff(tenv_fvs);
+            return new MTypeScheme(bounded.ToArray(), type);
+        }
+
+        /// <summary>
+        /// 型スキームからインスタンスを作成
+        /// </summary>
+        /// <param name="typescheme">型スキーム</param>
+        /// <returns>新しい型</returns>
+        static MType Instantiate(MTypeScheme typescheme)
+        {
+            var map = new Dictionary<int, MType>();
+            foreach (var id in typescheme.Bounded.ToArray())
+            {
+                map.Add(id, new TypeVar());
+            }
+            return MapTypeVar(map, typescheme.Type);
+        }
+
+        static MType MapTypeVar(Dictionary<int, MType> map, MType type)
+        {
+            if (type is TypeVar)
+            {
+                var t = (TypeVar)type;
+                if (t.Value == null)
+                {
+                    if (map.ContainsKey(t.id))
+                    {
+                        return map[t.Id];
+                    }
+                    else
+                    {
+                        return type;
+                    }
+                }
+                else
+                {
+                    return MapTypeVar(map, t.Value);
+                }
+            }
+            else if (type is UserType)
+            {
+                var t = (UserType)type;
+                var args = new List<MType>();
+                foreach (var arg in t.Args)
+                {
+                    args.Add(MapTypeVar(map, arg));
+                }
+                return new UserType(name, args);
+            }
+            else if (type is IntType || type is DoubleType ||
+                type is StringType || type is CharType || type is UnitType)
+            {
+                return type;
+            }
+            else if (type is FunType)
+            {
+                var t = (FunType)type;
+                var arg = MapTypeVar(map, t.ArgType);
+                var ret = MapTypeVar(map, t.RetType);
+                return new FunType(arg, ret);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
