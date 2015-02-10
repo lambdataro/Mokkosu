@@ -1,5 +1,6 @@
 ﻿using Mokkosu.AST;
 using Mokkosu.Utils;
+using Mokkosu.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,152 @@ namespace Mokkosu.TypeInference
 
     static class Typeinf
     {
+        /// <summary>
+        /// 型推論を開始する
+        /// </summary>
+        /// <param name="parse_result">構文解析の結果</param>
+        public static void Start(ParseResult parse_result)
+        {
+            var ctx = new TypeInfContext();
+            parse_result.TopExprs.ForEach(e => TypeinfTopExpr(e, ctx));
+        }
+
+        /// <summary>
+        /// トップレベル式の型検査＆型推論
+        /// </summary>
+        /// <param name="top_expr">トップレベル式</param>
+        /// <param name="ctx">型推論文脈</param>
+        static void TypeinfTopExpr(MTopExpr top_expr, TypeInfContext ctx)
+        {
+            if (top_expr is MUserTypeDef)
+            {
+                TypeinfUserTypeDef((MUserTypeDef)top_expr, ctx);
+                System.Console.WriteLine(ctx);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// ユーザ型定義の型検査
+        /// </summary>
+        /// <param name="typedef">ユーザ型定義</param>
+        /// <param name="ctx">型推論文脈</param>
+        static void TypeinfUserTypeDef(MUserTypeDef typedef, TypeInfContext ctx)
+        {
+            var user_types = new MEnv<int>();
+            foreach (var def in typedef.Items)
+            {
+                var name = def.Name;
+                var kind = def.TypeParams.Count;
+                user_types = user_types.Cons(name, kind);
+            }
+            ctx.UserTypes = ctx.UserTypes.Append(user_types);
+
+            var tag_env = new MEnv<Tag>();
+            foreach (var def in typedef.Items)
+            {
+                tag_env = tag_env.Append(TypeinfTypeDefItem(def.Tags, def.Name, def.TypeParams, ctx));
+            }
+            ctx.TagEnv = ctx.TagEnv.Append(tag_env);
+        }
+
+        /// <summary>
+        /// ユーザ定義型のアイテムごとの型検査
+        /// </summary>
+        /// <param name="tags">タグの列</param>
+        /// <param name="type_name">型名</param>
+        /// <param name="type_params">型パラメータ</param>
+        /// <param name="ctx">型推論文脈</param>
+        /// <returns>タグ環境</returns>
+        static MEnv<Tag> TypeinfTypeDefItem(List<TagDef> tags, string type_name, 
+            List<string> type_params, TypeInfContext ctx)
+        {
+            var tag_env = new MEnv<Tag>();
+
+            for (var i = 0; i < tags.Count; i++)
+            {
+                var name = tags[i].Name;
+                var index = i;
+
+                var dict = new Dictionary<string, TypeVar>();
+                var bounded = new MSet<int>();
+                var type_args = new List<MType>();
+                foreach (var p in type_params)
+                {
+                    var tv = new TypeVar();
+                    dict.Add(p, tv);
+                    bounded = bounded.Union(new MSet<int>(tv.Id));
+                    type_args.Add(tv);
+                }
+
+                var arg_types = tags[i].Args.Select(typ => MapTypeParam(typ, dict));
+                var type = new UserType(type_name, type_args);
+
+                var tag = new Tag(name, index, bounded, arg_types.ToList(), type);
+                tag_env = tag_env.Cons(name, tag);
+            }
+
+            return tag_env;
+        }
+
+        /// <summary>
+        /// 型中の型パラメータを表すUserTypeを型変数に置換する
+        /// </summary>
+        /// <param name="type">型</param>
+        /// <param name="dict">型パラメータと型変数の対応</param>
+        /// <returns>型</returns>
+        static MType MapTypeParam(MType type, Dictionary<string, TypeVar> dict)
+        {
+            if (type is TypeVar)
+            {
+                var t = (TypeVar)type;
+                if (t.Value == null)
+                {
+                    return type;
+                }
+                else
+                {
+                    return MapTypeParam(t.Value, dict);
+                }
+            }
+            else if (type is UserType)
+            {
+                var t = (UserType)type;
+                if (t.Args.Count == 0 && dict.ContainsKey(t.Name))
+                {
+                    return dict[t.Name];
+                }
+                else
+                {
+                    var args = new List<MType>();
+                    foreach (var arg in t.Args)
+                    {
+                        args.Add(MapTypeParam(arg, dict));
+                    }
+                    return new UserType(t.Name, args);
+                }
+            }
+            else if (type is IntType || type is DoubleType ||
+                type is StringType || type is CharType || type is UnitType)
+            {
+                return type;
+            }
+            else if (type is FunType)
+            {
+                var t = (FunType)type;
+                var arg = MapTypeParam(t.ArgType, dict);
+                var ret = MapTypeParam(t.RetType, dict);
+                return new FunType(arg, ret);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// 出現検査
         /// </summary>
@@ -233,7 +380,7 @@ namespace Mokkosu.TypeInference
             }
             else
             {
-                var set1 = FreeTypeVars(tenv.Head);
+                var set1 = FreeTypeVars(tenv.Head.Item2);
                 var set2 = FreeTypeVars(tenv.Tail);
                 return set1.Union(set2);
             }
@@ -268,6 +415,12 @@ namespace Mokkosu.TypeInference
             return MapTypeVar(map, typescheme.Type);
         }
 
+        /// <summary>
+        /// 型変数を辞書にしたがって新しいものに置き換える
+        /// </summary>
+        /// <param name="map">辞書</param>
+        /// <param name="type">型</param>
+        /// <returns>置換後の型</returns>
         static MType MapTypeVar(Dictionary<int, MType> map, MType type)
         {
             if (type is TypeVar)
@@ -275,7 +428,7 @@ namespace Mokkosu.TypeInference
                 var t = (TypeVar)type;
                 if (t.Value == null)
                 {
-                    if (map.ContainsKey(t.id))
+                    if (map.ContainsKey(t.Id))
                     {
                         return map[t.Id];
                     }
@@ -297,7 +450,7 @@ namespace Mokkosu.TypeInference
                 {
                     args.Add(MapTypeVar(map, arg));
                 }
-                return new UserType(name, args);
+                return new UserType(t.Name, args);
             }
             else if (type is IntType || type is DoubleType ||
                 type is StringType || type is CharType || type is UnitType)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mokkosu.Utils
@@ -18,12 +19,12 @@ namespace Mokkosu.Utils
             _tail = null;
         }
 
-        public MEnv<T> Cons(string key, T vlaue)
+        public MEnv<T> Cons(string key, T value)
         {
             var env = new MEnv<T>();
             env._is_empty = false;
             env._key = key;
-            env._value = _value;
+            env._value = value;
             env._tail = this;
             return env;
         }
@@ -33,11 +34,11 @@ namespace Mokkosu.Utils
             return _is_empty;
         }
 
-        public T Head
+        public Tuple<string,T> Head
         {
             get
             {
-                return _value;
+                return new Tuple<string,T>(_key, _value);
             }
         }
 
@@ -66,7 +67,7 @@ namespace Mokkosu.Utils
             }
         }
 
-        public bool Lookup(MEnv<T> env, string key, out T value)
+        public bool Lookup( string key, out T value)
         {
             if (_is_empty)
             {
@@ -80,14 +81,14 @@ namespace Mokkosu.Utils
             }
             else
             {
-                return _tail.Lookup(env, key, out value);
+                return _tail.Lookup(key, out value);
             }
         }
 
-        public T Lookup(MEnv<T> env, string key)
+        public T Lookup(string key)
         {
             T value;
-            var b = this.Lookup(env, key, out value);
+            var b = this.Lookup(key, out value);
             if (b)
             {
                 return value;
@@ -95,6 +96,22 @@ namespace Mokkosu.Utils
             else
             {
                 throw new MError("Not Found: " + key);
+            }
+        }
+
+        public bool Contains(string key)
+        {
+            if (_is_empty)
+            {
+                return false;
+            }
+            else if (_key == key)
+            {
+                return true;
+            }
+            else
+            {
+                return _tail.Contains(key);
             }
         }
     }

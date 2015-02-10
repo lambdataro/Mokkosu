@@ -1,6 +1,7 @@
 ﻿using Mokkosu.Input;
 using Mokkosu.Lexing;
 using Mokkosu.Parsing;
+using Mokkosu.TypeInference;
 using System;
 
 namespace Mokkosu.Main
@@ -30,6 +31,8 @@ namespace Mokkosu.Main
             {
                 Console.WriteLine(top_expr);
             }
+
+            Typeinf.Start(parse_result);
         }
     }
 }

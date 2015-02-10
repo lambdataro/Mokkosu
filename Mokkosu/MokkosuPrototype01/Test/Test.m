@@ -1,14 +1,4 @@
-﻿type Color = Red | Blue(Int) | Green | RGB(Int, Int, Int -> Int -> Int)
-and Tree<T,U> = Leaf | Node(T, Tree<T>, Tree<T>);
+﻿type Expr<T> =
+  Value(T) | Add(Expr<T>, Expr<T>) | Mul(Expr<T>, Expr<T>) | L(List<T>)
 
-do 123;
-do 3.14;
-do 3e10;
-do "hello, world.";
-do '3';
-do '\n';
-do "hello,\nworld.";
-do @"hello\nworld.";
-
-do Red;
-do Green (3, 4, 5);
+and List<T> = Nil | Cons(T, List<T>);

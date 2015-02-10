@@ -45,6 +45,7 @@
     <Compile Include="AST\MTopExpr.cs" />
     <Compile Include="AST\MType.cs" />
     <Compile Include="AST\MTypeScheme.cs" />
+    <Compile Include="AST\Tag.cs" />
     <Compile Include="Input\InputStream.cs" />
     <Compile Include="Input\SourceFile.cs" />
     <Compile Include="Lexing\Lexer.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\ParseResult.cs" />
     <Compile Include="TypeInference\Typeinf.cs" />
+    <Compile Include="TypeInference\TypeInfContext.cs" />
     <Compile Include="Utils\MEnv.cs" />
     <Compile Include="Utils\MError.cs" />
     <Compile Include="Utils\MSet.cs" />
