@@ -225,7 +225,8 @@ namespace Mokkosu.TypeInference
         {
             var tenv1 = InferencePat(top_let.Pat, top_let.Type, ctx.TEnv, ctx);
             Inference(top_let.Expr, top_let.Type, ctx.TEnv, ctx);
-            ctx.TEnv = tenv1.Append(ctx.TEnv);
+            var tenv2 = GeneralizeTypes(ctx.TEnv, tenv1);
+            ctx.TEnv = tenv2.Append(ctx.TEnv);
         }
 
         /// <summary>
@@ -615,7 +616,7 @@ namespace Mokkosu.TypeInference
                 var t = (TypeVar)type;
                 if (t.Value == null)
                 {
-                    return new MSet<int>();
+                    return new MSet<int>(t.Id);
                 }
                 else
                 {
@@ -707,6 +708,25 @@ namespace Mokkosu.TypeInference
             var fvs = FreeTypeVars(type);
             var bounded = fvs.Diff(tenv_fvs);
             return new MTypeScheme(bounded.ToArray(), type);
+        }
+
+        /// <summary>
+        /// 複数の型をまとめてGeneralizeする
+        /// </summary>
+        /// <param name="tenv">型環境</param>
+        /// <param name="types">Generalizeする型の集まり</param>
+        /// <returns>Generalize後の型</returns>
+        static TEnv GeneralizeTypes(TEnv tenv, TEnv types)
+        {
+            var ret = new TEnv();
+            while (!types.IsEmpty())
+            {
+                var t = types.Head;
+                var ts = Generalize(tenv, t.Item2.Type);
+                ret = ret.Cons(t.Item1, ts);
+                types = types.Tail;
+            }
+            return ret;
         }
 
         /// <summary>
