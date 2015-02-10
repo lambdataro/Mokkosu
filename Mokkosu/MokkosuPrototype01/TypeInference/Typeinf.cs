@@ -225,8 +225,16 @@ namespace Mokkosu.TypeInference
         {
             var tenv1 = InferencePat(top_let.Pat, top_let.Type, ctx.TEnv, ctx);
             Inference(top_let.Expr, top_let.Type, ctx.TEnv, ctx);
-            var tenv2 = GeneralizeTypes(ctx.TEnv, tenv1);
-            ctx.TEnv = tenv2.Append(ctx.TEnv);
+            
+            if (IsSyntacticValue(top_let.Expr))
+            {
+                var tenv2 = GeneralizeTypes(ctx.TEnv, tenv1);
+                ctx.TEnv = tenv2.Append(ctx.TEnv);
+            }
+            else
+            {
+                ctx.TEnv = tenv1.Append(ctx.TEnv);
+            }
         }
 
         /// <summary>
@@ -252,11 +260,60 @@ namespace Mokkosu.TypeInference
 
             foreach (var item in top_fun.Items)
             {
-                var ts = Generalize(ctx.TEnv, item.Type);
-                tenv2 = tenv2.Cons(item.Name, ts);
+                if (IsSyntacticValue(item.Expr))
+                {
+                    var ts = Generalize(ctx.TEnv, item.Type);
+                    tenv2 = tenv2.Cons(item.Name, ts);
+                }
+                else
+                {
+                    tenv2 = tenv2.Cons(item.Name, new MTypeScheme(item.Type));
+                }
             }
 
             ctx.TEnv = tenv2;
+        }
+
+        /// <summary>
+        /// 構文的に値であるかの判定
+        /// </summary>
+        /// <param name="expr">式</param>
+        /// <returns>構文的に値であれば真</returns>
+        static bool IsSyntacticValue(MExpr expr)
+        {
+            if (expr is MInt || expr is MDouble || expr is MString || expr is MChar ||
+                expr is MUnit || expr is MBool)
+            {
+                return true;
+            }
+            else if (expr is MTag)
+            {
+                var e = (MTag)expr;
+                if (e.Args.Count == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (expr is MVar)
+            {
+                return true;
+            }
+            else if (expr is MLambda)
+            {
+                return true;
+            }
+            else if (expr is MNil)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -395,7 +452,14 @@ namespace Mokkosu.TypeInference
             }
         }
 
-
+        /// <summary>
+        /// パターンの型推論
+        /// </summary>
+        /// <param name="pat">パターン</param>
+        /// <param name="type">文脈の型</param>
+        /// <param name="tenv">型環境</param>
+        /// <param name="ctx">型推論文脈</param>
+        /// <returns>新たに追加される型環境</returns>
         static TEnv InferencePat(MPat pat, MType type, TEnv tenv, TypeInfContext ctx)
         {
             if (pat is PWild)
