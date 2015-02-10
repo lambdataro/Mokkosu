@@ -113,7 +113,6 @@ namespace Mokkosu.Parsing
                 }
                 ctx.ReadToken(TokenType.RP);
             }
-            ctx.NewTagName(name);
             return new TagDef(name, args);
         }
 
@@ -443,20 +442,7 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.ID)
             {
                 var str = ctx.ReadStrToken(TokenType.ID);
-                if (ctx.IsTagName(str))
-                {
-                    var args = new List<MExpr>();
-                    if (ctx.Tkn.Type == TokenType.LP)
-                    {
-                        args = ParseExprList(ctx);
-                        ctx.ReadToken(TokenType.RP);
-                    }
-                    return new MTag(str, args);
-                }
-                else
-                {
-                    return new MVar(str);
-                }
+                return new MVar(str);
             }
             else if (ctx.Tkn.Type == TokenType.INT)
             {

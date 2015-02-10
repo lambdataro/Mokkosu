@@ -97,15 +97,15 @@ namespace Mokkosu.Parsing
             throw new MError(string.Format("{0}: 構文エラー", _lexer.Pos));
         }
 
-        public void NewTagName(string name)
-        {
-            _tag_names.Add(name);
-        }
+        //public void NewTagName(string name)
+        //{
+        //    _tag_names.Add(name);
+        //}
 
-        public bool IsTagName(string name)
-        {
-            return _tag_names.Contains(name);
-        }
+        //public bool IsTagName(string name)
+        //{
+        //    return _tag_names.Contains(name);
+        //}
 
         public void IncludeFile(string name)
         {

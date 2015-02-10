@@ -119,35 +119,6 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
-    /// タグ
-    /// </summary>
-    class MTag : MExpr
-    {
-        public string Name { get; private set; }
-        public List<MExpr> Args { get; private set; }
-        public int Index { get; set; }
-
-        public MTag(string name, List<MExpr> args)
-        {
-            Name = name;
-            Args = args;
-            Index = 0;
-        }
-
-        public override string ToString()
-        {
-            if (Args.Count == 0)
-            {
-                return Name;
-            }
-            else
-            {
-                return string.Format("{0}({1})", Name, Utils.Utils.ListToString(Args));
-            }
-        }
-    }
-
-    /// <summary>
     /// 変数
     /// </summary>
     class MVar : MExpr
@@ -155,21 +126,38 @@ namespace Mokkosu.AST
         public string Name { get; private set; }
         public MType Type { get; private set; }
 
+        public bool IsTag { get; set; }
+        public int TagIndex { get; set; }
+        public int TagSize { get; set; }
+
         public MVar(string name)
         {
             Name = name;
             Type = new TypeVar();
+            IsTag = false;
+            TagIndex = 0;
+            TagSize = 0;
         }
 
         public MVar(string name, MType type)
         {
             Name = name;
             Type = type;
+            IsTag = false;
+            TagIndex = 0;
+            TagSize = 0;
         }
 
         public override string ToString()
         {
-            return string.Format("({0} : {1})", Name, Type);
+            if (IsTag)
+            {
+                return string.Format("({0}({1}, {2}) : {3})", Name, TagIndex, TagSize, Type);
+            }
+            else
+            {
+                return string.Format("({0} : {1})", Name, Type);
+            }
         }
     }
 

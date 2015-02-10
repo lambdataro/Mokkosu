@@ -9,16 +9,26 @@ namespace Mokkosu.AST
         public MSet<int> Bounded { get; private set; }
         public MType Type { get; private set; }
 
+        public bool IsTag { get; set; }
+        public int TagIndex { get; set; }
+        public int TagSize { get; set; }
+
         public MTypeScheme(MType type)
         {
             Bounded = new MSet<int>();
             Type = type;
+            IsTag = false;
+            TagIndex = 0;
+            TagSize = 0;
         }
 
         public MTypeScheme(IEnumerable<int> bounded, MType type)
         {
             Bounded = new MSet<int>(bounded);
             Type = type;
+            IsTag = false;
+            TagIndex = 0;
+            TagSize = 0;
         }
 
         public override string ToString()

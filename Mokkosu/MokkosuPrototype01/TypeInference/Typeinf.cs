@@ -97,7 +97,45 @@ namespace Mokkosu.TypeInference
             {
                 tag_env = tag_env.Append(TypeinfTypeDefItem(def.Tags, def.Name, def.TypeParams, ctx));
             }
-            ctx.TagEnv = ctx.TagEnv.Append(tag_env);
+            ctx.TEnv = TagEnvToTEnv(tag_env).Append(ctx.TEnv);
+        }
+
+        /// <summary>
+        /// タグ環境を通常の型環境に変換
+        /// </summary>
+        /// <param name="tag_env">タグ環境</param>
+        /// <returns>型環境</returns>
+        static TEnv TagEnvToTEnv(MEnv<Tag> tag_env)
+        {
+            var tenv = new TEnv();
+
+            while (!tag_env.IsEmpty())
+            {
+                var name = tag_env.Head.Item1;
+                var tag = tag_env.Head.Item2;
+                MTypeScheme ts;
+                if (tag.ArgTypes.Count == 0)
+                {
+                    ts = new MTypeScheme(tag.Bounded.ToArray(), tag.Type);
+                   
+                }
+                else if (tag.ArgTypes.Count == 1)
+                {
+                    ts = new MTypeScheme(tag.Bounded.ToArray(), new FunType(tag.ArgTypes[0], tag.Type));
+                }
+                else
+                {
+                    ts = new MTypeScheme(tag.Bounded.ToArray(), 
+                        new FunType(new TupleType(tag.ArgTypes), tag.Type));
+                }
+                ts.IsTag = true;
+                ts.TagIndex = tag.Index;
+                ts.TagSize = tag.ArgTypes.Count;
+                tenv = tenv.Cons(name, ts);
+                tag_env = tag_env.Tail;
+            }
+
+            return tenv;
         }
 
         /// <summary>
@@ -286,18 +324,6 @@ namespace Mokkosu.TypeInference
             {
                 return true;
             }
-            else if (expr is MTag)
-            {
-                var e = (MTag)expr;
-                if (e.Args.Count == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
             else if (expr is MVar)
             {
                 return true;
@@ -348,32 +374,6 @@ namespace Mokkosu.TypeInference
             {
                 Unification(type, new BoolType());
             }
-            else if (expr is MTag)
-            {
-                var e = (MTag)expr;
-                Tag tag;
-                if (ctx.TagEnv.Lookup(e.Name, out tag))
-                {
-                    tag = GeneralizeTag(tag);
-                    e.Index = tag.Index;
-                    if (e.Args.Count == tag.ArgTypes.Count)
-                    {
-                        for (int i = 0; i < e.Args.Count; i++)
-                        {
-                            Inference(e.Args[i], tag.ArgTypes[i], tenv, ctx);
-                        }
-                        Unification(type, tag.Type);
-                    }
-                    else
-                    {
-                        throw new MError("型エラー");
-                    }
-                }
-                else
-                {
-                    throw new MError("タグ" + e.Name + "は定義されていません");
-                }
-            }
             else if (expr is MVar)
             {
                 var e = (MVar)expr;
@@ -383,6 +383,12 @@ namespace Mokkosu.TypeInference
                     var t = Instantiate(typescheme);
                     Unification(e.Type, t);
                     Unification(type, t);
+                    if (typescheme.IsTag)
+                    {
+                        e.IsTag = true;
+                        e.TagIndex = typescheme.TagIndex;
+                        e.TagSize = typescheme.TagSize;
+                    }
                 }
                 else
                 {
