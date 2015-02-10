@@ -1,3 +1,4 @@
-﻿type List<T> = Nil | Cons(T, List<T>);
-
-do Cons(3, Nil);
+﻿fun map = \f -> \lis ->
+  pat [] = lis -> []
+  else
+  let pat x :: xs = lis -> f x :: map f xs

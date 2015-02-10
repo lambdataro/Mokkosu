@@ -536,6 +536,7 @@ namespace Mokkosu.Parsing
 
             if (ctx.Tkn.Type == TokenType.COLCOL)
             {
+                ctx.ReadToken(TokenType.COLCOL);
                 var rhs = ParseConsPat(ctx);
                 return new PCons(lhs, rhs);
             }

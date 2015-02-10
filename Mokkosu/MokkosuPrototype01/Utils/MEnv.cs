@@ -114,5 +114,17 @@ namespace Mokkosu.Utils
                 return _tail.Contains(key);
             }
         }
+
+        public int Lenght()
+        {
+            if (_is_empty)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + _tail.Lenght();
+            }
+        }
     }
 }

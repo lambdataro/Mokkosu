@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 namespace Mokkosu.AST
 {
     abstract class MPat
@@ -129,6 +131,13 @@ namespace Mokkosu.AST
 
     class PNil : MPat
     {
+        public MType ItemType { get; private set; }
+
+        public PNil()
+        {
+            ItemType = new TypeVar();
+        }
+
         public override string ToString()
         {
             return "[]";
@@ -139,11 +148,13 @@ namespace Mokkosu.AST
     {
         public MPat Head { get; private set; }
         public MPat Tail { get; private set; }
+        public MType ItemType { get; private set; }
 
         public PCons(MPat head, MPat tail)
         {
             Head = head;
             Tail = tail;
+            ItemType = new TypeVar();
         }
 
         public override string ToString()
@@ -155,10 +166,14 @@ namespace Mokkosu.AST
     class PTuple : MPat
     {
         public List<MPat> Items { get; private set; }
+        public List<MType> Types { get; private set; }
+        public int Size { get; private set; }
 
         public PTuple(List<MPat> items)
         {
             Items = items;
+            Types = items.Select(item => (MType)(new TypeVar())).ToList();
+            Size = items.Count;
         }
 
         public override string ToString()
@@ -171,11 +186,13 @@ namespace Mokkosu.AST
     {
         public MPat Pat { get; private set; }
         public string Name { get; private set; }
+        public MType Type { get; private set; }
 
         public PAs(MPat pat, string name)
         {
             Pat = pat;
             Name = name;
+            Type = new TypeVar();
         }
 
         public override string ToString()
@@ -188,11 +205,13 @@ namespace Mokkosu.AST
     {
         public MPat Pat1 { get; private set; }
         public MPat Pat2 { get; private set; }
+        public MType Type { get; private set; }
 
         public POr(MPat pat1, MPat pat2)
         {
             Pat1 = pat1;
             Pat2 = pat2;
+            Type = new TypeVar();
         }
 
         public override string ToString()

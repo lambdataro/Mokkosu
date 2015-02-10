@@ -480,9 +480,111 @@ namespace Mokkosu.TypeInference
                 Unification(type, p.Type);
                 return new TEnv().Cons(p.Name, new MTypeScheme(type));
             }
+            else if (pat is PInt)
+            {
+                Unification(type, new IntType());
+                return new TEnv();
+            }
+            else if (pat is PDouble)
+            {
+                Unification(type, new DoubleType());
+                return new TEnv();
+            }
+            else if (pat is PString)
+            {
+                Unification(type, new StringType());
+                return new TEnv();
+            }
+            else if (pat is PChar)
+            {
+                Unification(type, new CharType());
+                return new TEnv();
+            }
+            else if (pat is PUnit)
+            {
+                Unification(type, new UnitType());
+                return new TEnv();
+            }
+            else if (pat is PBool)
+            {
+                Unification(type, new BoolType());
+                return new TEnv();
+            }
+            else if (pat is PNil)
+            {
+                var p = (PNil)pat;
+                Unification(type, new ListType(p.ItemType));
+                return new TEnv();
+            }
+            else if (pat is PCons)
+            {
+                var p = (PCons)pat;
+                var list_type = new ListType(p.ItemType);
+                var tenv1 = InferencePat(p.Head, p.ItemType, tenv, ctx);
+                var tenv2 = InferencePat(p.Tail, list_type, tenv, ctx);
+                Unification(type, list_type);
+                return tenv1.Append(tenv2);
+            }
+            else if (pat is PTuple)
+            {
+                var p = (PTuple)pat;
+                var ret_tenv = new TEnv();
+                for (var i = 0; i < p.Size; i++)
+                {
+                    var tenv2 = InferencePat(p.Items[i], p.Types[i], tenv, ctx);
+                    ret_tenv = tenv2.Append(ret_tenv);
+                }
+                Unification(type, new TupleType(p.Types));
+                return ret_tenv;
+            }
+            else if (pat is PAs)
+            {
+                var p = (PAs)pat;
+                var tenv2 = InferencePat(p.Pat, p.Type, tenv, ctx);
+                Unification(type, p.Type);
+                return tenv2.Cons(p.Name, new MTypeScheme(p.Type));
+            }
+            else if (pat is POr)
+            {
+                var p = (POr)pat;
+                var tenv1 = InferencePat(p.Pat1, p.Type, tenv, ctx);
+                var tenv2 = InferencePat(p.Pat2, p.Type, tenv, ctx);
+                Unification(type, p.Type);
+                CheckOrPattern(tenv1, tenv2);
+                return tenv1;
+            }
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Orパターンの整合性検査
+        /// </summary>
+        /// <param name="tenv1">型環境1</param>
+        /// <param name="tenv2">型環境2</param>
+        static void CheckOrPattern(TEnv tenv1, TEnv tenv2)
+        {
+            if (tenv1.Lenght() != tenv2.Lenght())
+            {
+                throw new MError("Orパターンの変数集合が左右で異なっています。");
+            }
+
+            while (!tenv1.IsEmpty())
+            {
+                var name = tenv1.Head.Item1;
+                var ts1 = tenv1.Head.Item2;
+                MTypeScheme ts2;
+                if (tenv2.Lookup(name, out ts2))
+                {
+                    Unification(ts1.Type, ts2.Type);
+                }
+                else
+                {
+                    throw new MError("Orパターンの変数集合が左右で異なっています。");
+                }
+                tenv1 = tenv1.Tail;
             }
         }
 
