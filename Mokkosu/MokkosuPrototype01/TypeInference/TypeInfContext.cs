@@ -14,10 +14,14 @@ namespace Mokkosu.TypeInference
         // 利用可能なタグ名と詳細を記録
         public MEnv<Tag> TagEnv { get; set; }
 
+        // 型環境
+        public MEnv<MTypeScheme> TEnv { get; set; }
+
         public TypeInfContext()
         {
             UserTypes = new MEnv<int>();
             TagEnv = new MEnv<Tag>();
+            TEnv = new MEnv<MTypeScheme>();
         }
 
         public override string ToString()

@@ -219,7 +219,7 @@ namespace Mokkosu.Parsing
 
         static MExpr ParseExpr(ParseContext ctx)
         {
-            return ParseAppExpr(ctx);
+            return ParseFunExpr(ctx);
         }
 
         static MExpr ParseFunExpr(ParseContext ctx)

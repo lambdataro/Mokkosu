@@ -18,8 +18,30 @@ namespace Mokkosu.TypeInference
         public static void Start(ParseResult parse_result)
         {
             var ctx = new TypeInfContext();
+            ctx.TEnv = InitialEnv();
             parse_result.TopExprs.ForEach(e => TypeinfTopExpr(e, ctx));
         }
+
+        static TEnv InitialEnv()
+        {
+            var int_int_int = new FunType(new IntType(), new FunType(new IntType(), new IntType()));
+
+            var dict = new Dictionary<string, MTypeScheme>()
+            {
+                { "__operator_pls", new MTypeScheme(int_int_int) },
+                { "__operator_mns", new MTypeScheme(int_int_int) },
+                { "__operator_ast", new MTypeScheme(int_int_int) },
+                { "__operator_sls", new MTypeScheme(int_int_int) },
+            };
+
+            var tenv = new TEnv();
+            foreach (var kv in dict)
+            {
+                tenv = tenv.Cons(kv.Key, kv.Value);
+            }
+            return tenv; 
+        }
+
 
         /// <summary>
         /// トップレベル式の型検査＆型推論
@@ -170,7 +192,7 @@ namespace Mokkosu.TypeInference
         /// <param name="ctx"></param>
         static void TypeinfTopDo(MTopDo top_do, TypeInfContext ctx)
         {
-            Inference(top_do.Expr, top_do.Type, ctx);
+            Inference(top_do.Expr, top_do.Type, ctx.TEnv, ctx);
         }
 
         /// <summary>
@@ -179,7 +201,7 @@ namespace Mokkosu.TypeInference
         /// <param name="expr">型を推論する式</param>
         /// <param name="type">文脈の型</param>
         /// <param name="ctx">型推論文脈</param>
-        static void Inference(MExpr expr, MType type, TypeInfContext ctx)
+        static void Inference(MExpr expr, MType type, MEnv<MTypeScheme> tenv, TypeInfContext ctx)
         {
             if (expr is MInt)
             {
@@ -213,7 +235,7 @@ namespace Mokkosu.TypeInference
                     {
                         for (int i = 0; i < e.Args.Count; i++)
                         {
-                            Inference(e.Args[i], tag.ArgTypes[i], ctx);
+                            Inference(e.Args[i], tag.ArgTypes[i], tenv, ctx);
                         }
                         Unification(type, tag.Type);
                     }
@@ -227,23 +249,42 @@ namespace Mokkosu.TypeInference
                     throw new MError("タグ" + e.Name + "は定義されていません");
                 }
             }
-        }
-
-        /// <summary>
-        /// タグを汎化
-        /// </summary>
-        /// <param name="tag">汎化するタグ</param>
-        /// <returns>汎化後のタグ</returns>
-        static Tag GeneralizeTag(Tag tag)
-        {
-            var map = new Dictionary<int, MType>();
-            foreach (var id in tag.Bounded.ToArray())
+            else if (expr is MVar)
             {
-                map.Add(id, new TypeVar());
+                var e = (MVar)expr;
+                MTypeScheme typescheme;
+                if (tenv.Lookup(e.Name, out typescheme))
+                {
+                    var t = Instantiate(typescheme);
+                    Unification(e.Type, t);
+                    Unification(type, t);
+                }
+                else
+                {
+                    throw new MError(string.Format("変数{0}は未定義です", e.Name));
+                }
             }
-            var arg_types = tag.ArgTypes.Select(t => MapTypeVar(map, t));
-            var type = MapTypeVar(map, tag.Type);
-            return new Tag(tag.Name, tag.Index, tag.Bounded, arg_types.ToList(), type);
+            else if (expr is MLambda)
+            {
+                var e = (MLambda)expr;
+                var tenv2 = tenv.Cons(e.ArgName, new MTypeScheme(e.ArgType));
+                var ret_type = new TypeVar();
+                Inference(e.Body, ret_type, tenv2, ctx);
+                var fun_type = new FunType(e.ArgType, ret_type);
+                Unification(type, fun_type);
+            }
+            else if (expr is MApp)
+            {
+                var e = (MApp)expr;
+                var arg_type = new TypeVar();
+                var fun_type = new FunType(arg_type, type);
+                Inference(e.FunExpr, fun_type, tenv, ctx);
+                Inference(e.ArgExpr, arg_type, tenv, ctx);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>
@@ -502,6 +543,23 @@ namespace Mokkosu.TypeInference
                 map.Add(id, new TypeVar());
             }
             return MapTypeVar(map, typescheme.Type);
+        }
+
+        /// <summary>
+        /// タグのインスタンスを作成
+        /// </summary>
+        /// <param name="tag">もととなるタグ</param>
+        /// <returns>生成されたタグ</returns>
+        static Tag GeneralizeTag(Tag tag)
+        {
+            var map = new Dictionary<int, MType>();
+            foreach (var id in tag.Bounded.ToArray())
+            {
+                map.Add(id, new TypeVar());
+            }
+            var arg_types = tag.ArgTypes.Select(t => MapTypeVar(map, t));
+            var type = MapTypeVar(map, tag.Type);
+            return new Tag(tag.Name, tag.Index, tag.Bounded, arg_types.ToList(), type);
         }
 
         /// <summary>
