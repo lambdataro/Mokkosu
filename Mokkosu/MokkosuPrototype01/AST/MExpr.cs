@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 namespace Mokkosu.AST
 {
     /// <summary>
@@ -263,6 +265,68 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("(pat {0} = {1} -> {2} else {3})", Pat, Expr, ThenExpr, ElseExpr);
+        }
+    }
+
+    /// <summary>
+    /// 空リスト
+    /// </summary>
+    class MNil : MExpr
+    {
+        public MType Type { get; private set; }
+
+        public MNil()
+        {
+            Type = new TypeVar();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("([] : {0})", Type);
+        }
+    }
+
+    /// <summary>
+    /// コンス
+    /// </summary>
+    class MCons : MExpr
+    {
+        public MExpr Head { get; private set; }
+        public MExpr Tail { get; private set; }
+        public MType ItemType { get; private set; }
+
+        public MCons(MExpr head, MExpr tail)
+        {
+            Head = head;
+            Tail = tail;
+            ItemType = new TypeVar();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(({0} :: {1}) : {2})", Head, Tail, ItemType);
+        }
+    }
+
+    /// <summary>
+    /// タプル
+    /// </summary>
+    class MTuple : MExpr
+    {
+        public List<MExpr> Items { get; private set; }
+        public List<MType> Types { get; private set; }
+        public int Size { get; private set; }
+
+        public MTuple(List<MExpr> items)
+        {
+            Size = items.Count;
+            Items = items;
+            Types = items.Select(item => (MType)(new TypeVar())).ToList();
+        }
+
+        public override string ToString()
+        {
+            return "(" + Utils.Utils.ListToString(Items) + ")";
         }
     }
 }

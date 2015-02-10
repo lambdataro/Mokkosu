@@ -157,4 +157,40 @@ namespace Mokkosu.AST
             return string.Format("({0} -> {1})", ArgType, RetType);
         }
     }
+
+    /// <summary>
+    /// リスト型
+    /// </summary>
+    class ListType : MType
+    {
+        public MType ElemType { get; private set; }
+
+        public ListType(MType elem_type)
+        {
+            ElemType = elem_type;
+        }
+
+        public override string ToString()
+        {
+            return "[" + ElemType.ToString() + "]";
+        }
+    }
+
+    /// <summary>
+    /// タプル型
+    /// </summary>
+    class TupleType : MType
+    {
+        public List<MType> Types { get; private set; }
+
+        public TupleType(List<MType> types)
+        {
+            Types = types;
+        }
+
+        public override string ToString()
+        {
+            return "(" + Utils.Utils.ListToString(Types) + ")";
+        }
+    }
 }

@@ -310,13 +310,32 @@ namespace Mokkosu.Parsing
             }
             else
             {
-                return ParseAddExpr(ctx);
+                return ParseConsExpr(ctx);
             }
         }
 
         static MExpr CreateBinop(string name, MExpr lhs, MExpr rhs)
         {
             return new MApp(new MApp(new MVar(name), lhs), rhs);
+        }
+
+        static MExpr ParseConsExpr(ParseContext ctx)
+        {
+            var lhs = ParseAddExpr(ctx);
+
+            while (ctx.Tkn.Type == TokenType.COLCOL)
+            {
+                var type = ctx.Tkn.Type;
+                ctx.NextToken();
+                var rhs = ParseAddExpr(ctx);
+                switch (type)
+                {
+                    case TokenType.COLCOL:
+                        lhs = new MCons(lhs, rhs);
+                        break;
+                }
+            }
+            return lhs;
         }
 
         static MExpr ParseAddExpr(ParseContext ctx)
@@ -377,6 +396,19 @@ namespace Mokkosu.Parsing
             return lhs;
         }
 
+        static List<MExpr> ParseExprList(ParseContext ctx)
+        {
+            var list = new List<MExpr>();
+            list.Add(ParseExpr(ctx));
+            while (ctx.Tkn.Type == TokenType.COM)
+            {
+                ctx.ReadToken(TokenType.COM);
+                list.Add(ParseExpr(ctx));
+            }
+            return list;
+        }
+
+
         static MExpr ParseFactor(ParseContext ctx)
         {
             if (ctx.Tkn.Type == TokenType.LP)
@@ -389,9 +421,16 @@ namespace Mokkosu.Parsing
                 }
                 else
                 {
-                    var expr = ParseExpr(ctx);
+                    var items = ParseExprList(ctx);
                     ctx.ReadToken(TokenType.RP);
-                    return expr;
+                    if (items.Count == 1)
+                    {
+                        return items[0];
+                    }
+                    else
+                    {
+                        return new MTuple(items);
+                    }
                 }
             }
             else if (ctx.Tkn.Type == TokenType.ID)
@@ -402,13 +441,7 @@ namespace Mokkosu.Parsing
                     var args = new List<MExpr>();
                     if (ctx.Tkn.Type == TokenType.LP)
                     {
-                        ctx.ReadToken(TokenType.LP);
-                        args.Add(ParseExpr(ctx));
-                        while (ctx.Tkn.Type == TokenType.COM)
-                        {
-                            ctx.ReadToken(TokenType.COM);
-                            args.Add(ParseExpr(ctx));
-                        }
+                        args = ParseExprList(ctx);
                         ctx.ReadToken(TokenType.RP);
                     }
                     return new MTag(str, args);
@@ -447,6 +480,12 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.FALSE);
                 return new MBool(false);
+            }
+            else if (ctx.Tkn.Type == TokenType.LBK)
+            {
+                ctx.ReadToken(TokenType.LBK);
+                ctx.ReadToken(TokenType.RBK);
+                return new MNil();
             }
             else
             {

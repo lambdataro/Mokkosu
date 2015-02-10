@@ -27,10 +27,10 @@ namespace Mokkosu.Main
 
             var parse_result = Parser.Start(parse_context);
 
-            foreach (var top_expr in parse_result.TopExprs)
-            {
-                Console.WriteLine(top_expr);
-            }
+            //foreach (var top_expr in parse_result.TopExprs)
+            //{
+            //    Console.WriteLine(top_expr);
+            //}
 
             Typeinf.Start(parse_result);
         }

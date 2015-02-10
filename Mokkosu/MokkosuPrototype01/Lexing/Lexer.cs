@@ -42,7 +42,6 @@ namespace Mokkosu.Lexing
             _symbols = new Dictionary<char, TokenType>()
             {
                 { ',', TokenType.COM },
-                { ':', TokenType.COL },
                 { '|', TokenType.BAR },
                 { ';', TokenType.SC },
                 { '<', TokenType.LT },
@@ -56,6 +55,8 @@ namespace Mokkosu.Lexing
                 { '/', TokenType.SLS },
                 { '_', TokenType.UB },
                 { '?', TokenType.QUE },
+                { '[', TokenType.LBK },
+                { ']', TokenType.RBK },
             };
         }
 
@@ -287,6 +288,19 @@ namespace Mokkosu.Lexing
                 else
                 {
                     return new Token(TokenType.MNS);
+                }
+            }
+            else if (_strm.Char == ':')
+            {
+                _strm.NextChar();
+                if (_strm.Char == ':')
+                {
+                    _strm.NextChar();
+                    return new Token(TokenType.COLCOL);
+                }
+                else
+                {
+                    return new Token(TokenType.COL);
                 }
             }
             else if (_symbols.ContainsKey(_strm.Char))

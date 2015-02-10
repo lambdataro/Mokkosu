@@ -9,6 +9,7 @@
         AT, BS, UB, QUE,
         LT, GT, EQ,
         LP, RP, PLS, MNS, AST, SLS,
+        LBK, RBK, COLCOL,
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN,

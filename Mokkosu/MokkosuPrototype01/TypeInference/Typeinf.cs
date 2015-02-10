@@ -188,6 +188,18 @@ namespace Mokkosu.TypeInference
                 var ret = MapTypeParam(t.RetType, dict);
                 return new FunType(arg, ret);
             }
+            else if (type is ListType)
+            {
+                var t = (ListType)type;
+                var elem_type = MapTypeParam(t.ElemType, dict);
+                return new ListType(elem_type);
+            }
+            else if (type is TupleType)
+            {
+                var t = (TupleType)type;
+                var types = t.Types.Select(typ => MapTypeParam(typ, dict)).ToList();
+                return new TupleType(types);
+            }
             else
             {
                 throw new NotImplementedException();
@@ -354,6 +366,28 @@ namespace Mokkosu.TypeInference
                 Inference(e.ThenExpr, type, tenv3, ctx);
                 Inference(e.ElseExpr, type, tenv, ctx);
             }
+            else if (expr is MNil)
+            {
+                var e = (MNil)expr;
+                Unification(type, new ListType(e.Type));
+            }
+            else if (expr is MCons)
+            {
+                var e = (MCons)expr;
+                var list_type = new ListType(e.ItemType);
+                Inference(e.Head, e.ItemType, tenv, ctx);
+                Inference(e.Tail, list_type, tenv, ctx);
+                Unification(type, list_type);
+            }
+            else if (expr is MTuple)
+            {
+                var e = (MTuple)expr;
+                for (var i = 0; i < e.Size; i++)
+                {
+                    Inference(e.Items[i], e.Types[i], tenv, ctx);
+                }
+                Unification(type, new TupleType(e.Types));
+            }
             else
             {
                 throw new NotImplementedException();
@@ -409,6 +443,16 @@ namespace Mokkosu.TypeInference
             {
                 var t = (FunType)type;
                 return OccursCheck(id, t.ArgType) || OccursCheck(id, t.RetType);
+            }
+            else if (type is ListType)
+            {
+                var t = (ListType)type;
+                return OccursCheck(id, t.ElemType);
+            }
+            else if (type is TupleType)
+            {
+                var t = (TupleType)type;
+                return t.Types.Exists(typ => OccursCheck(id, typ));
             }
             else if (type is IntType || type is DoubleType || type is StringType ||
                 type is CharType || type is UnitType || type is BoolType)
@@ -507,6 +551,28 @@ namespace Mokkosu.TypeInference
                 Unification(t1.ArgType, t2.ArgType);
                 Unification(t1.RetType, t2.RetType);
             }
+            else if (type1 is ListType && type2 is ListType)
+            {
+                var t1 = (ListType)type1;
+                var t2 = (ListType)type2;
+                Unification(t1.ElemType, t2.ElemType);
+            }
+            else if (type2 is TupleType && type2 is TupleType)
+            {
+                var t1 = (TupleType)type1;
+                var t2 = (TupleType)type2;
+                if (t1.Types.Count == t2.Types.Count)
+                {
+                    for (var i = 0; i < t1.Types.Count; i++)
+                    {
+                        Unification(t1.Types[i], t2.Types[i]);
+                    }
+                }
+                else
+                {
+                    throw new MError("型エラー (単一化エラー)");
+                }
+            }
             else if (type1 is IntType && type2 is IntType)
             {
                 return;
@@ -577,6 +643,21 @@ namespace Mokkosu.TypeInference
                 var set1 = FreeTypeVars(t.ArgType);
                 var set2 = FreeTypeVars(t.RetType);
                 return set1.Union(set2);
+            }
+            else if (type is ListType)
+            {
+                var t = (ListType)type;
+                return FreeTypeVars(t.ElemType);
+            }
+            else if (type is TupleType)
+            {
+                var t = (TupleType)type;
+                var set = new MSet<int>();
+                foreach (var typ in t.Types)
+                {
+                    set = set.Union(FreeTypeVars(typ));
+                }
+                return set;
             }
             else
             {
@@ -708,6 +789,18 @@ namespace Mokkosu.TypeInference
                 var arg = MapTypeVar(map, t.ArgType);
                 var ret = MapTypeVar(map, t.RetType);
                 return new FunType(arg, ret);
+            }
+            else if (type is ListType)
+            {
+                var t = (ListType)type;
+                var elem_type = MapTypeVar(map, t.ElemType);
+                return new ListType(elem_type);
+            }
+            else if (type is TupleType)
+            {
+                var t = (TupleType)type;
+                var types = t.Types.Select(typ => MapTypeVar(map, typ)).ToList();
+                return new TupleType(types);
             }
             else
             {
