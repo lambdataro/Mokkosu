@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace Mokkosu.TypeInference
 {
+    using TEnv = MEnv<MTypeScheme>;
+
     static class Typeinf
     {
         /// <summary>
@@ -157,6 +159,83 @@ namespace Mokkosu.TypeInference
             else
             {
                 throw new MError("型エラー (単一化エラー)");
+            }
+        }
+
+        /// <summary>
+        /// 型中に自由に出現する型変数の集合を返す
+        /// </summary>
+        /// <param name="type">型</param>
+        /// <returns>自由に出現する型変数の集合</returns>
+        static MSet<int> FreeTypeVars(MType type)
+        {
+            if (type is TypeVar)
+            {
+                var t = (TypeVar)type;
+                if (t.Value == null)
+                {
+                    return new MSet<int>();
+                }
+                else
+                {
+                    return FreeTypeVars(t.Value);
+                }
+            }
+            else if (type is UserType)
+            {
+                var t = (UserType)type;
+                var set = new MSet<int>();
+                foreach (var arg in t.Args)
+                {
+                    set = set.Union(FreeTypeVars(arg));
+                }
+                return set;
+            }
+            else if (type is IntType || type is DoubleType ||
+                type is StringType || type is CharType || type is UnitType)
+            {
+                return new MSet<int>();
+            }
+            else if (type is FunType)
+            {
+                var t = (FunType)type;
+                var set1 = FreeTypeVars(t.ArgType);
+                var set2 = FreeTypeVars(t.RetType);
+                return set1.Union(set2);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// 型スキーム中で自由に出現する型変数の集合を返す
+        /// </summary>
+        /// <param name="typescheme">型スキーム</param>
+        /// <returns>自由に出現する型変数の集合</returns>
+        static MSet<int> FreeTypeVars(MTypeScheme typescheme)
+        {
+            var set = FreeTypeVars(typescheme.Type);
+            return set.Diff(typescheme.Bounded);
+        }
+
+        /// <summary>
+        /// 型環境中で自由に出現する型変数の集合を返す
+        /// </summary>
+        /// <param name="tenv">型環境</param>
+        /// <returns>自由に出現する型変数の集合</returns>
+        static MSet<int> FreeTypeVars(TEnv tenv)
+        {
+            if (tenv.IsEmpty())
+            {
+                return new MSet<int>();
+            }
+            else
+            {
+                var set1 = FreeTypeVars(tenv.Head);
+                var set2 = FreeTypeVars(tenv.Tail);
+                return set1.Union(set2);
             }
         }
     }

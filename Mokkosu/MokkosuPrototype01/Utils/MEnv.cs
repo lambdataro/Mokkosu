@@ -28,9 +28,25 @@ namespace Mokkosu.Utils
             return env;
         }
 
-        public bool IsEmpty(MEnv<T> env)
+        public bool IsEmpty()
         {
-            return env._is_empty;
+            return _is_empty;
+        }
+
+        public T Head
+        {
+            get
+            {
+                return _value;
+            }
+        }
+
+        public MEnv<T> Tail
+        {
+            get
+            {
+                return _tail;
+            }
         }
 
         public MEnv<T> Append(MEnv<T> other)
