@@ -128,6 +128,17 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
+    /// 真偽値型
+    /// </summary>
+    class BoolType : MType
+    {
+        public override string ToString()
+        {
+            return "Bool";
+        }
+    }
+
+    /// <summary>
     /// 関数型
     /// </summary>
     class FunType : MType

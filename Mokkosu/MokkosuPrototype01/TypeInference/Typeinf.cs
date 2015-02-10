@@ -167,8 +167,8 @@ namespace Mokkosu.TypeInference
                     return new UserType(t.Name, args);
                 }
             }
-            else if (type is IntType || type is DoubleType ||
-                type is StringType || type is CharType || type is UnitType)
+            else if (type is IntType || type is DoubleType || type is StringType ||
+                type is CharType || type is UnitType || type is BoolType)
             {
                 return type;
             }
@@ -201,7 +201,7 @@ namespace Mokkosu.TypeInference
         /// <param name="expr">型を推論する式</param>
         /// <param name="type">文脈の型</param>
         /// <param name="ctx">型推論文脈</param>
-        static void Inference(MExpr expr, MType type, MEnv<MTypeScheme> tenv, TypeInfContext ctx)
+        static void Inference(MExpr expr, MType type, TEnv tenv, TypeInfContext ctx)
         {
             if (expr is MInt)
             {
@@ -222,6 +222,10 @@ namespace Mokkosu.TypeInference
             else if (expr is MUnit)
             {
                 Unification(type, new UnitType());
+            }
+            else if (expr is MBool)
+            {
+                Unification(type, new BoolType());
             }
             else if (expr is MTag)
             {
@@ -281,6 +285,44 @@ namespace Mokkosu.TypeInference
                 Inference(e.FunExpr, fun_type, tenv, ctx);
                 Inference(e.ArgExpr, arg_type, tenv, ctx);
             }
+            else if (expr is MIf)
+            {
+                var e = (MIf)expr;
+                Inference(e.CondExpr, new BoolType(), tenv, ctx);
+                Inference(e.ThenExpr, type, tenv, ctx);
+                Inference(e.ElseExpr, type, tenv, ctx);
+            }
+            else if (expr is MMatch)
+            {
+                var e = (MMatch)expr;
+                var t = new TypeVar();
+                var tenv2 = InferencePat(e.Pat, t, tenv, ctx);
+                Inference(e.Expr, t, tenv, ctx);
+                var tenv3 = tenv2.Append(tenv);
+                Inference(e.ThenExpr, type, tenv3, ctx);
+                Inference(e.ElseExpr, type, tenv, ctx);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
+        static TEnv InferencePat(MPat pat, MType type, TEnv tenv, TypeInfContext ctx)
+        {
+            if (pat is PWild)
+            {
+                var p = (PWild)pat;
+                Unification(type, p.Type);
+                return new TEnv();
+            }
+            else if (pat is PVar)
+            {
+                var p = (PVar)pat;
+                Unification(type, p.Type);
+                return new TEnv().Cons(p.Name, new MTypeScheme(type));
+            }
             else
             {
                 throw new NotImplementedException();
@@ -316,8 +358,8 @@ namespace Mokkosu.TypeInference
                 var t = (FunType)type;
                 return OccursCheck(id, t.ArgType) || OccursCheck(id, t.RetType);
             }
-            else if (type is IntType || type is DoubleType ||
-                type is StringType || type is CharType || type is UnitType)
+            else if (type is IntType || type is DoubleType || type is StringType ||
+                type is CharType || type is UnitType || type is BoolType)
             {
                 return false;
             }
@@ -433,6 +475,10 @@ namespace Mokkosu.TypeInference
             {
                 return;
             }
+            else if (type1 is BoolType && type2 is BoolType)
+            {
+                return;
+            }
             else
             {
                 throw new MError("型エラー (単一化エラー)");
@@ -468,8 +514,8 @@ namespace Mokkosu.TypeInference
                 }
                 return set;
             }
-            else if (type is IntType || type is DoubleType ||
-                type is StringType || type is CharType || type is UnitType)
+            else if (type is IntType || type is DoubleType || type is StringType ||
+                type is CharType || type is UnitType || type is BoolType)
             {
                 return new MSet<int>();
             }
@@ -599,8 +645,8 @@ namespace Mokkosu.TypeInference
                 }
                 return new UserType(t.Name, args);
             }
-            else if (type is IntType || type is DoubleType ||
-                type is StringType || type is CharType || type is UnitType)
+            else if (type is IntType || type is DoubleType || type is StringType ||
+                type is CharType || type is UnitType || type is BoolType)
             {
                 return type;
             }

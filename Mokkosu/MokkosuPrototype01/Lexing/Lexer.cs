@@ -27,6 +27,11 @@ namespace Mokkosu.Lexing
                 { "type", TokenType.TYPE },
                 { "and", TokenType.AND },
                 { "do", TokenType.DO },
+                { "if", TokenType.IF },
+                { "else", TokenType.ELSE },
+                { "pat", TokenType.PAT },
+                { "true", TokenType.TRUE },
+                { "false", TokenType.FALSE },
             };
         }
 
@@ -47,6 +52,8 @@ namespace Mokkosu.Lexing
                 { '+', TokenType.PLS },
                 { '*', TokenType.AST },
                 { '/', TokenType.SLS },
+                { '_', TokenType.UB },
+                { '?', TokenType.QUE },
             };
         }
 
@@ -162,8 +169,15 @@ namespace Mokkosu.Lexing
             }
             else
             {
-                var num = int.Parse(sb.ToString());
-                return new Token(TokenType.INT, num);
+                if (sb.ToString() == "")
+                {
+                    return new Token(TokenType.INT, 0);
+                }
+                else
+                {
+                    var num = int.Parse(sb.ToString());
+                    return new Token(TokenType.INT, num);
+                }
             }
         }
 

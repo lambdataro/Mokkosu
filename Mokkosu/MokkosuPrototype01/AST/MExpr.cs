@@ -92,6 +92,31 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
+    /// 真偽値定数
+    /// </summary>
+    class MBool : MExpr
+    {
+        public bool Value { get; private set; }
+
+        public MBool(bool value)
+        {
+            Value = value;
+        }
+
+        public override string ToString()
+        {
+            if (Value)
+            {
+                return "true";
+            }
+            else
+            {
+                return "false";
+            }
+        }
+    }
+
+    /// <summary>
     /// タグ
     /// </summary>
     class MTag : MExpr
@@ -146,6 +171,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// ラムダ式
+    /// </summary>
     class MLambda : MExpr
     {
         public string ArgName { get; private set; }
@@ -172,6 +200,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 関数適用
+    /// </summary>
     class MApp : MExpr
     {
         public MExpr FunExpr { get; private set; }
@@ -186,6 +217,52 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("({0} {1})", FunExpr, ArgExpr);
+        }
+    }
+
+    /// <summary>
+    /// 条件分岐
+    /// </summary>
+    class MIf : MExpr
+    {
+        public MExpr CondExpr { get; private set; }
+        public MExpr ThenExpr { get; private set; }
+        public MExpr ElseExpr { get; private set; }
+
+        public MIf(MExpr cond_expr, MExpr then_expr, MExpr else_expr)
+        {
+            CondExpr = cond_expr;
+            ThenExpr = then_expr;
+            ElseExpr = else_expr;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(if {0} then {1} else {2})", CondExpr, ThenExpr, ElseExpr);
+        }
+    }
+
+    /// <summary>
+    /// パターンマッチ
+    /// </summary>
+    class MMatch : MExpr
+    {
+        public MPat Pat { get; private set; }
+        public MExpr Expr { get; private set; }
+        public MExpr ThenExpr { get; private set; }
+        public MExpr ElseExpr { get; private set; }
+
+        public MMatch(MPat pat, MExpr expr, MExpr then_expr, MExpr else_expr)
+        {
+            Pat = pat;
+            Expr = expr;
+            ThenExpr = then_expr;
+            ElseExpr = else_expr;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(pat {0} = {1} -> {2} else {3})", Pat, Expr, ThenExpr, ElseExpr);
         }
     }
 }

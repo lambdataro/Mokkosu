@@ -5,11 +5,13 @@
         // 意味値を持つトークン
         INT, DBL, STR, CHAR, ID,
         // 記号
-        COM, COL, BAR, SC, ARROW, AT, BS,
+        COM, COL, BAR, SC, ARROW, 
+        AT, BS, UB, QUE,
         LT, GT, EQ,
         LP, RP, PLS, MNS, AST, SLS,
         // キーワード
-        TYPE, AND, DO,
+        TYPE, AND, DO, IF, ELSE, PAT,
+        TRUE, FALSE,
         // 制御記号
         EOF
     }

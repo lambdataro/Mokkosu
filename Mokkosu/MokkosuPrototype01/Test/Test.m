@@ -3,8 +3,4 @@
 
 and List<T> = Nil | Cons(T, List<T>);
 
-do Cons(3, Nil);
-do Nil;
-do Cons(Add(Value(3), Mul(Value(4), Value(5))), Nil);
-do 1 + 3;
-do \x -> x * 2;
+do pat x = 12 -> x * x else 0;

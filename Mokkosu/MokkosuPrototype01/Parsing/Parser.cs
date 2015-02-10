@@ -232,6 +232,28 @@ namespace Mokkosu.Parsing
                 var body = ParseFunExpr(ctx);
                 return new MLambda(arg_name, body);
             }
+            else if (ctx.Tkn.Type == TokenType.IF)
+            {
+                ctx.ReadToken(TokenType.IF);
+                var cond_expr = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.ARROW);
+                var then_expr = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.ELSE);
+                var else_expr = ParseFunExpr(ctx);
+                return new MIf(cond_expr, then_expr, else_expr);
+            }
+            else if (ctx.Tkn.Type == TokenType.PAT)
+            {
+                ctx.ReadToken(TokenType.PAT);
+                var pat = ParsePattern(ctx);
+                ctx.ReadToken(TokenType.EQ);
+                var expr = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.ARROW);
+                var then_expr = ParseFunExpr(ctx);
+                ctx.ReadToken(TokenType.ELSE);
+                var else_expr = ParseFunExpr(ctx);
+                return new MMatch(pat, expr, then_expr, else_expr);
+            }
             else
             {
                 return ParseAddExpr(ctx);
@@ -361,6 +383,45 @@ namespace Mokkosu.Parsing
             {
                 var ch = ctx.ReadCharToken(TokenType.CHAR);
                 return new MChar(ch);
+            }
+            else if (ctx.Tkn.Type == TokenType.TRUE)
+            {
+                return new MBool(true);
+            }
+            else if (ctx.Tkn.Type == TokenType.FALSE)
+            {
+                return new MBool(false);
+            }
+            else
+            {
+                ctx.SyntaxError();
+                throw new MError();
+            }
+        }
+
+        #endregion
+
+        #region パターン
+
+        //============================================================
+        // パターン
+        //============================================================
+
+        static MPat ParsePattern(ParseContext ctx)
+        {
+            return ParsePatFactor(ctx);
+        }
+
+        static MPat ParsePatFactor(ParseContext ctx)
+        {
+            if (ctx.Tkn.Type == TokenType.ID)
+            {
+                var str = ctx.ReadStrToken(TokenType.ID);
+                return new PVar(str);
+            }
+            else if (ctx.Tkn.Type == TokenType.UB)
+            {
+                return new PWild();
             }
             else
             {
