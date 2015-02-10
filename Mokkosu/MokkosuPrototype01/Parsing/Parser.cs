@@ -211,13 +211,94 @@ namespace Mokkosu.Parsing
 
         #endregion
 
+        #region 式
+
         //============================================================
         // 式
         //============================================================
 
         static MExpr ParseExpr(ParseContext ctx)
         {
-            return ParseFactor(ctx);
+            return ParseAppExpr(ctx);
+        }
+
+        static MExpr ParseFunExpr(ParseContext ctx)
+        {
+            if (ctx.Tkn.Type == TokenType.BS)
+            {
+                ctx.ReadToken(TokenType.BS);
+                var arg_name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.ARROW);
+                var body = ParseFunExpr(ctx);
+                return new MLambda(arg_name, body);
+            }
+            else
+            {
+                return ParseAppExpr(ctx);
+            }
+        }
+
+        static MExpr CreateBinop(string name, MExpr lhs, MExpr rhs)
+        {
+            return new MApp(new MApp(new MVar(name), lhs), rhs);
+        }
+
+        static MExpr ParseAddExpr(ParseContext ctx)
+        {
+            var lhs = ParseMulExpr(ctx);
+
+            while (ctx.Tkn.Type == TokenType.PLS || ctx.Tkn.Type == TokenType.MNS)
+            {
+                var type = ctx.Tkn.Type;
+                ctx.NextToken();
+                var rhs = ParseMulExpr(ctx);
+                switch (type)
+                {
+                    case TokenType.PLS:
+                        lhs = CreateBinop("__operator_pls", lhs, rhs);
+                        break;
+                    case TokenType.MNS:
+                        lhs = CreateBinop("__operator_mns", lhs, rhs);
+                        break;
+                }
+            }
+            return lhs;
+        }
+
+        static MExpr ParseMulExpr(ParseContext ctx)
+        {
+            var lhs = ParseAppExpr(ctx);
+
+            while (ctx.Tkn.Type == TokenType.AST || ctx.Tkn.Type == TokenType.SLS)
+            {
+                var type = ctx.Tkn.Type;
+                ctx.NextToken();
+                var rhs = ParseAppExpr(ctx);
+                switch (type)
+                {
+                    case TokenType.AST:
+                        lhs = CreateBinop("__operator_ast", lhs, rhs);
+                        break;
+                    case TokenType.SLS:
+                        lhs = CreateBinop("__operator_sls", lhs, rhs);
+                        break;
+                }
+            }
+            return lhs;
+        }
+
+        static MExpr ParseAppExpr(ParseContext ctx)
+        {
+            var lhs = ParseFactor(ctx);
+
+            while (ctx.Tkn.Type == TokenType.LP || ctx.Tkn.Type == TokenType.ID ||
+                ctx.Tkn.Type == TokenType.INT || ctx.Tkn.Type == TokenType.DBL ||
+                ctx.Tkn.Type == TokenType.STR || ctx.Tkn.Type == TokenType.CHAR)
+            {
+                var rhs = ParseFactor(ctx);
+                lhs = new MApp(lhs, rhs);
+            }
+            return lhs;
         }
 
         static MExpr ParseFactor(ParseContext ctx)
@@ -287,5 +368,8 @@ namespace Mokkosu.Parsing
                 throw new MError();
             }
         }
+
+        #endregion
+
     }
 }

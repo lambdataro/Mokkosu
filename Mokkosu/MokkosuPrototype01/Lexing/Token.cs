@@ -5,9 +5,9 @@
         // 意味値を持つトークン
         INT, DBL, STR, CHAR, ID,
         // 記号
-        COM, COL, BAR, SC, ARROW, AT,
+        COM, COL, BAR, SC, ARROW, AT, BS,
         LT, GT, EQ,
-        LP, RP, MNS,
+        LP, RP, PLS, MNS, AST, SLS,
         // キーワード
         TYPE, AND, DO,
         // 制御記号

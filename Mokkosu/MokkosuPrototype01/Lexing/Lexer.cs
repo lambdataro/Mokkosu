@@ -43,6 +43,10 @@ namespace Mokkosu.Lexing
                 { '=', TokenType.EQ },
                 { '(', TokenType.LP },
                 { ')', TokenType.RP },
+                { '\\', TokenType.BS },
+                { '+', TokenType.PLS },
+                { '*', TokenType.AST },
+                { '/', TokenType.SLS },
             };
         }
 
