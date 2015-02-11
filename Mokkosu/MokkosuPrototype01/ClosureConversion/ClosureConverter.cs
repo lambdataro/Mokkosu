@@ -19,14 +19,136 @@ namespace Mokkosu.ClosureConversion
             return new ClosureConversionResult(_function_table, main);
         }
 
-        static string GenName()
+        static string GenFunctionName()
         {
             return string.Format("function@{0:000}", ++_count);
         }
 
+        static string GenArgName()
+        {
+            return string.Format("arg@{0:000}", ++_count);
+        }
+
         static MExpr Conv(MExpr expr, ClosureConversionContext ctx)
         {
-            throw new NotImplementedException();
+            if (expr is MInt || expr is MDouble || expr is MString || expr is MChar ||
+                expr is MUnit || expr is MBool)
+            {
+                return expr;
+            }
+            else if (expr is MVar)
+            {
+                var e = (MVar)expr;
+                if (e.IsTag)
+                {
+                    return expr;
+                }
+                else if (e.Name == ctx.ArgName)
+                {
+                    return new MGetArg();
+                }
+                else
+                {
+                    var index = ctx.GetCaptureIndex(e.Name);
+                    if (index == -1)
+                    {
+                        return expr;
+                    }
+                    else
+                    {
+                        return new MGetEnv(index);
+                    }
+                }
+            }
+            else if (expr is MLambda)
+            {
+                var e = (MLambda)expr;
+                var set = e.Body.FreeVars().Diff(e.ArgPat.FreeVars());
+                var fv = set.ToArray();
+                var arg_name = GenArgName();
+                var ctx2 = new ClosureConversionContext(arg_name, fv);
+                var body = new MMatch(e.ArgPat, new MVar(arg_name), 
+                    Conv(e.Body, ctx2), new RuntimeError("パターンマッチ失敗"));
+                var fun_name = GenFunctionName();
+                _function_table.Add(fun_name, body);
+                var args = fv.Select(x => Conv(new MVar(x), ctx)).ToArray();
+                return new MMakeClos(fun_name, args);
+            }
+            else if (expr is MApp)
+            {
+                var e = (MApp)expr;
+                var fun = Conv(e.FunExpr, ctx);
+                var arg = Conv(e.ArgExpr, ctx);
+                return new MApp(fun, arg);
+            }
+            else if (expr is MIf)
+            {
+                var e = (MIf)expr;
+                var cond_expr = Conv(e.CondExpr, ctx);
+                var then_expr = Conv(e.ThenExpr, ctx);
+                var else_expr = Conv(e.ElseExpr, ctx);
+                return new MIf(cond_expr, then_expr, else_expr);
+            }
+            else if (expr is MMatch)
+            {
+                var e = (MMatch)expr;
+                var expr1 = Conv(e.Expr, ctx);
+                var then_expr = Conv(e.ThenExpr, ctx);
+                var else_expr = Conv(e.ElseExpr, ctx);
+                return new MMatch(e.Pat, expr1, then_expr, else_expr);
+            }
+            else if (expr is MNil)
+            {
+                return expr;
+            }
+            else if (expr is MCons)
+            {
+                var e = (MCons)expr;
+                var head = Conv(e.Head, ctx);
+                var tail = Conv(e.Tail, ctx);
+                return new MCons(head, tail);
+            }
+            else if (expr is MTuple)
+            {
+                var e = (MTuple)expr;
+                var list =e.Items.Select(x => Conv(x, ctx)).ToList();
+                return new MTuple(list);
+            }
+            else if (expr is MDo)
+            {
+                var e = (MDo)expr;
+                var e1 = Conv(e.E1, ctx);
+                var e2 = Conv(e.E2, ctx);
+                return new MDo(e1, e2);
+            }
+            else if (expr is MLet)
+            {
+                var e = (MLet)expr;
+                var e1 = Conv(e.E1, ctx);
+                var e2 = Conv(e.E2, ctx);
+                return new MLet(e.Pat, e1, e2);
+            }
+            else if (expr is MFun)
+            {
+                var e = (MFun)expr;
+                var items = e.Items.Select(item => 
+                    new MFunItem(item.Name, Conv(item.Expr, ctx))).ToList();
+                var e2 = Conv(e.E2, ctx);
+                return new MFun(items, e2);
+            }
+            else if (expr is MFource)
+            {
+                var e = (MFource)expr;
+                return Conv(e.Expr, ctx);
+            }
+            else if (expr is RuntimeError)
+            {
+                return expr;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

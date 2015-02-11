@@ -557,6 +557,29 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
+    /// 実行時エラーを出力する
+    /// </summary>
+    class RuntimeError : MExpr
+    {
+        public string Message { get; private set; }
+
+        public RuntimeError(string message)
+        {
+            Message = message;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("runtime_error(\"{0}\")", Message);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
+    }
+
+    /// <summary>
     /// 引数の値を取得する (クロージャ変換後に利用)
     /// </summary>
     class MGetArg : MExpr
@@ -624,23 +647,23 @@ namespace Mokkosu.AST
     /// <summary>
     /// クロージャでキャプチャする値を取得する変数 (クロージャ変換後に利用)
     /// </summary>
-    class MVarClos : MExpr
-    {
-        public string Name { get; private set; }
+    //class MVarClos : MExpr
+    //{
+    //    public string Name { get; private set; }
 
-        public MVarClos(string name)
-        {
-            Name = name;
-        }
+    //    public MVarClos(string name)
+    //    {
+    //        Name = name;
+    //    }
 
-        public override string ToString()
-        {
-            return string.Format("{0}", Name);
-        }
+    //    public override string ToString()
+    //    {
+    //        return string.Format("{0}", Name);
+    //    }
 
-        public override MSet<string> FreeVars()
-        {
-            throw new System.NotImplementedException();
-        }
-    }
+    //    public override MSet<string> FreeVars()
+    //    {
+    //        throw new System.NotImplementedException();
+    //    }
+    //}
 }

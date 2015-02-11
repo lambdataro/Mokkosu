@@ -1,4 +1,5 @@
-﻿using Mokkosu.Input;
+﻿using Mokkosu.ClosureConversion;
+using Mokkosu.Input;
 using Mokkosu.Lexing;
 using Mokkosu.Parsing;
 using Mokkosu.TypeInference;
@@ -27,12 +28,11 @@ namespace Mokkosu.Main
 
             var parse_result = Parser.Start(parse_context);
 
-            //foreach (var top_expr in parse_result.TopExprs)
-            //{
-            //    Console.WriteLine(top_expr);
-            //}
-
             Typeinf.Start(parse_result);
+            var expr = TopToExpr.Start(parse_result);
+            var closure_result = ClosureConverter.Start(expr);
+
+            Console.WriteLine(closure_result);
         }
     }
 }

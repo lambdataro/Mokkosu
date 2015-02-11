@@ -1,1 +1,1 @@
-﻿fun fact n = n * 2;
+﻿do (\x y -> x + y) 2 3;
