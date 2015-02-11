@@ -46,7 +46,7 @@ namespace Mokkosu.Input
                 return;
             }
 
-            throw new MError("ソースファイル " + fname + "が見つかりません。");
+            throw new MError(Pos + ": ソースファイル " + fname + "が見つかりません。");
         }
 
         public void NextChar()

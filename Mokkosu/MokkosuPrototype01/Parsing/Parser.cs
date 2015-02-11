@@ -57,6 +57,7 @@ namespace Mokkosu.Parsing
         {
             var items = new List<MUserTypeDefItem>();
 
+            var pos = ctx.Tkn.Pos;
             ctx.ReadToken(TokenType.TYPE);
 
             items.Add(ParseDataItem(ctx));
@@ -69,7 +70,7 @@ namespace Mokkosu.Parsing
 
             ctx.ReadToken(TokenType.SC);
 
-            return new MUserTypeDef(items);
+            return new MUserTypeDef(pos, items);
         }
 
         static MUserTypeDefItem ParseDataItem(ParseContext ctx)
@@ -214,17 +215,19 @@ namespace Mokkosu.Parsing
 
         static MTopDo ParseTopDo(ParseContext ctx)
         {
+            var pos = ctx.Tkn.Pos;
             ctx.ReadToken(TokenType.DO);
             var expr = ParseExpr(ctx);
             ctx.ReadToken(TokenType.SC);
-            return new MTopDo(expr);
+            return new MTopDo(pos, expr);
         }
 
         static MTopDo ParseTopDoSimple(ParseContext ctx)
         {
+            var pos = ctx.Tkn.Pos;
             var expr = ParseExpr(ctx);
             ctx.ReadToken(TokenType.SC);
-            return new MTopDo(expr);
+            return new MTopDo(pos, expr);
         }
 
         #endregion
@@ -237,13 +240,14 @@ namespace Mokkosu.Parsing
 
         static MTopLet ParseTopLet(ParseContext ctx)
         {
+            var pos = ctx.Tkn.Pos;
             ctx.ReadToken(TokenType.LET);
             var pat = ParsePattern(ctx);
             var args = ParseArgList0(ctx, TokenType.EQ);
             ctx.ReadToken(TokenType.EQ);
             var expr = ParseExpr(ctx);
             ctx.ReadToken(TokenType.SC);
-            return new MTopLet(pat, ArgsToLambda(args, expr));
+            return new MTopLet(pos, pat, ArgsToLambda(args, expr));
         }
 
         #endregion
@@ -256,6 +260,7 @@ namespace Mokkosu.Parsing
 
         static MTopFun ParseTopFun(ParseContext ctx)
         {
+            var pos = ctx.Tkn.Pos;
             ctx.ReadToken(TokenType.FUN);
             var items = new List<MFunItem>();
             items.Add(ParseFunItem(ctx));
@@ -265,7 +270,7 @@ namespace Mokkosu.Parsing
                 items.Add(ParseFunItem(ctx));
             }
             ctx.ReadToken(TokenType.SC);
-            return new MTopFun(items);
+            return new MTopFun(pos, items);
         }
 
         static MFunItem ParseFunItem(ParseContext ctx)
@@ -303,16 +308,18 @@ namespace Mokkosu.Parsing
             }
             else if (ctx.Tkn.Type == TokenType.IF)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.IF);
                 var cond_expr = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.ARROW);
                 var then_expr = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.ELSE);
                 var else_expr = ParseFunExpr(ctx);
-                return new MIf(cond_expr, then_expr, else_expr);
+                return new MIf(pos, cond_expr, then_expr, else_expr);
             }
             else if (ctx.Tkn.Type == TokenType.PAT)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.PAT);
                 var pat = ParsePattern(ctx);
                 ctx.ReadToken(TokenType.EQ);
@@ -321,18 +328,20 @@ namespace Mokkosu.Parsing
                 var then_expr = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.ELSE);
                 var else_expr = ParseFunExpr(ctx);
-                return new MMatch(pat, expr, then_expr, else_expr);
+                return new MMatch(pos, pat, expr, then_expr, else_expr);
             }
             else if (ctx.Tkn.Type == TokenType.DO)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.DO);
                 var e1 = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.IN);
                 var e2 = ParseFunExpr(ctx);
-                return new MDo(e1, e2);
+                return new MDo(pos, e1, e2);
             }
             else if (ctx.Tkn.Type == TokenType.LET)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.LET);
                 var pat = ParsePattern(ctx);
                 var args = ParseArgList0(ctx, TokenType.EQ);
@@ -340,10 +349,11 @@ namespace Mokkosu.Parsing
                 var e1 = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.IN);
                 var e2 = ParseFunExpr(ctx);
-                return new MLet(pat, ArgsToLambda(args, e1), e2);
+                return new MLet(pos, pat, ArgsToLambda(args, e1), e2);
             }
             else if (ctx.Tkn.Type == TokenType.FUN)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.FUN);
                 var items = new List<MFunItem>();
                 items.Add(ParseFunItem(ctx));
@@ -354,7 +364,7 @@ namespace Mokkosu.Parsing
                 }
                 ctx.ReadToken(TokenType.IN);
                 var e2 = ParseFunExpr(ctx);
-                return new MFun(items, e2);
+                return new MFun(pos, items, e2);
             }
             else
             {
@@ -393,13 +403,13 @@ namespace Mokkosu.Parsing
             {
                 var pat = args[0];
                 var rest = args.Skip(1).ToList();
-                return new MLambda(pat, ArgsToLambda(rest, body));
+                return new MLambda(body.Pos, pat, ArgsToLambda(rest, body));
             }
         }
 
-        static MExpr CreateBinop(string name, MExpr lhs, MExpr rhs)
+        static MExpr CreateBinop(string pos, string name, MExpr lhs, MExpr rhs)
         {
-            return new MApp(new MApp(new MVar(name), lhs), rhs);
+            return new MApp(pos, new MApp(pos, new MVar(pos, name), lhs), rhs);
         }
 
         static MExpr ParseConsExpr(ParseContext ctx)
@@ -409,12 +419,13 @@ namespace Mokkosu.Parsing
             while (ctx.Tkn.Type == TokenType.COLCOL)
             {
                 var type = ctx.Tkn.Type;
+                var pos = ctx.Tkn.Pos;
                 ctx.NextToken();
                 var rhs = ParseAddExpr(ctx);
                 switch (type)
                 {
                     case TokenType.COLCOL:
-                        lhs = new MCons(lhs, rhs);
+                        lhs = new MCons(pos, lhs, rhs);
                         break;
                 }
             }
@@ -428,15 +439,16 @@ namespace Mokkosu.Parsing
             while (ctx.Tkn.Type == TokenType.PLS || ctx.Tkn.Type == TokenType.MNS)
             {
                 var type = ctx.Tkn.Type;
+                var pos = ctx.Tkn.Pos;
                 ctx.NextToken();
                 var rhs = ParseMulExpr(ctx);
                 switch (type)
                 {
                     case TokenType.PLS:
-                        lhs = CreateBinop("__operator_pls", lhs, rhs);
+                        lhs = CreateBinop(pos, "__operator_pls", lhs, rhs);
                         break;
                     case TokenType.MNS:
-                        lhs = CreateBinop("__operator_mns", lhs, rhs);
+                        lhs = CreateBinop(pos, "__operator_mns", lhs, rhs);
                         break;
                 }
             }
@@ -450,15 +462,16 @@ namespace Mokkosu.Parsing
             while (ctx.Tkn.Type == TokenType.AST || ctx.Tkn.Type == TokenType.SLS)
             {
                 var type = ctx.Tkn.Type;
+                var pos = ctx.Tkn.Pos;
                 ctx.NextToken();
                 var rhs = ParseAppExpr(ctx);
                 switch (type)
                 {
                     case TokenType.AST:
-                        lhs = CreateBinop("__operator_ast", lhs, rhs);
+                        lhs = CreateBinop(pos, "__operator_ast", lhs, rhs);
                         break;
                     case TokenType.SLS:
-                        lhs = CreateBinop("__operator_sls", lhs, rhs);
+                        lhs = CreateBinop(pos, "__operator_sls", lhs, rhs);
                         break;
                 }
             }
@@ -473,21 +486,23 @@ namespace Mokkosu.Parsing
                 ctx.Tkn.Type == TokenType.INT || ctx.Tkn.Type == TokenType.DBL ||
                 ctx.Tkn.Type == TokenType.STR || ctx.Tkn.Type == TokenType.CHAR)
             {
+                var pos = ctx.Tkn.Pos;
                 var rhs = ParseFactor(ctx);
-                lhs = new MApp(lhs, rhs);
+                lhs = new MApp(pos, lhs, rhs);
             }
             return lhs;
         }
 
         static MExpr ParseFactor(ParseContext ctx)
         {
+            var pos = ctx.Tkn.Pos;
             if (ctx.Tkn.Type == TokenType.LP)
             {
                 ctx.ReadToken(TokenType.LP);
                 if (ctx.Tkn.Type == TokenType.RP)
                 {
                     ctx.ReadToken(TokenType.RP);
-                    return new MUnit();
+                    return new MUnit(pos);
                 }
                 else
                 {
@@ -499,7 +514,7 @@ namespace Mokkosu.Parsing
                             ctx.ReadToken(TokenType.COL);
                             var type = ParseType(ctx);
                             ctx.ReadToken(TokenType.RP);
-                            return new MFource(items[0], type);
+                            return new MFource(pos, items[0], type);
                         }
                         else
                         {
@@ -510,44 +525,44 @@ namespace Mokkosu.Parsing
                     else
                     {
                         ctx.ReadToken(TokenType.RP);
-                        return new MTuple(items);
+                        return new MTuple(pos, items);
                     }
                 }
             }
             else if (ctx.Tkn.Type == TokenType.ID)
             {
                 var str = ctx.ReadStrToken(TokenType.ID);
-                return new MVar(str);
+                return new MVar(pos, str);
             }
             else if (ctx.Tkn.Type == TokenType.INT)
             {
                 var num = ctx.ReadIntToken(TokenType.INT);
-                return new MInt(num);
+                return new MInt(pos, num);
             }
             else if (ctx.Tkn.Type == TokenType.DBL)
             {
                 var num = ctx.ReadDoubleToken(TokenType.DBL);
-                return new MDouble(num);
+                return new MDouble(pos, num);
             }
             else if (ctx.Tkn.Type == TokenType.STR)
             {
                 var str = ctx.ReadStrToken(TokenType.STR);
-                return new MString(str);
+                return new MString(pos, str);
             }
             else if (ctx.Tkn.Type == TokenType.CHAR)
             {
                 var ch = ctx.ReadCharToken(TokenType.CHAR);
-                return new MChar(ch);
+                return new MChar(pos, ch);
             }
             else if (ctx.Tkn.Type == TokenType.TRUE)
             {
                 ctx.ReadToken(TokenType.TRUE);
-                return new MBool(true);
+                return new MBool(pos, true);
             }
             else if (ctx.Tkn.Type == TokenType.FALSE)
             {
                 ctx.ReadToken(TokenType.FALSE);
-                return new MBool(false);
+                return new MBool(pos, false);
             }
             else if (ctx.Tkn.Type == TokenType.LBK)
             {
@@ -555,13 +570,13 @@ namespace Mokkosu.Parsing
                 if (ctx.Tkn.Type == TokenType.RBK)
                 {
                     ctx.ReadToken(TokenType.RBK);
-                    return new MNil();
+                    return new MNil(pos);
                 }
                 else
                 {
                     var list = ParseExprList(ctx);
                     ctx.ReadToken(TokenType.RBK);
-                    return ExprListToCons(list);
+                    return ExprListToCons(pos, list);
                 }
             }
             else
@@ -583,13 +598,13 @@ namespace Mokkosu.Parsing
             return list;
         }
 
-        static MExpr ExprListToCons(List<MExpr> list)
+        static MExpr ExprListToCons(string pos, List<MExpr> list)
         {
-            MExpr ret_expr = new MNil();
+            MExpr ret_expr = new MNil(pos);
             list.Reverse();
             foreach (var expr in list)
             {
-                ret_expr = new MCons(expr, ret_expr);
+                ret_expr = new MCons(expr.Pos, expr, ret_expr);
             }
             return ret_expr;
         }
@@ -613,9 +628,10 @@ namespace Mokkosu.Parsing
 
             while (ctx.Tkn.Type == TokenType.BAR)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.BAR);
                 var rhs = ParseAsPat(ctx);
-                lhs = new POr(lhs, rhs);
+                lhs = new POr(pos, lhs, rhs);
             }
 
             return lhs;
@@ -627,9 +643,10 @@ namespace Mokkosu.Parsing
 
             if (ctx.Tkn.Type == TokenType.AS)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.AS);
                 var name = ctx.ReadStrToken(TokenType.ID);
-                return new PAs(pat, name);
+                return new PAs(pos, pat, name);
             }
             else
             {
@@ -643,9 +660,10 @@ namespace Mokkosu.Parsing
 
             if (ctx.Tkn.Type == TokenType.COLCOL)
             {
+                var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.COLCOL);
                 var rhs = ParseConsPat(ctx);
-                return new PCons(lhs, rhs);
+                return new PCons(pos, lhs, rhs);
             }
             else
             {
@@ -655,42 +673,43 @@ namespace Mokkosu.Parsing
 
         static MPat ParsePatFactor(ParseContext ctx)
         {
+            var pos = ctx.Tkn.Pos;
             if (ctx.Tkn.Type == TokenType.ID)
             {
                 var str = ctx.ReadStrToken(TokenType.ID);
-                return new PVar(str);
+                return new PVar(pos, str);
             }
             else if (ctx.Tkn.Type == TokenType.UB)
             {
                 ctx.ReadToken(TokenType.UB);
-                return new PWild();
+                return new PWild(pos);
             }
             else if (ctx.Tkn.Type == TokenType.INT)
             {
                 var value = ctx.ReadIntToken(TokenType.INT);
-                return new PInt(value);
+                return new PInt(pos, value);
             }
             else if (ctx.Tkn.Type == TokenType.DBL)
             {
                 var value = ctx.ReadDoubleToken(TokenType.DBL);
-                return new PDouble(value);
+                return new PDouble(pos, value);
             }
             else if (ctx.Tkn.Type == TokenType.STR)
             {
                 var value = ctx.ReadStrToken(TokenType.STR);
-                return new PString(value);
+                return new PString(pos, value);
             }
             else if (ctx.Tkn.Type == TokenType.CHAR)
             {
                 var value = ctx.ReadCharToken(TokenType.CHAR);
-                return new PChar(value);
+                return new PChar(pos, value);
             }
             else if (ctx.Tkn.Type == TokenType.LP)
             {
                 ctx.ReadToken(TokenType.LP);
                 if (ctx.Tkn.Type == TokenType.RP)
                 {
-                    return new PUnit();
+                    return new PUnit(pos);
                 }
                 else
                 {
@@ -702,19 +721,19 @@ namespace Mokkosu.Parsing
                     }
                     else
                     {
-                        return new PTuple(pat_list);
+                        return new PTuple(pos, pat_list);
                     }
                 }
             }
             else if (ctx.Tkn.Type == TokenType.TRUE)
             {
                 ctx.ReadToken(TokenType.TRUE);
-                return new PBool(true);
+                return new PBool(pos, true);
             }
             else if (ctx.Tkn.Type == TokenType.FALSE)
             {
                 ctx.ReadToken(TokenType.FALSE);
-                return new PBool(false);
+                return new PBool(pos, false);
             }
             else if (ctx.Tkn.Type == TokenType.LBK)
             {
@@ -722,13 +741,13 @@ namespace Mokkosu.Parsing
                 if (ctx.Tkn.Type == TokenType.RBK)
                 {
                     ctx.ReadToken(TokenType.RBK);
-                    return new PNil();
+                    return new PNil(pos);
                 }
                 else
                 {
                     var list = ParsePatList(ctx);
                     ctx.ReadToken(TokenType.RBK);
-                    return PatListToCons(list);
+                    return PatListToCons(pos, list);
                 }
             }
             else
@@ -750,13 +769,13 @@ namespace Mokkosu.Parsing
             return list;
         }
 
-        static MPat PatListToCons(List<MPat> list)
+        static MPat PatListToCons(string pos, List<MPat> list)
         {
-            MPat ret_pat = new PNil();
+            MPat ret_pat = new PNil(pos);
             list.Reverse();
             foreach (var pat in list)
             {
-                ret_pat = new PCons(pat, ret_pat);
+                ret_pat = new PCons(pat.Pos, pat, ret_pat);
             }
             return ret_pat;
         }

@@ -11,6 +11,13 @@ namespace Mokkosu.AST
     abstract class MExpr
     {
         public abstract MSet<string> FreeVars();
+
+        public string Pos { get; set; }
+
+        public MExpr(string pos)
+        {
+            Pos = pos;
+        }
     }
 
     /// <summary>
@@ -20,7 +27,8 @@ namespace Mokkosu.AST
     {
         public int Value { get; private set; }
 
-        public MInt(int value)
+        public MInt(string pos, int value)
+            : base(pos)
         {
             Value = value;
         }
@@ -43,7 +51,8 @@ namespace Mokkosu.AST
     {
         public double Value { get; private set; }
 
-        public MDouble(double value)
+        public MDouble(string pos, double value)
+            : base(pos)
         {
             Value = value;
         }
@@ -66,7 +75,8 @@ namespace Mokkosu.AST
     {
         public string Value { get; private set; }
 
-        public MString(string value)
+        public MString(string pos, string value)
+            : base(pos)
         {
             Value = value;
         }
@@ -89,7 +99,8 @@ namespace Mokkosu.AST
     {
         public char Value { get; private set; }
 
-        public MChar(char value)
+        public MChar(string pos, char value)
+            : base(pos)
         {
             Value = value;
         }
@@ -110,6 +121,11 @@ namespace Mokkosu.AST
     /// </summary>
     class MUnit : MExpr
     {
+        public MUnit(string pos)
+            : base(pos)
+        {
+        }
+
         public override string ToString()
         {
             return "()";
@@ -128,7 +144,8 @@ namespace Mokkosu.AST
     {
         public bool Value { get; private set; }
 
-        public MBool(bool value)
+        public MBool(string pos, bool value)
+            : base(pos)
         {
             Value = value;
         }
@@ -164,6 +181,17 @@ namespace Mokkosu.AST
         public int TagSize { get; set; }
 
         public MVar(string name)
+            : base("")
+        {
+            Name = name;
+            Type = new TypeVar();
+            IsTag = false;
+            TagIndex = 0;
+            TagSize = 0;
+        }
+
+        public MVar(string pos, string name)
+            : base(pos)
         {
             Name = name;
             Type = new TypeVar();
@@ -173,6 +201,7 @@ namespace Mokkosu.AST
         }
 
         public MVar(string name, MType type)
+            : base("")
         {
             Name = name;
             Type = type;
@@ -215,7 +244,8 @@ namespace Mokkosu.AST
         public MType ArgType { get; private set; }
         public MExpr Body { get; private set; }
 
-        public MLambda(MPat arg_pat, MExpr body)
+        public MLambda(string pos, MPat arg_pat, MExpr body)
+            : base(pos)
         {
             ArgPat = arg_pat;
             ArgType = new TypeVar();
@@ -223,6 +253,7 @@ namespace Mokkosu.AST
         }
 
         public MLambda(MPat arg_pat, MType arg_type, MExpr body)
+            : base("")
         {
             ArgPat = arg_pat;
             ArgType = arg_type;
@@ -248,7 +279,8 @@ namespace Mokkosu.AST
         public MExpr FunExpr { get; private set; }
         public MExpr ArgExpr { get; private set; }
 
-        public MApp(MExpr fun_expr, MExpr arg_expr)
+        public MApp(string pos, MExpr fun_expr, MExpr arg_expr)
+            : base(pos)
         {
             FunExpr = fun_expr;
             ArgExpr = arg_expr;
@@ -274,7 +306,8 @@ namespace Mokkosu.AST
         public MExpr ThenExpr { get; private set; }
         public MExpr ElseExpr { get; private set; }
 
-        public MIf(MExpr cond_expr, MExpr then_expr, MExpr else_expr)
+        public MIf(string pos, MExpr cond_expr, MExpr then_expr, MExpr else_expr)
+            : base(pos)
         {
             CondExpr = cond_expr;
             ThenExpr = then_expr;
@@ -302,7 +335,8 @@ namespace Mokkosu.AST
         public MExpr ThenExpr { get; private set; }
         public MExpr ElseExpr { get; private set; }
 
-        public MMatch(MPat pat, MExpr expr, MExpr then_expr, MExpr else_expr)
+        public MMatch(string pos, MPat pat, MExpr expr, MExpr then_expr, MExpr else_expr)
+            : base(pos)
         {
             Pat = pat;
             Expr = expr;
@@ -330,7 +364,8 @@ namespace Mokkosu.AST
     {
         public MType Type { get; private set; }
 
-        public MNil()
+        public MNil(string pos)
+            : base(pos)
         {
             Type = new TypeVar();
         }
@@ -355,7 +390,8 @@ namespace Mokkosu.AST
         public MExpr Tail { get; private set; }
         public MType ItemType { get; private set; }
 
-        public MCons(MExpr head, MExpr tail)
+        public MCons(string pos, MExpr head, MExpr tail)
+            : base(pos)
         {
             Head = head;
             Tail = tail;
@@ -382,7 +418,8 @@ namespace Mokkosu.AST
         public List<MType> Types { get; private set; }
         public int Size { get; private set; }
 
-        public MTuple(List<MExpr> items)
+        public MTuple(string pos, List<MExpr> items)
+            : base(pos)
         {
             Size = items.Count;
             Items = items;
@@ -415,7 +452,8 @@ namespace Mokkosu.AST
         public MType E1Type { get; private set; }
         public MType E2Type { get; private set; }
 
-        public MDo(MExpr e1, MExpr e2)
+        public MDo(string pos, MExpr e1, MExpr e2)
+            : base(pos)
         {
             E1 = e1;
             E2 = e2;
@@ -445,7 +483,8 @@ namespace Mokkosu.AST
         public MType E1Type { get; private set; }
         public MType E2Type { get; private set; }
 
-        public MLet(MPat pat, MExpr e1, MExpr e2)
+        public MLet(string pos, MPat pat, MExpr e1, MExpr e2)
+            : base(pos)
         {
             Pat = pat;
             E1 = e1;
@@ -473,7 +512,8 @@ namespace Mokkosu.AST
         public List<MFunItem> Items { get; private set; }
         public MExpr E2 { get; private set; }
 
-        public MFun(List<MFunItem> items, MExpr e2)
+        public MFun(string pos, List<MFunItem> items, MExpr e2)
+            : base(pos)
         {
             Items = items;
             E2 = e2;
@@ -539,7 +579,8 @@ namespace Mokkosu.AST
         public MExpr Expr { get; private set; }
         public MType Type { get; private set; }
 
-        public MFource(MExpr expr, MType type)
+        public MFource(string pos, MExpr expr, MType type)
+            : base(pos)
         {
             Expr = expr;
             Type = type;
@@ -563,7 +604,8 @@ namespace Mokkosu.AST
     {
         public string Message { get; private set; }
 
-        public RuntimeError(string message)
+        public RuntimeError(string pos, string message)
+            : base(pos)
         {
             Message = message;
         }
@@ -584,6 +626,11 @@ namespace Mokkosu.AST
     /// </summary>
     class MGetArg : MExpr
     {
+        public MGetArg()
+            : base("") 
+        { 
+        }
+
         public override string ToString()
         {
             return "<GetArg>";
@@ -603,6 +650,7 @@ namespace Mokkosu.AST
         public int Index { get; private set; }
 
         public MGetEnv(int index)
+            : base("")
         {
             Index = index;
         }
@@ -627,6 +675,7 @@ namespace Mokkosu.AST
         public MExpr[] Args { get; private set; }
 
         public MMakeClos(string clos_name, MExpr[] args)
+            : base("")
         {
             ClosName = clos_name;
             Args = args;
@@ -643,27 +692,4 @@ namespace Mokkosu.AST
             throw new System.NotImplementedException();
         }
     }
-
-    /// <summary>
-    /// クロージャでキャプチャする値を取得する変数 (クロージャ変換後に利用)
-    /// </summary>
-    //class MVarClos : MExpr
-    //{
-    //    public string Name { get; private set; }
-
-    //    public MVarClos(string name)
-    //    {
-    //        Name = name;
-    //    }
-
-    //    public override string ToString()
-    //    {
-    //        return string.Format("{0}", Name);
-    //    }
-
-    //    public override MSet<string> FreeVars()
-    //    {
-    //        throw new System.NotImplementedException();
-    //    }
-    //}
 }

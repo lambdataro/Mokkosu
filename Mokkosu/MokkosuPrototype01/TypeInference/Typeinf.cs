@@ -352,27 +352,27 @@ namespace Mokkosu.TypeInference
         {
             if (expr is MInt)
             {
-                Unification(type, new IntType());
+                Unification(expr.Pos, type, new IntType());
             }
             else if (expr is MDouble)
             {
-                Unification(type, new DoubleType());
+                Unification(expr.Pos, type, new DoubleType());
             }
             else if (expr is MString)
             {
-                Unification(type, new StringType());
+                Unification(expr.Pos, type, new StringType());
             }
             else if (expr is MChar)
             {
-                Unification(type, new CharType());
+                Unification(expr.Pos, type, new CharType());
             }
             else if (expr is MUnit)
             {
-                Unification(type, new UnitType());
+                Unification(expr.Pos, type, new UnitType());
             }
             else if (expr is MBool)
             {
-                Unification(type, new BoolType());
+                Unification(expr.Pos, type, new BoolType());
             }
             else if (expr is MVar)
             {
@@ -381,8 +381,8 @@ namespace Mokkosu.TypeInference
                 if (tenv.Lookup(e.Name, out typescheme))
                 {
                     var t = Instantiate(typescheme);
-                    Unification(e.Type, t);
-                    Unification(type, t);
+                    Unification(expr.Pos, e.Type, t);
+                    Unification(expr.Pos, type, t);
                     if (typescheme.IsTag)
                     {
                         e.IsTag = true;
@@ -392,7 +392,7 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
-                    throw new MError(string.Format("変数{0}は未定義です", e.Name));
+                    throw new MError(string.Format("{0}: 変数{1}は未定義です", e.Pos, e.Name));
                 }
             }
             else if (expr is MLambda)
@@ -403,7 +403,7 @@ namespace Mokkosu.TypeInference
                 var ret_type = new TypeVar();
                 Inference(e.Body, ret_type, tenv3, ctx);
                 var fun_type = new FunType(e.ArgType, ret_type);
-                Unification(type, fun_type);
+                Unification(expr.Pos, type, fun_type);
             }
             else if (expr is MApp)
             {
@@ -433,7 +433,7 @@ namespace Mokkosu.TypeInference
             else if (expr is MNil)
             {
                 var e = (MNil)expr;
-                Unification(type, new ListType(e.Type));
+                Unification(expr.Pos, type, new ListType(e.Type));
             }
             else if (expr is MCons)
             {
@@ -441,7 +441,7 @@ namespace Mokkosu.TypeInference
                 var list_type = new ListType(e.ItemType);
                 Inference(e.Head, e.ItemType, tenv, ctx);
                 Inference(e.Tail, list_type, tenv, ctx);
-                Unification(type, list_type);
+                Unification(expr.Pos, type, list_type);
             }
             else if (expr is MTuple)
             {
@@ -450,14 +450,14 @@ namespace Mokkosu.TypeInference
                 {
                     Inference(e.Items[i], e.Types[i], tenv, ctx);
                 }
-                Unification(type, new TupleType(e.Types));
+                Unification(expr.Pos, type, new TupleType(e.Types));
             }
             else if (expr is MDo)
             {
                 var e = (MDo)expr;
                 Inference(e.E1, e.E1Type, tenv, ctx);
                 Inference(e.E2, e.E2Type, tenv, ctx);
-                Unification(type, e.E2Type);
+                Unification(expr.Pos, type, e.E2Type);
             }
             else if (expr is MLet)
             {
@@ -474,7 +474,7 @@ namespace Mokkosu.TypeInference
                 {
                     Inference(e.E2, e.E2Type, tenv1.Append(tenv), ctx);
                 }
-                Unification(type, e.E2Type);
+                Unification(expr.Pos, type, e.E2Type);
             }
             else if (expr is MFun)
             {
@@ -512,7 +512,11 @@ namespace Mokkosu.TypeInference
             {
                 var e = (MFource)expr;
                 Inference(e.Expr, e.Type, tenv, ctx);
-                Unification(type, e.Type);
+                Unification(expr.Pos, type, e.Type);
+            }
+            else if (expr is RuntimeError)
+            {
+                // 何もしない
             }
             else
             {
@@ -533,49 +537,49 @@ namespace Mokkosu.TypeInference
             if (pat is PWild)
             {
                 var p = (PWild)pat;
-                Unification(type, p.Type);
+                Unification(pat.Pos, type, p.Type);
                 return new TEnv();
             }
             else if (pat is PVar)
             {
                 var p = (PVar)pat;
-                Unification(type, p.Type);
+                Unification(pat.Pos, type, p.Type);
                 return new TEnv().Cons(p.Name, new MTypeScheme(type));
             }
             else if (pat is PInt)
             {
-                Unification(type, new IntType());
+                Unification(pat.Pos, type, new IntType());
                 return new TEnv();
             }
             else if (pat is PDouble)
             {
-                Unification(type, new DoubleType());
+                Unification(pat.Pos, type, new DoubleType());
                 return new TEnv();
             }
             else if (pat is PString)
             {
-                Unification(type, new StringType());
+                Unification(pat.Pos, type, new StringType());
                 return new TEnv();
             }
             else if (pat is PChar)
             {
-                Unification(type, new CharType());
+                Unification(pat.Pos, type, new CharType());
                 return new TEnv();
             }
             else if (pat is PUnit)
             {
-                Unification(type, new UnitType());
+                Unification(pat.Pos, type, new UnitType());
                 return new TEnv();
             }
             else if (pat is PBool)
             {
-                Unification(type, new BoolType());
+                Unification(pat.Pos, type, new BoolType());
                 return new TEnv();
             }
             else if (pat is PNil)
             {
                 var p = (PNil)pat;
-                Unification(type, new ListType(p.ItemType));
+                Unification(pat.Pos, type, new ListType(p.ItemType));
                 return new TEnv();
             }
             else if (pat is PCons)
@@ -584,7 +588,7 @@ namespace Mokkosu.TypeInference
                 var list_type = new ListType(p.ItemType);
                 var tenv1 = InferencePat(p.Head, p.ItemType, tenv, ctx);
                 var tenv2 = InferencePat(p.Tail, list_type, tenv, ctx);
-                Unification(type, list_type);
+                Unification(pat.Pos, type, list_type);
                 return tenv1.Append(tenv2);
             }
             else if (pat is PTuple)
@@ -596,14 +600,14 @@ namespace Mokkosu.TypeInference
                     var tenv2 = InferencePat(p.Items[i], p.Types[i], tenv, ctx);
                     ret_tenv = tenv2.Append(ret_tenv);
                 }
-                Unification(type, new TupleType(p.Types));
+                Unification(pat.Pos, type, new TupleType(p.Types));
                 return ret_tenv;
             }
             else if (pat is PAs)
             {
                 var p = (PAs)pat;
                 var tenv2 = InferencePat(p.Pat, p.Type, tenv, ctx);
-                Unification(type, p.Type);
+                Unification(pat.Pos, type, p.Type);
                 return tenv2.Cons(p.Name, new MTypeScheme(p.Type));
             }
             else if (pat is POr)
@@ -611,8 +615,8 @@ namespace Mokkosu.TypeInference
                 var p = (POr)pat;
                 var tenv1 = InferencePat(p.Pat1, p.Type, tenv, ctx);
                 var tenv2 = InferencePat(p.Pat2, p.Type, tenv, ctx);
-                Unification(type, p.Type);
-                CheckOrPattern(tenv1, tenv2);
+                Unification(pat.Pos, type, p.Type);
+                CheckOrPattern(pat.Pos, tenv1, tenv2);
                 return tenv1;
             }
             else
@@ -626,11 +630,11 @@ namespace Mokkosu.TypeInference
         /// </summary>
         /// <param name="tenv1">型環境1</param>
         /// <param name="tenv2">型環境2</param>
-        static void CheckOrPattern(TEnv tenv1, TEnv tenv2)
+        static void CheckOrPattern(string pat, TEnv tenv1, TEnv tenv2)
         {
             if (tenv1.Lenght() != tenv2.Lenght())
             {
-                throw new MError("Orパターンの変数集合が左右で異なっています。");
+                throw new MError(pat + ": Orパターンの変数集合が左右で異なっています。");
             }
 
             while (!tenv1.IsEmpty())
@@ -640,11 +644,11 @@ namespace Mokkosu.TypeInference
                 MTypeScheme ts2;
                 if (tenv2.Lookup(name, out ts2))
                 {
-                    Unification(ts1.Type, ts2.Type);
+                    Unification(pat, ts1.Type, ts2.Type);
                 }
                 else
                 {
-                    throw new MError("Orパターンの変数集合が左右で異なっています。");
+                    throw new MError(pat + ": Orパターンの変数集合が左右で異なっています。");
                 }
                 tenv1 = tenv1.Tail;
             }
@@ -719,7 +723,7 @@ namespace Mokkosu.TypeInference
         /// </summary>
         /// <param name="type1">型1</param>
         /// <param name="type2">型2</param>
-        static void Unification(MType type1, MType type2)
+        static void Unification(string pos, MType type1, MType type2)
         {
             if (type1 is TypeVar)
             {
@@ -732,7 +736,7 @@ namespace Mokkosu.TypeInference
                 {
                     if (OccursCheck(t1.Id, type2))
                     {
-                        throw new MError("型エラー (出現違反)");
+                        throw new MError(pos + ": 型エラー (出現違反)");
                     }
                     else
                     {
@@ -741,7 +745,7 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
-                    Unification(t1.Value, type2);
+                    Unification(pos, t1.Value, type2);
                 }
             }
             else if (type2 is TypeVar)
@@ -751,7 +755,7 @@ namespace Mokkosu.TypeInference
                 {
                     if (OccursCheck(t2.Id, type1))
                     {
-                        throw new MError("型エラー (出現違反)");
+                        throw new MError(pos + ": 型エラー (出現違反)");
                     }
                     else
                     {
@@ -760,7 +764,7 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
-                    Unification(t2.Value, type1);
+                    Unification(pos, t2.Value, type1);
                 }
             }
             else if (type1 is UserType && type2 is UserType)
@@ -771,26 +775,26 @@ namespace Mokkosu.TypeInference
                 {
                     for (int i = 0; i < t1.Args.Count; i++)
                     {
-                        Unification(t1.Args[i], t2.Args[i]);
+                        Unification(pos, t1.Args[i], t2.Args[i]);
                     }
                 }
                 else
                 {
-                    throw new MError("型エラー (単一化エラー)");
+                    throw new MError(pos + ": 型エラー (単一化エラー)");
                 }
             }
             else if (type1 is FunType && type2 is FunType)
             {
                 var t1 = (FunType)type1;
                 var t2 = (FunType)type2;
-                Unification(t1.ArgType, t2.ArgType);
-                Unification(t1.RetType, t2.RetType);
+                Unification(pos, t1.ArgType, t2.ArgType);
+                Unification(pos, t1.RetType, t2.RetType);
             }
             else if (type1 is ListType && type2 is ListType)
             {
                 var t1 = (ListType)type1;
                 var t2 = (ListType)type2;
-                Unification(t1.ElemType, t2.ElemType);
+                Unification(pos, t1.ElemType, t2.ElemType);
             }
             else if (type2 is TupleType && type2 is TupleType)
             {
@@ -800,12 +804,12 @@ namespace Mokkosu.TypeInference
                 {
                     for (var i = 0; i < t1.Types.Count; i++)
                     {
-                        Unification(t1.Types[i], t2.Types[i]);
+                        Unification(pos, t1.Types[i], t2.Types[i]);
                     }
                 }
                 else
                 {
-                    throw new MError("型エラー (単一化エラー)");
+                    throw new MError(pos + ": 型エラー (単一化エラー)");
                 }
             }
             else if (type1 is IntType && type2 is IntType)
@@ -834,7 +838,7 @@ namespace Mokkosu.TypeInference
             }
             else
             {
-                throw new MError("型エラー (単一化エラー)");
+                throw new MError(pos + ": 型エラー (単一化エラー)");
             }
         }
 

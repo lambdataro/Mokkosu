@@ -10,6 +10,13 @@ namespace Mokkosu.AST
     abstract class MPat
     {
         public abstract MSet<string> FreeVars();
+
+        public string Pos { get; set; }
+
+        public MPat(string pos)
+        {
+            Pos = pos;
+        }
     }
 
     /// <summary>
@@ -20,7 +27,8 @@ namespace Mokkosu.AST
         public string Name { get; private set; }
         public MType Type { get; private set; }
 
-        public PVar(string name)
+        public PVar(string pos, string name)
+            : base(pos)
         {
             Name = name;
             Type = new TypeVar();
@@ -44,7 +52,8 @@ namespace Mokkosu.AST
     {
         public MType Type { get; private set; }
 
-        public PWild()
+        public PWild(string pos)
+            : base(pos)
         {
             Type = new TypeVar();
         }
@@ -67,7 +76,8 @@ namespace Mokkosu.AST
     {
         public int Value { get; private set; }
 
-        public PInt(int value)
+        public PInt(string pos, int value)
+            : base(pos)
         {
             Value = value;
         }
@@ -90,7 +100,8 @@ namespace Mokkosu.AST
     {
         public double Value { get; private set; }
 
-        public PDouble(double value)
+        public PDouble(string pos, double value)
+            : base(pos)
         {
             Value = value;
         }
@@ -113,7 +124,8 @@ namespace Mokkosu.AST
     {
         public string Value { get; private set; }
 
-        public PString(string value)
+        public PString(string pos, string value)
+            : base(pos)
         {
             Value = value;
         }
@@ -136,7 +148,8 @@ namespace Mokkosu.AST
     {
         public char Value { get; private set; }
 
-        public PChar(char value)
+        public PChar(string pos, char value)
+            : base(pos)
         {
             Value = value;
         }
@@ -157,6 +170,11 @@ namespace Mokkosu.AST
     /// </summary>
     class PUnit : MPat
     {
+        public PUnit(string pos)
+            : base(pos)
+        {
+        }
+
         public override string ToString()
         {
             return "()";
@@ -175,7 +193,8 @@ namespace Mokkosu.AST
     {
         public bool Value { get; private set; }
 
-        public PBool(bool value)
+        public PBool(string pos, bool value)
+            : base(pos)
         {
             Value = value;
         }
@@ -205,7 +224,8 @@ namespace Mokkosu.AST
     {
         public MType ItemType { get; private set; }
 
-        public PNil()
+        public PNil(string pos)
+            : base(pos)
         {
             ItemType = new TypeVar();
         }
@@ -230,7 +250,8 @@ namespace Mokkosu.AST
         public MPat Tail { get; private set; }
         public MType ItemType { get; private set; }
 
-        public PCons(MPat head, MPat tail)
+        public PCons(string pos, MPat head, MPat tail)
+            : base(pos)
         {
             Head = head;
             Tail = tail;
@@ -257,7 +278,8 @@ namespace Mokkosu.AST
         public List<MType> Types { get; private set; }
         public int Size { get; private set; }
 
-        public PTuple(List<MPat> items)
+        public PTuple(string pos, List<MPat> items)
+            : base(pos)
         {
             Items = items;
             Types = items.Select(item => (MType)(new TypeVar())).ToList();
@@ -289,7 +311,8 @@ namespace Mokkosu.AST
         public string Name { get; private set; }
         public MType Type { get; private set; }
 
-        public PAs(MPat pat, string name)
+        public PAs(string pos, MPat pat, string name)
+            : base(pos)
         {
             Pat = pat;
             Name = name;
@@ -316,7 +339,8 @@ namespace Mokkosu.AST
         public MPat Pat2 { get; private set; }
         public MType Type { get; private set; }
 
-        public POr(MPat pat1, MPat pat2)
+        public POr(string pos, MPat pat1, MPat pat2)
+            : base(pos)
         {
             Pat1 = pat1;
             Pat2 = pat2;

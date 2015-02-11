@@ -25,32 +25,34 @@
         public char CharVal { get; private set; }
         public double DoubleVal { get; private set; }
         public string StrVal { get; private set; }
+        public string Pos { get; private set; }
 
-        public Token(TokenType type)
+        public Token(string pos, TokenType type)
         {
             Type = type;
+            Pos = pos;
         }
 
-        public Token(TokenType type, int int_val)
-            : this(type)
+        public Token(string pos, TokenType type, int int_val)
+            : this(pos, type)
         {
             IntVal = int_val;
         }
 
-        public Token(TokenType type, char char_val)
-            : this(type)
+        public Token(string pos, TokenType type, char char_val)
+            : this(pos, type)
         {
             CharVal = char_val;
         }
 
-        public Token(TokenType type, double double_val)
-            : this(type)
+        public Token(string pos, TokenType type, double double_val)
+            : this(pos, type)
         {
             DoubleVal = double_val;
         }
 
-        public Token(TokenType type, string str_val)
-            : this(type)
+        public Token(string Pos, TokenType type, string str_val)
+            : this(Pos, type)
         {
             StrVal = str_val;
         }

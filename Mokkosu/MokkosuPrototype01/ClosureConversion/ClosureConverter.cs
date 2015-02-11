@@ -67,8 +67,8 @@ namespace Mokkosu.ClosureConversion
                 var fv = set.ToArray();
                 var arg_name = GenArgName();
                 var ctx2 = new ClosureConversionContext(arg_name, fv);
-                var body = new MMatch(e.ArgPat, new MVar(arg_name), 
-                    Conv(e.Body, ctx2), new RuntimeError("パターンマッチ失敗"));
+                var body = new MMatch(e.Pos, e.ArgPat, new MVar(arg_name), 
+                    Conv(e.Body, ctx2), new RuntimeError("", "パターンマッチ失敗"));
                 var fun_name = GenFunctionName();
                 _function_table.Add(fun_name, body);
                 var args = fv.Select(x => Conv(new MVar(x), ctx)).ToArray();
@@ -79,7 +79,7 @@ namespace Mokkosu.ClosureConversion
                 var e = (MApp)expr;
                 var fun = Conv(e.FunExpr, ctx);
                 var arg = Conv(e.ArgExpr, ctx);
-                return new MApp(fun, arg);
+                return new MApp(e.Pos, fun, arg);
             }
             else if (expr is MIf)
             {
@@ -87,7 +87,7 @@ namespace Mokkosu.ClosureConversion
                 var cond_expr = Conv(e.CondExpr, ctx);
                 var then_expr = Conv(e.ThenExpr, ctx);
                 var else_expr = Conv(e.ElseExpr, ctx);
-                return new MIf(cond_expr, then_expr, else_expr);
+                return new MIf(e.Pos, cond_expr, then_expr, else_expr);
             }
             else if (expr is MMatch)
             {
@@ -95,7 +95,7 @@ namespace Mokkosu.ClosureConversion
                 var expr1 = Conv(e.Expr, ctx);
                 var then_expr = Conv(e.ThenExpr, ctx);
                 var else_expr = Conv(e.ElseExpr, ctx);
-                return new MMatch(e.Pat, expr1, then_expr, else_expr);
+                return new MMatch(e.Pos, e.Pat, expr1, then_expr, else_expr);
             }
             else if (expr is MNil)
             {
@@ -106,27 +106,27 @@ namespace Mokkosu.ClosureConversion
                 var e = (MCons)expr;
                 var head = Conv(e.Head, ctx);
                 var tail = Conv(e.Tail, ctx);
-                return new MCons(head, tail);
+                return new MCons(e.Pos, head, tail);
             }
             else if (expr is MTuple)
             {
                 var e = (MTuple)expr;
                 var list =e.Items.Select(x => Conv(x, ctx)).ToList();
-                return new MTuple(list);
+                return new MTuple("", list);
             }
             else if (expr is MDo)
             {
                 var e = (MDo)expr;
                 var e1 = Conv(e.E1, ctx);
                 var e2 = Conv(e.E2, ctx);
-                return new MDo(e1, e2);
+                return new MDo(e.Pos, e1, e2);
             }
             else if (expr is MLet)
             {
                 var e = (MLet)expr;
                 var e1 = Conv(e.E1, ctx);
                 var e2 = Conv(e.E2, ctx);
-                return new MLet(e.Pat, e1, e2);
+                return new MLet(e.Pos, e.Pat, e1, e2);
             }
             else if (expr is MFun)
             {
@@ -134,7 +134,7 @@ namespace Mokkosu.ClosureConversion
                 var items = e.Items.Select(item => 
                     new MFunItem(item.Name, Conv(item.Expr, ctx))).ToList();
                 var e2 = Conv(e.E2, ctx);
-                return new MFun(items, e2);
+                return new MFun(e.Pos, items, e2);
             }
             else if (expr is MFource)
             {

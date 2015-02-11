@@ -10,6 +10,12 @@ namespace Mokkosu.AST
     /// </summary>
     abstract class MTopExpr
     {
+        public string Pos { get; set; }
+
+        public MTopExpr(string pos)
+        {
+            Pos = pos;
+        }
     }
 
     /// <summary>
@@ -19,7 +25,8 @@ namespace Mokkosu.AST
     {
         public List<MUserTypeDefItem> Items { get; private set; }
         
-        public MUserTypeDef(List<MUserTypeDefItem> items)
+        public MUserTypeDef(string pos, List<MUserTypeDefItem> items)
+            : base(pos)
         {
             Items = items;
         }
@@ -96,7 +103,8 @@ namespace Mokkosu.AST
         public MExpr Expr { get; private set; }
         public MType Type { get; private set; }
 
-        public MTopDo(MExpr expr)
+        public MTopDo(string pos, MExpr expr)
+            : base(pos)
         {
             Expr = expr;
             Type = new TypeVar();
@@ -117,7 +125,8 @@ namespace Mokkosu.AST
         public MExpr Expr { get; private set; }
         public MType Type { get; private set; }
 
-        public MTopLet(MPat pat, MExpr expr)
+        public MTopLet(string pos, MPat pat, MExpr expr)
+            : base(pos)
         {
             Pat = pat;
             Expr = expr;
@@ -137,7 +146,8 @@ namespace Mokkosu.AST
     {
         public List<MFunItem> Items { get; private set; }
 
-        public MTopFun(List<MFunItem> items)
+        public MTopFun(string pos, List<MFunItem> items)
+            : base(pos)
         {
             Items = items;
         }

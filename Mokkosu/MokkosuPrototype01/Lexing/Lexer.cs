@@ -82,7 +82,7 @@ namespace Mokkosu.Lexing
 
             if (_strm.IsEof())
             {
-                return new Token(TokenType.EOF);
+                return new Token(Pos, TokenType.EOF);
             }
             else if (_strm.IsDigit())
             {
@@ -139,7 +139,7 @@ namespace Mokkosu.Lexing
             }
             var num = Convert.ToInt32(sb.ToString(), 16);
 
-            return new Token(TokenType.INT, num);
+            return new Token(Pos, TokenType.INT, num);
         }
 
         Token NextDecToken()
@@ -176,18 +176,18 @@ namespace Mokkosu.Lexing
             if (is_double)
             {
                 var num = double.Parse(sb.ToString());
-                return new Token(TokenType.DBL, num);
+                return new Token(Pos, TokenType.DBL, num);
             }
             else
             {
                 if (sb.ToString() == "")
                 {
-                    return new Token(TokenType.INT, 0);
+                    return new Token(Pos, TokenType.INT, 0);
                 }
                 else
                 {
                     var num = int.Parse(sb.ToString());
-                    return new Token(TokenType.INT, num);
+                    return new Token(Pos, TokenType.INT, num);
                 }
             }
         }
@@ -201,7 +201,7 @@ namespace Mokkosu.Lexing
                 _strm.NextChar();
             }
             var num = Convert.ToInt32(sb.ToString(), 8);
-            return new Token(TokenType.INT, num);
+            return new Token(Pos, TokenType.INT, num);
         }
 
         Token NextBinToken()
@@ -213,7 +213,7 @@ namespace Mokkosu.Lexing
                 _strm.NextChar();
             }
             var num = Convert.ToInt32(sb.ToString(), 2);
-            return new Token(TokenType.INT, num);
+            return new Token(Pos, TokenType.INT, num);
         }
 
         Token NextStrToken()
@@ -227,11 +227,11 @@ namespace Mokkosu.Lexing
             var str = sb.ToString();
             if (_keywords.ContainsKey(str))
             {
-                return new Token(_keywords[str]);
+                return new Token(Pos, _keywords[str]);
             }
             else
             {
-                return new Token(TokenType.ID, str);
+                return new Token(Pos, TokenType.ID, str);
             }
         }
 
@@ -260,7 +260,7 @@ namespace Mokkosu.Lexing
                 }
                 else
                 {
-                    return new Token(TokenType.AT);
+                    return new Token(Pos, TokenType.AT);
                 }
             }
             else if (_strm.Char == '\'')
@@ -283,7 +283,7 @@ namespace Mokkosu.Lexing
                     throw new MError(_strm.Pos + ": 文字定数が閉じていない");
                 }
                 _strm.NextChar();
-                return new Token(TokenType.CHAR, ch);                
+                return new Token(Pos, TokenType.CHAR, ch);                
             }
             else if (_strm.Char == '-')
             {
@@ -291,11 +291,11 @@ namespace Mokkosu.Lexing
                 if (_strm.Char == '>')
                 {
                     _strm.NextChar();
-                    return new Token(TokenType.ARROW);
+                    return new Token(Pos, TokenType.ARROW);
                 }
                 else
                 {
-                    return new Token(TokenType.MNS);
+                    return new Token(Pos, TokenType.MNS);
                 }
             }
             else if (_strm.Char == ':')
@@ -304,18 +304,18 @@ namespace Mokkosu.Lexing
                 if (_strm.Char == ':')
                 {
                     _strm.NextChar();
-                    return new Token(TokenType.COLCOL);
+                    return new Token(Pos, TokenType.COLCOL);
                 }
                 else
                 {
-                    return new Token(TokenType.COL);
+                    return new Token(Pos, TokenType.COL);
                 }
             }
             else if (_symbols.ContainsKey(_strm.Char))
             {
                 var type = _symbols[_strm.Char];
                 _strm.NextChar();
-                return new Token(type);
+                return new Token(Pos, type);
             }
             else
             {
@@ -340,7 +340,7 @@ namespace Mokkosu.Lexing
                 _strm.NextChar();
             }
             _strm.NextChar();
-            return new Token(TokenType.STR, sb.ToString());
+            return new Token(Pos, TokenType.STR, sb.ToString());
         }
 
         Token NextVerbatimStringLiteral()
@@ -352,7 +352,7 @@ namespace Mokkosu.Lexing
                 _strm.NextChar();
             }
             _strm.NextChar();
-            return new Token(TokenType.STR, sb.ToString());
+            return new Token(Pos, TokenType.STR, sb.ToString());
         }
 
         char EscapeChar()
