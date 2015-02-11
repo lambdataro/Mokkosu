@@ -3,6 +3,7 @@ using Mokkosu.Lexing;
 using Mokkosu.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mokkosu.Parsing
 {
@@ -238,10 +239,11 @@ namespace Mokkosu.Parsing
         {
             ctx.ReadToken(TokenType.LET);
             var pat = ParsePattern(ctx);
+            var args = ParseArgList0(ctx, TokenType.EQ);
             ctx.ReadToken(TokenType.EQ);
             var expr = ParseExpr(ctx);
             ctx.ReadToken(TokenType.SC);
-            return new MTopLet(pat, expr);
+            return new MTopLet(pat, ArgsToLambda(args, expr));
         }
 
         #endregion
@@ -269,9 +271,10 @@ namespace Mokkosu.Parsing
         static MFunItem ParseFunItem(ParseContext ctx)
         {
             var name = ctx.ReadStrToken(TokenType.ID);
+            var args = ParseArgList(ctx, TokenType.EQ);
             ctx.ReadToken(TokenType.EQ);
             var expr = ParseExpr(ctx);
-            return new MFunItem(name, expr);
+            return new MFunItem(name, ArgsToLambda(args, expr));
         }
 
 
@@ -293,10 +296,10 @@ namespace Mokkosu.Parsing
             if (ctx.Tkn.Type == TokenType.BS)
             {
                 ctx.ReadToken(TokenType.BS);
-                var arg_pat = ParsePatFactor(ctx);
+                var args = ParseArgList(ctx, TokenType.ARROW);
                 ctx.ReadToken(TokenType.ARROW);
                 var body = ParseFunExpr(ctx);
-                return new MLambda(arg_pat, body);
+                return ArgsToLambda(args, body);
             }
             else if (ctx.Tkn.Type == TokenType.IF)
             {
@@ -332,11 +335,12 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.LET);
                 var pat = ParsePattern(ctx);
+                var args = ParseArgList0(ctx, TokenType.EQ);
                 ctx.ReadToken(TokenType.EQ);
                 var e1 = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.IN);
                 var e2 = ParseFunExpr(ctx);
-                return new MLet(pat, e1, e2);
+                return new MLet(pat, ArgsToLambda(args, e1), e2);
             }
             else if (ctx.Tkn.Type == TokenType.FUN)
             {
@@ -355,6 +359,41 @@ namespace Mokkosu.Parsing
             else
             {
                 return ParseConsExpr(ctx);
+            }
+        }
+
+        static List<MPat> ParseArgList(ParseContext ctx, TokenType end)
+        {
+            var list = new List<MPat>();
+            list.Add(ParsePatFactor(ctx));
+            while (ctx.Tkn.Type != end)
+            {
+                list.Add(ParsePatFactor(ctx));
+            }
+            return list;
+        }
+
+        static List<MPat> ParseArgList0(ParseContext ctx, TokenType end)
+        {
+            var list = new List<MPat>();
+            while (ctx.Tkn.Type != end)
+            {
+                list.Add(ParsePatFactor(ctx));
+            }
+            return list;
+        }
+
+        static MExpr ArgsToLambda(List<MPat> args, MExpr body)
+        {
+            if (args.Count == 0)
+            {
+                return body;
+            }
+            else
+            {
+                var pat = args[0];
+                var rest = args.Skip(1).ToList();
+                return new MLambda(pat, ArgsToLambda(rest, body));
             }
         }
 
