@@ -51,6 +51,7 @@
     <Compile Include="ClosureConversion\ClosureConversionResult.cs" />
     <Compile Include="ClosureConversion\ClosureConverter.cs" />
     <Compile Include="ClosureConversion\TopToExpr.cs" />
+    <Compile Include="CodeGenerate\CodeGenerator.cs" />
     <Compile Include="Input\InputStream.cs" />
     <Compile Include="Input\SourceFile.cs" />
     <Compile Include="Lexing\Lexer.cs" />

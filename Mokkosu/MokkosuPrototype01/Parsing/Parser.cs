@@ -579,6 +579,15 @@ namespace Mokkosu.Parsing
                     return ExprListToCons(pos, list);
                 }
             }
+            else if (ctx.Tkn.Type == TokenType.PRIM)
+            {
+                ctx.ReadToken(TokenType.PRIM);
+                var name = ctx.ReadStrToken(TokenType.STR);
+                ctx.ReadToken(TokenType.LP);
+                var items = ParseExprList(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MPrim(pos, name, items);
+            }
             else
             {
                 ctx.SyntaxError();

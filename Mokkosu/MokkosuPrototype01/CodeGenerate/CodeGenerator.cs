@@ -51,6 +51,10 @@ namespace Mokkosu.CodeGenerate
             ilgen.Emit(OpCodes.Call, _function_table["MokkosuMain"]);
             ilgen.Emit(OpCodes.Pop);
             ilgen.Emit(OpCodes.Ret);
+
+            type_builder.CreateType();
+            assembly_builder.SetEntryPoint(builder);
+            return assembly_builder;
         }
 
         static void DeclareFunction(string name, TypeBuilder type_builder)
@@ -63,7 +67,66 @@ namespace Mokkosu.CodeGenerate
 
         static void Compile(ILGenerator il, MExpr expr, LEnv env)
         {
+            if (expr is MInt)
+            {
+                var e = (MInt)expr;
+                il.Emit(OpCodes.Ldc_I4, e.Value);
+                il.Emit(OpCodes.Box, typeof(int));
+            }
+            else if (expr is MString)
+            {
+                var e = (MString)expr;
+                il.Emit(OpCodes.Ldstr, e.Value);
+            }
+            else if (expr is MUnit)
+            {
+                il.Emit(OpCodes.Ldc_I4_0);
+                il.Emit(OpCodes.Box, typeof(int));
+            }
+            else if (expr is MDo)
+            {
+                var e = (MDo)expr;
+                Compile(il, e.E1, env);
+                il.Emit(OpCodes.Pop);
+                Compile(il, e.E2, env);
+            }
+            else if (expr is MPrim)
+            {
+                var e = (MPrim)expr;
+                foreach (var arg in e.Args)
+                {
+                    Compile(il, arg, env);
+                }
+                CompilePrim(il, e.Name, e.ArgTypes, e.RetType);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
 
+        static void CompilePrim(ILGenerator il, string name, List<MType> arg_types, MType ret_type)
+        {
+            switch (name)
+            {
+                case "println":
+                    il.Emit(OpCodes.Call, 
+                        SystemMethod("mscorlib.dll", "System.Console", "WriteLine",
+                        new Type[] { typeof(object) }));
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        static MethodInfo SystemMethod(string assembly, string type_name, string method_name, Type[] arg_types)
+        {
+            var dll = Assembly.LoadFrom(Path.Combine(_runtime_dir, assembly));
+            var type = dll.GetType(type_name);
+            var method = type.GetMethod(method_name, arg_types);
+            return method;
         }
     }
 }

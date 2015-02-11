@@ -518,9 +518,31 @@ namespace Mokkosu.TypeInference
             {
                 // 何もしない
             }
+            else if (expr is MPrim)
+            {
+                var e = (MPrim)expr;
+                for (var i = 0; i < e.Args.Count; i++)
+                {
+                    Inference(e.Args[i], e.ArgTypes[i], tenv, ctx);
+                }
+                Unification(expr.Pos, type, e.RetType);
+                InferencePrim(e.Pos, e.Name, e.ArgTypes, e.RetType);
+            }
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        static void InferencePrim(string pos, string name, List<MType> args, MType ret)
+        {
+            if (name == "println" && args.Count == 1)
+            {
+                Unification(pos, ret, new UnitType());
+            }
+            else
+            {
+                throw new MError(pos + ": プリミティブ演算型エラー");
             }
         }
 

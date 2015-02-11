@@ -1,4 +1,5 @@
 ﻿using Mokkosu.ClosureConversion;
+using Mokkosu.CodeGenerate;
 using Mokkosu.Input;
 using Mokkosu.Lexing;
 using Mokkosu.Parsing;
@@ -33,6 +34,9 @@ namespace Mokkosu.Main
             var closure_result = ClosureConverter.Start(expr);
 
             Console.WriteLine(closure_result);
+
+            var assembly = CodeGenerator.Start("Test", closure_result);
+            assembly.Save("Test.exe");
         }
     }
 }

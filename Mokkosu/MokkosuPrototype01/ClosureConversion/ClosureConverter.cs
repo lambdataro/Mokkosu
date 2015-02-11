@@ -145,6 +145,12 @@ namespace Mokkosu.ClosureConversion
             {
                 return expr;
             }
+            else if (expr is MPrim)
+            {
+                var e = (MPrim)expr;
+                var list = e.Args.Select(x => Conv(x, ctx)).ToList();
+                return new MPrim(e.Pos, e.Name, e.Args, e.ArgTypes, e.RetType);
+            }
             else
             {
                 throw new NotImplementedException();

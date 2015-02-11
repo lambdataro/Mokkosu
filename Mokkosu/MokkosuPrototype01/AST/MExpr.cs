@@ -622,6 +622,51 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
+    /// プリミティブ呼び出し
+    /// </summary>
+    class MPrim : MExpr
+    {
+        public string Name { get; private set; }
+        public List<MExpr> Args { get; private set; }
+        public List<MType> ArgTypes { get; private set; }
+        public MType RetType { get; private set; }
+
+        public MPrim(string pos, string name, List<MExpr> items)
+            : base(pos)
+        {
+            Name = name;
+            Args = items;
+            ArgTypes = items.Select(item => (MType)(new TypeVar())).ToList();
+            RetType = new TypeVar();
+        }
+
+        public MPrim(string pos, string name, List<MExpr> items, 
+            List<MType> arg_types, MType ret_type)
+            : base(pos)
+        {
+            Name = name;
+            Args = items;
+            ArgTypes = arg_types;
+            RetType = ret_type;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("__prim \"{0}\" ({1})", Name, Utils.Utils.ListToString(Args));
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set = new MSet<string>();
+            foreach (var item in Args)
+            {
+                set = item.FreeVars().Union(set);
+            }
+            return set;
+        }
+    }
+
+    /// <summary>
     /// 引数の値を取得する (クロージャ変換後に利用)
     /// </summary>
     class MGetArg : MExpr

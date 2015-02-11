@@ -37,6 +37,7 @@ namespace Mokkosu.Lexing
                 { "include", TokenType.INCLUDE },
                 { "as", TokenType.AS },
                 { "in", TokenType.IN },
+                { "__prim", TokenType.PRIM },
             };
         }
 
@@ -56,7 +57,6 @@ namespace Mokkosu.Lexing
                 { '+', TokenType.PLS },
                 { '*', TokenType.AST },
                 { '/', TokenType.SLS },
-                { '_', TokenType.UB },
                 { '?', TokenType.QUE },
                 { '[', TokenType.LBK },
                 { ']', TokenType.RBK },
@@ -225,7 +225,11 @@ namespace Mokkosu.Lexing
                 _strm.NextChar();
             }
             var str = sb.ToString();
-            if (_keywords.ContainsKey(str))
+            if (str == "_")
+            {
+                return new Token(Pos, TokenType.UB);
+            }
+            else if (_keywords.ContainsKey(str))
             {
                 return new Token(Pos, _keywords[str]);
             }

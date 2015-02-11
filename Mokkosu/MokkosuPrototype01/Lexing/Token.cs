@@ -13,7 +13,7 @@
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN, INCLUDE,
-        AS, IN,
+        AS, IN, PRIM,
         // 制御記号
         EOF
     }

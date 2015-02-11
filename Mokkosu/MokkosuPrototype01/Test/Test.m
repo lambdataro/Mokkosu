@@ -1,1 +1,1 @@
-﻿do [1, 2.3, 4];
+﻿do __prim "println" ("hello, world.");
