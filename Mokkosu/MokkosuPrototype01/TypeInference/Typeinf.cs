@@ -24,14 +24,14 @@ namespace Mokkosu.TypeInference
 
         static TEnv InitialEnv()
         {
-            var int_int_int = new FunType(new IntType(), new FunType(new IntType(), new IntType()));
+            //var int_int_int = new FunType(new IntType(), new FunType(new IntType(), new IntType()));
 
             var dict = new Dictionary<string, MTypeScheme>()
             {
-                { "__operator_pls", new MTypeScheme(int_int_int) },
-                { "__operator_mns", new MTypeScheme(int_int_int) },
-                { "__operator_ast", new MTypeScheme(int_int_int) },
-                { "__operator_sls", new MTypeScheme(int_int_int) },
+                //{ "__operator_pls", new MTypeScheme(int_int_int) },
+                //{ "__operator_mns", new MTypeScheme(int_int_int) },
+                //{ "__operator_ast", new MTypeScheme(int_int_int) },
+                //{ "__operator_sls", new MTypeScheme(int_int_int) },
             };
 
             var tenv = new TEnv();
@@ -553,6 +553,12 @@ namespace Mokkosu.TypeInference
                 Unification(pos, ret, new IntType());
             }
             else if (name == "mul" && args.Count == 2)
+            {
+                Unification(pos, args[0], new IntType());
+                Unification(pos, args[1], new IntType());
+                Unification(pos, ret, new IntType());
+            }
+            else if (name == "div" && args.Count == 2)
             {
                 Unification(pos, args[0], new IntType());
                 Unification(pos, args[1], new IntType());

@@ -67,6 +67,9 @@
     <Compile Include="Utils\MSet.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Stdlib.m">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Test\Test.m">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -5,6 +5,9 @@ using Mokkosu.Lexing;
 using Mokkosu.Parsing;
 using Mokkosu.TypeInference;
 using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Mokkosu.Main
 {
@@ -19,6 +22,10 @@ namespace Mokkosu.Main
         static void Test(string[] args)
         {
             var input_stream = new InputStream();
+
+            var exe_path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            input_stream.AddSourceFile(Path.Combine(exe_path, "Stdlib.m"));
+
             foreach (var file in args)
             {
                 input_stream.AddSourceFile(file);
@@ -35,8 +42,10 @@ namespace Mokkosu.Main
 
             Console.WriteLine(closure_result);
 
-            var assembly = CodeGenerator.Start("Test", closure_result);
-            assembly.Save("Test.exe");
+            var name = Path.GetFileNameWithoutExtension(args.Last());
+
+            var assembly = CodeGenerator.Start(name, closure_result);
+            assembly.Save(name + ".exe");
         }
     }
 }

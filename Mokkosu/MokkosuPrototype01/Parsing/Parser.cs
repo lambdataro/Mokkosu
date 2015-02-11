@@ -35,8 +35,8 @@ namespace Mokkosu.Parsing
                 {
                     ctx.ReadToken(TokenType.INCLUDE);
                     var name = ctx.ReadStrToken(TokenType.STR);
-                    ctx.ReadToken(TokenType.SC);
                     ctx.IncludeFile(name);
+                    ctx.ReadToken(TokenType.SC);
                 }
                 else
                 {

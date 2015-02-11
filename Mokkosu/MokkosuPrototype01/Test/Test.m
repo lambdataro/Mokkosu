@@ -14,6 +14,6 @@
 
 fun fact n =
   pat 0 = n -> 1
-  else __prim "mul" (n, fact (__prim "sub" (n, 1)));
+  else n * fact (n - 1);
 
- do __prim "println" (fact 5);
+println (fact 5);

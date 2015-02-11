@@ -123,7 +123,7 @@ namespace Mokkosu.CodeGenerate
             _sub = type_builder.DefineMethod("sub",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
-            var il = _add.GetILGenerator();
+            var il = _sub.GetILGenerator();
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Unbox_Any, typeof(int));
             il.Emit(OpCodes.Ldarg_1);
@@ -138,7 +138,7 @@ namespace Mokkosu.CodeGenerate
             _mul = type_builder.DefineMethod("mul",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
-            var il = _add.GetILGenerator();
+            var il = _mul.GetILGenerator();
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Unbox_Any, typeof(int));
             il.Emit(OpCodes.Ldarg_1);
@@ -153,7 +153,7 @@ namespace Mokkosu.CodeGenerate
             _div = type_builder.DefineMethod("div",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
-            var il = _add.GetILGenerator();
+            var il = _div.GetILGenerator();
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Unbox_Any, typeof(int));
             il.Emit(OpCodes.Ldarg_1);
@@ -681,6 +681,10 @@ namespace Mokkosu.CodeGenerate
 
                 case "mul":
                     il.Emit(OpCodes.Call, _mul);
+                    break;
+
+                case "div":
+                    il.Emit(OpCodes.Call, _div);
                     break;
 
                 default:
