@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mokkosu.Utils;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -9,6 +10,7 @@ namespace Mokkosu.AST
     /// </summary>
     abstract class MExpr
     {
+        public abstract MSet<string> FreeVars();
     }
 
     /// <summary>
@@ -26,6 +28,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return Value.ToString();
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -45,6 +52,11 @@ namespace Mokkosu.AST
         {
             return Value.ToString();
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
     }
 
     /// <summary>
@@ -62,6 +74,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "\"" + Value + "\"";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -81,6 +98,11 @@ namespace Mokkosu.AST
         {
             return "\'" + Value.ToString() + "\'";
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
     }
 
     /// <summary>
@@ -91,6 +113,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "()";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -116,6 +143,11 @@ namespace Mokkosu.AST
             {
                 return "false";
             }
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -160,6 +192,18 @@ namespace Mokkosu.AST
                 return string.Format("({0} : {1})", Name, Type);
             }
         }
+
+        public override MSet<string> FreeVars()
+        {
+            if (IsTag)
+            {
+                return new MSet<string>();
+            }
+            else
+            {
+                return new MSet<string>(Name);
+            }
+        }
     }
 
     /// <summary>
@@ -189,6 +233,11 @@ namespace Mokkosu.AST
         {
             return string.Format("(\\{0} : {1} -> {2})", ArgPat, ArgType, Body);
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return Body.FreeVars().Diff(ArgPat.FreeVars());
+        }
     }
 
     /// <summary>
@@ -208,6 +257,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("({0} {1})", FunExpr, ArgExpr);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return FunExpr.FreeVars().Union(ArgExpr.FreeVars());
         }
     }
 
@@ -230,6 +284,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("(if {0} then {1} else {2})", CondExpr, ThenExpr, ElseExpr);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return CondExpr.FreeVars().Union(ThenExpr.FreeVars().Union(ElseExpr.FreeVars()));
         }
     }
 
@@ -255,6 +314,13 @@ namespace Mokkosu.AST
         {
             return string.Format("(pat {0} = {1} -> {2} else {3})", Pat, Expr, ThenExpr, ElseExpr);
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return Expr.FreeVars().Union(
+                ElseExpr.FreeVars().Union(
+                    ThenExpr.FreeVars().Diff(Pat.FreeVars())));
+        }
     }
 
     /// <summary>
@@ -272,6 +338,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("([] : {0})", Type);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -295,6 +366,11 @@ namespace Mokkosu.AST
         {
             return string.Format("(({0} :: {1}) : {2})", Head, Tail, ItemType);
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return Head.FreeVars().Union(Tail.FreeVars());
+        }
     }
 
     /// <summary>
@@ -316,6 +392,16 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "(" + Utils.Utils.ListToString(Items) + ")";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set = new MSet<string>();
+            foreach (var item in Items)
+            {
+                set = item.FreeVars().Union(set);
+            }
+            return set;
         }
     }
 
@@ -340,6 +426,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("(do {0}; {1}", E1, E2);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return E1.FreeVars().Union(E2.FreeVars());
         }
     }
 
@@ -366,6 +457,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("(let {0} = {1}; {2})", Pat, E1, E2);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return E1.FreeVars().Union(E2.FreeVars().Diff(Pat.FreeVars()));
         }
     }
 
@@ -398,6 +494,18 @@ namespace Mokkosu.AST
             sb.Append(E2);
 
             return sb.ToString();
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set1 = new MSet<string>();
+            var set2 = new MSet<string>();
+            foreach (var item in Items)
+            {
+                set1 = item.Expr.FreeVars().Union(set1);
+                set2 = new MSet<string>(item.Name).Union(set2);
+            }
+            return E2.FreeVars().Union(set1).Diff(set2);
         }
     }
 
@@ -440,6 +548,99 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("({0} : {1})", Expr, Type);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Expr.FreeVars();
+        }
+    }
+
+    /// <summary>
+    /// 引数の値を取得する (クロージャ変換後に利用)
+    /// </summary>
+    class MGetArg : MExpr
+    {
+        public override string ToString()
+        {
+            return "<GetArg>";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    /// <summary>
+    /// クロージャによって束縛された値を取得する (クロージャ変換後に利用)
+    /// </summary>
+    class MGetEnv : MExpr
+    {
+        public int Index { get; private set; }
+
+        public MGetEnv(int index)
+        {
+            Index = index;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("<GetEnv {0}>", Index);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    /// <summary>
+    /// クロージャを作る (クロージャ変換後に利用)
+    /// </summary>
+    class MMakeClos : MExpr
+    {
+        public string ClosName { get; private set; }
+        public MExpr[] Args { get; private set; }
+
+        public MMakeClos(string clos_name, MExpr[] args)
+        {
+            ClosName = clos_name;
+            Args = args;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(MakeClos {0}({1})", 
+                ClosName, Utils.Utils.ListToString(Args.ToList()));
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    /// <summary>
+    /// クロージャでキャプチャする値を取得する変数 (クロージャ変換後に利用)
+    /// </summary>
+    class MVarClos : MExpr
+    {
+        public string Name { get; private set; }
+
+        public MVarClos(string name)
+        {
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", Name);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

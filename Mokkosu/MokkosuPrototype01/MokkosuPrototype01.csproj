@@ -47,6 +47,10 @@
     <Compile Include="AST\MType.cs" />
     <Compile Include="AST\MTypeScheme.cs" />
     <Compile Include="AST\Tag.cs" />
+    <Compile Include="ClosureConversion\ClosureConversionContext.cs" />
+    <Compile Include="ClosureConversion\ClosureConversionResult.cs" />
+    <Compile Include="ClosureConversion\ClosureConverter.cs" />
+    <Compile Include="ClosureConversion\TopToExpr.cs" />
     <Compile Include="Input\InputStream.cs" />
     <Compile Include="Input\SourceFile.cs" />
     <Compile Include="Lexing\Lexer.cs" />

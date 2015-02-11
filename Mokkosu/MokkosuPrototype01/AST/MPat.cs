@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mokkosu.Utils;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mokkosu.AST
@@ -8,6 +9,7 @@ namespace Mokkosu.AST
     /// </summary>
     abstract class MPat
     {
+        public abstract MSet<string> FreeVars();
     }
 
     /// <summary>
@@ -28,6 +30,11 @@ namespace Mokkosu.AST
         {
             return Name;
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>(Name);
+        }
     }
 
     /// <summary>
@@ -45,6 +52,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "_";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -64,6 +76,11 @@ namespace Mokkosu.AST
         {
             return Value.ToString();
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
     }
 
     /// <summary>
@@ -81,6 +98,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return Value.ToString();
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -100,6 +122,11 @@ namespace Mokkosu.AST
         {
             return "\"" + Value + "\"";
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
     }
 
     /// <summary>
@@ -118,6 +145,11 @@ namespace Mokkosu.AST
         {
             return "\'" + Value.ToString() + "\'";
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
     }
 
     /// <summary>
@@ -128,6 +160,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "()";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -154,6 +191,11 @@ namespace Mokkosu.AST
                 return "false";
             }
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
     }
 
     /// <summary>
@@ -171,6 +213,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "[]";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
         }
     }
 
@@ -194,6 +241,11 @@ namespace Mokkosu.AST
         {
             return string.Format("({0} :: {1})", Head, Tail);
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return Head.FreeVars().Union(Tail.FreeVars());
+        }
     }
 
     /// <summary>
@@ -215,6 +267,16 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "(" + Utils.Utils.ListToString(Items) + ")";
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set = new MSet<string>();
+            foreach (var pat in Items)
+            {
+                set = pat.FreeVars().Union(set);
+            }
+            return set;
         }
     }
 
@@ -238,6 +300,11 @@ namespace Mokkosu.AST
         {
             return string.Format("({0} as {1})", Pat, Name);
         }
+
+        public override MSet<string> FreeVars()
+        {
+            return Pat.FreeVars().Union(new MSet<string>(Name));
+        }
     }
 
     /// <summary>
@@ -259,6 +326,11 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return string.Format("({0} | {1})", Pat1, Pat2);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Pat1.FreeVars().Union(Pat2.FreeVars());
         }
     }
 }
