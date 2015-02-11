@@ -452,6 +452,62 @@ namespace Mokkosu.TypeInference
                 }
                 Unification(type, new TupleType(e.Types));
             }
+            else if (expr is MDo)
+            {
+                var e = (MDo)expr;
+                Inference(e.E1, e.E1Type, tenv, ctx);
+                Inference(e.E2, e.E2Type, tenv, ctx);
+                Unification(type, e.E2Type);
+            }
+            else if (expr is MLet)
+            {
+                var e = (MLet)expr;
+                var tenv1 = InferencePat(e.Pat, e.E1Type, tenv, ctx);
+                Inference(e.E1, e.E1Type, tenv, ctx);
+
+                if (IsSyntacticValue(e.E1))
+                {
+                    var tenv2 = GeneralizeTypes(tenv, tenv1);
+                    Inference(e.E2, e.E2Type, tenv2.Append(tenv), ctx);
+                }
+                else
+                {
+                    Inference(e.E2, e.E2Type, tenv1.Append(tenv), ctx);
+                }
+                Unification(type, e.E2Type);
+            }
+            else if (expr is MFun)
+            {
+                var e = (MFun)expr;
+                var tenv1 = tenv;
+
+                foreach (var item in e.Items)
+                {
+                    tenv1 = tenv1.Cons(item.Name, new MTypeScheme(item.Type));
+                }
+
+                foreach (var item in e.Items)
+                {
+                    Inference(item.Expr, item.Type, tenv1, ctx);
+                }
+
+                var tenv2 = tenv;
+
+                foreach (var item in e.Items)
+                {
+                    if (IsSyntacticValue(item.Expr))
+                    {
+                        var ts = Generalize(tenv, item.Type);
+                        tenv2 = tenv2.Cons(item.Name, ts);
+                    }
+                    else
+                    {
+                        tenv2 = tenv2.Cons(item.Name, new MTypeScheme(item.Type));
+                    }
+                }
+
+                Inference(e.E2, type, tenv2, ctx);
+            }
             else
             {
                 throw new NotImplementedException();

@@ -114,9 +114,9 @@ namespace Mokkosu.AST
 
     class MTopFun : MTopExpr
     {
-        public List<MTopFunItem> Items { get; private set; }
+        public List<MFunItem> Items { get; private set; }
 
-        public MTopFun(List<MTopFunItem> items)
+        public MTopFun(List<MFunItem> items)
         {
             Items = items;
         }
@@ -137,24 +137,4 @@ namespace Mokkosu.AST
             return sb.ToString();
         }
     }
-
-    class MTopFunItem
-    {
-        public string Name { get; private set; }
-        public MExpr Expr { get; private set; }
-        public MType Type { get; private set; }
-
-        public MTopFunItem(string name, MExpr expr)
-        {
-            Name = name;
-            Expr = expr;
-            Type = new TypeVar();
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0} : {1} = {2};", Name, Type, Expr);
-        }
-    }
-
 }

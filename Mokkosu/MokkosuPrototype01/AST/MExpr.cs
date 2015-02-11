@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Mokkosu.AST
 {
@@ -315,6 +316,110 @@ namespace Mokkosu.AST
         public override string ToString()
         {
             return "(" + Utils.Utils.ListToString(Items) + ")";
+        }
+    }
+
+    /// <summary>
+    /// do式
+    /// </summary>
+    class MDo : MExpr
+    {
+        public MExpr E1 { get; private set; }
+        public MExpr E2 { get; private set; }
+        public MType E1Type { get; private set; }
+        public MType E2Type { get; private set; }
+
+        public MDo(MExpr e1, MExpr e2)
+        {
+            E1 = e1;
+            E2 = e2;
+            E1Type = new TypeVar();
+            E2Type = new TypeVar();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(do {0}; {1}", E1, E2);
+        }
+    }
+
+    /// <summary>
+    /// let式
+    /// </summary>
+    class MLet : MExpr
+    {
+        public MPat Pat { get; private set; }
+        public MExpr E1 { get; private set; }
+        public MExpr E2 { get; private set; }
+        public MType E1Type { get; private set; }
+        public MType E2Type { get; private set; }
+
+        public MLet(MPat pat, MExpr e1, MExpr e2)
+        {
+            Pat = pat;
+            E1 = e1;
+            E2 = e2;
+            E1Type = new TypeVar();
+            E2Type = new TypeVar();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(let {0} = {1}; {2})", Pat, E1, E2);
+        }
+    }
+
+    /// <summary>
+    /// fun式
+    /// </summary>
+    class MFun : MExpr
+    {
+        public List<MFunItem> Items { get; private set; }
+        public MExpr E2 { get; private set; }
+
+        public MFun(List<MFunItem> items, MExpr e2)
+        {
+            Items = items;
+            E2 = e2;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("=== fun ===");
+
+            foreach (var item in Items)
+            {
+                sb.AppendLine(item.ToString());
+            }
+
+            sb.Append("=== end fun. ===\n");
+            sb.Append(E2);
+
+            return sb.ToString();
+        }
+    }
+
+    /// <summary>
+    /// fun式で相互再帰する各定義
+    /// </summary>
+    class MFunItem
+    {
+        public string Name { get; private set; }
+        public MExpr Expr { get; private set; }
+        public MType Type { get; private set; }
+
+        public MFunItem(string name, MExpr expr)
+        {
+            Name = name;
+            Expr = expr;
+            Type = new TypeVar();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} : {1} = {2};", Name, Type, Expr);
         }
     }
 }
