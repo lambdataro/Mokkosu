@@ -737,4 +737,28 @@ namespace Mokkosu.AST
             throw new System.NotImplementedException();
         }
     }
+
+    /// <summary>
+    /// クロージャでキャプチャされる変数の値を取得する変数 (クロージャ変換後に利用)
+    /// </summary>
+    class MVarClos : MExpr
+    {
+        public string Name { get; private set; }
+
+        public MVarClos(string name)
+            : base("")
+        {
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>(Name);
+        }
+    }
 }

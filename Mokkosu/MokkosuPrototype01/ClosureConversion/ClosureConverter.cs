@@ -67,11 +67,11 @@ namespace Mokkosu.ClosureConversion
                 var fv = set.ToArray();
                 var arg_name = GenArgName();
                 var ctx2 = new ClosureConversionContext(arg_name, fv);
-                var body = new MMatch(e.Pos, e.ArgPat, new MVar(arg_name), 
-                    Conv(e.Body, ctx2), new RuntimeError("", "パターンマッチ失敗"));
+                var body = Conv(new MMatch(e.Pos, e.ArgPat, new MVar(arg_name), e.Body,
+                    new RuntimeError("", "パターンマッチ失敗")), ctx2);
                 var fun_name = GenFunctionName();
                 _function_table.Add(fun_name, body);
-                var args = fv.Select(x => Conv(new MVar(x), ctx)).ToArray();
+                var args = fv.Select(x => Conv(new MVarClos(x), ctx)).ToArray();
                 return new MMakeClos(fun_name, args);
             }
             else if (expr is MApp)
@@ -149,7 +149,27 @@ namespace Mokkosu.ClosureConversion
             {
                 var e = (MPrim)expr;
                 var list = e.Args.Select(x => Conv(x, ctx)).ToList();
-                return new MPrim(e.Pos, e.Name, e.Args, e.ArgTypes, e.RetType);
+                return new MPrim(e.Pos, e.Name, list, e.ArgTypes, e.RetType);
+            }
+            else if (expr is MVarClos)
+            {
+                var e = (MVarClos)expr;
+                if (e.Name == ctx.ArgName)
+                {
+                    return new MGetArg();
+                }
+                else
+                {
+                    var index = ctx.GetCaptureIndex(e.Name);
+                    if (index == -1)
+                    {
+                        return expr;
+                    }
+                    else
+                    {
+                        return new MGetEnv(index);
+                    }
+                }
             }
             else
             {

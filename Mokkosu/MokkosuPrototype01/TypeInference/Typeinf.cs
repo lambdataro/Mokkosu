@@ -540,6 +540,24 @@ namespace Mokkosu.TypeInference
             {
                 Unification(pos, ret, new UnitType());
             }
+            else if (name == "add" && args.Count == 2)
+            {
+                Unification(pos, args[0], new IntType());
+                Unification(pos, args[1], new IntType());
+                Unification(pos, ret, new IntType());
+            }
+            else if (name == "sub" && args.Count == 2)
+            {
+                Unification(pos, args[0], new IntType());
+                Unification(pos, args[1], new IntType());
+                Unification(pos, ret, new IntType());
+            }
+            else if (name == "mul" && args.Count == 2)
+            {
+                Unification(pos, args[0], new IntType());
+                Unification(pos, args[1], new IntType());
+                Unification(pos, ret, new IntType());
+            }
             else
             {
                 throw new MError(pos + ": プリミティブ演算型エラー");
@@ -747,46 +765,40 @@ namespace Mokkosu.TypeInference
         /// <param name="type2">型2</param>
         static void Unification(string pos, MType type1, MType type2)
         {
-            if (type1 is TypeVar)
+            if (type1 is TypeVar && type2 is TypeVar && ((TypeVar)type1).Id == ((TypeVar)type2).Id)
+            {
+                return;
+            }
+            else if (type1 is TypeVar && ((TypeVar)type1).Value != null)
+            {
+                Unification(pos, ((TypeVar)type1).Value, type2);
+            }
+            else if (type2 is TypeVar && ((TypeVar)type2).Value != null)
+            {
+                Unification(pos, ((TypeVar)type2).Value, type1);
+            }
+            else if (type1 is TypeVar)
             {
                 var t1 = (TypeVar)type1;
-                if (type2 is TypeVar && t1.Id == ((TypeVar)type2).Id)
+                if (OccursCheck(t1.Id, type2))
                 {
-                    return;
-                }
-                else if (t1.Value == null)
-                {
-                    if (OccursCheck(t1.Id, type2))
-                    {
-                        throw new MError(pos + ": 型エラー (出現違反)");
-                    }
-                    else
-                    {
-                        t1.Value = type2;
-                    }
+                    throw new MError(pos + ": 型エラー (出現違反)");
                 }
                 else
                 {
-                    Unification(pos, t1.Value, type2);
+                    t1.Value = type2;
                 }
             }
             else if (type2 is TypeVar)
             {
                 var t2 = (TypeVar)type2;
-                if (t2.Value == null)
+                if (OccursCheck(t2.Id, type1))
                 {
-                    if (OccursCheck(t2.Id, type1))
-                    {
-                        throw new MError(pos + ": 型エラー (出現違反)");
-                    }
-                    else
-                    {
-                        t2.Value = type1;
-                    }
+                    throw new MError(pos + ": 型エラー (出現違反)");
                 }
                 else
                 {
-                    Unification(pos, t2.Value, type1);
+                    t2.Value = type1;
                 }
             }
             else if (type1 is UserType && type2 is UserType)
