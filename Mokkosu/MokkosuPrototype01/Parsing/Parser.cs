@@ -440,19 +440,6 @@ namespace Mokkosu.Parsing
             return lhs;
         }
 
-        static List<MExpr> ParseExprList(ParseContext ctx)
-        {
-            var list = new List<MExpr>();
-            list.Add(ParseExpr(ctx));
-            while (ctx.Tkn.Type == TokenType.COM)
-            {
-                ctx.ReadToken(TokenType.COM);
-                list.Add(ParseExpr(ctx));
-            }
-            return list;
-        }
-
-
         static MExpr ParseFactor(ParseContext ctx)
         {
             if (ctx.Tkn.Type == TokenType.LP)
@@ -515,14 +502,46 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.LBK)
             {
                 ctx.ReadToken(TokenType.LBK);
-                ctx.ReadToken(TokenType.RBK);
-                return new MNil();
+                if (ctx.Tkn.Type == TokenType.RBK)
+                {
+                    ctx.ReadToken(TokenType.RBK);
+                    return new MNil();
+                }
+                else
+                {
+                    var list = ParseExprList(ctx);
+                    ctx.ReadToken(TokenType.RBK);
+                    return ExprListToCons(list);
+                }
             }
             else
             {
                 ctx.SyntaxError();
                 throw new MError();
             }
+        }
+
+        static List<MExpr> ParseExprList(ParseContext ctx)
+        {
+            var list = new List<MExpr>();
+            list.Add(ParseExpr(ctx));
+            while (ctx.Tkn.Type == TokenType.COM)
+            {
+                ctx.ReadToken(TokenType.COM);
+                list.Add(ParseExpr(ctx));
+            }
+            return list;
+        }
+
+        static MExpr ExprListToCons(List<MExpr> list)
+        {
+            MExpr ret_expr = new MNil();
+            list.Reverse();
+            foreach (var expr in list)
+            {
+                ret_expr = new MCons(expr, ret_expr);
+            }
+            return ret_expr;
         }
 
         #endregion
@@ -650,8 +669,17 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.LBK)
             {
                 ctx.ReadToken(TokenType.LBK);
-                ctx.ReadToken(TokenType.RBK);
-                return new PNil();
+                if (ctx.Tkn.Type == TokenType.RBK)
+                {
+                    ctx.ReadToken(TokenType.RBK);
+                    return new PNil();
+                }
+                else
+                {
+                    var list = ParsePatList(ctx);
+                    ctx.ReadToken(TokenType.RBK);
+                    return PatListToCons(list);
+                }
             }
             else
             {
@@ -672,7 +700,17 @@ namespace Mokkosu.Parsing
             return list;
         }
 
-        #endregion
+        static MPat PatListToCons(List<MPat> list)
+        {
+            MPat ret_pat = new PNil();
+            list.Reverse();
+            foreach (var pat in list)
+            {
+                ret_pat = new PCons(pat, ret_pat);
+            }
+            return ret_pat;
+        }
 
+        #endregion
     }
 }
