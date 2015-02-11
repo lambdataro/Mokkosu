@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Mokkosu.AST
 {
+    /// <summary>
+    /// 型スキーム
+    /// </summary>
     class MTypeScheme
     {
         public MSet<int> Bounded { get; private set; }

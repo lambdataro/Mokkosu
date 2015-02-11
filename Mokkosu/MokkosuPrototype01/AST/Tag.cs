@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Mokkosu.AST
 {
+    /// <summary>
+    /// タグ情報
+    /// </summary>
     class Tag
     {
         public string Name { get; private set; }

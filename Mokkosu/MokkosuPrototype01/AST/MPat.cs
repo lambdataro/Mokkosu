@@ -3,10 +3,16 @@ using System.Linq;
 
 namespace Mokkosu.AST
 {
+    /// <summary>
+    /// パターンの抽象クラス
+    /// </summary>
     abstract class MPat
     {
     }
 
+    /// <summary>
+    /// 変数パターン
+    /// </summary>
     class PVar : MPat
     {
         public string Name { get; private set; }
@@ -24,6 +30,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// ワイルドカードパターン
+    /// </summary>
     class PWild : MPat
     {
         public MType Type { get; private set; }
@@ -39,6 +48,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 整数パターン
+    /// </summary>
     class PInt : MPat
     {
         public int Value { get; private set; }
@@ -54,6 +66,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 浮動小数点パターン
+    /// </summary>
     class PDouble : MPat
     {
         public double Value { get; private set; }
@@ -69,6 +84,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 文字列パターン
+    /// </summary>
     class PString : MPat
     {
         public string Value { get; private set; }
@@ -84,6 +102,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 文字パターン
+    /// </summary>
     class PChar : MPat
     {
         public char Value { get; private set; }
@@ -99,6 +120,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// ユニットパターン
+    /// </summary>
     class PUnit : MPat
     {
         public override string ToString()
@@ -107,6 +131,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 真偽値パターン
+    /// </summary>
     class PBool : MPat
     {
         public bool Value { get; private set; }
@@ -129,6 +156,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 空リストパターン
+    /// </summary>
     class PNil : MPat
     {
         public MType ItemType { get; private set; }
@@ -144,6 +174,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// コンスパターン
+    /// </summary>
     class PCons : MPat
     {
         public MPat Head { get; private set; }
@@ -163,6 +196,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// タプルパターン
+    /// </summary>
     class PTuple : MPat
     {
         public List<MPat> Items { get; private set; }
@@ -182,6 +218,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// asパターン
+    /// </summary>
     class PAs : MPat
     {
         public MPat Pat { get; private set; }
@@ -201,6 +240,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// orパターン
+    /// </summary>
     class POr : MPat
     {
         public MPat Pat1 { get; private set; }

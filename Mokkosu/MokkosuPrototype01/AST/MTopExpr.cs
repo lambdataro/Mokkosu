@@ -5,10 +5,16 @@ using System.Text;
 
 namespace Mokkosu.AST
 {
+    /// <summary>
+    /// トップレベル文の抽象クラス
+    /// </summary>
     abstract class MTopExpr
     {
     }
 
+    /// <summary>
+    /// 型定義文
+    /// </summary>
     class MUserTypeDef : MTopExpr
     {
         public List<MUserTypeDefItem> Items { get; private set; }
@@ -28,6 +34,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// 型定義の各行の内容
+    /// </summary>
     class MUserTypeDefItem
     {
         public string Name { get; private set; }
@@ -53,6 +62,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// タグの定義
+    /// </summary>
     class TagDef
     {
         public string Name { get; private set; }
@@ -76,6 +88,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// トップレベルdo文
+    /// </summary>
     class MTopDo : MTopExpr
     {
         public MExpr Expr { get; private set; }
@@ -93,6 +108,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// トップレベルlet文
+    /// </summary>
     class MTopLet : MTopExpr
     {
         public MPat Pat { get; private set; }
@@ -112,6 +130,9 @@ namespace Mokkosu.AST
         }
     }
 
+    /// <summary>
+    /// トップレベルfun文
+    /// </summary>
     class MTopFun : MTopExpr
     {
         public List<MFunItem> Items { get; private set; }
