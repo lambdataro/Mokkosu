@@ -508,6 +508,12 @@ namespace Mokkosu.TypeInference
 
                 Inference(e.E2, type, tenv2, ctx);
             }
+            else if (expr is MFource)
+            {
+                var e = (MFource)expr;
+                Inference(e.Expr, e.Type, tenv, ctx);
+                Unification(type, e.Type);
+            }
             else
             {
                 throw new NotImplementedException();

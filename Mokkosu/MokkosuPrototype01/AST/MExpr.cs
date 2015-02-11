@@ -422,4 +422,24 @@ namespace Mokkosu.AST
             return string.Format("{0} : {1} = {2};", Name, Type, Expr);
         }
     }
+
+    /// <summary>
+    /// 型強制
+    /// </summary>
+    class MFource : MExpr
+    {
+        public MExpr Expr { get; private set; }
+        public MType Type { get; private set; }
+
+        public MFource(MExpr expr, MType type)
+        {
+            Expr = expr;
+            Type = type;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0} : {1})", Expr, Type);
+        }
+    }
 }

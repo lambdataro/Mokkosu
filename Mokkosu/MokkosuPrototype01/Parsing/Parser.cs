@@ -453,13 +453,24 @@ namespace Mokkosu.Parsing
                 else
                 {
                     var items = ParseExprList(ctx);
-                    ctx.ReadToken(TokenType.RP);
                     if (items.Count == 1)
                     {
-                        return items[0];
+                        if (ctx.Tkn.Type == TokenType.COL)
+                        {
+                            ctx.ReadToken(TokenType.COL);
+                            var type = ParseType(ctx);
+                            ctx.ReadToken(TokenType.RP);
+                            return new MFource(items[0], type);
+                        }
+                        else
+                        {
+                            ctx.ReadToken(TokenType.RP);
+                            return items[0];
+                        }
                     }
                     else
                     {
+                        ctx.ReadToken(TokenType.RP);
                         return new MTuple(items);
                     }
                 }
