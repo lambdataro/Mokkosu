@@ -600,11 +600,11 @@ namespace Mokkosu.AST
     /// <summary>
     /// 実行時エラーを出力する
     /// </summary>
-    class RuntimeError : MExpr
+    class MRuntimeError : MExpr
     {
         public string Message { get; private set; }
 
-        public RuntimeError(string pos, string message)
+        public MRuntimeError(string pos, string message)
             : base(pos)
         {
             Message = message;

@@ -65,10 +65,19 @@ namespace Mokkosu.ClosureConversion
                 var e = (MLambda)expr;
                 var set = e.Body.FreeVars().Diff(e.ArgPat.FreeVars());
                 var fv = set.ToArray();
-                var arg_name = GenArgName();
-                var ctx2 = new ClosureConversionContext(arg_name, fv);
-                var body = Conv(new MMatch(e.Pos, e.ArgPat, new MVar(arg_name), e.Body,
-                    new RuntimeError("", "パターンマッチ失敗")), ctx2);
+                MExpr body;
+                if (e.ArgPat is PVar)
+                {
+                    var ctx2 = new ClosureConversionContext(((PVar)e.ArgPat).Name, fv);
+                    body = Conv(e.Body, ctx2);
+                }
+                else
+                {
+                    var arg_name = GenArgName();
+                    var ctx2 = new ClosureConversionContext(arg_name, fv);
+                    body = Conv(new MMatch(e.Pos, e.ArgPat, new MVar(arg_name), e.Body,
+                        new MRuntimeError(e.Pos, "パターンマッチ失敗")), ctx2);
+                }
                 var fun_name = GenFunctionName();
                 _function_table.Add(fun_name, body);
                 var args = fv.Select(x => Conv(new MVarClos(x), ctx)).ToArray();
@@ -141,7 +150,7 @@ namespace Mokkosu.ClosureConversion
                 var e = (MFource)expr;
                 return Conv(e.Expr, ctx);
             }
-            else if (expr is RuntimeError)
+            else if (expr is MRuntimeError)
             {
                 return expr;
             }

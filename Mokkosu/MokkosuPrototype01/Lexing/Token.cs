@@ -7,7 +7,7 @@
         // 記号
         COM, COL, BAR, SC, ARROW, 
         AT, BS, UB, QUE,
-        LT, GT, EQ,
+        LT, GT, EQ, LE, GE, EQEQ, LTGT,
         LP, RP, PLS, MNS, AST, SLS,
         LBK, RBK, COLCOL,
         // キーワード

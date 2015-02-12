@@ -414,9 +414,31 @@ namespace Mokkosu.Parsing
 
         static MExpr ParseConsExpr(ParseContext ctx)
         {
-            var lhs = ParseAddExpr(ctx);
+            var lhs = ParseCmpExpr(ctx);
 
             while (ctx.Tkn.Type == TokenType.COLCOL)
+            {
+                var type = ctx.Tkn.Type;
+                var pos = ctx.Tkn.Pos;
+                ctx.NextToken();
+                var rhs = ParseCmpExpr(ctx);
+                switch (type)
+                {
+                    case TokenType.COLCOL:
+                        lhs = new MCons(pos, lhs, rhs);
+                        break;
+                }
+            }
+            return lhs;
+        }
+
+        static MExpr ParseCmpExpr(ParseContext ctx)
+        {
+            var lhs = ParseAddExpr(ctx);
+
+            while (ctx.Tkn.Type == TokenType.LT || ctx.Tkn.Type == TokenType.GT ||
+                ctx.Tkn.Type == TokenType.LE || ctx.Tkn.Type == TokenType.GE ||
+                ctx.Tkn.Type == TokenType.EQEQ || ctx.Tkn.Type == TokenType.LTGT)
             {
                 var type = ctx.Tkn.Type;
                 var pos = ctx.Tkn.Pos;
@@ -424,8 +446,23 @@ namespace Mokkosu.Parsing
                 var rhs = ParseAddExpr(ctx);
                 switch (type)
                 {
-                    case TokenType.COLCOL:
-                        lhs = new MCons(pos, lhs, rhs);
+                    case TokenType.LT:
+                        lhs = CreateBinop(pos, "__operator_lt", lhs, rhs);
+                        break;
+                    case TokenType.GT:
+                        lhs = CreateBinop(pos, "__operator_gt", lhs, rhs);
+                        break;
+                    case TokenType.LE:
+                        lhs = CreateBinop(pos, "__operator_le", lhs, rhs);
+                        break;
+                    case TokenType.GE:
+                        lhs = CreateBinop(pos, "__operator_ge", lhs, rhs);
+                        break;
+                    case TokenType.EQEQ:
+                        lhs = CreateBinop(pos, "__operator_eqeq", lhs, rhs);
+                        break;
+                    case TokenType.LTGT:
+                        lhs = CreateBinop(pos, "__operator_ltgt", lhs, rhs);
                         break;
                 }
             }

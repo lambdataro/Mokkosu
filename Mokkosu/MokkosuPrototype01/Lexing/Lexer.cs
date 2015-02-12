@@ -48,9 +48,6 @@ namespace Mokkosu.Lexing
                 { ',', TokenType.COM },
                 { '|', TokenType.BAR },
                 { ';', TokenType.SC },
-                { '<', TokenType.LT },
-                { '>', TokenType.GT },
-                { '=', TokenType.EQ },
                 { '(', TokenType.LP },
                 { ')', TokenType.RP },
                 { '\\', TokenType.BS },
@@ -313,6 +310,50 @@ namespace Mokkosu.Lexing
                 else
                 {
                     return new Token(Pos, TokenType.COL);
+                }
+            }
+            else if (_strm.Char == '<')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '=')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.LE);
+                }
+                else if (_strm.Char == '>')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.LTGT);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.LT);
+                }
+            }
+            else if (_strm.Char == '>')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '=')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.GE);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.GT);
+                }
+            }
+            else if (_strm.Char == '=')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '=')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.EQEQ);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.EQ);
                 }
             }
             else if (_symbols.ContainsKey(_strm.Char))

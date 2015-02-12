@@ -24,14 +24,8 @@ namespace Mokkosu.TypeInference
 
         static TEnv InitialEnv()
         {
-            //var int_int_int = new FunType(new IntType(), new FunType(new IntType(), new IntType()));
-
             var dict = new Dictionary<string, MTypeScheme>()
             {
-                //{ "__operator_pls", new MTypeScheme(int_int_int) },
-                //{ "__operator_mns", new MTypeScheme(int_int_int) },
-                //{ "__operator_ast", new MTypeScheme(int_int_int) },
-                //{ "__operator_sls", new MTypeScheme(int_int_int) },
             };
 
             var tenv = new TEnv();
@@ -514,7 +508,7 @@ namespace Mokkosu.TypeInference
                 Inference(e.Expr, e.Type, tenv, ctx);
                 Unification(expr.Pos, type, e.Type);
             }
-            else if (expr is RuntimeError)
+            else if (expr is MRuntimeError)
             {
                 // 何もしない
             }
@@ -534,39 +528,109 @@ namespace Mokkosu.TypeInference
             }
         }
 
-        static void InferencePrim(string pos, string name, List<MType> args, MType ret)
+        static MType ReduceType(MType type)
         {
-            if (name == "println" && args.Count == 1)
+            if (type is TypeVar)
             {
-                Unification(pos, ret, new UnitType());
+                var t = (TypeVar)type;
+                if (t.Value == null)
+                {
+                    return t;
+                }
+                else
+                {
+                    return t.Value;
+                }
             }
-            else if (name == "add" && args.Count == 2)
+            else if (type is UserType)
             {
-                Unification(pos, args[0], new IntType());
-                Unification(pos, args[1], new IntType());
-                Unification(pos, ret, new IntType());
+                var t = (UserType)type;
+                var args = t.Args.Select(typ => ReduceType(typ)).ToList();
+                return new UserType(t.Name, args);
             }
-            else if (name == "sub" && args.Count == 2)
+            else if (type is IntType || type is DoubleType || type is StringType ||
+                type is CharType || type is UnitType || type is BoolType)
             {
-                Unification(pos, args[0], new IntType());
-                Unification(pos, args[1], new IntType());
-                Unification(pos, ret, new IntType());
+                return type;
             }
-            else if (name == "mul" && args.Count == 2)
+            else if (type is FunType)
             {
-                Unification(pos, args[0], new IntType());
-                Unification(pos, args[1], new IntType());
-                Unification(pos, ret, new IntType());
+                var t = (FunType)type;
+                var arg = ReduceType(t.ArgType);
+                var ret = ReduceType(t.RetType);
+                return new FunType(arg, ret);
             }
-            else if (name == "div" && args.Count == 2)
+            else if (type is ListType)
             {
-                Unification(pos, args[0], new IntType());
-                Unification(pos, args[1], new IntType());
-                Unification(pos, ret, new IntType());
+                var t = (ListType)type;
+                var elem = ReduceType(t.ElemType);
+                return new ListType(elem);
+            }
+            else if (type is TupleType)
+            {
+                var t = (TupleType)type;
+                var args = t.Types.Select(typ => ReduceType(typ)).ToList();
+                return new TupleType(args);
             }
             else
             {
-                throw new MError(pos + ": プリミティブ演算型エラー");
+                throw new NotImplementedException();
+            }
+        }
+
+        static void InferencePrim(string pos, string name, List<MType> args, MType ret)
+        {
+            args = args.Select(t => ReduceType(t)).ToList();
+            ret = ReduceType(ret);
+
+            switch (name)
+            {
+                case "add":
+                case "sub":
+                case "mul":
+                case "div":
+                    if (args.Count == 2)
+                    {
+                        Unification(pos, args[0], new IntType());
+                        Unification(pos, args[1], new IntType());
+                        Unification(pos, ret, new IntType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "eq":
+                case "ne":
+                case "lt":
+                case "gt":
+                case "le":
+                case "ge":
+                    if (args.Count == 2)
+                    {
+                        Unification(pos, args[0], args[1]);
+                        Unification(pos, ret, new BoolType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "println":
+                    if (args.Count == 1)
+                    {
+                        Unification(pos, ret, new UnitType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                default:
+                    throw new MError(pos + ": プリミティブ演算型エラー");
             }
         }
 

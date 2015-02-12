@@ -16,7 +16,6 @@ namespace Mokkosu.CodeGenerate
     static class CodeGenerator
     {
         static Dictionary<string, MethodBuilder> _function_table;
-        static string _runtime_dir = RuntimeEnvironment.GetRuntimeDirectory();
 
         static FieldInfo _value_ref_field;
         static Type _value_ref_type;
@@ -26,17 +25,32 @@ namespace Mokkosu.CodeGenerate
         static Type _tag_type;
 
         static MethodInfo _string_equal =
-            SystemMethod("mscorlib.dll", "System.String", "Equals", 
+            CodeGeneratorCommon.SystemMethod(
+                "mscorlib.dll", "System.String", "Equals", 
                 new Type[] { typeof(string), typeof(string) });
 
+        static MethodInfo _object_equal =
+            CodeGeneratorCommon.
+                SystemMethod("mscorlib.dll", "System.Object", "Equals",
+                new Type[] { typeof(object) });
+
         static ConstructorInfo _application_exception =
-            SystemConstructor("mscorlib.dll", "System.ApplicationException", new Type[] { typeof(string) });
+            CodeGeneratorCommon.
+                SystemConstructor("mscorlib.dll", "System.ApplicationException", new Type[] { typeof(string) });
 
-        static MethodBuilder _add;
-        static MethodBuilder _sub;
-        static MethodBuilder _mul;
-        static MethodBuilder _div;
+        static MethodInfo _println;
 
+        static MethodInfo _add;
+        static MethodInfo _sub;
+        static MethodInfo _mul;
+        static MethodInfo _div;
+
+        static MethodInfo _eq;
+        static MethodInfo _ne;
+        static MethodInfo _lt;
+        static MethodInfo _gt;
+        static MethodInfo _le;
+        static MethodInfo _ge;
 
         public static AssemblyBuilder Start(string name, ClosureConversionResult cc_result)
         {
@@ -76,13 +90,14 @@ namespace Mokkosu.CodeGenerate
                 Compile(il, f.Value, new LEnv());
                 il.Emit(OpCodes.Ret);
             }
-            Compile(_function_table["MokkosuMain"].GetILGenerator(),
-                cc_result.Main, new LEnv());
+            var ilgen = _function_table["MokkosuMain"].GetILGenerator();
+            Compile(ilgen, cc_result.Main, new LEnv());
+            ilgen.Emit(OpCodes.Ret);
 
             // MokkosuEntryPoint
             var builder = type_builder.DefineMethod("MokkosuEntryPoint",
                 MethodAttributes.Static, typeof(void), new Type[] { });
-            var ilgen = builder.GetILGenerator();
+            ilgen = builder.GetILGenerator();
             ilgen.Emit(OpCodes.Ldnull);
             ilgen.Emit(OpCodes.Ldnull);
             ilgen.Emit(OpCodes.Call, _function_table["MokkosuMain"]);
@@ -96,71 +111,19 @@ namespace Mokkosu.CodeGenerate
 
         static void DefinePrimFun(TypeBuilder type_builder)
         {
-            DefineAdd(type_builder);
-            DefineSub(type_builder);
-            DefineMul(type_builder);
-            DefineDiv(type_builder);
+            _println = PrimitiveFunctions.DefinePrintLn(type_builder);
 
-        }
+            _add = PrimitiveFunctions.DefineAdd(type_builder);
+            _sub = PrimitiveFunctions.DefineSub(type_builder);
+            _mul = PrimitiveFunctions.DefineMul(type_builder);
+            _div = PrimitiveFunctions.DefineDiv(type_builder);
 
-        private static void DefineAdd(TypeBuilder type_builder)
-        {
-            _add = type_builder.DefineMethod("add",
-                MethodAttributes.Static, typeof(object),
-                new Type[] { typeof(object), typeof(object) });
-            var il = _add.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Add);
-            il.Emit(OpCodes.Box, typeof(int));
-            il.Emit(OpCodes.Ret);
-        }
-
-        private static void DefineSub(TypeBuilder type_builder)
-        {
-            _sub = type_builder.DefineMethod("sub",
-                MethodAttributes.Static, typeof(object),
-                new Type[] { typeof(object), typeof(object) });
-            var il = _sub.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Sub);
-            il.Emit(OpCodes.Box, typeof(int));
-            il.Emit(OpCodes.Ret);
-        }
-
-        private static void DefineMul(TypeBuilder type_builder)
-        {
-            _mul = type_builder.DefineMethod("mul",
-                MethodAttributes.Static, typeof(object),
-                new Type[] { typeof(object), typeof(object) });
-            var il = _mul.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Mul);
-            il.Emit(OpCodes.Box, typeof(int));
-            il.Emit(OpCodes.Ret);
-        }
-
-        private static void DefineDiv(TypeBuilder type_builder)
-        {
-            _div = type_builder.DefineMethod("div",
-                MethodAttributes.Static, typeof(object),
-                new Type[] { typeof(object), typeof(object) });
-            var il = _div.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Unbox_Any, typeof(int));
-            il.Emit(OpCodes.Div);
-            il.Emit(OpCodes.Box, typeof(int));
-            il.Emit(OpCodes.Ret);
+            _eq = PrimitiveFunctions.DefineEq(type_builder);
+            _ne = PrimitiveFunctions.DefineNe(type_builder);
+            _lt = PrimitiveFunctions.DefineLt(type_builder);
+            _gt = PrimitiveFunctions.DefineGt(type_builder);
+            _le = PrimitiveFunctions.DefineLe(type_builder);
+            _ge = PrimitiveFunctions.DefineGe(type_builder);
         }
 
         static void DeclareFunction(string name, TypeBuilder type_builder)
@@ -387,9 +350,9 @@ namespace Mokkosu.CodeGenerate
                 }
                 Compile(il, e.E2, env2);
             }
-            else if (expr is RuntimeError)
+            else if (expr is MRuntimeError)
             {
-                var e = (RuntimeError)expr;
+                var e = (MRuntimeError)expr;
                 il.Emit(OpCodes.Ldstr, e.Pos + ": " + e.Message);
                 il.Emit(OpCodes.Newobj, _application_exception);
                 il.Emit(OpCodes.Throw);
@@ -662,50 +625,47 @@ namespace Mokkosu.CodeGenerate
 
         static void CompilePrim(ILGenerator il, string name, List<MType> arg_types, MType ret_type)
         {
+            var lbl1 = il.DefineLabel();
+            var lbl2 = il.DefineLabel();
+
             switch (name)
             {
                 case "println":
-                    il.Emit(OpCodes.Call, 
-                        SystemMethod("mscorlib.dll", "System.Console", "WriteLine",
-                        new Type[] { typeof(object) }));
-                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Call, _println);
                     break;
-
                 case "add":
                     il.Emit(OpCodes.Call, _add);
                     break;
-
                 case "sub":
                     il.Emit(OpCodes.Call, _sub);
                     break;
-
                 case "mul":
                     il.Emit(OpCodes.Call, _mul);
                     break;
-
                 case "div":
                     il.Emit(OpCodes.Call, _div);
                     break;
-
+                case "eq":
+                    il.Emit(OpCodes.Call, _eq);
+                    break;
+                case "ne":
+                    il.Emit(OpCodes.Call, _ne);
+                    break;
+                case "lt":
+                    il.Emit(OpCodes.Call, _lt);
+                    break;
+                case "gt":
+                    il.Emit(OpCodes.Call, _gt);
+                    break;
+                case "le":
+                    il.Emit(OpCodes.Call, _le);
+                    break;
+                case "ge":
+                    il.Emit(OpCodes.Call, _ge);
+                    break;
                 default:
                     throw new NotImplementedException();
             }
-        }
-
-        static MethodInfo SystemMethod(string assembly, string type_name, string method_name, Type[] arg_types)
-        {
-            var dll = Assembly.LoadFrom(Path.Combine(_runtime_dir, assembly));
-            var type = dll.GetType(type_name);
-            var method = type.GetMethod(method_name, arg_types);
-            return method;
-        }
-
-        static ConstructorInfo SystemConstructor(string assembly, string type_name, Type[] arg_types)
-        {
-            var dll = Assembly.LoadFrom(Path.Combine(_runtime_dir, assembly));
-            var type = dll.GetType(type_name);
-            var constructor = type.GetConstructor(arg_types);
-            return constructor;
         }
     }
 }

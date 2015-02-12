@@ -36,6 +36,8 @@ namespace Mokkosu.Main
 
             var parse_result = Parser.Start(parse_context);
 
+            Console.WriteLine(parse_result);
+
             Typeinf.Start(parse_result);
             var expr = TopToExpr.Start(parse_result);
             var closure_result = ClosureConverter.Start(expr);
