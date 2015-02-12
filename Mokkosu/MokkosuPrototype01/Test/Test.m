@@ -7,8 +7,10 @@
 # do __prim "println" ((\x y -> __prim "mul" (x, y)) 10 20);
 
 
-do println (__prim "concat" ("abc", "def"));
+# do println (__prim "concat" ("abc", "def"));
 
+
+do println (pat x ? x > 3 = 2 -> 123 else 456);
 
 # fun f x = f x;
 # do f 5;

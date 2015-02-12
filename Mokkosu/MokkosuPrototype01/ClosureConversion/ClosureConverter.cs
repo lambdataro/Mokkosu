@@ -75,7 +75,7 @@ namespace Mokkosu.ClosureConversion
                 {
                     var arg_name = GenArgName();
                     var ctx2 = new ClosureConversionContext(arg_name, fv);
-                    body = Conv(new MMatch(e.Pos, e.ArgPat, new MVar(arg_name), e.Body,
+                    body = Conv(new MMatch(e.Pos, e.ArgPat, new MBool(e.Pos, true), new MVar(arg_name), e.Body,
                         new MRuntimeError(e.Pos, "パターンマッチ失敗")), ctx2);
                 }
                 var fun_name = GenFunctionName();
@@ -102,9 +102,10 @@ namespace Mokkosu.ClosureConversion
             {
                 var e = (MMatch)expr;
                 var expr1 = Conv(e.Expr, ctx);
+                var guard = Conv(e.Guard, ctx);
                 var then_expr = Conv(e.ThenExpr, ctx);
                 var else_expr = Conv(e.ElseExpr, ctx);
-                return new MMatch(e.Pos, e.Pat, expr1, then_expr, else_expr);
+                return new MMatch(e.Pos, e.Pat, guard, expr1, then_expr, else_expr);
             }
             else if (expr is MNil)
             {

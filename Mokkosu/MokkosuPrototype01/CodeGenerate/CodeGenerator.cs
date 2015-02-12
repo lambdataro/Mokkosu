@@ -278,15 +278,18 @@ namespace Mokkosu.CodeGenerate
             {
                 var e = (MMatch)expr;
                 var fail_label = il.DefineLabel();
-                var lbl = il.DefineLabel();
+                var lbl1 = il.DefineLabel();
                 Compile(il, e.Expr, env);
                 var env2 = CompilePat(il, e.Pat, fail_label);
-
-                Compile(il, e.ThenExpr, env2.Append(env));
-                il.Emit(OpCodes.Br, lbl);
+                var env3 = env2.Append(env);
+                Compile(il, e.Guard, env3);
+                il.Emit(OpCodes.Unbox_Any, typeof(int));
+                il.Emit(OpCodes.Brfalse, fail_label);
+                Compile(il, e.ThenExpr, env3);
+                il.Emit(OpCodes.Br, lbl1);
                 il.MarkLabel(fail_label);
                 Compile(il, e.ElseExpr, env);
-                il.MarkLabel(lbl);
+                il.MarkLabel(lbl1);
             }
             else if (expr is MNil)
             {

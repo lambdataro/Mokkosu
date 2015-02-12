@@ -322,13 +322,23 @@ namespace Mokkosu.Parsing
                 var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.PAT);
                 var pat = ParsePattern(ctx);
+                MExpr guard;
+                if (ctx.Tkn.Type == TokenType.QUE)
+                {
+                    ctx.ReadToken(TokenType.QUE);
+                    guard = ParseFunExpr(ctx);
+                }
+                else
+                {
+                    guard = new MBool(pos, true);
+                }
                 ctx.ReadToken(TokenType.EQ);
                 var expr = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.ARROW);
                 var then_expr = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.ELSE);
                 var else_expr = ParseFunExpr(ctx);
-                return new MMatch(pos, pat, expr, then_expr, else_expr);
+                return new MMatch(pos, pat, guard, expr, then_expr, else_expr);
             }
             else if (ctx.Tkn.Type == TokenType.DO)
             {

@@ -331,14 +331,16 @@ namespace Mokkosu.AST
     class MMatch : MExpr
     {
         public MPat Pat { get; private set; }
+        public MExpr Guard { get; private set; }
         public MExpr Expr { get; private set; }
         public MExpr ThenExpr { get; private set; }
         public MExpr ElseExpr { get; private set; }
 
-        public MMatch(string pos, MPat pat, MExpr expr, MExpr then_expr, MExpr else_expr)
+        public MMatch(string pos, MPat pat, MExpr guard, MExpr expr, MExpr then_expr, MExpr else_expr)
             : base(pos)
         {
             Pat = pat;
+            Guard = guard;
             Expr = expr;
             ThenExpr = then_expr;
             ElseExpr = else_expr;
@@ -346,14 +348,15 @@ namespace Mokkosu.AST
 
         public override string ToString()
         {
-            return string.Format("(pat {0} = {1} -> {2} else {3})", Pat, Expr, ThenExpr, ElseExpr);
+            return string.Format("(pat {0} ? {1} = {2} -> {3} else {4})", Pat, Guard, Expr, ThenExpr, ElseExpr);
         }
 
         public override MSet<string> FreeVars()
         {
-            return Expr.FreeVars().Union(
-                ElseExpr.FreeVars().Union(
-                    ThenExpr.FreeVars().Diff(Pat.FreeVars())));
+            return Guard.FreeVars().Union(
+                Expr.FreeVars().Union(
+                    ElseExpr.FreeVars().Union(
+                        ThenExpr.FreeVars().Diff(Pat.FreeVars()))));
         }
     }
 

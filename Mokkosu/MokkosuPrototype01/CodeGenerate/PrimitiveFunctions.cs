@@ -57,7 +57,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefinePrint(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("println",
+            var info = type_builder.DefineMethod("print",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object) });
             var il = info.GetILGenerator();
@@ -71,7 +71,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineToString(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("println",
+            var info = type_builder.DefineMethod("tostring",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object) });
             var il = info.GetILGenerator();
@@ -176,7 +176,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineBAnd(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("mod",
+            var info = type_builder.DefineMethod("band",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();
@@ -192,7 +192,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineBOr(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("mod",
+            var info = type_builder.DefineMethod("bor",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();
@@ -208,7 +208,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineBXor(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("mod",
+            var info = type_builder.DefineMethod("bxor",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();
@@ -224,7 +224,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineBShr(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("mod",
+            var info = type_builder.DefineMethod("bshr",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();
@@ -240,7 +240,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineBShl(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("mod",
+            var info = type_builder.DefineMethod("bshl",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();
@@ -256,7 +256,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineBShrUn(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("mod",
+            var info = type_builder.DefineMethod("bshrun",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();
@@ -272,7 +272,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineBNot(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("mod",
+            var info = type_builder.DefineMethod("bnot",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object) });
             var il = info.GetILGenerator();
@@ -318,7 +318,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineFMul(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("fsub",
+            var info = type_builder.DefineMethod("fmul",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();
@@ -334,7 +334,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineFDiv(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("fsub",
+            var info = type_builder.DefineMethod("fdiv",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object), typeof(object) });
             var il = info.GetILGenerator();

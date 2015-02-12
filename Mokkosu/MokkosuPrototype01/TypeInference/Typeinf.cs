@@ -421,6 +421,7 @@ namespace Mokkosu.TypeInference
                 var tenv2 = InferencePat(e.Pat, t, tenv, ctx);
                 Inference(e.Expr, t, tenv, ctx);
                 var tenv3 = tenv2.Append(tenv);
+                Inference(e.Guard, new BoolType(), tenv3, ctx);
                 Inference(e.ThenExpr, type, tenv3, ctx);
                 Inference(e.ElseExpr, type, tenv, ctx);
             }
