@@ -589,11 +589,46 @@ namespace Mokkosu.TypeInference
                 case "sub":
                 case "mul":
                 case "div":
+                case "mod":
+                case "band":
+                case "bor":
+                case "bxor":
+                case "bshr":
+                case "bshl":
+                case "bshrun":
                     if (args.Count == 2)
                     {
                         Unification(pos, args[0], new IntType());
                         Unification(pos, args[1], new IntType());
                         Unification(pos, ret, new IntType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "bnot":
+                    if (args.Count == 1)
+                    {
+                        Unification(pos, args[0], new IntType());
+                        Unification(pos, ret, new IntType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "fadd":
+                case "fsub":
+                case "fmul":
+                case "fdiv":
+                    if (args.Count == 2)
+                    {
+                        Unification(pos, args[0], new DoubleType());
+                        Unification(pos, args[1], new DoubleType());
+                        Unification(pos, ret, new DoubleType());
                     }
                     else
                     {
@@ -618,10 +653,45 @@ namespace Mokkosu.TypeInference
                     }
                     break;
 
+                case "concat":
+                    if (args.Count == 2)
+                    {
+                        Unification(pos, args[0], new StringType());
+                        Unification(pos, args[1], new StringType());
+                        Unification(pos, ret, new StringType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "print":
+                    if (args.Count == 1)
+                    {
+                        Unification(pos, ret, new UnitType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
                 case "println":
                     if (args.Count == 1)
                     {
                         Unification(pos, ret, new UnitType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "tostring":
+                    if (args.Count == 1)
+                    {
+                        Unification(pos, ret, new StringType());
                     }
                     else
                     {

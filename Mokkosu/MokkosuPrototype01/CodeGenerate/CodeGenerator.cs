@@ -39,11 +39,29 @@ namespace Mokkosu.CodeGenerate
                 SystemConstructor("mscorlib.dll", "System.ApplicationException", new Type[] { typeof(string) });
 
         static MethodInfo _println;
+        static MethodInfo _print;
+        static MethodInfo _tostring;
+
+        static MethodInfo _concat;
 
         static MethodInfo _add;
         static MethodInfo _sub;
         static MethodInfo _mul;
         static MethodInfo _div;
+        static MethodInfo _mod;
+
+        static MethodInfo _band;
+        static MethodInfo _bor;
+        static MethodInfo _bxor;
+        static MethodInfo _bnot;
+        static MethodInfo _bshr;
+        static MethodInfo _bshl;
+        static MethodInfo _bshrun;
+
+        static MethodInfo _fadd;
+        static MethodInfo _fsub;
+        static MethodInfo _fmul;
+        static MethodInfo _fdiv;
 
         static MethodInfo _eq;
         static MethodInfo _ne;
@@ -112,11 +130,29 @@ namespace Mokkosu.CodeGenerate
         static void DefinePrimFun(TypeBuilder type_builder)
         {
             _println = PrimitiveFunctions.DefinePrintLn(type_builder);
+            _print = PrimitiveFunctions.DefinePrint(type_builder);
+            _tostring = PrimitiveFunctions.DefineToString(type_builder);
+
+            _concat = PrimitiveFunctions.DefineConcat(type_builder);
 
             _add = PrimitiveFunctions.DefineAdd(type_builder);
             _sub = PrimitiveFunctions.DefineSub(type_builder);
             _mul = PrimitiveFunctions.DefineMul(type_builder);
             _div = PrimitiveFunctions.DefineDiv(type_builder);
+            _mod = PrimitiveFunctions.DefineMod(type_builder);
+
+            _band = PrimitiveFunctions.DefineBAnd(type_builder);
+            _bor = PrimitiveFunctions.DefineBOr(type_builder);
+            _bxor = PrimitiveFunctions.DefineBXor(type_builder);
+            _bnot = PrimitiveFunctions.DefineBNot(type_builder);
+            _bshr = PrimitiveFunctions.DefineBShr(type_builder);
+            _bshl = PrimitiveFunctions.DefineBShl(type_builder);
+            _bshrun = PrimitiveFunctions.DefineBShrUn(type_builder);
+
+            _fadd = PrimitiveFunctions.DefineFAdd(type_builder);
+            _fsub = PrimitiveFunctions.DefineFSub(type_builder);
+            _fmul = PrimitiveFunctions.DefineFMul(type_builder);
+            _fdiv = PrimitiveFunctions.DefineFDiv(type_builder);
 
             _eq = PrimitiveFunctions.DefineEq(type_builder);
             _ne = PrimitiveFunctions.DefineNe(type_builder);
@@ -633,6 +669,15 @@ namespace Mokkosu.CodeGenerate
                 case "println":
                     il.Emit(OpCodes.Call, _println);
                     break;
+                case "print":
+                    il.Emit(OpCodes.Call, _print);
+                    break;
+                case "tostring":
+                    il.Emit(OpCodes.Call, _tostring);
+                    break;
+                case "concat":
+                    il.Emit(OpCodes.Call, _concat);
+                    break;
                 case "add":
                     il.Emit(OpCodes.Call, _add);
                     break;
@@ -644,6 +689,42 @@ namespace Mokkosu.CodeGenerate
                     break;
                 case "div":
                     il.Emit(OpCodes.Call, _div);
+                    break;
+                case "mod":
+                    il.Emit(OpCodes.Call, _mod);
+                    break;
+                case "band":
+                    il.Emit(OpCodes.Call, _band);
+                    break;
+                case "bor":
+                    il.Emit(OpCodes.Call, _bor);
+                    break;
+                case "bxor":
+                    il.Emit(OpCodes.Call, _bxor);
+                    break;
+                case "bnot":
+                    il.Emit(OpCodes.Call, _bnot);
+                    break;
+                case "bshr":
+                    il.Emit(OpCodes.Call, _bshr);
+                    break;
+                case "bshl":
+                    il.Emit(OpCodes.Call, _bshl);
+                    break;
+                case "bshrun":
+                    il.Emit(OpCodes.Call, _bshrun);
+                    break;
+                case "fadd":
+                    il.Emit(OpCodes.Call, _fadd);
+                    break;
+                case "fsub":
+                    il.Emit(OpCodes.Call, _fsub);
+                    break;
+                case "fmul":
+                    il.Emit(OpCodes.Call, _fmul);
+                    break;
+                case "fdiv":
+                    il.Emit(OpCodes.Call, _fdiv);
                     break;
                 case "eq":
                     il.Emit(OpCodes.Call, _eq);

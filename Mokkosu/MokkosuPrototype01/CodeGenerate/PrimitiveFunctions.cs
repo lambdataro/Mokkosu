@@ -26,6 +26,21 @@ namespace Mokkosu.CodeGenerate
                 "mscorlib.dll", "System.Console", "WriteLine",
                 new Type[] { typeof(object) });
 
+        static MethodInfo _console_write =
+            CodeGeneratorCommon.SystemMethod(
+                "mscorlib.dll", "System.Console", "Write",
+                new Type[] { typeof(object) });
+
+        static MethodInfo _object_tostring =
+            CodeGeneratorCommon.SystemMethod(
+                "mscorlib.dll", "System.Object", "ToString",
+                new Type[] { });
+
+        static MethodInfo _string_concat =
+            CodeGeneratorCommon.SystemMethod(
+                "mscorlib.dll", "System.String", "Concat",
+                new Type[] { typeof(string), typeof(string) });
+
         public static MethodInfo DefinePrintLn(TypeBuilder type_builder)
         {
             var info = type_builder.DefineMethod("println",
@@ -36,6 +51,45 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Call, _console_writeln);
             il.Emit(OpCodes.Ldc_I4_0);
             il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefinePrint(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("println",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Call, _console_write);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineToString(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("println",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Callvirt, _object_tostring);
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineConcat(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("concat",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Call, _string_concat);
             il.Emit(OpCodes.Ret);
             return info;
         }
@@ -100,6 +154,196 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Unbox_Any, typeof(int));
             il.Emit(OpCodes.Div);
             il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineMod(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Rem);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineBAnd(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.And);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineBOr(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Or);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineBXor(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Xor);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineBShr(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Shr);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineBShl(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Shl);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineBShrUn(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Shr_Un);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineBNot(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("mod",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(int));
+            il.Emit(OpCodes.Not);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineFAdd(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("fadd",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Add);
+            il.Emit(OpCodes.Box, typeof(double));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineFSub(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("fsub",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Sub);
+            il.Emit(OpCodes.Box, typeof(double));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineFMul(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("fsub",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Mul);
+            il.Emit(OpCodes.Box, typeof(double));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineFDiv(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("fsub",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(double));
+            il.Emit(OpCodes.Div);
+            il.Emit(OpCodes.Box, typeof(double));
             il.Emit(OpCodes.Ret);
             return info;
         }

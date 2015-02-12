@@ -7,6 +7,9 @@
 # do __prim "println" ((\x y -> __prim "mul" (x, y)) 10 20);
 
 
+do println (__prim "concat" ("abc", "def"));
+
+
 # fun f x = f x;
 # do f 5;
 
@@ -28,7 +31,7 @@
 
 # do f 5 6;
 
-println ("abc" < "abc");
+# println ("abc" < "abc");
 
 # println (__prim "lt" (1, 2));
 
