@@ -9,6 +9,8 @@ namespace Mokkosu.Parsing
 {
     static class Parser
     {
+        static int _count = 0;
+
         public static ParseResult Start(ParseContext ctx)
         {
             var top_exprs = new List<MTopExpr>();
@@ -671,7 +673,8 @@ namespace Mokkosu.Parsing
                 ctx.Tkn.Type == TokenType.INT || ctx.Tkn.Type == TokenType.DBL ||
                 ctx.Tkn.Type == TokenType.STR || ctx.Tkn.Type == TokenType.CHAR ||
                 ctx.Tkn.Type == TokenType.MNS || ctx.Tkn.Type == TokenType.MNSDOT ||
-                ctx.Tkn.Type == TokenType.BANG)
+                ctx.Tkn.Type == TokenType.BANG || ctx.Tkn.Type == TokenType.LBR ||
+                ctx.Tkn.Type == TokenType.LBK)
             {
                 var pos = ctx.Tkn.Pos;
                 var rhs = ParseFactor(ctx);
@@ -790,10 +793,97 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.RP);
                 return new MPrim(pos, name, items);
             }
+            else if (ctx.Tkn.Type == TokenType.LBR)
+            {
+                return ParseBlock(ctx);
+            }
             else
             {
                 ctx.SyntaxError();
                 throw new MError();
+            }
+        }
+
+        static string GenVarName()
+        {
+            return string.Format("var@{0:000}", ++_count);
+        }
+
+        static MExpr ParseBlock(ParseContext ctx)
+        {
+            ctx.ReadToken(TokenType.LBR);
+            var name = GenVarName();
+            var pos = ctx.Tkn.Pos;
+            var expr = new MLambda(pos, new PVar(pos, name), ParseBlockItem(name, ctx));
+            ctx.ReadToken(TokenType.RBR);
+            return expr;
+        }
+
+        static MExpr ParseBlockItem(string var_name, ParseContext ctx)
+        {
+            var start_pos = ctx.Tkn.Pos;
+            if (ctx.Tkn.Type == TokenType.DO)
+            {
+                var pos = ctx.Tkn.Pos;
+                ctx.ReadToken(TokenType.DO);
+                var e1 = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.SC);
+                var e2 = ParseBlockItem(var_name, ctx);
+                return new MDo(pos, e1, e2);
+            }
+            else if (ctx.Tkn.Type == TokenType.LET)
+            {
+                var pos = ctx.Tkn.Pos;
+                ctx.ReadToken(TokenType.LET);
+                var pat = ParsePattern(ctx);
+                var args = ParseArgList0(ctx, TokenType.EQ);
+                ctx.ReadToken(TokenType.EQ);
+                var e1 = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.SC);
+                var e2 = ParseBlockItem(var_name, ctx);
+                return new MLet(pos, pat, ArgsToLambda(args, e1), e2);
+            }
+            else if (ctx.Tkn.Type == TokenType.FUN)
+            {
+                var pos = ctx.Tkn.Pos;
+                ctx.ReadToken(TokenType.FUN);
+                var items = new List<MFunItem>();
+                items.Add(ParseFunItem(ctx));
+                while (ctx.Tkn.Type == TokenType.AND)
+                {
+                    ctx.ReadToken(TokenType.AND);
+                    items.Add(ParseFunItem(ctx));
+                }
+                ctx.ReadToken(TokenType.SC);
+                var e2 = ParseBlockItem(var_name, ctx);
+                return new MFun(pos, items, e2);
+            }
+            else
+            {
+                var pat = ParsePattern(ctx);
+                MExpr guard;
+                if (ctx.Tkn.Type == TokenType.QUE)
+                {
+                    ctx.ReadToken(TokenType.QUE);
+                    guard = ParseExpr(ctx);
+                }
+                else
+                {
+                    guard = new MBool(ctx.Tkn.Pos, true);
+                }
+                ctx.ReadToken(TokenType.ARROW);
+                var then_expr = ParseExpr(ctx);
+                MExpr else_expr;
+                if (ctx.Tkn.Type == TokenType.RBR)
+                {
+                    else_expr = new MRuntimeError(ctx.Tkn.Pos, "パターンマッチ失敗");
+                }
+                else
+                {
+                    ctx.ReadToken(TokenType.SC);
+                    else_expr = ParseBlockItem(var_name, ctx);
+                }
+                return new MMatch(start_pos, pat, guard, new MVar(var_name), then_expr, else_expr);
             }
         }
 

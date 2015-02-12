@@ -13,6 +13,7 @@
         LBK, RBK, COLCOL, AMPAMP, BARBAR,
         AMP, ASTAST, LTLT, GTGT, PLSPLS,
         LTBAR, BARGT, COLEQ, BQ,
+        LBR, RBR,
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN, INCLUDE,

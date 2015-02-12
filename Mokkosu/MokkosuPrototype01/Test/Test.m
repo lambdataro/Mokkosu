@@ -10,7 +10,7 @@
 # do println (__prim "concat" ("abc", "def"));
 
 
-do println (pat x ? x > 3 = 2 -> 123 else 456);
+# do println (pat x ? x > 3 = 2 -> 123 else 456);
 
 # fun f x = f x;
 # do f 5;
@@ -38,3 +38,7 @@ do println (pat x ? x > 3 = 2 -> 123 else 456);
 # println (__prim "lt" (1, 2));
 
 # println (123 <> 123);
+
+
+do println ({ [] -> 123; x :: xs -> x } [2]);
+

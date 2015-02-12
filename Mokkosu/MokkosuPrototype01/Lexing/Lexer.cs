@@ -57,6 +57,8 @@ namespace Mokkosu.Lexing
                 { '%', TokenType.PER },
                 { '^', TokenType.HAT },
                 { '`', TokenType.BQ },
+                { '{', TokenType.LBR },
+                { '}', TokenType.RBR },
             };
         }
 
