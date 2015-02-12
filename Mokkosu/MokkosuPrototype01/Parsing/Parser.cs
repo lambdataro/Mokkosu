@@ -156,10 +156,24 @@ namespace Mokkosu.Parsing
                 }
                 else
                 {
-                    var t = ParseType(ctx);
+                    var ts = ParseTypeList(ctx);
                     ctx.ReadToken(TokenType.RP);
-                    return t;
+                    if (ts.Count == 1)
+                    {
+                        return ts[0];
+                    }
+                    else
+                    {
+                        return new TupleType(ts);
+                    }
                 }
+            }
+            else if (ctx.Tkn.Type == TokenType.LBK)
+            {
+                ctx.ReadToken(TokenType.LBK);
+                var t = ParseType(ctx);
+                ctx.ReadToken(TokenType.RBK);
+                return new ListType(t);
             }
             else if (ctx.Tkn.Type == TokenType.ID)
             {
@@ -174,6 +188,8 @@ namespace Mokkosu.Parsing
                         return new CharType();
                     case "String":
                         return new StringType();
+                    case "Bool":
+                        return new BoolType();
                     default:
                         if (ctx.Tkn.Type == TokenType.LT)
                         {
