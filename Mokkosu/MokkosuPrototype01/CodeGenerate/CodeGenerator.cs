@@ -70,6 +70,8 @@ namespace Mokkosu.CodeGenerate
         static MethodInfo _le;
         static MethodInfo _ge;
 
+        static MethodInfo _error;
+
         public static AssemblyBuilder Start(string name, ClosureConversionResult cc_result)
         {
             _function_table = new Dictionary<string, MethodBuilder>();
@@ -160,6 +162,8 @@ namespace Mokkosu.CodeGenerate
             _gt = PrimitiveFunctions.DefineGt(type_builder);
             _le = PrimitiveFunctions.DefineLe(type_builder);
             _ge = PrimitiveFunctions.DefineGe(type_builder);
+
+            _error = PrimitiveFunctions.DefineError(type_builder);
         }
 
         static void DeclareFunction(string name, TypeBuilder type_builder)
@@ -811,6 +815,9 @@ namespace Mokkosu.CodeGenerate
                     break;
                 case "ge":
                     il.Emit(OpCodes.Call, _ge);
+                    break;
+                case "error":
+                    il.Emit(OpCodes.Call, _error);
                     break;
                 default:
                     throw new NotImplementedException();

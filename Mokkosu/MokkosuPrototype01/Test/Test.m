@@ -15,6 +15,8 @@ fun eval expr =
 
 println (eval test);
 
+error "test";
+
 #[
 type color = red | green | blue;
 

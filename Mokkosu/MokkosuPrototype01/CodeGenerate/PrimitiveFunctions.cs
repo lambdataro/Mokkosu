@@ -943,6 +943,18 @@ namespace Mokkosu.CodeGenerate
 
             return info;
         }
+
+        public static MethodInfo DefineError(TypeBuilder type_builder)
+        {
+            var info = type_builder.DefineMethod("print",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Newobj, _application_exception);
+            il.Emit(OpCodes.Throw);
+            return info;
+        }
     }
 
 
