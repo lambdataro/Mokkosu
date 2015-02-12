@@ -6,10 +6,13 @@
         INT, DBL, STR, CHAR, ID,
         // 記号
         COM, COL, BAR, SC, ARROW, 
-        AT, BS, UB, QUE,
+        AT, BS, UB, QUE, BANG, HAT,
         LT, GT, EQ, LE, GE, EQEQ, LTGT,
-        LP, RP, PLS, MNS, AST, SLS,
-        LBK, RBK, COLCOL,
+        LP, RP, PLS, MNS, AST, SLS, PER, 
+        PLSDOT, MNSDOT, ASTDOT, SLSDOT,
+        LBK, RBK, COLCOL, AMPAMP, BARBAR,
+        AMP, ASTAST, LTLT, GTGT, PLSPLS,
+        LTBAR, BARGT, COLEQ, BQ,
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN, INCLUDE,

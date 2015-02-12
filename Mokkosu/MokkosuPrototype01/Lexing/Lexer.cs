@@ -46,17 +46,17 @@ namespace Mokkosu.Lexing
             _symbols = new Dictionary<char, TokenType>()
             {
                 { ',', TokenType.COM },
-                { '|', TokenType.BAR },
                 { ';', TokenType.SC },
                 { '(', TokenType.LP },
                 { ')', TokenType.RP },
                 { '\\', TokenType.BS },
-                { '+', TokenType.PLS },
-                { '*', TokenType.AST },
-                { '/', TokenType.SLS },
                 { '?', TokenType.QUE },
+                { '!', TokenType.BANG },
                 { '[', TokenType.LBK },
                 { ']', TokenType.RBK },
+                { '%', TokenType.PER },
+                { '^', TokenType.HAT },
+                { '`', TokenType.BQ },
             };
         }
 
@@ -286,6 +286,24 @@ namespace Mokkosu.Lexing
                 _strm.NextChar();
                 return new Token(Pos, TokenType.CHAR, ch);                
             }
+            else if (_strm.Char == '+')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '.')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.PLSDOT);
+                }
+                else if (_strm.Char == '+')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.PLSPLS);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.PLS);
+                }
+            }
             else if (_strm.Char == '-')
             {
                 _strm.NextChar();
@@ -294,9 +312,40 @@ namespace Mokkosu.Lexing
                     _strm.NextChar();
                     return new Token(Pos, TokenType.ARROW);
                 }
+                else if (_strm.Char == '.')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.MNSDOT);
+                }
                 else
                 {
                     return new Token(Pos, TokenType.MNS);
+                }
+            }
+            else if (_strm.Char == '*')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '.')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.ASTDOT);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.AST);
+                }
+            }
+            else if (_strm.Char == '/')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '.')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.SLSDOT);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.SLS);
                 }
             }
             else if (_strm.Char == ':')
@@ -306,6 +355,11 @@ namespace Mokkosu.Lexing
                 {
                     _strm.NextChar();
                     return new Token(Pos, TokenType.COLCOL);
+                }
+                else if (_strm.Char == '=')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.COLEQ);
                 }
                 else
                 {
@@ -325,6 +379,16 @@ namespace Mokkosu.Lexing
                     _strm.NextChar();
                     return new Token(Pos, TokenType.LTGT);
                 }
+                else if (_strm.Char == '<')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.LTLT);
+                }
+                else if (_strm.Char == '|')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.LTBAR);
+                }
                 else
                 {
                     return new Token(Pos, TokenType.LT);
@@ -337,6 +401,11 @@ namespace Mokkosu.Lexing
                 {
                     _strm.NextChar();
                     return new Token(Pos, TokenType.GE);
+                }
+                else  if (_strm.Char == '>')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.GTGT);
                 }
                 else
                 {
@@ -354,6 +423,37 @@ namespace Mokkosu.Lexing
                 else
                 {
                     return new Token(Pos, TokenType.EQ);
+                }
+            }
+            else if (_strm.Char == '&')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '&')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.AMPAMP);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.AMP);
+                }
+            }
+            else if (_strm.Char == '|')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '|')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.BARBAR);
+                }
+                else if (_strm.Char == '>')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.BARGT);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.BAR);
                 }
             }
             else if (_symbols.ContainsKey(_strm.Char))
