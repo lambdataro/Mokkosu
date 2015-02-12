@@ -837,7 +837,7 @@ namespace Mokkosu.TypeInference
                             }
                             var arg_type = new TypeVar();
                             var ret_type = new TypeVar();
-                            Unification(pat.Pos, typescheme.Type, new FunType(arg_type, ret_type));
+                            Unification(pat.Pos, Instantiate(typescheme), new FunType(arg_type, ret_type));
                             if (p.Types.Count == 1)
                             {
                                 Unification(pat.Pos, arg_type, p.Types[0]);
