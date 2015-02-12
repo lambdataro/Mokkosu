@@ -725,7 +725,25 @@ namespace Mokkosu.TypeInference
             {
                 var p = (PVar)pat;
                 Unification(pat.Pos, type, p.Type);
-                return new TEnv().Cons(p.Name, new MTypeScheme(type));
+
+                MTypeScheme typescheme;
+                if (tenv.Lookup(p.Name, out typescheme))
+                {
+                    if (typescheme.IsTag)
+                    {
+                        p.IsTag = true;
+                        p.TagIndex = typescheme.TagIndex;
+                        return new TEnv();
+                    }
+                    else
+                    {
+                        return new TEnv().Cons(p.Name, new MTypeScheme(type));
+                    }
+                }
+                else
+                {
+                    return new TEnv().Cons(p.Name, new MTypeScheme(type));
+                }
             }
             else if (pat is PInt)
             {
@@ -799,6 +817,52 @@ namespace Mokkosu.TypeInference
                 Unification(pat.Pos, type, p.Type);
                 CheckOrPattern(pat.Pos, tenv1, tenv2);
                 return tenv1;
+            }
+            else if (pat is PUserTag)
+            {
+                var p = (PUserTag)pat;
+                MTypeScheme typescheme;
+                if (tenv.Lookup(p.Name, out typescheme))
+                {
+                    if (typescheme.IsTag)
+                    {
+                        if (typescheme.TagSize == p.Args.Count)
+                        {
+                            p.TagIndex = typescheme.TagIndex;
+                            var ret_tenv = new TEnv();
+                            for (var i = 0; i < p.Args.Count; i++)
+                            {
+                                var tenv2 = InferencePat(p.Args[i], p.Types[i], tenv, ctx);
+                                ret_tenv = tenv2.Append(ret_tenv);
+                            }
+                            var arg_type = new TypeVar();
+                            var ret_type = new TypeVar();
+                            Unification(pat.Pos, typescheme.Type, new FunType(arg_type, ret_type));
+                            if (p.Types.Count == 1)
+                            {
+                                Unification(pat.Pos, arg_type, p.Types[0]);
+                            }
+                            else
+                            {
+                                Unification(pat.Pos, arg_type, new TupleType(p.Types));
+                            }
+                            Unification(pat.Pos, type, ret_type);
+                            return ret_tenv;
+                        }
+                        else
+                        {
+                            throw new MError(p.Pos + ": タグの引数が不正です。");
+                        }
+                    }
+                    else
+                    {
+                        throw new MError(p.Pos + ": タグ" + p.Name + "は定義されていません。");
+                    }
+                }
+                else
+                {
+                    throw new MError(p.Pos + ": タグ" + p.Name + "は定義されていません。");
+                }
             }
             else
             {
@@ -971,7 +1035,7 @@ namespace Mokkosu.TypeInference
                 var t2 = (ListType)type2;
                 Unification(pos, t1.ElemType, t2.ElemType);
             }
-            else if (type2 is TupleType && type2 is TupleType)
+            else if (type1 is TupleType && type2 is TupleType)
             {
                 var t1 = (TupleType)type1;
                 var t2 = (TupleType)type2;

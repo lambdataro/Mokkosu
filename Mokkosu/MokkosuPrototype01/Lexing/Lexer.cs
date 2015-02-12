@@ -59,6 +59,7 @@ namespace Mokkosu.Lexing
                 { '`', TokenType.BQ },
                 { '{', TokenType.LBR },
                 { '}', TokenType.RBR },
+                { '~', TokenType.TILDA },
             };
         }
 

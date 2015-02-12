@@ -1,45 +1,29 @@
-﻿# fun fact n =
-#   pat 0 = n -> 1
-#   else n * fact (n - 1);
-
-# do __prim "println" (fact 5);
-
-# do __prim "println" ((\x y -> __prim "mul" (x, y)) 10 20);
+﻿# ラムダ計算インタプリタ
 
 
-# do println (__prim "concat" ("abc", "def"));
+type Expr = Num(Int) | Add(Expr, Expr) | Mul(Expr, Expr);
+
+let test = Add(Num(3), Mul(Num(4), Num(5)));
+
+fun eval expr =
+  {
+     Num (x) -> x;
+	 Add (e1, e2) -> eval e1 + eval e2;
+	 Mul (e1, e2) -> eval e1 * eval e2
+  } expr;
 
 
-# do println (pat x ? x > 3 = 2 -> 123 else 456);
+println (eval test);
 
-# fun f x = f x;
-# do f 5;
+#[
+type color = red | green | blue;
 
-# fun f x = 
-# do __prim "println" (x) in
-#  f x;
+fun color_num color =
+  {
+    red -> 123;
+	blue -> 234;
+	green -> 345
+  } color;
 
-# do __prim "println" (f 5);
-
-
-# do println (2 == 3);
-
-
-# let f = ;
-
-# do println ((\x -> x) 1);
-
-# let f = (\x y -> y);
-
-# do f 5 6;
-
-# println ("abc" < "abc");
-
-# println (__prim "lt" (1, 2));
-
-# println (123 <> 123);
-
-##[
-do println ({ [] -> 123; x :: xs -> x } [2]);
+println (color_num blue);
 #]
-println "hello";

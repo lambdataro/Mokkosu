@@ -88,7 +88,7 @@ namespace Mokkosu.CodeGenerate
             // Tag クラス
             var tag = module_builder.DefineType("Tag");
             _tag_id = tag.DefineField("id", typeof(int), FieldAttributes.Public);
-            _tag_args = tag.DefineField("args", typeof(object[]), FieldAttributes.Public);
+            _tag_args = tag.DefineField("args", typeof(object), FieldAttributes.Public);
             _tag_type = tag.CreateType();
 
             // MokkosuProgram クラス
@@ -245,8 +245,22 @@ namespace Mokkosu.CodeGenerate
             {
                 var e = (MApp)expr;
                 Compile(il, e.FunExpr, env);
-                var ary = il.DeclareLocal(typeof(object[]));
+                var ary = il.DeclareLocal(typeof(object));
                 il.Emit(OpCodes.Stloc, ary);
+
+                var lbl1 = il.DefineLabel();
+                var lbl2 = il.DefineLabel();
+
+                il.Emit(OpCodes.Ldloc, ary);
+                il.Emit(OpCodes.Isinst, _tag_type);
+                il.Emit(OpCodes.Brfalse, lbl1);
+                il.Emit(OpCodes.Ldloc, ary);
+                Compile(il, e.ArgExpr, env);
+                il.Emit(OpCodes.Stfld, _tag_args);
+                il.Emit(OpCodes.Ldloc, ary);
+                il.Emit(OpCodes.Br, lbl2);
+
+                il.MarkLabel(lbl1);
                 Compile(il, e.ArgExpr, env);
                 il.Emit(OpCodes.Ldloc, ary);
                 il.Emit(OpCodes.Ldc_I4_1);
@@ -259,6 +273,7 @@ namespace Mokkosu.CodeGenerate
                     typeof(object),
                     new Type[] { typeof(object), typeof(object[]) },
                     null);
+                il.MarkLabel(lbl2);
             }
             else if (expr is MIf)
             {
@@ -488,9 +503,20 @@ namespace Mokkosu.CodeGenerate
             if (pat is PVar)
             {
                 var p = (PVar)pat;
-                var loc = il.DeclareLocal(typeof(object));
-                il.Emit(OpCodes.Stloc, loc);
-                return new LEnv().Cons(p.Name, loc);
+                if (p.IsTag)
+                {
+                    il.Emit(OpCodes.Isinst, _tag_type);
+                    il.Emit(OpCodes.Ldfld, _tag_id);
+                    il.Emit(OpCodes.Ldc_I4, p.TagIndex);
+                    il.Emit(OpCodes.Bne_Un, fail_label);
+                    return new LEnv();
+                }
+                else
+                {
+                    var loc = il.DeclareLocal(typeof(object));
+                    il.Emit(OpCodes.Stloc, loc);
+                    return new LEnv().Cons(p.Name, loc);
+                }
             }
             else if (pat is PWild)
             {
@@ -654,6 +680,45 @@ namespace Mokkosu.CodeGenerate
                 il.MarkLabel(lbl_end);
 
                 return env1;
+            }
+            else if (pat is PUserTag)
+            {
+                var p = (PUserTag)pat;
+                var lbl1 = il.DefineLabel();
+                var lbl2 = il.DefineLabel();
+
+                il.Emit(OpCodes.Dup);
+                il.Emit(OpCodes.Isinst, _tag_type);
+                il.Emit(OpCodes.Ldfld, _tag_id);
+                il.Emit(OpCodes.Ldc_I4, p.TagIndex);
+                il.Emit(OpCodes.Bne_Un, lbl1);
+
+                var env = new LEnv();
+                if (p.Args.Count == 1)
+                {
+                    il.Emit(OpCodes.Ldfld, _tag_args);
+                    env = CompilePat(il, p.Args[0], fail_label).Append(env);
+                    il.Emit(OpCodes.Br, lbl2);
+                }
+                else
+                {
+                    for (var i = 0; i < p.Args.Count; i++)
+                    {
+                        il.Emit(OpCodes.Dup);
+                        il.Emit(OpCodes.Ldfld, _tag_args);
+                        il.Emit(OpCodes.Ldc_I4, i);
+                        il.Emit(OpCodes.Ldelem_Ref);
+                        env = CompilePat(il, p.Args[i], lbl1).Append(env);
+                    }
+                    il.Emit(OpCodes.Pop);
+                    il.Emit(OpCodes.Br, lbl2);
+                }
+
+                il.MarkLabel(lbl1);
+                il.Emit(OpCodes.Pop);
+                il.Emit(OpCodes.Br, fail_label);
+                il.MarkLabel(lbl2);
+                return env;
             }
             else
             {

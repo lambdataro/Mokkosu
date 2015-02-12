@@ -994,7 +994,33 @@ namespace Mokkosu.Parsing
             if (ctx.Tkn.Type == TokenType.ID)
             {
                 var str = ctx.ReadStrToken(TokenType.ID);
-                return new PVar(pos, str);
+                if (ctx.Tkn.Type == TokenType.LP)
+                {
+                    ctx.ReadToken(TokenType.LP);
+                    var pat_list = ParsePatList(ctx);
+                    ctx.ReadToken(TokenType.RP);
+                    return new PUserTag(pos, str, pat_list);
+                }
+                else
+                {
+                    return new PVar(pos, str);
+                }
+            }
+            else if (ctx.Tkn.Type == TokenType.TILDA)
+            {
+                ctx.ReadToken(TokenType.TILDA);
+                var str = ctx.ReadStrToken(TokenType.ID);
+                if (ctx.Tkn.Type == TokenType.LP)
+                {
+                    ctx.ReadToken(TokenType.LP);
+                    var pat_list = ParsePatList(ctx);
+                    ctx.ReadToken(TokenType.RP);
+                    return new PUserTag(pos, str, pat_list);
+                }
+                else
+                {
+                    return new PUserTag(pos, str, new List<MPat>());
+                }
             }
             else if (ctx.Tkn.Type == TokenType.UB)
             {

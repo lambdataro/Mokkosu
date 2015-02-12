@@ -27,11 +27,16 @@ namespace Mokkosu.AST
         public string Name { get; private set; }
         public MType Type { get; private set; }
 
+        public bool IsTag { get; set; }
+        public int TagIndex { get; set; }
+
         public PVar(string pos, string name)
             : base(pos)
         {
             Name = name;
             Type = new TypeVar();
+            IsTag = false;
+            TagIndex = 0;
         }
 
         public override string ToString()
@@ -355,6 +360,41 @@ namespace Mokkosu.AST
         public override MSet<string> FreeVars()
         {
             return Pat1.FreeVars().Union(Pat2.FreeVars());
+        }
+    }
+
+    /// <summary>
+    /// ユーザタグパターン
+    /// </summary>
+    class PUserTag : MPat
+    {
+        public string Name { get; private set; }
+        public List<MPat> Args { get; private set; }
+        public List<MType> Types { get; private set; }
+        public int TagIndex { get; set; }
+
+        public PUserTag(string pos, string name, List<MPat> args)
+            : base(pos)
+        {
+            Name = name;
+            Args = args;
+            Types = args.Select(item => (MType)(new TypeVar())).ToList();
+            TagIndex = 0;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0}({1})", Name, Utils.Utils.ListToString(Args));
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set = new MSet<string>();
+            foreach (var pat in Args)
+            {
+                set = pat.FreeVars().Union(set);
+            }
+            return set;
         }
     }
 }
