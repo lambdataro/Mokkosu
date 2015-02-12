@@ -39,6 +39,7 @@
 
 # println (123 <> 123);
 
-
+##[
 do println ({ [] -> 123; x :: xs -> x } [2]);
-
+#]
+println "hello";

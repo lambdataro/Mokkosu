@@ -242,11 +242,36 @@ namespace Mokkosu.Lexing
         {
             if (_strm.Char == '#')
             {
-                while (!_strm.IsEof() && _strm.Char != '\n')
+                _strm.NextChar();
+                if (_strm.Char == '[')
                 {
                     _strm.NextChar();
+                    while (true)
+                    {
+                        if (_strm.IsEof())
+                        {
+                            throw new MError(_strm.Pos + ": 複数行コメントが閉じていない。");
+                        }
+                        if (_strm.Char == '#')
+                        {
+                            _strm.NextChar();
+                            if (!_strm.IsEof() && _strm.Char == ']')
+                            {
+                                _strm.NextChar();
+                                return NextToken();
+                            }
+                        }
+                        _strm.NextChar();
+                    }
                 }
-                return NextToken();
+                else
+                {
+                    while (!_strm.IsEof() && _strm.Char != '\n')
+                    {
+                        _strm.NextChar();
+                    }
+                    return NextToken();
+                } 
             }
             else if (_strm.Char == '\"')
             {
