@@ -40,6 +40,7 @@ namespace Mokkosu.Lexing
                 { "__prim", TokenType.PRIM },
                 { "call", TokenType.CALL },
                 { "cast", TokenType.CAST },
+                { "import", TokenType.IMPORT },
             };
         }
 

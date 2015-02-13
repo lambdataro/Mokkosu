@@ -13,18 +13,26 @@ namespace Mokkosu.TypeInference
     {
         static LinkedList<Assembly> _assembly_list = new LinkedList<Assembly>();
         static string _runtime_dir = RuntimeEnvironment.GetRuntimeDirectory();
-
-        static TypeinfDotNet()
-        {
-            AddAssembly("mscorlib.dll");
-            AddAssembly("System.dll");
-            AddAssembly("System.Core.dll");
-        }
+        static string _exe_dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
         public static void AddAssembly(string name)
         {
-            var asm = Assembly.LoadFrom(Path.Combine(_runtime_dir, name));
-            _assembly_list.AddFirst(asm);
+            var path1 = Path.Combine(_exe_dir, name);
+            var path2 = Path.Combine(_runtime_dir, name);
+            if (File.Exists(path1))
+            {
+                var asm = Assembly.LoadFrom(path1);
+                _assembly_list.AddFirst(asm);
+            }
+            else if (File.Exists(path2))
+            {
+                var asm = Assembly.LoadFrom(path2);
+                _assembly_list.AddFirst(asm);
+            }
+            else
+            {
+                throw new MError("DLL" + name + "が見つからない。");
+            }
         }
 
         public static Type LookupDotNetClass(string pos, string class_name)

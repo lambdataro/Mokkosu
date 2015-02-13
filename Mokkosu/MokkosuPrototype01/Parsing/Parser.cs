@@ -42,6 +42,13 @@ namespace Mokkosu.Parsing
                     ctx.IncludeFile(name);
                     ctx.ReadToken(TokenType.SC);
                 }
+                else if (ctx.Tkn.Type == TokenType.IMPORT)
+                {
+                    ctx.ReadToken(TokenType.IMPORT);
+                    var name = ctx.ReadStrToken(TokenType.STR);
+                    TypeinfDotNet.AddAssembly(name);
+                    ctx.ReadToken(TokenType.SC);
+                }
                 else
                 {
                     top_exprs.Add(ParseTopDoSimple(ctx));

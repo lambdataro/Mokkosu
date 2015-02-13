@@ -2,6 +2,10 @@
 # Mokkosu 標準ライブラリ
 #============================================================
 
+import "mscorlib.dll";
+import "System.dll";
+import "System.Core.dll";
+
 #[
 let println x = __prim "println" (x);
 let print x = __prim "print" (x);

@@ -17,7 +17,7 @@
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN, INCLUDE,
-        AS, IN, PRIM, CALL, CAST,
+        AS, IN, PRIM, CALL, CAST, IMPORT,
         // 制御記号
         EOF
     }
