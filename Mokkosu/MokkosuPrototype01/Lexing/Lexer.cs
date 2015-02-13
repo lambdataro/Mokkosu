@@ -38,6 +38,8 @@ namespace Mokkosu.Lexing
                 { "as", TokenType.AS },
                 { "in", TokenType.IN },
                 { "__prim", TokenType.PRIM },
+                { "call", TokenType.CALL },
+                { "cast", TokenType.CAST },
             };
         }
 
@@ -60,6 +62,7 @@ namespace Mokkosu.Lexing
                 { '{', TokenType.LBR },
                 { '}', TokenType.RBR },
                 { '~', TokenType.TILDA },
+                { '.', TokenType.DOT },
             };
         }
 

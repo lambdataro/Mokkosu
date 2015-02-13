@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Mokkosu.AST
@@ -195,20 +196,20 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
-    /// リファレンス型
+    /// .NETの型
     /// </summary>
-    class RefType : MType
+    class DotNetType : MType
     {
-        public MType ElemType { get; private set; }
+        public Type Type { get; private set; }
 
-        public RefType(MType elem_type)
+        public DotNetType(Type type)
         {
-            ElemType = elem_type;
+            Type = type;
         }
 
         public override string ToString()
         {
-            return "ref<" + ElemType.ToString() + ">";
+            return Type.ToString();
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Mokkosu.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Mokkosu.AST
@@ -666,6 +668,91 @@ namespace Mokkosu.AST
                 set = item.FreeVars().Union(set);
             }
             return set;
+        }
+    }
+
+    class MCallStatic : MExpr
+    {
+        public string ClassName { get; private set; }
+        public string MethodName { get; private set; }
+        public List<MExpr> Args { get; private set; }
+        public List<MType> Types { get; private set; }
+        public MethodInfo Info { get; set; }
+
+        public MCallStatic(string pos, string class_name, string method_name, List<MExpr> args)
+            : base(pos)
+        {
+            ClassName = class_name;
+            MethodName = method_name;
+            Args = args;
+            Types = args.Select(item => (MType)(new TypeVar())).ToList();
+            Info = null;
+        }
+
+        public MCallStatic(string pos, string class_name, string method_name, List<MExpr> args,
+            List<MType> types, MethodInfo info)
+            : base(pos)
+        {
+            ClassName = class_name;
+            MethodName = method_name;
+            Args = args;
+            Types = types;
+            Info = info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("call {0}::{1}({2})",
+                ClassName, MethodName, Utils.Utils.ListToString(Args));
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set = new MSet<string>();
+            foreach (var item in Args)
+            {
+                set = item.FreeVars().Union(set);
+            }
+            return set;
+        }
+    }
+
+    class MCast : MExpr
+    {
+        public string SrcTypeName { get; private set; }
+        public Type SrcType { get; set; }
+        public string DstTypeName { get; private set; }
+        public Type DstType { get; set; }
+        public MExpr Expr { get; private set; }
+
+        public MCast(string pos, string src_name, string dst_name, MExpr expr)
+            : base(pos)
+        {
+            SrcTypeName = src_name;
+            SrcType = null;
+            DstTypeName = dst_name;
+            DstType = null;
+            Expr = expr;
+        }
+
+        public MCast(string pos, string src_name, Type src_type, string dst_name, Type dst_type, MExpr expr)
+            : base(pos)
+        {
+            SrcTypeName = src_name;
+            SrcType = src_type;
+            DstTypeName = dst_name;
+            DstType = dst_type;
+            Expr = expr;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("cast<{0},{1}>({2})", SrcTypeName, DstTypeName, Expr);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Expr.FreeVars();
         }
     }
 

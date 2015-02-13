@@ -496,6 +496,45 @@ namespace Mokkosu.CodeGenerate
                 var loc = env.Lookup(e.Name);
                 il.Emit(OpCodes.Ldloc, loc);
             }
+            else if (expr is MCallStatic)
+            {
+                var e = (MCallStatic)expr;
+
+                for (int i = 0; i < e.Args.Count; i++)
+                {
+                    Compile(il, e.Args[i], env);
+                    if (e.Types[i] is IntType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    }
+                    else if (e.Types[i] is DoubleType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(double));
+                    }
+                    else if (e.Types[i] is CharType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(char));
+                    }
+                    else if (e.Types[i] is BoolType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                }
+
+                il.Emit(OpCodes.Call, e.Info);
+
+                if (e.Info.ReturnType == typeof(void))
+                {
+                    il.Emit(OpCodes.Ldc_I4_0);
+                }
+
+            }
+            else if (expr is MCast)
+            {
+                var e = (MCast)expr;
+                Compile(il, e.Expr, env);
+                il.Emit(OpCodes.Castclass, e.DstType);
+            }
             else
             {
                 throw new NotImplementedException();

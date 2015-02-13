@@ -161,6 +161,18 @@ namespace Mokkosu.ClosureConversion
                 var list = e.Args.Select(x => Conv(x, ctx)).ToList();
                 return new MPrim(e.Pos, e.Name, list, e.ArgTypes, e.RetType);
             }
+            else if (expr is MCallStatic)
+            {
+                var e = (MCallStatic)expr;
+                var list = e.Args.Select(x => Conv(x, ctx)).ToList();
+                return new MCallStatic(e.Pos, e.ClassName, e.MethodName, list, e.Types, e.Info);
+            }
+            else if (expr is MCast)
+            {
+                var e = (MCast)expr;
+                return new MCast(e.Pos, e.SrcTypeName, e.SrcType, 
+                    e.DstTypeName, e.DstType, Conv(e.Expr, ctx));
+            }
             else if (expr is MVarClos)
             {
                 var e = (MVarClos)expr;

@@ -232,6 +232,10 @@ namespace Mokkosu.TypeInference
                 var types = t.Types.Select(typ => MapTypeParam(typ, dict)).ToList();
                 return new TupleType(types);
             }
+            else if (type is DotNetType)
+            {
+                return type;
+            }
             else
             {
                 throw new NotImplementedException();
@@ -523,6 +527,35 @@ namespace Mokkosu.TypeInference
                 Unification(expr.Pos, type, e.RetType);
                 InferencePrim(e.Pos, e.Name, e.ArgTypes, e.RetType);
             }
+            else if (expr is MCallStatic)
+            {
+                var e = (MCallStatic)expr;
+                for (var i = 0; i < e.Args.Count; i++)
+                {
+                    Inference(e.Args[i], e.Types[i], tenv, ctx);
+                }
+                var method = TypeinfDotNet.LookupStaticMethod(e.Pos, e.ClassName, e.MethodName, e.Types);
+                e.Info = method;
+                if (method.ReturnType == typeof(void))
+                {
+                    Unification(e.Pos, type, new UnitType());
+                }
+                else
+                {
+                    var ret_type = TypeinfDotNet.DotNetTypeToMokkosuType(method.ReturnType);
+                    Unification(e.Pos, type, ret_type);
+                }
+            }
+            else if (expr is MCast)
+            {
+                var e = (MCast)expr;
+                var src_type = TypeinfDotNet.LookupDotNetClass(e.Pos, e.SrcTypeName);
+                var dst_type = TypeinfDotNet.LookupDotNetClass(e.Pos, e.DstTypeName);
+                e.SrcType = src_type;
+                e.DstType = dst_type;
+                Inference(e.Expr, TypeinfDotNet.DotNetTypeToMokkosuType(src_type), tenv, ctx);
+                Unification(e.Pos, type, TypeinfDotNet.DotNetTypeToMokkosuType(dst_type));
+            }
             else
             {
                 throw new NotImplementedException();
@@ -572,6 +605,10 @@ namespace Mokkosu.TypeInference
                 var t = (TupleType)type;
                 var args = t.Types.Select(typ => ReduceType(typ)).ToList();
                 return new TupleType(args);
+            }
+            else if (type is DotNetType)
+            {
+                return type;
             }
             else
             {
@@ -968,6 +1005,10 @@ namespace Mokkosu.TypeInference
                 }
                 return b;
             }
+            else if (type is DotNetType)
+            {
+                return false;
+            }
             else
             {
                 throw new NotImplementedException();
@@ -1086,6 +1127,19 @@ namespace Mokkosu.TypeInference
             {
                 return;
             }
+            else if (type1 is DotNetType && type2 is DotNetType)
+            {
+                var t1 = (DotNetType)type1;
+                var t2 = (DotNetType)type2;
+                if (t1.Type == t2.Type)
+                {
+                    return;
+                }
+                else
+                {
+                    throw new MError(pos + ": 型エラー (単一化エラー)");
+                }
+            }
             else
             {
                 throw new MError(pos + ": 型エラー (単一化エラー)");
@@ -1147,6 +1201,10 @@ namespace Mokkosu.TypeInference
                     set = set.Union(FreeTypeVars(typ));
                 }
                 return set;
+            }
+            else if (type is DotNetType)
+            {
+                return new MSet<int>();
             }
             else
             {
@@ -1309,6 +1367,10 @@ namespace Mokkosu.TypeInference
                 var t = (TupleType)type;
                 var types = t.Types.Select(typ => MapTypeVar(map, typ)).ToList();
                 return new TupleType(types);
+            }
+            else if (type is DotNetType)
+            {
+                return type;
             }
             else
             {

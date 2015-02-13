@@ -13,11 +13,11 @@
         LBK, RBK, COLCOL, AMPAMP, BARBAR,
         AMP, ASTAST, LTLT, GTGT, PLSPLS,
         LTBAR, BARGT, COLEQ, BQ,
-        LBR, RBR, TILDA,
+        LBR, RBR, TILDA, DOT,
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN, INCLUDE,
-        AS, IN, PRIM,
+        AS, IN, PRIM, CALL, CAST,
         // 制御記号
         EOF
     }

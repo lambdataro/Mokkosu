@@ -1,9 +1,11 @@
 ﻿using Mokkosu.AST;
 using Mokkosu.Lexing;
+using Mokkosu.TypeInference;
 using Mokkosu.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Mokkosu.Parsing
 {
@@ -174,6 +176,14 @@ namespace Mokkosu.Parsing
                 var t = ParseType(ctx);
                 ctx.ReadToken(TokenType.RBK);
                 return new ListType(t);
+            }
+            else if (ctx.Tkn.Type == TokenType.LBR)
+            {
+                ctx.ReadToken(TokenType.LBR);
+                var name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.RBR);
+                var t = TypeinfDotNet.LookupDotNetClass(ctx.Tkn.Pos, name);
+                return new DotNetType(t);
             }
             else if (ctx.Tkn.Type == TokenType.ID)
             {
@@ -813,6 +823,30 @@ namespace Mokkosu.Parsing
             {
                 return ParseBlock(ctx);
             }
+            else if (ctx.Tkn.Type == TokenType.CALL)
+            {
+                ctx.ReadToken(TokenType.CALL);
+                var cls_name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.COLCOL);
+                var met_name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.LP);
+                var args = ParseExprList(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MCallStatic(pos, cls_name, met_name, args);
+            }
+            else if (ctx.Tkn.Type == TokenType.CAST)
+            {
+                ctx.ReadToken(TokenType.CAST);
+                ctx.ReadToken(TokenType.LT);
+                var src = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.COM);
+                var dst = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.GT);
+                ctx.ReadToken(TokenType.LP);
+                var expr = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MCast(pos, src, dst, expr);
+            }
             else
             {
                 ctx.SyntaxError();
@@ -924,6 +958,19 @@ namespace Mokkosu.Parsing
                 ret_expr = new MCons(expr.Pos, expr, ret_expr);
             }
             return ret_expr;
+        }
+
+        static string ParseDotNetName(ParseContext ctx)
+        {
+            var sb = new StringBuilder();
+            sb.Append(ctx.ReadStrToken(TokenType.ID));
+            while (ctx.Tkn.Type == TokenType.DOT)
+            {
+                ctx.ReadToken(TokenType.DOT);
+                sb.Append(".");
+                sb.Append(ctx.ReadStrToken(TokenType.ID));
+            }
+            return sb.ToString();
         }
 
         #endregion
