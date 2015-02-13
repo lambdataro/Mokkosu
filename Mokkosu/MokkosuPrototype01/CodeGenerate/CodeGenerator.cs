@@ -15,6 +15,8 @@ namespace Mokkosu.CodeGenerate
     
     static class CodeGenerator
     {
+        static int _count = 0;
+
         static Dictionary<string, MethodBuilder> _function_table;
 
         static FieldInfo _value_ref_field;
@@ -33,6 +35,11 @@ namespace Mokkosu.CodeGenerate
             CodeGeneratorCommon.
                 SystemMethod("mscorlib.dll", "System.Object", "Equals",
                 new Type[] { typeof(object) });
+
+        static MethodInfo _delegate_create =
+            CodeGeneratorCommon.
+                SystemMethod("mscorlib.dll", "System.Delegate", "CreateDelegate",
+                new Type[] { typeof(Type), typeof(MethodInfo) });
 
         static ConstructorInfo _application_exception =
             CodeGeneratorCommon.
@@ -72,6 +79,8 @@ namespace Mokkosu.CodeGenerate
 
         static MethodInfo _error;
 
+        static TypeBuilder _type_builder;
+
         public static AssemblyBuilder Start(string name, ClosureConversionResult cc_result)
         {
             _function_table = new Dictionary<string, MethodBuilder>();
@@ -95,6 +104,7 @@ namespace Mokkosu.CodeGenerate
 
             // MokkosuProgram クラス
             var type_builder = module_builder.DefineType("MokkosuProgram");
+            _type_builder = type_builder;
 
             foreach (var f in cc_result.FunctionTable)
             {
@@ -127,6 +137,16 @@ namespace Mokkosu.CodeGenerate
             type_builder.CreateType();
             assembly_builder.SetEntryPoint(builder);
             return assembly_builder;
+        }
+
+        static string GenDelegateName()
+        {
+            return string.Format("delegate@{0:000}", ++_count);
+        }
+
+        static string GenFieldName()
+        {
+            return string.Format("field@{0:000}", ++_count);
         }
 
         static void DefinePrimFun(TypeBuilder type_builder)
@@ -624,11 +644,63 @@ namespace Mokkosu.CodeGenerate
                     il.Emit(OpCodes.Box, e.Info.ReturnType);
                 }
             }
+            else if (expr is MDelegate)
+            {
+                var e = (MDelegate)expr;
+
+                // メソッドを生成
+                var method = _type_builder.DefineMethod(GenDelegateName(), 
+                    MethodAttributes.Static, typeof(void), e.ParamType);
+                var delil = method.GetILGenerator();
+
+                var field = _type_builder.DefineField(GenFieldName(), 
+                    typeof(object[]), FieldAttributes.Static);
+
+                Compile(il, e.Expr, env);
+                il.Emit(OpCodes.Stsfld, field);
+
+                delil.Emit(OpCodes.Ldsfld, field);
+                var fun = delil.DeclareLocal(typeof(object));
+                delil.Emit(OpCodes.Stloc, fun);
+
+                var ary = delil.DeclareLocal(typeof(object[]));
+                delil.Emit(OpCodes.Ldc_I4, e.ParamType.Length);
+                delil.Emit(OpCodes.Newarr, typeof(object));
+                delil.Emit(OpCodes.Stloc, ary);
+                for (int i = 0; i < e.ParamType.Length; i++)
+                {
+                    delil.Emit(OpCodes.Ldloc, ary);
+                    delil.Emit(OpCodes.Ldc_I4, i);
+                    delil.Emit(OpCodes.Ldarg, i);
+                    delil.Emit(OpCodes.Stelem, typeof(object));
+                }
+                delil.Emit(OpCodes.Ldloc, ary);
+                delil.Emit(OpCodes.Ldloc, fun);
+                delil.Emit(OpCodes.Ldc_I4_1);
+                delil.Emit(OpCodes.Ldelem_Ref);
+                delil.Emit(OpCodes.Ldloc, fun);
+                delil.Emit(OpCodes.Ldc_I4_0);
+                delil.Emit(OpCodes.Ldelem_Ref);
+                delil.EmitCalli(OpCodes.Calli,
+                    CallingConventions.Standard,
+                    typeof(object),
+                    new Type[] { typeof(object), typeof(object[]) },
+                    null);
+                delil.Emit(OpCodes.Pop);
+                delil.Emit(OpCodes.Ret);
+                // メソッドここまで
+
+                il.Emit(OpCodes.Ldnull);
+                il.Emit(OpCodes.Ldftn, method);
+                il.Emit(OpCodes.Newobj, e.CstrInfo);
+            }
             else
             {
                 throw new NotImplementedException();
             }
         }
+
+
 
         static LEnv CompilePat(ILGenerator il, MPat pat, Label fail_label)
         {

@@ -946,7 +946,7 @@ namespace Mokkosu.CodeGenerate
 
         public static MethodInfo DefineError(TypeBuilder type_builder)
         {
-            var info = type_builder.DefineMethod("print",
+            var info = type_builder.DefineMethod("error",
                 MethodAttributes.Static, typeof(object),
                 new Type[] { typeof(object) });
             var il = info.GetILGenerator();

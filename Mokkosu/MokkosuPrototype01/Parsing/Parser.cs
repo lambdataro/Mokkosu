@@ -906,6 +906,13 @@ namespace Mokkosu.Parsing
                 }
                 return new MNewClass(pos, cls_name, args);
             }
+            else if (ctx.Tkn.Type == TokenType.DELEGATE)
+            {
+                ctx.ReadToken(TokenType.DELEGATE);
+                var cls_name = ParseDotNetName(ctx);
+                var expr = ParseFactor(ctx);
+                return new MDelegate(pos, cls_name, expr);
+            }
             else
             {
                 ctx.SyntaxError();
@@ -1100,17 +1107,17 @@ namespace Mokkosu.Parsing
             if (ctx.Tkn.Type == TokenType.ID)
             {
                 var str = ctx.ReadStrToken(TokenType.ID);
-                if (ctx.Tkn.Type == TokenType.LP)
-                {
-                    ctx.ReadToken(TokenType.LP);
-                    var pat_list = ParsePatList(ctx);
-                    ctx.ReadToken(TokenType.RP);
-                    return new PUserTag(pos, str, pat_list);
-                }
-                else
-                {
+                //if (ctx.Tkn.Type == TokenType.LP)
+                //{
+                //    ctx.ReadToken(TokenType.LP);
+                //    var pat_list = ParsePatList(ctx);
+                //    ctx.ReadToken(TokenType.RP);
+                //    return new PUserTag(pos, str, pat_list);
+                //}
+                //else
+                //{
                     return new PVar(pos, str);
-                }
+                //}
             }
             else if (ctx.Tkn.Type == TokenType.TILDA)
             {

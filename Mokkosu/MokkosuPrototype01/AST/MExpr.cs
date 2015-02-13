@@ -848,6 +848,50 @@ namespace Mokkosu.AST
         }
     }
 
+    class MDelegate : MExpr
+    {
+        public string ClassName { get; private set; }
+        public MExpr Expr { get; private set; }
+        public MType ExprType { get; private set; }
+        public Type[] ParamType { get; set; }
+        public Type ClassType { get; set; }
+        public ConstructorInfo CstrInfo { get; set; }
+
+        public MDelegate(string pos, string class_name, MExpr expr)
+            : base(pos)
+        {
+            ClassName = class_name;
+            Expr = expr;
+            ExprType = new TypeVar();
+            ParamType = null;
+            ClassType = null;
+            CstrInfo = null;
+        }
+
+        public MDelegate(string pos, string class_name, MExpr expr, 
+            MType expr_type, Type[] param_type, Type class_type, ConstructorInfo cstr_info)
+            : base(pos)
+        {
+            ClassName = class_name;
+            Expr = expr;
+            ExprType = expr_type;
+            ParamType = param_type;
+            ClassType = class_type;
+            CstrInfo = cstr_info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("delegate {0}({1})",
+                ClassName, Expr);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Expr.FreeVars();
+        }
+    }
+
     /// <summary>
     /// 引数の値を取得する (クロージャ変換後に利用)
     /// </summary>

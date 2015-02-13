@@ -591,6 +591,22 @@ namespace Mokkosu.TypeInference
                     Unification(e.Pos, type, ret_type);
                 }
             }
+            else if (expr is MDelegate)
+            {
+                var e = (MDelegate)expr;
+                var t = TypeinfDotNet.LookupDotNetClass(e.Pos, e.ClassName);
+                var invoke = t.GetMethod("Invoke");
+                var param_info = invoke.GetParameters();
+                var param_type = param_info.Select(info => info.ParameterType).ToArray();
+                var param_mtype = param_type.Select(typ => 
+                    TypeinfDotNet.DotNetTypeToMokkosuType(typ)).ToList();
+                Inference(e.Expr, e.ExprType, tenv, ctx);
+                Unification(e.Pos, e.ExprType, new FunType(new TupleType(param_mtype), new UnitType()));
+                Unification(e.Pos, type, new DotNetType(t));
+                e.ParamType = param_type;
+                e.ClassType = t;
+                e.CstrInfo = t.GetConstructor(new Type[] { typeof(object), typeof(IntPtr) });
+            }
             else
             {
                 throw new NotImplementedException();

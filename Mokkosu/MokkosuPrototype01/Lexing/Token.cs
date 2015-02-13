@@ -18,7 +18,7 @@
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN, INCLUDE,
         AS, IN, PRIM, CALL, CAST, IMPORT,
-        NEW, 
+        NEW, GET, SET, DELEGATE,
         // 制御記号
         EOF
     }

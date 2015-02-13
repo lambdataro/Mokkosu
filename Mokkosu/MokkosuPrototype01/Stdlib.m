@@ -6,14 +6,14 @@ import "mscorlib.dll";
 import "System.dll";
 import "System.Core.dll";
 
-#[
+
 let println x = __prim "println" (x);
 let print x = __prim "print" (x);
 let tostring x = __prim "tostring" (x);
 let error x = __prim "error" (x);
 
-let __operator_ltbar x f = f x;
-let __operator_bargt f x = f x;
+let __operator_ltbar f x = f x;
+let __operator_bargt x f = f x;
 
 let __operator_eqeq x y = __prim "eq" (x, y);
 let __operator_ltgt x y = __prim "ne" (x, y);
@@ -26,6 +26,3 @@ let __operator_pls x y = __prim "add" (x, y);
 let __operator_mns x y = __prim "sub" (x, y);
 let __operator_ast x y = __prim "mul" (x, y);
 let __operator_sls x y = __prim "div" (x, y);
-#]
-
-

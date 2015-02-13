@@ -42,6 +42,9 @@ namespace Mokkosu.Lexing
                 { "cast", TokenType.CAST },
                 { "import", TokenType.IMPORT },
                 { "new", TokenType.NEW },
+                { "get", TokenType.GET },
+                { "set", TokenType.SET },
+                { "delegate", TokenType.DELEGATE },
             };
         }
 
