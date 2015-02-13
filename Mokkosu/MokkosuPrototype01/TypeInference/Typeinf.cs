@@ -36,7 +36,6 @@ namespace Mokkosu.TypeInference
             return tenv; 
         }
 
-
         /// <summary>
         /// トップレベル式の型検査＆型推論
         /// </summary>
@@ -47,22 +46,23 @@ namespace Mokkosu.TypeInference
             if (top_expr is MUserTypeDef)
             {
                 TypeinfUserTypeDef((MUserTypeDef)top_expr, ctx);
-                System.Console.WriteLine(ctx);
+                // System.Console.WriteLine(ctx);
             }
             else if (top_expr is MTopDo)
             {
                 TypeinfTopDo((MTopDo)top_expr, ctx);
-                System.Console.WriteLine(top_expr);
+                // System.Console.WriteLine(top_expr);
             }
             else if (top_expr is MTopLet)
             {
-                TypeinfTopLet((MTopLet)top_expr, ctx);
-                System.Console.WriteLine(top_expr);
+                var t = (MTopLet)top_expr;
+                TypeinfTopLet(t, ctx);
+                // System.Console.WriteLine(top_expr);
             }
             else if (top_expr is MTopFun)
             {
                 TypeinfTopFun((MTopFun)top_expr, ctx);
-                System.Console.WriteLine(top_expr);
+                // System.Console.WriteLine(top_expr);
             }
             else
             {

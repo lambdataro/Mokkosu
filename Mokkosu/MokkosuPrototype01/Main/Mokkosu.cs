@@ -4,6 +4,7 @@ using Mokkosu.Input;
 using Mokkosu.Lexing;
 using Mokkosu.Parsing;
 using Mokkosu.TypeInference;
+using Mokkosu.Utils;
 using System;
 using System.IO;
 using System.Linq;
@@ -15,11 +16,21 @@ namespace Mokkosu.Main
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Mokkosu");
-            Test(args);
+            try
+            {
+                Start(args);
+            }
+            catch(MError e)
+            {
+                Console.Error.WriteLine(e.Message);
+            }
+            catch(NotImplementedException e)
+            {
+                Console.Error.WriteLine("実装の誤りです。作者に連絡してください。");
+            }
         }
 
-        static void Test(string[] args)
+        static void Start(string[] args)
         {
             var input_stream = new InputStream();
 
@@ -36,13 +47,9 @@ namespace Mokkosu.Main
 
             var parse_result = Parser.Start(parse_context);
 
-            Console.WriteLine(parse_result);
-
             Typeinf.Start(parse_result);
             var expr = TopToExpr.Start(parse_result);
             var closure_result = ClosureConverter.Start(expr);
-
-            Console.WriteLine(closure_result);
 
             var name = Path.GetFileNameWithoutExtension(args.Last());
 

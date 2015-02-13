@@ -62,6 +62,7 @@
     <Compile Include="Parsing\ParseContext.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\ParseResult.cs" />
+    <Compile Include="TypeInference\ShowType.cs" />
     <Compile Include="TypeInference\Typeinf.cs" />
     <Compile Include="TypeInference\TypeInfContext.cs" />
     <Compile Include="TypeInference\TypeinfDotNet.cs" />

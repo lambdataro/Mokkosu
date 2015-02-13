@@ -1,13 +1,7 @@
-﻿type Expr = Num(Int) | Add (Expr, Expr);
+﻿import "System.Windows.Forms.dll";
 
-#[
-fun eval e =
-  e |> {
-    ~Num(n) -> n;
-    ~Add(e1, e2) -> eval e1 + eval e2;
-  };
-#]
+let form = new System.Windows.Forms.Form();
 
-let test = Add (Num 3, Num 4);
+form.add_Click(delegate System.EventHandler (\_ -> println "aaa"));
 
-println <| eval test;
+form.ShowDialog();
