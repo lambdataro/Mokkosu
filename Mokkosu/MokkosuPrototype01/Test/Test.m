@@ -1,3 +1,4 @@
 ﻿
 
-call System.Console::WriteLine(cast<System.String,System.Object>("hello"));
+let rnd = new System.Random();
+call System.Console::WriteLine(rnd.Next());

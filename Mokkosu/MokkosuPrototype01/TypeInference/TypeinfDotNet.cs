@@ -61,6 +61,22 @@ namespace Mokkosu.TypeInference
             return method;
         }
 
+        public static ConstructorInfo LookupConstructor(string pos, string class_name, List<MType> arg_types)
+        {
+            var t = LookupDotNetClass(pos, class_name);
+            var ts = arg_types.Select(typ => MokkosuTypeToDotNetType(pos, typ)).ToArray();
+            var constructor = t.GetConstructor(ts);
+            return constructor;
+        }
+
+        public static MethodInfo LookupInstanceMethod(string pos, MType object_type, string method_name, List<MType> arg_types)
+        {
+            var t = MokkosuTypeToDotNetType(pos, object_type);
+            var ts = arg_types.Select(typ => MokkosuTypeToDotNetType(pos, typ)).ToArray();
+            var method = t.GetMethod(method_name, ts);
+            return method;
+        }
+
         static Type MokkosuTypeToDotNetType(string pos, MType mtype)
         {
             if (mtype is TypeVar)

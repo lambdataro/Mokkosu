@@ -700,7 +700,7 @@ namespace Mokkosu.Parsing
 
         static MExpr ParseAppExpr(ParseContext ctx)
         {
-            var lhs = ParseFactor(ctx);
+            var lhs = ParseInvoke(ctx);
 
             while (ctx.Tkn.Type == TokenType.LP || ctx.Tkn.Type == TokenType.ID ||
                 ctx.Tkn.Type == TokenType.INT || ctx.Tkn.Type == TokenType.DBL ||
@@ -710,8 +710,33 @@ namespace Mokkosu.Parsing
                 ctx.Tkn.Type == TokenType.LBK)
             {
                 var pos = ctx.Tkn.Pos;
-                var rhs = ParseFactor(ctx);
+                var rhs = ParseInvoke(ctx);
                 lhs = new MApp(pos, lhs, rhs);
+            }
+            return lhs;
+        }
+
+        static MExpr ParseInvoke(ParseContext ctx)
+        {
+            var lhs = ParseFactor(ctx);
+            while (ctx.Tkn.Type == TokenType.DOT)
+            {
+                ctx.ReadToken(TokenType.DOT);
+                var pos = ctx.Tkn.Pos;
+                var name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.LP);
+                List<MExpr> args;
+                if (ctx.Tkn.Type == TokenType.RP)
+                {
+                    ctx.ReadToken(TokenType.RP);
+                    args = new List<MExpr>();
+                }
+                else
+                {
+                    args = ParseExprList(ctx);
+                    ctx.ReadToken(TokenType.RP);
+                }
+                lhs = new MInvoke(pos, lhs, name, args);
             }
             return lhs;
         }
@@ -837,8 +862,17 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.COLCOL);
                 var met_name = ctx.ReadStrToken(TokenType.ID);
                 ctx.ReadToken(TokenType.LP);
-                var args = ParseExprList(ctx);
-                ctx.ReadToken(TokenType.RP);
+                List<MExpr> args;
+                if (ctx.Tkn.Type == TokenType.RP)
+                {
+                    ctx.ReadToken(TokenType.RP);
+                    args = new List<MExpr>();
+                }
+                else
+                {
+                    args = ParseExprList(ctx);
+                    ctx.ReadToken(TokenType.RP);
+                }
                 return new MCallStatic(pos, cls_name, met_name, args);
             }
             else if (ctx.Tkn.Type == TokenType.CAST)
@@ -853,6 +887,24 @@ namespace Mokkosu.Parsing
                 var expr = ParseExpr(ctx);
                 ctx.ReadToken(TokenType.RP);
                 return new MCast(pos, src, dst, expr);
+            }
+            else if (ctx.Tkn.Type == TokenType.NEW)
+            {
+                ctx.ReadToken(TokenType.NEW);
+                var cls_name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.LP);
+                List<MExpr> args;
+                if (ctx.Tkn.Type == TokenType.RP)
+                {
+                    ctx.ReadToken(TokenType.RP);
+                    args = new List<MExpr>();
+                }
+                else
+                {
+                    args = ParseExprList(ctx);
+                    ctx.ReadToken(TokenType.RP);
+                }
+                return new MNewClass(pos, cls_name, args);
             }
             else
             {

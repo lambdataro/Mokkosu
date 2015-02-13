@@ -556,6 +556,41 @@ namespace Mokkosu.TypeInference
                 Inference(e.Expr, TypeinfDotNet.DotNetTypeToMokkosuType(src_type), tenv, ctx);
                 Unification(e.Pos, type, TypeinfDotNet.DotNetTypeToMokkosuType(dst_type));
             }
+            else if (expr is MNewClass)
+            {
+                var e = (MNewClass)expr;
+                for (var i = 0; i < e.Args.Count; i++)
+                {
+                    Inference(e.Args[i], e.Types[i], tenv, ctx);
+                }
+                var constructor = TypeinfDotNet.LookupConstructor(e.Pos, e.ClassName, e.Types);
+                e.Info = constructor;
+
+                var t = TypeinfDotNet.DotNetTypeToMokkosuType(constructor.DeclaringType);
+                Unification(e.Pos, type, t);
+            }
+            else if (expr is MInvoke)
+            {
+                var e = (MInvoke)expr;
+
+                Inference(e.Expr, e.ExprType, tenv, ctx);
+                for (var i = 0; i < e.Args.Count; i++)
+                {
+                    Inference(e.Args[i], e.Types[i], tenv, ctx);
+                }
+
+                var method = TypeinfDotNet.LookupInstanceMethod(e.Pos, e.ExprType, e.MethodName, e.Types);
+                e.Info = method;
+                if (method.ReturnType == typeof(void))
+                {
+                    Unification(e.Pos, type, new UnitType());
+                }
+                else
+                {
+                    var ret_type = TypeinfDotNet.DotNetTypeToMokkosuType(method.ReturnType);
+                    Unification(e.Pos, type, ret_type);
+                }
+            }
             else
             {
                 throw new NotImplementedException();

@@ -41,6 +41,7 @@ namespace Mokkosu.Lexing
                 { "call", TokenType.CALL },
                 { "cast", TokenType.CAST },
                 { "import", TokenType.IMPORT },
+                { "new", TokenType.NEW },
             };
         }
 

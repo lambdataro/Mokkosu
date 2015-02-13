@@ -756,6 +756,98 @@ namespace Mokkosu.AST
         }
     }
 
+    class MNewClass : MExpr
+    {
+        public string ClassName { get; private set; }
+        public List<MExpr> Args { get; private set; }
+        public List<MType> Types { get; private set; }
+        public ConstructorInfo Info { get; set; }
+
+        public MNewClass(string pos, string class_name, List<MExpr> args)
+            : base(pos)
+        {
+            ClassName = class_name;
+            Args = args;
+            Types = args.Select(item => (MType)(new TypeVar())).ToList();
+            Info = null;
+        }
+
+        public MNewClass(string pos, string class_name, List<MExpr> args,
+            List<MType> types, ConstructorInfo info)
+            : base(pos)
+        {
+            ClassName = class_name;
+            Args = args;
+            Types = types;
+            Info = info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("new {0}({1})",
+                ClassName,  Utils.Utils.ListToString(Args));
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set = new MSet<string>();
+            foreach (var item in Args)
+            {
+                set = item.FreeVars().Union(set);
+            }
+            return set;
+        }
+    }
+
+    class MInvoke : MExpr
+    {
+        public MExpr Expr { get; private set; }
+        public MType ExprType { get; private set; }
+        public string MethodName { get; private set; }
+        public List<MExpr> Args { get; private set; }
+        public List<MType> Types { get; private set; }
+        public MethodInfo Info { get; set; }
+
+        public MInvoke(string pos, MExpr expr, string method_name, List<MExpr> args)
+            : base(pos)
+        {
+            Expr = expr;
+            ExprType = new TypeVar();
+            MethodName = method_name;
+            Args = args;
+            Types = args.Select(item => (MType)(new TypeVar())).ToList();
+            Info = null;
+        }
+
+        public MInvoke(string pos, MExpr expr, MType expr_type, string method_name, 
+            List<MExpr> args, List<MType> types, MethodInfo info)
+            : base(pos)
+        {
+            Expr = expr;
+            ExprType = expr_type;
+            MethodName = method_name;
+            Args = args;
+            Types = types;
+            Info = info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}.{1}({2})",
+                Expr, MethodName, Utils.Utils.ListToString(Args));
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set = Expr.FreeVars();
+            foreach (var item in Args)
+            {
+                set = item.FreeVars().Union(set);
+            }
+            return set;
+        }
+    }
+
     /// <summary>
     /// 引数の値を取得する (クロージャ変換後に利用)
     /// </summary>

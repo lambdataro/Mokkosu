@@ -527,13 +527,102 @@ namespace Mokkosu.CodeGenerate
                 {
                     il.Emit(OpCodes.Ldc_I4_0);
                 }
-
+                else if (e.Info.ReturnType.IsValueType)
+                {
+                    il.Emit(OpCodes.Box, e.Info.ReturnType);
+                }
             }
             else if (expr is MCast)
             {
                 var e = (MCast)expr;
                 Compile(il, e.Expr, env);
                 il.Emit(OpCodes.Castclass, e.DstType);
+            }
+            else if (expr is MNewClass)
+            {
+                var e = (MNewClass)expr;
+
+                for (int i = 0; i < e.Args.Count; i++)
+                {
+                    Compile(il, e.Args[i], env);
+                    if (e.Types[i] is IntType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    }
+                    else if (e.Types[i] is DoubleType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(double));
+                    }
+                    else if (e.Types[i] is CharType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(char));
+                    }
+                    else if (e.Types[i] is BoolType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                }
+
+                il.Emit(OpCodes.Newobj, e.Info);
+
+                if (e.Info.DeclaringType.IsValueType)
+                {
+                    il.Emit(OpCodes.Box, e.Info.DeclaringType);
+                }
+            }
+            else if (expr is MInvoke)
+            {
+                var e = (MInvoke)expr;
+
+                Compile(il, e.Expr, env);
+                if (e.ExprType is IntType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                }
+                else if (e.ExprType is DoubleType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(double));
+                }
+                else if (e.ExprType is CharType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(char));
+                }
+                else if (e.ExprType is BoolType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                }
+
+                for (int i = 0; i < e.Args.Count; i++)
+                {
+                    Compile(il, e.Args[i], env);
+                    if (e.Types[i] is IntType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    }
+                    else if (e.Types[i] is DoubleType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(double));
+                    }
+                    else if (e.Types[i] is CharType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(char));
+                    }
+                    else if (e.Types[i] is BoolType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                }
+
+                il.Emit(OpCodes.Callvirt, e.Info);
+
+                if (e.Info.ReturnType == typeof(void))
+                {
+                    il.Emit(OpCodes.Ldc_I4_0);
+                }
+                else if (e.Info.ReturnType.IsValueType)
+                {
+                    il.Emit(OpCodes.Box, e.Info.ReturnType);
+                }
             }
             else
             {

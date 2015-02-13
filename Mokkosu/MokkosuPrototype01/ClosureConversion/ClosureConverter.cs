@@ -173,6 +173,19 @@ namespace Mokkosu.ClosureConversion
                 return new MCast(e.Pos, e.SrcTypeName, e.SrcType, 
                     e.DstTypeName, e.DstType, Conv(e.Expr, ctx));
             }
+            else if (expr is MNewClass)
+            {
+                var e = (MNewClass)expr;
+                var list = e.Args.Select(x => Conv(x, ctx)).ToList();
+                return new MNewClass(e.Pos, e.ClassName, list, e.Types, e.Info);
+            }
+            else if (expr is MInvoke)
+            {
+                var e = (MInvoke)expr;
+                var e2 = Conv(e.Expr, ctx);
+                var list = e.Args.Select(x => Conv(x, ctx)).ToList();
+                return new MInvoke(e.Pos, e2, e.ExprType, e.MethodName, list, e.Types, e.Info);
+            }
             else if (expr is MVarClos)
             {
                 var e = (MVarClos)expr;
