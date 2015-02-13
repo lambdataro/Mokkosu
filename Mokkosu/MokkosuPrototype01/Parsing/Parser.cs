@@ -515,7 +515,7 @@ namespace Mokkosu.Parsing
                 var type = ctx.Tkn.Type;
                 var pos = ctx.Tkn.Pos;
                 ctx.NextToken();
-                var rhs = ParseOrExpr(ctx);
+                var rhs = ParseAndExpr(ctx);
                 switch (type)
                 {
                     case TokenType.BARBAR:
@@ -705,7 +705,7 @@ namespace Mokkosu.Parsing
             while (ctx.Tkn.Type == TokenType.LP || ctx.Tkn.Type == TokenType.ID ||
                 ctx.Tkn.Type == TokenType.INT || ctx.Tkn.Type == TokenType.DBL ||
                 ctx.Tkn.Type == TokenType.STR || ctx.Tkn.Type == TokenType.CHAR ||
-                ctx.Tkn.Type == TokenType.MNS || ctx.Tkn.Type == TokenType.MNSDOT ||
+                ctx.Tkn.Type == TokenType.TILDAMNS || ctx.Tkn.Type == TokenType.TILDAMNSDOT ||
                 ctx.Tkn.Type == TokenType.BANG || ctx.Tkn.Type == TokenType.LBR ||
                 ctx.Tkn.Type == TokenType.LBK)
             {
@@ -777,18 +777,21 @@ namespace Mokkosu.Parsing
                     }
                 }
             }
-            else if (ctx.Tkn.Type == TokenType.MNS)
+            else if (ctx.Tkn.Type == TokenType.TILDAMNS)
             {
+                ctx.ReadToken(TokenType.TILDAMNS);
                 var e = ParseFactor(ctx);
                 return CreateUniop(pos, "__operator_neg", e);
             }
-            else if (ctx.Tkn.Type == TokenType.MNSDOT)
+            else if (ctx.Tkn.Type == TokenType.TILDAMNSDOT)
             {
+                ctx.ReadToken(TokenType.TILDAMNSDOT);
                 var e = ParseFactor(ctx);
                 return CreateUniop(pos, "__operator_negdot", e);
             }
             else if (ctx.Tkn.Type == TokenType.BANG)
             {
+                ctx.ReadToken(TokenType.BANG);
                 var e = ParseFactor(ctx);
                 return CreateUniop(pos, "__operator_bang", e);
             }
@@ -997,7 +1000,14 @@ namespace Mokkosu.Parsing
                 else
                 {
                     ctx.ReadToken(TokenType.SC);
-                    else_expr = ParseBlockItem(var_name, ctx);
+                    if (ctx.Tkn.Type == TokenType.RBR)
+                    {
+                        else_expr = new MRuntimeError(ctx.Tkn.Pos, "パターンマッチ失敗");
+                    }
+                    else
+                    {
+                        else_expr = ParseBlockItem(var_name, ctx);
+                    }
                 }
                 return new MMatch(start_pos, pat, guard, new MVar(var_name), then_expr, else_expr);
             }
@@ -1107,17 +1117,7 @@ namespace Mokkosu.Parsing
             if (ctx.Tkn.Type == TokenType.ID)
             {
                 var str = ctx.ReadStrToken(TokenType.ID);
-                //if (ctx.Tkn.Type == TokenType.LP)
-                //{
-                //    ctx.ReadToken(TokenType.LP);
-                //    var pat_list = ParsePatList(ctx);
-                //    ctx.ReadToken(TokenType.RP);
-                //    return new PUserTag(pos, str, pat_list);
-                //}
-                //else
-                //{
-                    return new PVar(pos, str);
-                //}
+                return new PVar(pos, str);
             }
             else if (ctx.Tkn.Type == TokenType.TILDA)
             {

@@ -66,8 +66,6 @@ namespace Mokkosu.Lexing
                 { '`', TokenType.BQ },
                 { '{', TokenType.LBR },
                 { '}', TokenType.RBR },
-                { '~', TokenType.TILDA },
-                { '.', TokenType.DOT },
             };
         }
 
@@ -490,6 +488,40 @@ namespace Mokkosu.Lexing
                 else
                 {
                     return new Token(Pos, TokenType.BAR);
+                }
+            }
+            else if (_strm.Char == '.')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '.')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.DOTDOT);
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.DOT);
+                }
+            }
+            else if (_strm.Char == '~')
+            {
+                _strm.NextChar();
+                if (_strm.Char == '-')
+                {
+                    _strm.NextChar();
+                    if (_strm.Char == '.')
+                    {
+                        _strm.NextChar();
+                        return new Token(Pos, TokenType.TILDAMNSDOT);
+                    }
+                    else
+                    {
+                        return new Token(Pos, TokenType.TILDAMNS);
+                    }
+                }
+                else
+                {
+                    return new Token(Pos, TokenType.TILDA);
                 }
             }
             else if (_symbols.ContainsKey(_strm.Char))
