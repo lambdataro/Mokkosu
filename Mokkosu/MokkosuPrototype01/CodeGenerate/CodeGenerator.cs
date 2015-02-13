@@ -12,6 +12,7 @@ using Mokkosu.AST;
 namespace Mokkosu.CodeGenerate
 {
     using LEnv = MEnv<LocalBuilder>;
+    using Mokkosu.TypeInference;
     
     static class CodeGenerator
     {
@@ -235,7 +236,7 @@ namespace Mokkosu.CodeGenerate
                 {
                     il.Emit(OpCodes.Ldc_I4_0);
                 }
-                il.Emit(OpCodes.Box, typeof(int));
+                il.Emit(OpCodes.Box, typeof(bool));
             }
             else if (expr is MVar)
             {
@@ -305,7 +306,7 @@ namespace Mokkosu.CodeGenerate
                 Compile(il, e.CondExpr, env);
                 var lbl1 = il.DefineLabel();
                 var lbl2 = il.DefineLabel();
-                il.Emit(OpCodes.Unbox_Any, typeof(int));
+                il.Emit(OpCodes.Unbox_Any, typeof(bool));
                 il.Emit(OpCodes.Brfalse, lbl1);
                 Compile(il, e.ThenExpr, env);
                 il.Emit(OpCodes.Br, lbl2);
@@ -322,7 +323,7 @@ namespace Mokkosu.CodeGenerate
                 var env2 = CompilePat(il, e.Pat, fail_label);
                 var env3 = env2.Append(env);
                 Compile(il, e.Guard, env3);
-                il.Emit(OpCodes.Unbox_Any, typeof(int));
+                il.Emit(OpCodes.Unbox_Any, typeof(bool));
                 il.Emit(OpCodes.Brfalse, fail_label);
                 Compile(il, e.ThenExpr, env3);
                 il.Emit(OpCodes.Br, lbl1);
@@ -523,19 +524,20 @@ namespace Mokkosu.CodeGenerate
                 for (int i = 0; i < e.Args.Count; i++)
                 {
                     Compile(il, e.Args[i], env);
-                    if (e.Types[i] is IntType)
+                    var t = Typeinf.ReduceType(e.Types[i]);
+                    if (t is IntType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(int));
                     }
-                    else if (e.Types[i] is DoubleType)
+                    else if (t is DoubleType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(double));
                     }
-                    else if (e.Types[i] is CharType)
+                    else if (t is CharType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(char));
                     }
-                    else if (e.Types[i] is BoolType)
+                    else if (t is BoolType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(bool));
                     }
@@ -565,19 +567,20 @@ namespace Mokkosu.CodeGenerate
                 for (int i = 0; i < e.Args.Count; i++)
                 {
                     Compile(il, e.Args[i], env);
-                    if (e.Types[i] is IntType)
+                    var t = Typeinf.ReduceType(e.Types[i]);
+                    if (t is IntType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(int));
                     }
-                    else if (e.Types[i] is DoubleType)
+                    else if (t is DoubleType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(double));
                     }
-                    else if (e.Types[i] is CharType)
+                    else if (t is CharType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(char));
                     }
-                    else if (e.Types[i] is BoolType)
+                    else if (t is BoolType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(bool));
                     }
@@ -595,19 +598,22 @@ namespace Mokkosu.CodeGenerate
                 var e = (MInvoke)expr;
 
                 Compile(il, e.Expr, env);
-                if (e.ExprType is IntType)
+
+                var t = Typeinf.ReduceType(e.ExprType);
+
+                if (t is IntType)
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(int));
                 }
-                else if (e.ExprType is DoubleType)
+                else if (t is DoubleType)
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(double));
                 }
-                else if (e.ExprType is CharType)
+                else if (t is CharType)
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(char));
                 }
-                else if (e.ExprType is BoolType)
+                else if (t is BoolType)
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(bool));
                 }
@@ -615,19 +621,20 @@ namespace Mokkosu.CodeGenerate
                 for (int i = 0; i < e.Args.Count; i++)
                 {
                     Compile(il, e.Args[i], env);
-                    if (e.Types[i] is IntType)
+                    var tt = Typeinf.ReduceType(e.Types[i]);
+                    if (tt is IntType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(int));
                     }
-                    else if (e.Types[i] is DoubleType)
+                    else if (tt is DoubleType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(double));
                     }
-                    else if (e.Types[i] is CharType)
+                    else if (tt is CharType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(char));
                     }
-                    else if (e.Types[i] is BoolType)
+                    else if (tt is BoolType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(bool));
                     }
@@ -699,8 +706,6 @@ namespace Mokkosu.CodeGenerate
                 throw new NotImplementedException();
             }
         }
-
-
 
         static LEnv CompilePat(ILGenerator il, MPat pat, Label fail_label)
         {

@@ -707,7 +707,8 @@ namespace Mokkosu.Parsing
                 ctx.Tkn.Type == TokenType.STR || ctx.Tkn.Type == TokenType.CHAR ||
                 ctx.Tkn.Type == TokenType.TILDAMNS || ctx.Tkn.Type == TokenType.TILDAMNSDOT ||
                 ctx.Tkn.Type == TokenType.BANG || ctx.Tkn.Type == TokenType.LBR ||
-                ctx.Tkn.Type == TokenType.LBK)
+                ctx.Tkn.Type == TokenType.LBK || ctx.Tkn.Type == TokenType.TRUE ||
+                ctx.Tkn.Type == TokenType.FALSE)
             {
                 var pos = ctx.Tkn.Pos;
                 var rhs = ParseInvoke(ctx);

@@ -613,7 +613,7 @@ namespace Mokkosu.TypeInference
             }
         }
 
-        static MType ReduceType(MType type)
+        public static MType ReduceType(MType type)
         {
             if (type is TypeVar)
             {
@@ -927,26 +927,36 @@ namespace Mokkosu.TypeInference
                     {
                         if (typescheme.TagSize == p.Args.Count)
                         {
-                            p.TagIndex = typescheme.TagIndex;
-                            var ret_tenv = new TEnv();
-                            for (var i = 0; i < p.Args.Count; i++)
+                            if (p.Args.Count == 0)
                             {
-                                var tenv2 = InferencePat(p.Args[i], p.Types[i], tenv, ctx);
-                                ret_tenv = tenv2.Append(ret_tenv);
-                            }
-                            var arg_type = new TypeVar();
-                            var ret_type = new TypeVar();
-                            Unification(pat.Pos, Instantiate(typescheme), new FunType(arg_type, ret_type));
-                            if (p.Types.Count == 1)
-                            {
-                                Unification(pat.Pos, arg_type, p.Types[0]);
+                                p.TagIndex = typescheme.TagIndex;
+                                var ret_tenv = new TEnv();
+                                Unification(pat.Pos, Instantiate(typescheme), type);
+                                return ret_tenv;
                             }
                             else
                             {
-                                Unification(pat.Pos, arg_type, new TupleType(p.Types));
+                                p.TagIndex = typescheme.TagIndex;
+                                var ret_tenv = new TEnv();
+                                for (var i = 0; i < p.Args.Count; i++)
+                                {
+                                    var tenv2 = InferencePat(p.Args[i], p.Types[i], tenv, ctx);
+                                    ret_tenv = tenv2.Append(ret_tenv);
+                                }
+                                var arg_type = new TypeVar();
+                                var ret_type = new TypeVar();
+                                Unification(pat.Pos, Instantiate(typescheme), new FunType(arg_type, ret_type));
+                                if (p.Types.Count == 1)
+                                {
+                                    Unification(pat.Pos, arg_type, p.Types[0]);
+                                }
+                                else
+                                {
+                                    Unification(pat.Pos, arg_type, new TupleType(p.Types));
+                                }
+                                Unification(pat.Pos, type, ret_type);
+                                return ret_tenv;
                             }
-                            Unification(pat.Pos, type, ret_type);
-                            return ret_tenv;
                         }
                         else
                         {

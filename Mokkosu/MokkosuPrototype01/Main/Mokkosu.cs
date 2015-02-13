@@ -24,7 +24,7 @@ namespace Mokkosu.Main
             {
                 Console.Error.WriteLine(e.Message);
             }
-            catch(NotImplementedException e)
+            catch(NotImplementedException)
             {
                 Console.Error.WriteLine("実装の誤りです。作者に連絡してください。");
             }
