@@ -5,16 +5,38 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuPrototype01", "MokkosuPrototype01\MokkosuPrototype01.csproj", "{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuIDE", "MokkosuIDE\MokkosuIDE.csproj", "{4B73A169-87C3-460E-9AE3-94DE1F1788E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|x86.ActiveCfg = Debug|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|x86.Build.0 = Debug|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|Any CPU.ActiveCfg = Release|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|Mixed Platforms.Build.0 = Release|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|x86.ActiveCfg = Release|x86
+		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
