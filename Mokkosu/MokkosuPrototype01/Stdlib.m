@@ -2,7 +2,7 @@
 # Mokkosu 標準ライブラリ
 #============================================================
 
-# __define "HIDE_TYPE";
+__define "HIDE_TYPE";
 
 import "mscorlib.dll";
 import "System.dll";

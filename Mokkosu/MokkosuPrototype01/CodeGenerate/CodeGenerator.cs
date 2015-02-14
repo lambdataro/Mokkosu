@@ -549,6 +549,14 @@ namespace Mokkosu.CodeGenerate
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(bool));
                     }
+                    else if (t is DotNetType)
+                    {
+                        var dotnettype = (DotNetType)t;
+                        if (dotnettype.Type.IsValueType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        }
+                    }
                 }
 
                 il.Emit(OpCodes.Call, e.Info);
@@ -592,6 +600,14 @@ namespace Mokkosu.CodeGenerate
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(bool));
                     }
+                    else if (t is DotNetType)
+                    {
+                        var dotnettype = (DotNetType)t;
+                        if (dotnettype.Type.IsValueType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        }
+                    }
                 }
 
                 il.Emit(OpCodes.Newobj, e.Info);
@@ -625,6 +641,14 @@ namespace Mokkosu.CodeGenerate
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(bool));
                 }
+                else if (t is DotNetType)
+                {
+                    var dotnettype = (DotNetType)t;
+                    if (dotnettype.Type.IsValueType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                    }
+                }
 
                 for (int i = 0; i < e.Args.Count; i++)
                 {
@@ -645,6 +669,14 @@ namespace Mokkosu.CodeGenerate
                     else if (tt is BoolType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                    else if (tt is DotNetType)
+                    {
+                        var dotnettype = (DotNetType)t;
+                        if (dotnettype.Type.IsValueType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        }
                     }
                 }
 
@@ -733,6 +765,14 @@ namespace Mokkosu.CodeGenerate
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(bool));
                 }
+                else if (t is DotNetType)
+                {
+                    var dotnettype = (DotNetType)t;
+                    if (dotnettype.Type.IsValueType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                    }
+                }
 
                 Compile(il, e.Arg, env);
 
@@ -753,6 +793,14 @@ namespace Mokkosu.CodeGenerate
                 else if (tt is BoolType)
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                }
+                else if (t is DotNetType)
+                {
+                    var dotnettype = (DotNetType)tt;
+                    if (dotnettype.Type.IsValueType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                    }
                 }
 
                 il.Emit(OpCodes.Stfld, e.Info);
@@ -783,6 +831,14 @@ namespace Mokkosu.CodeGenerate
                 else if (t is BoolType)
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                }
+                else if (t is DotNetType)
+                {
+                    var dotnettype = (DotNetType)t;
+                    if (dotnettype.Type.IsValueType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                    }
                 }
 
                 il.Emit(OpCodes.Ldfld, e.Info);
@@ -816,6 +872,14 @@ namespace Mokkosu.CodeGenerate
                 {
                     il.Emit(OpCodes.Unbox_Any, typeof(bool));
                 }
+                else if (tt is DotNetType)
+                {
+                    var dotnettype = (DotNetType)tt;
+                    if (dotnettype.Type.IsValueType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                    }
+                }
 
                 il.Emit(OpCodes.Stsfld, e.Info);
 
@@ -837,9 +901,9 @@ namespace Mokkosu.CodeGenerate
                     }
                     else
                     {
-                        throw new MError(e.Pos + ": フィールドの読出しに失敗");
+                        var n = e.Info.GetValue(null);
+                        il.Emit(OpCodes.Ldc_I4, (int)n);
                     }
-                    
                 }
                 else
                 {
