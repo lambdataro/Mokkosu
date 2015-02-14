@@ -71,24 +71,99 @@ namespace Mokkosu.Parsing
             return ch;
         }
 
+        Dictionary<TokenType, string> _token_name = new Dictionary<TokenType, string>()
+        {
+            { TokenType.INT, "整数値" },
+            { TokenType.DBL, "浮動小数点数値" },
+            { TokenType.STR, "文字列値" },
+            { TokenType.CHAR, "文字値" },
+            { TokenType.ID, "識別子 "},
+            { TokenType.COM, "(,)" },
+            { TokenType.COL, "(:)" },
+            { TokenType.BAR, "(|)" },
+            { TokenType.SC, "(;)" },
+            { TokenType.ARROW, "(->)" },
+            { TokenType.AT, "(@)" },
+            { TokenType.BS, "(\\)" },
+            { TokenType.UB, "(_)" },
+            { TokenType.QUE, "(?)" },
+            { TokenType.BANG, "(!)" },
+            { TokenType.HAT, "(^)"},
+            { TokenType.LT, "(<)" },
+            { TokenType.GT, "(>)" },
+            { TokenType.EQ, "(=)" },
+            { TokenType.LE, "(<=)" },
+            { TokenType.GE, "(>=)" },
+            { TokenType.EQEQ, "(==)" },
+            { TokenType.LTGT, "(<>)" },
+            { TokenType.LP, "開き括弧" },
+            { TokenType.RP, "閉じ括弧" },
+            { TokenType.PLS, "(+)"},
+            { TokenType.MNS, "(-)"},
+            { TokenType.AST, "(*)"},
+            { TokenType.SLS, "(/)"},
+            { TokenType.PER, "(%)"},
+            { TokenType.PLSDOT, "(+.)"},
+            { TokenType.MNSDOT, "(-.)"},
+            { TokenType.ASTDOT, "(*.)"},
+            { TokenType.SLSDOT, "(/.)"},
+            { TokenType.LBK, "([)"},
+            { TokenType.RBK, "(])"},
+            { TokenType.COLCOL, "(::)"},
+            { TokenType.AMPAMP, "(&&)"},
+            { TokenType.BARBAR, "(||)"},
+            { TokenType.AMP, "(&)"},
+            { TokenType.ASTAST, "(**)"},
+            { TokenType.LTLT, "(<<)"},
+            { TokenType.GTGT, "(>>)"},
+            { TokenType.PLSPLS, "(++)"},
+            { TokenType.LTBAR, "(<|)"},
+            { TokenType.BARGT, "(|>)"},
+            { TokenType.COLEQ, "(:=)"},
+            { TokenType.BQ, "(`)"},
+            { TokenType.LBR, "({)" },
+            { TokenType.RBR, "(})" },
+            { TokenType.TILDA, "(~)" },
+            { TokenType.DOT, "(.)" },
+            { TokenType.DOTDOT, "(..)" },
+            { TokenType.TILDAMNS, "(~-)" },
+            { TokenType.TILDAMNSDOT, "(~-.)"},
+            { TokenType.TYPE, "type" },
+            { TokenType.AND, "and" },
+            { TokenType.DO, "do" },
+            { TokenType.IF, "if" },
+            { TokenType.ELSE, "else" },
+            { TokenType.PAT, "pat" },
+            { TokenType.TRUE, "true" },
+            { TokenType.FALSE, "false" },
+            { TokenType.LET, "let" },
+            { TokenType.FUN, "fun" },
+            { TokenType.INCLUDE, "include" },
+            { TokenType.AS, "as" },
+            { TokenType.IN, "in" },
+            { TokenType.PRIM, "__prim" },
+            { TokenType.CALL, "call" },
+            { TokenType.CAST, "cast" },
+            { TokenType.IMPORT, "import" },
+            { TokenType.NEW, "new" },
+            { TokenType.GET, "get" },
+            { TokenType.SET, "set" },
+            { TokenType.SGET, "sget" },
+            { TokenType.SSET, "sset" },
+            { TokenType.DELEGATE, "delegate" },
+            { TokenType.DEFINE, "__define" },
+            { TokenType.UNDEFINE, "__undefine" },
+        };
+
         string TypeToString(TokenType type)
         {
-            switch (type)
+            if (_token_name.ContainsKey(type))
             {
-                case TokenType.INT:
-                    return "整数値";
-                case TokenType.DBL:
-                    return "浮動小数点数値";
-                case TokenType.STR:
-                    return "文字列";
-                case TokenType.CHAR:
-                    return "文字";
-                case TokenType.ID:
-                    return "識別子";
-                case TokenType.EOF:
-                    return "ファイル終端";
-                default:
-                    throw new NotImplementedException();
+                return _token_name[type];
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
 
