@@ -825,7 +825,30 @@ namespace Mokkosu.CodeGenerate
             else if (expr is MSGet)
             {
                 var e = (MSGet)expr;
-                il.Emit(OpCodes.Ldsfld, e.Info);
+                if (e.Info.IsLiteral)
+                {
+                    if (e.Info.FieldType == typeof(int))
+                    {
+                        il.Emit(OpCodes.Ldc_I4, (int)e.Info.GetRawConstantValue());
+                    }
+                    else if (e.Info.FieldType == typeof(double))
+                    {
+                        il.Emit(OpCodes.Ldc_R8, (double)e.Info.GetRawConstantValue());
+                    }
+                    else
+                    {
+                        throw new MError(e.Pos + ": フィールドの読出しに失敗");
+                    }
+                    
+                }
+                else
+                {
+                    il.Emit(OpCodes.Ldsfld, e.Info);
+                }
+                if (e.Info.FieldType.IsValueType)
+                {
+                    il.Emit(OpCodes.Box, e.Info.FieldType);
+                }
             }
             else
             {

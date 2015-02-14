@@ -960,7 +960,7 @@ namespace Mokkosu.Parsing
             }
             else if (ctx.Tkn.Type == TokenType.SSET)
             {
-                ctx.ReadToken(TokenType.SET);
+                ctx.ReadToken(TokenType.SSET);
                 var cls = ParseDotNetName(ctx);
                 ctx.ReadToken(TokenType.COLCOL);
                 var name = ctx.ReadStrToken(TokenType.ID);
@@ -970,7 +970,7 @@ namespace Mokkosu.Parsing
             }
             else if (ctx.Tkn.Type == TokenType.SGET)
             {
-                ctx.ReadToken(TokenType.SET);
+                ctx.ReadToken(TokenType.SGET);
                 var cls = ParseDotNetName(ctx);
                 ctx.ReadToken(TokenType.COLCOL);
                 var name = ctx.ReadStrToken(TokenType.ID);

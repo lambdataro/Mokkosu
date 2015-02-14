@@ -141,7 +141,7 @@ namespace Mokkosu.TypeInference
             else if (type is ListType)
             {
                 var t = (ListType)type;
-                return string.Format("[{1}]", Show(name, t.ElemType, typevars, false));
+                return string.Format("[{0}]", Show(name, t.ElemType, typevars, false));
             }
             else if (type is RefType)
             {

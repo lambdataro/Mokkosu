@@ -58,6 +58,10 @@ namespace Mokkosu.TypeInference
             var t = LookupDotNetClass(pos, class_name);
             var ts = arg_types.Select(typ => MokkosuTypeToDotNetType(pos, typ)).ToArray();
             var method = t.GetMethod(method_name, ts);
+            if (method == null)
+            {
+                throw new MError(pos + ": メソッド" + class_name + "::" + method_name + "が見つかりません。");
+            }
             return method;
         }
 
@@ -66,6 +70,10 @@ namespace Mokkosu.TypeInference
             var t = LookupDotNetClass(pos, class_name);
             var ts = arg_types.Select(typ => MokkosuTypeToDotNetType(pos, typ)).ToArray();
             var constructor = t.GetConstructor(ts);
+            if (constructor == null)
+            {
+                throw new MError(pos + ": コンストラクタ" + class_name +　"が見つかりません。");
+            }
             return constructor;
         }
 
@@ -74,6 +82,10 @@ namespace Mokkosu.TypeInference
             var t = MokkosuTypeToDotNetType(pos, object_type);
             var ts = arg_types.Select(typ => MokkosuTypeToDotNetType(pos, typ)).ToArray();
             var method = t.GetMethod(method_name, ts);
+            if (method == null)
+            {
+                throw new MError(pos + ": メソッド" + method_name + "が見つかりません。");
+            }
             return method;
         }
 
@@ -81,6 +93,10 @@ namespace Mokkosu.TypeInference
         {
             var t = MokkosuTypeToDotNetType(pos, object_type);
             var field = t.GetField(field_name);
+            if (field == null)
+            {
+                throw new MError(pos + ": フィールド" + field_name + "が見つかりません。");
+            }
             return field;
         }
 

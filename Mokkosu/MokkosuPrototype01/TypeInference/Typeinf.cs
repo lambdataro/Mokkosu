@@ -656,7 +656,7 @@ namespace Mokkosu.TypeInference
                 Unification(e.Pos, e.ArgType, ret_type);
                 Unification(e.Pos, type, ret_type);
             }
-            else if (expr is MSSet)
+            else if (expr is MSGet)
             {
                 var e = (MSGet)expr;
                 var t = TypeinfDotNet.LookupDotNetClass(e.Pos, e.ClassName);

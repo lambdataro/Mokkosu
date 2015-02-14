@@ -26,8 +26,8 @@ namespace Mokkosu.Main
             Console.WriteLine(" =============== Version 0.0.1 ===============");
             Console.WriteLine("");
 
-            try
-            {
+            //try
+            //{
                 if (args.Length > 0)
                 {
                     Start(args);
@@ -39,15 +39,15 @@ namespace Mokkosu.Main
                 {
                     Console.WriteLine("入力がありません。");
                 }
-            }
-            catch(MError e)
-            {
-                Console.Error.WriteLine(e.Message);
-            }
-            catch(NotImplementedException)
-            {
-                Console.Error.WriteLine("実装の誤りです。作者に連絡してください。");
-            }
+            //}
+            //// catch(MError e)
+            //{
+            //    Console.Error.WriteLine(e.Message);
+            //}
+            //catch(NotImplementedException)
+            //{
+            //    Console.Error.WriteLine("エラー。");
+            //}
         }
 
         static void Start(string[] args)
