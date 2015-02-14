@@ -1212,7 +1212,7 @@ namespace Mokkosu.TypeInference
                 if (OccursCheck(t1.Id, type2))
                 {
                     ShowType.ShowSingleType(type1, type2);
-                    throw new MError(pos + ": 型エラー (出現違反)");
+                    throw new MError(pos + ": 型エラー (型がループしている)");
                 }
                 else
                 {
@@ -1225,7 +1225,7 @@ namespace Mokkosu.TypeInference
                 if (OccursCheck(t2.Id, type1))
                 {
                     ShowType.ShowSingleType(type1, type2);
-                    throw new MError(pos + ": 型エラー (出現違反)");
+                    throw new MError(pos + ": 型エラー (型がループしている)");
                 }
                 else
                 {
