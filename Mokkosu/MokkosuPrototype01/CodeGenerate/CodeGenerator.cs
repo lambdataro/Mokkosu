@@ -672,7 +672,7 @@ namespace Mokkosu.CodeGenerate
                     }
                     else if (tt is DotNetType)
                     {
-                        var dotnettype = (DotNetType)t;
+                        var dotnettype = (DotNetType)tt;
                         if (dotnettype.Type.IsValueType)
                         {
                             il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
