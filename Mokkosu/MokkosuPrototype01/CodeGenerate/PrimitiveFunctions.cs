@@ -381,7 +381,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl2);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl3);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // char
@@ -399,7 +399,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl5);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl6);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // double
@@ -417,7 +417,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl8);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl9);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // string
@@ -428,7 +428,7 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldarg_1);
             il.Emit(OpCodes.Call, _string_equal);
-            il.Emit(OpCodes.Box, typeof(int));            
+            il.Emit(OpCodes.Box, typeof(bool));            
             il.Emit(OpCodes.Ret);
 
             // その他
@@ -475,7 +475,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl2);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl3);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // char
@@ -493,7 +493,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl5);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl6);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // double
@@ -511,7 +511,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl8);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl9);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // string
@@ -528,7 +528,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl11);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl12);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // その他
@@ -575,7 +575,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl2);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl3);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // char
@@ -593,7 +593,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl5);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl6);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // double
@@ -611,7 +611,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl8);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl9);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // string
@@ -629,7 +629,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl11);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl12);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // その他
@@ -676,7 +676,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl2);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl3);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // char
@@ -694,7 +694,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl5);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl6);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // double
@@ -712,7 +712,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl8);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl9);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // string
@@ -730,7 +730,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl11);
             il.Emit(OpCodes.Ldc_I4_1);
             il.MarkLabel(lbl12);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // その他
@@ -777,7 +777,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl2);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl3);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // char
@@ -795,7 +795,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl5);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl6);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // double
@@ -813,7 +813,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl8);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl9);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // string
@@ -831,7 +831,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl11);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl12);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // その他
@@ -878,7 +878,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl2);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl3);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // char
@@ -896,7 +896,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl5);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl6);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // double
@@ -914,7 +914,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl8);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl9);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // string
@@ -932,7 +932,7 @@ namespace Mokkosu.CodeGenerate
             il.MarkLabel(lbl11);
             il.Emit(OpCodes.Ldc_I4_0);
             il.MarkLabel(lbl12);
-            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
             // その他

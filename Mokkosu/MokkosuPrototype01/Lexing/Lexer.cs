@@ -368,6 +368,11 @@ namespace Mokkosu.Lexing
                     _strm.NextChar();
                     return new Token(Pos, TokenType.ASTDOT);
                 }
+                else if (_strm.Char == '*')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.ASTAST);
+                }
                 else
                 {
                     return new Token(Pos, TokenType.AST);
