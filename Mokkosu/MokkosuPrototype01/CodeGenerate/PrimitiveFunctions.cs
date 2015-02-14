@@ -366,8 +366,10 @@ namespace Mokkosu.CodeGenerate
             var lbl8 = il.DefineLabel();
             var lbl9 = il.DefineLabel();
             var lbl10 = il.DefineLabel();
+            var lbl11 = il.DefineLabel();
+            var lbl12 = il.DefineLabel();
 
-            // int, bool, unit
+            // int, unit
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Isinst, typeof(int));
             il.Emit(OpCodes.Brfalse, lbl1);
@@ -461,7 +463,7 @@ namespace Mokkosu.CodeGenerate
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
 
-            // int, bool, unit
+            // int, unit
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Isinst, typeof(int));
             il.Emit(OpCodes.Brfalse, lbl1);
@@ -561,7 +563,7 @@ namespace Mokkosu.CodeGenerate
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
 
-            // int, bool, unit
+            // int, unit
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Isinst, typeof(int));
             il.Emit(OpCodes.Brfalse, lbl1);
@@ -662,7 +664,7 @@ namespace Mokkosu.CodeGenerate
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
 
-            // int, bool, unit
+            // int, unit
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Isinst, typeof(int));
             il.Emit(OpCodes.Brfalse, lbl1);
@@ -763,7 +765,7 @@ namespace Mokkosu.CodeGenerate
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
 
-            // int, bool, unit
+            // int, unit
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Isinst, typeof(int));
             il.Emit(OpCodes.Brfalse, lbl1);
@@ -864,7 +866,7 @@ namespace Mokkosu.CodeGenerate
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
 
-            // int, bool, unit
+            // int, unit
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Isinst, typeof(int));
             il.Emit(OpCodes.Brfalse, lbl1);

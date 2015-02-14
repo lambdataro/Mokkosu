@@ -426,9 +426,15 @@ namespace Mokkosu.Parsing
             {
                 var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.DO);
-                var e1 = ParseFunExpr(ctx);
+                var es = ParseExprScList(ctx, TokenType.IN);
                 ctx.ReadToken(TokenType.IN);
                 var e2 = ParseFunExpr(ctx);
+                es.Reverse();
+                var e1 = es.First();
+                foreach (var e in es.Skip(1))
+                {
+                    e1 = new MDo(e.Pos, e, e1);
+                }
                 return new MDo(pos, e1, e2);
             }
             else if (ctx.Tkn.Type == TokenType.LET)
@@ -1354,6 +1360,22 @@ namespace Mokkosu.Parsing
             return list;
         }
 
+        static List<MExpr> ParseExprScList(ParseContext ctx, TokenType end)
+        {
+            var list = new List<MExpr>();
+            list.Add(ParseExpr(ctx));
+            while (ctx.Tkn.Type == TokenType.SC)
+            {
+                ctx.ReadToken(TokenType.SC);
+                if (ctx.Tkn.Type == end)
+                {
+                    break;
+                }
+                list.Add(ParseExpr(ctx));
+            }
+            return list;
+        }
+
         static MExpr ExprListToCons(string pos, List<MExpr> list)
         {
             MExpr ret_expr = new MNil(pos);
@@ -1494,6 +1516,7 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.LP);
                 if (ctx.Tkn.Type == TokenType.RP)
                 {
+                    ctx.ReadToken(TokenType.RP);
                     return new PUnit(pos);
                 }
                 else
