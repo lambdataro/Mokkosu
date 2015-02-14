@@ -75,6 +75,32 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
+    /// 型強制
+    /// </summary>
+    class PFource : MPat
+    {
+        public MPat Pat { get; private set; }
+        public MType Type { get; private set; }
+
+        public PFource(string pos, MPat pat, MType type)
+            : base(pos)
+        {
+            Pat = pat;
+            Type = type;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0} : {1})", Pat, Type);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Pat.FreeVars();
+        }
+    }
+
+    /// <summary>
     /// 整数パターン
     /// </summary>
     class PInt : MPat

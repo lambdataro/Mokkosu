@@ -944,6 +944,12 @@ namespace Mokkosu.TypeInference
                     return new TEnv().Cons(p.Name, new MTypeScheme(type));
                 }
             }
+            else if (pat is PFource)
+            {
+                var p = (PFource)pat;
+                Unification(pat.Pos, type, p.Type);
+                return InferencePat(p.Pat, p.Type, tenv, ctx);
+            }
             else if (pat is PInt)
             {
                 Unification(pat.Pos, type, new IntType());

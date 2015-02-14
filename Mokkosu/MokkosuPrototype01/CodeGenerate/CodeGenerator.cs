@@ -945,6 +945,11 @@ namespace Mokkosu.CodeGenerate
                 il.Emit(OpCodes.Pop);
                 return new LEnv();
             }
+            else if (pat is PFource)
+            {
+                var p = (PFource)pat;
+                return CompilePat(il, p.Pat, fail_label);
+            }
             else if (pat is PInt)
             {
                 var p = (PInt)pat;

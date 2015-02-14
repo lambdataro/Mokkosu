@@ -1,1 +1,1 @@
-﻿do println (1 + "abc");
+﻿let f (x : Int) = x;

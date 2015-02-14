@@ -723,7 +723,8 @@ namespace Mokkosu.Parsing
         {
             var lhs = ParseAppExpr(ctx);
             
-            if (ctx.Tkn.Type == TokenType.ASTAST || ctx.Tkn.Type == TokenType.LTLT || ctx.Tkn.Type == TokenType.GTGT)
+            if (ctx.Tkn.Type == TokenType.ASTAST || ctx.Tkn.Type == TokenType.LTLT ||
+                ctx.Tkn.Type == TokenType.GTGT || ctx.Tkn.Type == TokenType.DOTDOT)
             {
                 var type = ctx.Tkn.Type;
                 var pos = ctx.Tkn.Pos;
@@ -739,6 +740,9 @@ namespace Mokkosu.Parsing
                         break;
                     case TokenType.GTGT:
                         lhs = CreateBinop(pos, "__operator_gtgt", lhs, rhs);
+                        break;
+                    case TokenType.DOTDOT:
+                        lhs = CreateBinop(pos, "__operator_dotdot", lhs, rhs);
                         break;
                 }
             }
@@ -985,6 +989,12 @@ namespace Mokkosu.Parsing
                     ctx.NextToken();
                     ctx.ReadToken(TokenType.RP);
                     return new MVar("__operator_coleq");
+                }
+                else if (ctx.Tkn.Type == TokenType.DOTDOT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_dotdot");
                 }
                 else
                 {
@@ -1440,6 +1450,13 @@ namespace Mokkosu.Parsing
                 else
                 {
                     var pat_list = ParsePatList(ctx);
+                    if (pat_list.Count == 1 && ctx.Tkn.Type == TokenType.COL)
+                    {
+                        ctx.ReadToken(TokenType.COL);
+                        var type = ParseType(ctx);
+                        ctx.ReadToken(TokenType.RP);
+                        return new PFource(pos, pat_list[0], type);
+                    }
                     ctx.ReadToken(TokenType.RP);
                     if (pat_list.Count == 1)
                     {
