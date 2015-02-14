@@ -78,6 +78,10 @@ namespace Mokkosu.CodeGenerate
         static MethodInfo _le;
         static MethodInfo _ge;
 
+        static MethodInfo _ref;
+        static MethodInfo _deref;
+        static MethodInfo _assign;
+
         static MethodInfo _error;
 
         static TypeBuilder _type_builder;
@@ -185,6 +189,10 @@ namespace Mokkosu.CodeGenerate
             _ge = PrimitiveFunctions.DefineGe(type_builder);
 
             _error = PrimitiveFunctions.DefineError(type_builder);
+
+            _ref = PrimitiveFunctions.DefineRef(type_builder, _tag_type, _tag_args);
+            _deref = PrimitiveFunctions.DefineDeRef(type_builder, _tag_args);
+            _assign = PrimitiveFunctions.DefineAssign(type_builder, _tag_args);
         }
 
         static void DeclareFunction(string name, TypeBuilder type_builder)
@@ -1023,6 +1031,15 @@ namespace Mokkosu.CodeGenerate
                     break;
                 case "error":
                     il.Emit(OpCodes.Call, _error);
+                    break;
+                case "ref":
+                    il.Emit(OpCodes.Call, _ref);
+                    break;
+                case "deref":
+                    il.Emit(OpCodes.Call, _deref);
+                    break;
+                case "assign":
+                    il.Emit(OpCodes.Call, _assign);
                     break;
                 default:
                     throw new NotImplementedException();

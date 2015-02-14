@@ -18,7 +18,10 @@ namespace Mokkosu.Main
         {
             try
             {
-                Start(args);
+                if (args.Length > 0)
+                {
+                    Start(args);
+                }
             }
             catch(MError e)
             {

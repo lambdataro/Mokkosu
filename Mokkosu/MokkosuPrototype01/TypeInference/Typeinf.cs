@@ -226,6 +226,12 @@ namespace Mokkosu.TypeInference
                 var elem_type = MapTypeParam(t.ElemType, dict);
                 return new ListType(elem_type);
             }
+            else if (type is RefType)
+            {
+                var t = (RefType)type;
+                var elem_type = MapTypeParam(t.ElemType, dict);
+                return new RefType(elem_type);
+            }
             else if (type is TupleType)
             {
                 var t = (TupleType)type;
@@ -651,6 +657,12 @@ namespace Mokkosu.TypeInference
                 var elem = ReduceType(t.ElemType);
                 return new ListType(elem);
             }
+            else if (type is RefType)
+            {
+                var t = (RefType)type;
+                var elem = ReduceType(t.ElemType);
+                return new RefType(elem);
+            }
             else if (type is TupleType)
             {
                 var t = (TupleType)type;
@@ -792,6 +804,42 @@ namespace Mokkosu.TypeInference
                     if (args.Count == 1)
                     {
                         Unification(pos, args[0], new StringType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "ref":
+                    if (args.Count == 1)
+                    {
+                        Unification(pos, ret, new RefType(args[0]));
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "deref":
+                    if (args.Count == 1)
+                    {
+                        var t = new TypeVar();
+                        Unification(pos, new RefType(t), args[0]);
+                        Unification(pos, ret, t);
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
+                case "assign":
+                    if (args.Count == 2)
+                    {
+                        Unification(pos, args[0], new RefType(args[1]));
+                        Unification(pos, ret, new UnitType());
                     }
                     else
                     {
@@ -1042,6 +1090,11 @@ namespace Mokkosu.TypeInference
                 var t = (ListType)type;
                 return OccursCheck(id, t.ElemType);
             }
+            else if (type is RefType)
+            {
+                var t = (RefType)type;
+                return OccursCheck(id, t.ElemType);
+            }
             else if (type is TupleType)
             {
                 var t = (TupleType)type;
@@ -1148,6 +1201,12 @@ namespace Mokkosu.TypeInference
                 var t2 = (ListType)type2;
                 Unification(pos, t1.ElemType, t2.ElemType);
             }
+            else if (type1 is RefType && type2 is RefType)
+            {
+                var t1 = (RefType)type1;
+                var t2 = (RefType)type2;
+                Unification(pos, t1.ElemType, t2.ElemType);
+            }
             else if (type1 is TupleType && type2 is TupleType)
             {
                 var t1 = (TupleType)type1;
@@ -1251,6 +1310,11 @@ namespace Mokkosu.TypeInference
             else if (type is ListType)
             {
                 var t = (ListType)type;
+                return FreeTypeVars(t.ElemType);
+            }
+            else if (type is RefType)
+            {
+                var t = (RefType)type;
                 return FreeTypeVars(t.ElemType);
             }
             else if (type is TupleType)
@@ -1422,6 +1486,12 @@ namespace Mokkosu.TypeInference
                 var t = (ListType)type;
                 var elem_type = MapTypeVar(map, t.ElemType);
                 return new ListType(elem_type);
+            }
+            else if (type is RefType)
+            {
+                var t = (RefType)type;
+                var elem_type = MapTypeVar(map, t.ElemType);
+                return new RefType(elem_type);
             }
             else if (type is TupleType)
             {

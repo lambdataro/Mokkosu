@@ -178,6 +178,24 @@ namespace Mokkosu.AST
     }
 
     /// <summary>
+    /// 参照型
+    /// </summary>
+    class RefType : MType
+    {
+        public MType ElemType { get; private set; }
+
+        public RefType(MType elem_type)
+        {
+            ElemType = elem_type;
+        }
+
+        public override string ToString()
+        {
+            return "ref<" + ElemType.ToString() + ">";
+        }
+    }
+
+    /// <summary>
     /// タプル型
     /// </summary>
     class TupleType : MType

@@ -28,3 +28,7 @@ let __operator_ast x y = __prim "mul" (x, y);
 let __operator_sls x y = __prim "div" (x, y);
 
 let __operator_hat x y = __prim "concat" (x, y);
+
+let ref x = __prim "ref" (x);
+let __operator_bang x = __prim "deref" (x);
+let __operator_coleq x y = __prim "assign" (x, y);

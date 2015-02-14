@@ -213,7 +213,14 @@ namespace Mokkosu.Parsing
                             ctx.ReadToken(TokenType.LT);
                             var args = ParseTypeList(ctx);
                             ctx.ReadToken(TokenType.GT);
-                            return new UserType(name, args);
+                            if (name == "ref" && args.Count == 1)
+                            {
+                                return new RefType(args[0]);
+                            }
+                            else
+                            {
+                                return new UserType(name, args);
+                            }
                         }
                         else
                         {

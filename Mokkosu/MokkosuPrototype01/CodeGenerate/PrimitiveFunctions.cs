@@ -955,7 +955,46 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Throw);
             return info;
         }
+
+        public static MethodInfo DefineRef(TypeBuilder type_builder, Type tag_type, FieldInfo tag_args)
+        {
+            var info = type_builder.DefineMethod("ref",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Newobj, tag_type.GetConstructor(new Type[] { }));
+            il.Emit(OpCodes.Dup);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Stfld, tag_args);
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineDeRef(TypeBuilder type_builder, FieldInfo tag_args)
+        {
+            var info = type_builder.DefineMethod("deref",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldfld, tag_args);
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
+
+        public static MethodInfo DefineAssign(TypeBuilder type_builder, FieldInfo tag_args)
+        {
+            var info = type_builder.DefineMethod("assign",
+                MethodAttributes.Static, typeof(object),
+                new Type[] { typeof(object), typeof(object) });
+            var il = info.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Stfld, tag_args);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.Emit(OpCodes.Box, typeof(int));
+            il.Emit(OpCodes.Ret);
+            return info;
+        }
     }
-
-
 }
