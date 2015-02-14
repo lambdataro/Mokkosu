@@ -2,12 +2,14 @@
 import "System.Windows.Forms.dll";
 import "System.Drawing.dll";
 
+using System.Windows.Forms;
+
 let x = ref 0;
 let y = ref 0;
 let vx = ref 5;
 let vy = ref 5;
 
-let form = new System.Windows.Forms.Form();
+let form = new Form();
 
 let tick (obj, e) =
   let obj = (obj : {System.Object}) in
@@ -20,7 +22,7 @@ let tick (obj, e) =
   do if !y < 0 -> vy := ~- !vy else () in
   form.Invalidate();
 
-let timer = new System.Windows.Forms.Timer();
+let timer = new Timer();
 
 do timer.add_Tick(delegate System.EventHandler tick);
 

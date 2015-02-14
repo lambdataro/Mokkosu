@@ -153,6 +153,7 @@ namespace Mokkosu.Parsing
             { TokenType.DELEGATE, "delegate" },
             { TokenType.DEFINE, "__define" },
             { TokenType.UNDEFINE, "__undefine" },
+            { TokenType.USING, "using" },
         };
 
         string TypeToString(TokenType type)

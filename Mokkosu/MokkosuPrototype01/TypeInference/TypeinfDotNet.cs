@@ -12,6 +12,7 @@ namespace Mokkosu.TypeInference
     static class TypeinfDotNet
     {
         static LinkedList<Assembly> _assembly_list = new LinkedList<Assembly>();
+        static LinkedList<string> _using_list = new LinkedList<string>();
         static string _runtime_dir = RuntimeEnvironment.GetRuntimeDirectory();
         static string _exe_dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
@@ -35,12 +36,30 @@ namespace Mokkosu.TypeInference
             }
         }
 
+        public static void AddUsing(string name)
+        {
+            _using_list.AddFirst(name);
+        }
+
         public static Type LookupDotNetClass(string pos, string class_name)
         {
             Type type = null;
             foreach (var asm in _assembly_list)
             {
                 type = asm.GetType(class_name);
+                if (type != null)
+                {
+                    break;
+                }
+                foreach (var sp in _using_list)
+                {
+                    var name = sp + "." + class_name;
+                    type = asm.GetType(name);
+                    if (type != null)
+                    {
+                        break;
+                    }
+                }
                 if (type != null)
                 {
                     break;

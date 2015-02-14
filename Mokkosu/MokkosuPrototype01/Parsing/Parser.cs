@@ -63,6 +63,13 @@ namespace Mokkosu.Parsing
                     Global.UnDefineKey(name);
                     ctx.ReadToken(TokenType.SC);
                 }
+                else if (ctx.Tkn.Type == TokenType.USING)
+                {
+                    ctx.ReadToken(TokenType.USING);
+                    var name = ParseDotNetName(ctx);
+                    TypeinfDotNet.AddUsing(name);
+                    ctx.ReadToken(TokenType.SC);
+                }
                 else
                 {
                     top_exprs.Add(ParseTopDoSimple(ctx));

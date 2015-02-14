@@ -49,6 +49,7 @@ namespace Mokkosu.Lexing
                 { "delegate", TokenType.DELEGATE },
                 { "__define", TokenType.DEFINE },
                 { "__undefine", TokenType.UNDEFINE },
+                { "using", TokenType.USING },
             };
         }
 
