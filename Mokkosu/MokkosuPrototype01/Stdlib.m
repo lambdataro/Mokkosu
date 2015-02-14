@@ -223,9 +223,9 @@ fun foldr f seed = {
 # Maybe<T>
 #------------------------------------------------------------
 
-type Maybe<T> = Nothing | Some(T);
+type Maybe<T> = Nothing | Just(T);
 
-let maybe def f = { ~Nothing -> def; ~Some(x) -> f x };
+let maybe def f = { ~Nothing -> def; ~Just(x) -> f x };
 
 #------------------------------------------------------------
 # Either<T>
