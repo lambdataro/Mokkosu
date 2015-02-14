@@ -800,6 +800,192 @@ namespace Mokkosu.Parsing
                     ctx.ReadToken(TokenType.RP);
                     return new MUnit(pos);
                 }
+                else if (ctx.Tkn.Type == TokenType.PLS)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_pls");
+                }
+                else if (ctx.Tkn.Type == TokenType.MNS)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_mns");
+                }
+                else if (ctx.Tkn.Type == TokenType.AST)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_ast");
+                }
+                else if (ctx.Tkn.Type == TokenType.SLS)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_sls");
+                }
+                else if (ctx.Tkn.Type == TokenType.PER)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_per");
+                }
+                else if (ctx.Tkn.Type == TokenType.PLSDOT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_plsdot");
+                }
+                else if (ctx.Tkn.Type == TokenType.MNSDOT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_mnsdot");
+                }
+                else if (ctx.Tkn.Type == TokenType.ASTDOT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_astdot");
+                }
+                else if (ctx.Tkn.Type == TokenType.SLSDOT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_slsdot");
+                }
+                else if (ctx.Tkn.Type == TokenType.ASTAST)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_astast");
+                }
+                else if (ctx.Tkn.Type == TokenType.LTLT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_ltlt");
+                }
+                else if (ctx.Tkn.Type == TokenType.GTGT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_gtgt");
+                }
+                else if (ctx.Tkn.Type == TokenType.BANG)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_bang");
+                }
+                else if (ctx.Tkn.Type == TokenType.TILDAMNS)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_neg");
+                }
+                else if (ctx.Tkn.Type == TokenType.TILDAMNSDOT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_negdot");
+                }
+                else if (ctx.Tkn.Type == TokenType.COLCOL)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    var name1 = GenVarName();
+                    var name2 = GenVarName();
+                    return new MLambda(pos, new PVar(pos, name1),
+                        new MLambda(pos, new PVar(pos, name2),
+                            new MCons(pos, new MVar(pos, name1), new MVar(pos, name2))));
+                }
+                else if (ctx.Tkn.Type == TokenType.PLSPLS)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_plspls");
+                }
+                else if (ctx.Tkn.Type == TokenType.HAT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_hat");
+                }
+                else if (ctx.Tkn.Type == TokenType.LT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_lt");
+                }
+                else if (ctx.Tkn.Type == TokenType.GT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_gt");
+                }
+                else if (ctx.Tkn.Type == TokenType.LE)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_le");
+                }
+                else if (ctx.Tkn.Type == TokenType.GE)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_ge");
+                }
+                else if (ctx.Tkn.Type == TokenType.EQEQ)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_eqeq");
+                }
+                else if (ctx.Tkn.Type == TokenType.LTGT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_ltgt");
+                }
+                else if (ctx.Tkn.Type == TokenType.AMPAMP)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    var name1 = GenVarName();
+                    var name2 = GenVarName();
+                    return new MLambda(pos, new PVar(pos, name1),
+                        new MLambda(pos, new PVar(pos, name2),
+                            new MIf(pos, new MVar(pos, name1), new MVar(pos, name2), new MBool(pos, false))));
+                }
+                else if (ctx.Tkn.Type == TokenType.BARBAR)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    var name1 = GenVarName();
+                    var name2 = GenVarName();
+                    return new MLambda(pos, new PVar(pos, name1),
+                        new MLambda(pos, new PVar(pos, name2),
+                            new MIf(pos, new MVar(pos, name1), new MBool(pos, true), new MVar(pos, name2))));
+                }
+                else if (ctx.Tkn.Type == TokenType.LTBAR)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_ltbar");
+                }
+                else if (ctx.Tkn.Type == TokenType.BARGT)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_bargt");
+                }
+                else if (ctx.Tkn.Type == TokenType.COLEQ)
+                {
+                    ctx.NextToken();
+                    ctx.ReadToken(TokenType.RP);
+                    return new MVar("__operator_coleq");
+                }
                 else
                 {
                     var items = ParseExprList(ctx);
