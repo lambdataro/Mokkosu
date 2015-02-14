@@ -482,11 +482,21 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.IF);
                 var e1 = ParseExpr(ctx);
-                if (ctx.Tkn.Type == TokenType.COM)
+                if (ctx.Tkn.Type == TokenType.SC)
                 {
-                    ctx.ReadToken(TokenType.COM);
-                    return new MIf(pos, e1, ParseForLine(pos, ctx), 
-                        new MVar(pos, "__for_zero"));
+                    ctx.ReadToken(TokenType.SC);
+                    if (ctx.Tkn.Type == TokenType.IN)
+                    {
+                        ctx.ReadToken(TokenType.IN);
+                        var e2 = ParseExpr(ctx);
+                        return new MIf(pos, e1, CreateUniop(pos, "__for_unit", e2),
+                            new MVar(pos, "__for_zero"));
+                    }
+                    else
+                    {
+                        return new MIf(pos, e1, ParseForLine(pos, ctx),
+                            new MVar(pos, "__for_zero"));
+                    }
                 }
                 else
                 {
@@ -501,11 +511,21 @@ namespace Mokkosu.Parsing
                 var pat = ParsePattern(ctx);
                 ctx.ReadToken(TokenType.RARROW);
                 var e1 = ParseExpr(ctx);
-                if (ctx.Tkn.Type == TokenType.COM)
+                if (ctx.Tkn.Type == TokenType.SC)
                 {
-                    ctx.ReadToken(TokenType.COM);
-                    return CreateBinop(pos, "__for_bind", e1,
-                        new MLambda(pos, pat, ParseForLine(pos, ctx)));
+                    ctx.ReadToken(TokenType.SC);
+                    if (ctx.Tkn.Type == TokenType.IN)
+                    {
+                        ctx.ReadToken(TokenType.IN);
+                        var e2 = ParseExpr(ctx);
+                        return CreateBinop(pos, "__for_bind", e1,
+                            new MLambda(pos, pat, CreateUniop(pos, "__for_unit", e2)));
+                    }
+                    else
+                    {
+                        return CreateBinop(pos, "__for_bind", e1,
+                            new MLambda(pos, pat, ParseForLine(pos, ctx)));
+                    }
                 }
                 else
                 {

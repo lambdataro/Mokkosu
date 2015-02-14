@@ -1,3 +1,8 @@
 site_name: プログラミング言語 Mokkosu
 repo_url: https://github.com/lambdataro/Mokkosu
 theme: Bootstrap
+pages:
+- ['index.md', 'トップ']
+- ['language.md', '言語仕様']
+
+
