@@ -20,6 +20,7 @@
         TRUE, FALSE, LET, FUN, INCLUDE,
         AS, IN, PRIM, CALL, CAST, IMPORT,
         NEW, GET, SET, SGET, SSET, DELEGATE,
+        DEFINE, UNDEFINE,
         // 制御記号
         EOF
     }

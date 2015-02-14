@@ -2,10 +2,11 @@
 # Mokkosu 標準ライブラリ
 #============================================================
 
+__define "HIDE_TYPE";
+
 import "mscorlib.dll";
 import "System.dll";
 import "System.Core.dll";
-
 
 let println x = __prim "println" (x);
 let print x = __prim "print" (x);
@@ -32,3 +33,5 @@ let __operator_hat x y = __prim "concat" (x, y);
 let ref x = __prim "ref" (x);
 let __operator_bang x = __prim "deref" (x);
 let __operator_coleq x y = __prim "assign" (x, y);
+
+__undefine "HIDE_TYPE";

@@ -56,12 +56,21 @@ namespace Mokkosu.TypeInference
             else if (top_expr is MTopLet)
             {
                 var t = (MTopLet)top_expr;
-                TypeinfTopLet(t, ctx);
+                var tenv = TypeinfTopLet(t, ctx);
+                if (!t.HideType)
+                {
+                    ShowType.ShowTEnv(tenv);
+                }
                 // System.Console.WriteLine(top_expr);
             }
             else if (top_expr is MTopFun)
             {
-                TypeinfTopFun((MTopFun)top_expr, ctx);
+                var t = (MTopFun)top_expr;
+                var tenv = TypeinfTopFun(t, ctx);
+                if (!t.HideType)
+                {
+                    ShowType.ShowTEnv(tenv);
+                }
                 // System.Console.WriteLine(top_expr);
             }
             else
@@ -263,7 +272,7 @@ namespace Mokkosu.TypeInference
         /// </summary>
         /// <param name="top_let">トップレベルlet</param>
         /// <param name="ctx">型推論文脈</param>
-        static void TypeinfTopLet(MTopLet top_let, TypeInfContext ctx)
+        static TEnv TypeinfTopLet(MTopLet top_let, TypeInfContext ctx)
         {
             var tenv1 = InferencePat(top_let.Pat, top_let.Type, ctx.TEnv, ctx);
             Inference(top_let.Expr, top_let.Type, ctx.TEnv, ctx);
@@ -272,10 +281,12 @@ namespace Mokkosu.TypeInference
             {
                 var tenv2 = GeneralizeTypes(ctx.TEnv, tenv1);
                 ctx.TEnv = tenv2.Append(ctx.TEnv);
+                return tenv2;
             }
             else
             {
                 ctx.TEnv = tenv1.Append(ctx.TEnv);
+                return tenv1;
             }
         }
 
@@ -284,7 +295,7 @@ namespace Mokkosu.TypeInference
         /// </summary>
         /// <param name="top_fun">トップレベルfun</param>
         /// <param name="ctx">型推論文脈</param>
-        static void TypeinfTopFun(MTopFun top_fun, TypeInfContext ctx)
+        static TEnv TypeinfTopFun(MTopFun top_fun, TypeInfContext ctx)
         {
             var tenv = ctx.TEnv;
 
@@ -298,7 +309,7 @@ namespace Mokkosu.TypeInference
                 Inference(item.Expr, item.Type, tenv, ctx);
             }
 
-            var tenv2 = ctx.TEnv;
+            var tenv2 = new TEnv();
 
             foreach (var item in top_fun.Items)
             {
@@ -313,7 +324,8 @@ namespace Mokkosu.TypeInference
                 }
             }
 
-            ctx.TEnv = tenv2;
+            ctx.TEnv = tenv2.Append(ctx.TEnv);
+            return tenv2;
         }
 
         /// <summary>

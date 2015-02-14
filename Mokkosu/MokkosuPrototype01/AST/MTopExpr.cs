@@ -124,13 +124,15 @@ namespace Mokkosu.AST
         public MPat Pat { get; private set; }
         public MExpr Expr { get; private set; }
         public MType Type { get; private set; }
+        public bool HideType { get; private set; }
 
-        public MTopLet(string pos, MPat pat, MExpr expr)
+        public MTopLet(string pos, MPat pat, MExpr expr, bool hide_type)
             : base(pos)
         {
             Pat = pat;
             Expr = expr;
             Type = new TypeVar();
+            HideType = hide_type;
         }
 
         public override string ToString()
@@ -145,11 +147,13 @@ namespace Mokkosu.AST
     class MTopFun : MTopExpr
     {
         public List<MFunItem> Items { get; private set; }
+        public bool HideType { get; private set; }
 
-        public MTopFun(string pos, List<MFunItem> items)
+        public MTopFun(string pos, List<MFunItem> items, bool hide_type)
             : base(pos)
         {
             Items = items;
+            HideType = hide_type;
         }
 
         public override string ToString()

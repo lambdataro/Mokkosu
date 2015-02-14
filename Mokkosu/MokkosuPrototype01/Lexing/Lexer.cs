@@ -47,6 +47,8 @@ namespace Mokkosu.Lexing
                 { "sget", TokenType.SGET },
                 { "sset", TokenType.SSET },
                 { "delegate", TokenType.DELEGATE },
+                { "__define", TokenType.DEFINE },
+                { "__undefine", TokenType.UNDEFINE },
             };
         }
 

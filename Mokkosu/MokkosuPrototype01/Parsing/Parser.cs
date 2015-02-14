@@ -49,6 +49,20 @@ namespace Mokkosu.Parsing
                     TypeinfDotNet.AddAssembly(name);
                     ctx.ReadToken(TokenType.SC);
                 }
+                else if (ctx.Tkn.Type == TokenType.DEFINE)
+                {
+                    ctx.ReadToken(TokenType.DEFINE);
+                    var name = ctx.ReadStrToken(TokenType.STR);
+                    Global.DefineKey(name);
+                    ctx.ReadToken(TokenType.SC);
+                }
+                else if (ctx.Tkn.Type == TokenType.UNDEFINE)
+                {
+                    ctx.ReadToken(TokenType.UNDEFINE);
+                    var name = ctx.ReadStrToken(TokenType.STR);
+                    Global.UnDefineKey(name);
+                    ctx.ReadToken(TokenType.SC);
+                }
                 else
                 {
                     top_exprs.Add(ParseTopDoSimple(ctx));
@@ -213,7 +227,7 @@ namespace Mokkosu.Parsing
                             ctx.ReadToken(TokenType.LT);
                             var args = ParseTypeList(ctx);
                             ctx.ReadToken(TokenType.GT);
-                            if (name == "ref" && args.Count == 1)
+                            if (name == "Ref" && args.Count == 1)
                             {
                                 return new RefType(args[0]);
                             }
@@ -289,7 +303,8 @@ namespace Mokkosu.Parsing
             ctx.ReadToken(TokenType.EQ);
             var expr = ParseExpr(ctx);
             ctx.ReadToken(TokenType.SC);
-            return new MTopLet(pos, pat, ArgsToLambda(args, expr));
+            var hide_type = Global.IdDefineKey("HIDE_TYPE");
+            return new MTopLet(pos, pat, ArgsToLambda(args, expr), hide_type);
         }
 
         #endregion
@@ -312,7 +327,8 @@ namespace Mokkosu.Parsing
                 items.Add(ParseFunItem(ctx));
             }
             ctx.ReadToken(TokenType.SC);
-            return new MTopFun(pos, items);
+            var hide_type = Global.IdDefineKey("HIDE_TYPE");
+            return new MTopFun(pos, items, hide_type);
         }
 
         static MFunItem ParseFunItem(ParseContext ctx)

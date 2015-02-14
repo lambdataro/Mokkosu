@@ -16,11 +16,24 @@ namespace Mokkosu.Main
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(" =============================================");
+            Console.WriteLine("  __  __         _     _                      ");
+            Console.WriteLine(" |  \\/  |  ___  | | __| | __ ___   ___  _   _ ");
+            Console.WriteLine(" | |\\/| | / _ \\ | |/ /| |/ // _ \\ / __|| | | |");
+            Console.WriteLine(" | |  | || (_) ||   < |   <| (_) |\\__ \\| |_| |");
+            Console.WriteLine(" |_|  |_| \\___/ |_|\\_\\|_|\\_\\\\___/ |___/ \\__,_|");
+            Console.WriteLine("");
+            Console.WriteLine(" =============== Version 0.0.1 ===============");
+            Console.WriteLine("");
+
             try
             {
                 if (args.Length > 0)
                 {
                     Start(args);
+                    Console.WriteLine();
+                    Console.WriteLine("コンパイルに成功しました。");
+                    Console.WriteLine();
                 }
                 else
                 {
