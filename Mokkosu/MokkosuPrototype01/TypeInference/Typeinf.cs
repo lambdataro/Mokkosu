@@ -1205,6 +1205,7 @@ namespace Mokkosu.TypeInference
                 var t1 = (TypeVar)type1;
                 if (OccursCheck(t1.Id, type2))
                 {
+                    ShowType.ShowSingleType(type1, type2);
                     throw new MError(pos + ": 型エラー (出現違反)");
                 }
                 else
@@ -1217,6 +1218,7 @@ namespace Mokkosu.TypeInference
                 var t2 = (TypeVar)type2;
                 if (OccursCheck(t2.Id, type1))
                 {
+                    ShowType.ShowSingleType(type1, type2);
                     throw new MError(pos + ": 型エラー (出現違反)");
                 }
                 else
@@ -1237,6 +1239,7 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
+                    ShowType.ShowSingleType(type1, type2);
                     throw new MError(pos + ": 型エラー (単一化エラー)");
                 }
             }
@@ -1272,6 +1275,7 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
+                    ShowType.ShowSingleType(type1, type2);
                     throw new MError(pos + ": 型エラー (単一化エラー)");
                 }
             }
@@ -1309,11 +1313,13 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
+                    ShowType.ShowSingleType(type1, type2);
                     throw new MError(pos + ": 型エラー (単一化エラー)");
                 }
             }
             else
             {
+                ShowType.ShowSingleType(type1, type2);
                 throw new MError(pos + ": 型エラー (単一化エラー)");
             }
         }

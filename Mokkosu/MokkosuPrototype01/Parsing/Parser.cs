@@ -341,10 +341,27 @@ namespace Mokkosu.Parsing
         static MFunItem ParseFunItem(ParseContext ctx)
         {
             var name = ctx.ReadStrToken(TokenType.ID);
-            var args = ParseArgList(ctx, TokenType.EQ);
-            ctx.ReadToken(TokenType.EQ);
-            var expr = ParseExpr(ctx);
-            return new MFunItem(name, ArgsToLambda(args, expr));
+            if (ctx.Tkn.Type == TokenType.EQ)
+            {
+                ctx.ReadToken(TokenType.EQ);
+                if (ctx.Tkn.Type == TokenType.LBR)
+                {
+                    var expr = ParseExpr(ctx);
+                    return new MFunItem(name, expr);
+                }
+                else
+                {
+                    ctx.SyntaxError();
+                    throw new MError();
+                }
+            }
+            else
+            {
+                var args = ParseArgList(ctx, TokenType.EQ);
+                ctx.ReadToken(TokenType.EQ);
+                var expr = ParseExpr(ctx);
+                return new MFunItem(name, ArgsToLambda(args, expr));
+            }
         }
 
 
