@@ -220,6 +220,18 @@ fun foldr f seed = {
   x :: xs -> f x (foldr f seed xs)
 };
 
+fun concat lis =
+  match lis {
+    [] -> [];
+	x :: xs -> x ++ concat xs;
+  };
+
+let concatmap f lis = concat (map f lis); 
+
+let __for_bind lis f = concatmap f lis;
+let __for_unit x = [x];
+let __for_zero = [];
+
 
 #------------------------------------------------------------
 # Maybe<T>

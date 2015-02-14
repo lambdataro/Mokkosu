@@ -14,13 +14,13 @@
         AMP, ASTAST, LTLT, GTGT, PLSPLS,
         LTBAR, BARGT, COLEQ, BQ,
         LBR, RBR, TILDA, DOT, DOTDOT,
-        TILDAMNS, TILDAMNSDOT,
+        TILDAMNS, TILDAMNSDOT, RARROW,
         // キーワード
         TYPE, AND, DO, IF, ELSE, PAT,
         TRUE, FALSE, LET, FUN, INCLUDE,
         AS, IN, PRIM, CALL, CAST, IMPORT,
         NEW, GET, SET, SGET, SSET, DELEGATE,
-        DEFINE, UNDEFINE, USING,
+        DEFINE, UNDEFINE, USING, FOR,
         // 制御記号
         EOF
     }

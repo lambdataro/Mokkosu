@@ -128,6 +128,7 @@ namespace Mokkosu.Parsing
             { TokenType.DOTDOT, "(..)" },
             { TokenType.TILDAMNS, "(~-)" },
             { TokenType.TILDAMNSDOT, "(~-.)"},
+            { TokenType.RARROW, "(<-)"},
             { TokenType.TYPE, "type" },
             { TokenType.AND, "and" },
             { TokenType.DO, "do" },
@@ -154,6 +155,7 @@ namespace Mokkosu.Parsing
             { TokenType.DEFINE, "__define" },
             { TokenType.UNDEFINE, "__undefine" },
             { TokenType.USING, "using" },
+            { TokenType.FOR, "for" },
         };
 
         string TypeToString(TokenType type)

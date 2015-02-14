@@ -50,6 +50,7 @@ namespace Mokkosu.Lexing
                 { "__define", TokenType.DEFINE },
                 { "__undefine", TokenType.UNDEFINE },
                 { "using", TokenType.USING },
+                { "for", TokenType.FOR },
             };
         }
 
@@ -432,6 +433,11 @@ namespace Mokkosu.Lexing
                 {
                     _strm.NextChar();
                     return new Token(Pos, TokenType.LTBAR);
+                }
+                else if (_strm.Char == '-')
+                {
+                    _strm.NextChar();
+                    return new Token(Pos, TokenType.RARROW);
                 }
                 else
                 {

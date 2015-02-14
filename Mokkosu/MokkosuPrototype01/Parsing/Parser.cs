@@ -458,11 +458,60 @@ namespace Mokkosu.Parsing
                 var e2 = ParseFunExpr(ctx);
                 return new MFun(pos, items, e2);
             }
+            else if (ctx.Tkn.Type == TokenType.FOR)
+            {
+                var pos = ctx.Tkn.Pos;
+                ctx.ReadToken(TokenType.FOR);
+                return ParseForLine(pos, ctx);
+            }
             else
             {
                 return ParseAssignExpr(ctx);
             }
         }
+
+        static MExpr ParseForLine(string pos, ParseContext ctx)
+        {
+            if (ctx.Tkn.Type == TokenType.IF)
+            {
+                ctx.ReadToken(TokenType.IF);
+                var e1 = ParseExpr(ctx);
+                if (ctx.Tkn.Type == TokenType.COM)
+                {
+                    ctx.ReadToken(TokenType.COM);
+                    return new MIf(pos, e1, ParseForLine(pos, ctx), 
+                        new MVar(pos, "__for_zero"));
+                }
+                else
+                {
+                    ctx.ReadToken(TokenType.IN);
+                    var e2 = ParseExpr(ctx);
+                    return new MIf(pos, e1, CreateUniop(pos, "__for_unit", e2), 
+                        new MVar(pos, "__for_zero"));
+                }
+            }
+            else
+            {
+                var pat = ParsePattern(ctx);
+                ctx.ReadToken(TokenType.RARROW);
+                var e1 = ParseExpr(ctx);
+                if (ctx.Tkn.Type == TokenType.COM)
+                {
+                    ctx.ReadToken(TokenType.COM);
+                    return CreateBinop(pos, "__for_bind", e1,
+                        new MLambda(pos, pat, ParseForLine(pos, ctx)));
+                }
+                else
+                {
+                    ctx.ReadToken(TokenType.IN);
+                    var e2 = ParseExpr(ctx);
+                    return CreateBinop(pos, "__for_bind", e1,
+                        new MLambda(pos, pat, CreateUniop(pos, "__for_unit", e2)));
+                }
+            }
+        }
+
+
 
         static List<MPat> ParseArgList(ParseContext ctx, TokenType end)
         {
