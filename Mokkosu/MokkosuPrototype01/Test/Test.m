@@ -2,11 +2,45 @@
 import "System.Windows.Forms.dll";
 import "System.Drawing.dll";
 
+let x = ref 0;
+let y = ref 0;
+let vx = ref 5;
+let vy = ref 5;
+
 let form = new System.Windows.Forms.Form();
 
-let hide = sget System.Windows.Forms.SizeGripStyle::Hide;
+let tick (obj, e) =
+  let obj = (obj : {System.Object}) in
+  let e = (e : {System.EventArgs}) in
+  do x := !x + !vx in
+  do y := !y + !vy in
+  do if !x > 800 - 20 -> vx := ~- !vx else () in
+  do if !x < 0 -> vx := ~- !vx else () in
+  do if !y > 600 - 20 -> vy := ~- !vy else () in
+  do if !y < 0 -> vy := ~- !vy else () in
+  form.Invalidate();
 
+let timer = new System.Windows.Forms.Timer();
+
+do timer.add_Tick(delegate System.EventHandler tick);
+
+let debug x = let x = x in x;
+
+let paint (obj, e) =
+  let obj = (obj : {System.Object}) in
+  let e = (e : {System.Windows.Forms.PaintEventArgs}) in
+  let g = e.get_Graphics() in
+  let v = !x in
+  let brush = call System.Drawing.Brushes::get_Blue() in
+  g.FillRectangle(brush, !x, !y, 20, 20);
+
+do form.add_Paint(delegate System.Windows.Forms.PaintEventHandler paint);
+
+let hide = sget System.Windows.Forms.SizeGripStyle::Hide;
 do form.set_ClientSize(new System.Drawing.Size(800, 600));
 do form.set_SizeGripStyle(hide);
+
+
+do timer.Start();
 
 do form.ShowDialog();

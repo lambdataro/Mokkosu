@@ -156,7 +156,7 @@ namespace Mokkosu.TypeInference
             else if (type is DotNetType)
             {
                 var t = (DotNetType)type;
-                return string.Format("{{0}}", t.Type.ToString());
+                return string.Format("{{{0}}}", t.Type.ToString());
             }
             else
             {

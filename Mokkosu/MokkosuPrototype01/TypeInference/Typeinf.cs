@@ -682,7 +682,7 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
-                    return t.Value;
+                    return ReduceType(t.Value);
                 }
             }
             else if (type is UserType)
