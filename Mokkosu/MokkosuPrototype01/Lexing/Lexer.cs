@@ -44,6 +44,8 @@ namespace Mokkosu.Lexing
                 { "new", TokenType.NEW },
                 { "get", TokenType.GET },
                 { "set", TokenType.SET },
+                { "sget", TokenType.SGET },
+                { "sset", TokenType.SSET },
                 { "delegate", TokenType.DELEGATE },
             };
         }

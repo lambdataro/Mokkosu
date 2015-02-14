@@ -892,6 +892,160 @@ namespace Mokkosu.AST
         }
     }
 
+    class MSet : MExpr
+    {
+        public MExpr Expr { get; private set; }
+        public MType ExprType { get; private set; }
+        public string FieldName { get; private set; }
+        public MExpr Arg { get; private set; }
+        public MType ArgType { get; private set; }
+        public FieldInfo Info { get; set; }
+
+        public MSet(string pos, MExpr expr, string field_name, MExpr arg)
+            : base(pos)
+        {
+            Expr = expr;
+            ExprType = new TypeVar();
+            FieldName = field_name;
+            Arg = arg;
+            ArgType = new TypeVar();
+            Info = null;
+        }
+
+        public MSet(string pos, MExpr expr, MType type, string field_name, 
+            MExpr arg, MType arg_type, FieldInfo info)
+            : base(pos)
+        {
+            Expr = expr;
+            ExprType = type;
+            FieldName = field_name;
+            Arg = arg;
+            ArgType = arg_type;
+            Info = info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("set {0}.{1} = {2}", Expr, FieldName, Arg);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set1 = Expr.FreeVars();
+            var set2 = Arg.FreeVars();
+            return set1.Union(set2);
+        }
+    }
+
+    class MGet : MExpr
+    {
+        public MExpr Expr { get; private set; }
+        public MType ExprType { get; private set; }
+        public string FieldName { get; private set; }
+        public FieldInfo Info { get; set; }
+
+        public MGet(string pos, MExpr expr, string field_name)
+            : base(pos)
+        {
+            Expr = expr;
+            ExprType = new TypeVar();
+            FieldName = field_name;
+            Info = null;
+        }
+
+        public MGet(string pos, MExpr expr, MType type, string field_name, FieldInfo info)
+            : base(pos)
+        {
+            Expr = expr;
+            ExprType = type;
+            FieldName = field_name;
+            Info = info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("get {0}.{1}", Expr, FieldName);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Expr.FreeVars();
+        }
+    }
+
+    class MSSet : MExpr
+    {
+        public string ClassName { get; private set; }
+        public string FieldName { get; private set; }
+        public MExpr Arg { get; private set; }
+        public MType ArgType { get; private set; }
+        public FieldInfo Info { get; set; }
+
+        public MSSet(string pos, string class_name, string field_name, MExpr arg)
+            : base(pos)
+        {
+            ClassName = class_name;
+            FieldName = field_name;
+            Arg = arg;
+            ArgType = new TypeVar();
+            Info = null;
+        }
+
+        public MSSet(string pos, string class_name, string field_name,
+            MExpr arg, MType arg_type, FieldInfo info)
+            : base(pos)
+        {
+            ClassName = class_name;
+            FieldName = field_name;
+            Arg = arg;
+            ArgType = arg_type;
+            Info = info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("set {0}.{1} = {2}", ClassName, FieldName, Arg);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Arg.FreeVars();
+        }
+    }
+
+    class MSGet : MExpr
+    {
+        public string ClassName { get; private set; }
+        public string FieldName { get; private set; }
+        public FieldInfo Info { get; set; }
+
+        public MSGet(string pos, string class_name, string field_name)
+            : base(pos)
+        {
+            ClassName = class_name;
+            FieldName = field_name;
+            Info = null;
+        }
+
+        public MSGet(string pos, string class_name, string field_name, FieldInfo info)
+            : base(pos)
+        {
+            ClassName = class_name;
+            FieldName = field_name;
+            Info = info;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("get {0}.{1}", ClassName, FieldName);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return new MSet<string>();
+        }
+    }
+
     /// <summary>
     /// 引数の値を取得する (クロージャ変換後に利用)
     /// </summary>

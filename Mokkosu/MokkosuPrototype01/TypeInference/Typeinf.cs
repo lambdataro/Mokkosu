@@ -613,6 +613,46 @@ namespace Mokkosu.TypeInference
                 e.ClassType = t;
                 e.CstrInfo = t.GetConstructor(new Type[] { typeof(object), typeof(IntPtr) });
             }
+            else if (expr is MSet)
+            {
+                var e = (MSet)expr;
+                Inference(e.Expr, e.ExprType, tenv, ctx);
+                Inference(e.Arg, e.ArgType, tenv, ctx);
+                var field = TypeinfDotNet.LookupField(e.Pos, e.ExprType, e.FieldName);
+                e.Info = field;
+                var ret_type = TypeinfDotNet.DotNetTypeToMokkosuType(field.FieldType);
+                Unification(e.Pos, e.ArgType, ret_type);
+                Unification(e.Pos, type, ret_type);
+            }
+            else if (expr is MGet)
+            {
+                var e = (MGet)expr;
+                Inference(e.Expr, e.ExprType, tenv, ctx);
+                var field = TypeinfDotNet.LookupField(e.Pos, e.ExprType, e.FieldName);
+                e.Info = field;
+                var ret_type = TypeinfDotNet.DotNetTypeToMokkosuType(field.FieldType);
+                Unification(e.Pos, type, ret_type);
+            }
+            else if (expr is MSSet)
+            {
+                var e = (MSSet)expr;
+                Inference(e.Arg, e.ArgType, tenv, ctx);
+                var t = TypeinfDotNet.LookupDotNetClass(e.Pos, e.ClassName);
+                var field = TypeinfDotNet.LookupField(e.Pos, new DotNetType(t), e.FieldName);
+                e.Info = field;
+                var ret_type = TypeinfDotNet.DotNetTypeToMokkosuType(field.FieldType);
+                Unification(e.Pos, e.ArgType, ret_type);
+                Unification(e.Pos, type, ret_type);
+            }
+            else if (expr is MSSet)
+            {
+                var e = (MSGet)expr;
+                var t = TypeinfDotNet.LookupDotNetClass(e.Pos, e.ClassName);
+                var field = TypeinfDotNet.LookupField(e.Pos, new DotNetType(t), e.FieldName);
+                e.Info = field;
+                var ret_type = TypeinfDotNet.DotNetTypeToMokkosuType(field.FieldType);
+                Unification(e.Pos, type, ret_type);
+            }
             else
             {
                 throw new NotImplementedException();

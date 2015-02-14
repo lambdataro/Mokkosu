@@ -213,6 +213,29 @@ namespace Mokkosu.ClosureConversion
                     }
                 }
             }
+            else if (expr is MSet)
+            {
+                var e = (MSet)expr;
+                var e1 = Conv(e.Expr, ctx);
+                var e2 = Conv(e.Arg, ctx);
+                return new MSet(e.Pos, e1, e.ExprType, e.FieldName, e2, e.ArgType, e.Info);
+            }
+            else if (expr is MGet)
+            {
+                var e = (MGet)expr;
+                var e1 = Conv(e.Expr, ctx);
+                return new MGet(e.Pos, e1, e.ExprType, e.FieldName, e.Info);
+            }
+            else if (expr is MSSet)
+            {
+                var e = (MSSet)expr;
+                var e1 = Conv(e.Arg, ctx);
+                return new MSSet(e.Pos, e.ClassName, e.FieldName, e1, e.ArgType, e.Info);
+            }
+            else if (expr is MSGet)
+            {
+                return expr;
+            }
             else
             {
                 throw new NotImplementedException();

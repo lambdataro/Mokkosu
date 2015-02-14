@@ -77,6 +77,13 @@ namespace Mokkosu.TypeInference
             return method;
         }
 
+        public static FieldInfo LookupField(string pos, MType object_type, string field_name)
+        {
+            var t = MokkosuTypeToDotNetType(pos, object_type);
+            var field = t.GetField(field_name);
+            return field;
+        }
+
         static Type MokkosuTypeToDotNetType(string pos, MType mtype)
         {
             if (mtype is TypeVar)

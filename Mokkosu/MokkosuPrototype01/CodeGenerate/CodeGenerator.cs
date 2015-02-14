@@ -709,6 +709,124 @@ namespace Mokkosu.CodeGenerate
                 il.Emit(OpCodes.Ldftn, method);
                 il.Emit(OpCodes.Newobj, e.CstrInfo);
             }
+            else if (expr is MSet)
+            {
+                var e = (MSet)expr;
+
+                Compile(il, e.Expr, env);
+
+                var t = Typeinf.ReduceType(e.ExprType);
+
+                if (t is IntType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                }
+                else if (t is DoubleType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(double));
+                }
+                else if (t is CharType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(char));
+                }
+                else if (t is BoolType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                }
+
+                Compile(il, e.Arg, env);
+
+                var tt = Typeinf.ReduceType(e.ArgType);
+
+                if (tt is IntType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                }
+                else if (tt is DoubleType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(double));
+                }
+                else if (tt is CharType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(char));
+                }
+                else if (tt is BoolType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                }
+
+                il.Emit(OpCodes.Stfld, e.Info);
+
+                il.Emit(OpCodes.Ldc_I4_0);
+                il.Emit(OpCodes.Box, typeof(int));
+            }
+            else if (expr is MGet)
+            {
+                var e = (MGet)expr;
+
+                Compile(il, e.Expr, env);
+
+                var t = Typeinf.ReduceType(e.ExprType);
+
+                if (t is IntType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                }
+                else if (t is DoubleType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(double));
+                }
+                else if (t is CharType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(char));
+                }
+                else if (t is BoolType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                }
+
+                il.Emit(OpCodes.Ldfld, e.Info);
+
+                if (e.Info.FieldType.IsValueType)
+                {
+                    il.Emit(OpCodes.Box, e.Info.FieldType);
+                }
+            }
+            else if (expr is MSSet)
+            {
+                var e = (MSSet)expr;
+
+                Compile(il, e.Arg, env);
+
+                var tt = Typeinf.ReduceType(e.ArgType);
+
+                if (tt is IntType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                }
+                else if (tt is DoubleType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(double));
+                }
+                else if (tt is CharType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(char));
+                }
+                else if (tt is BoolType)
+                {
+                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                }
+
+                il.Emit(OpCodes.Stsfld, e.Info);
+
+                il.Emit(OpCodes.Ldc_I4_0);
+                il.Emit(OpCodes.Box, typeof(int));
+            }
+            else if (expr is MSGet)
+            {
+                var e = (MSGet)expr;
+                il.Emit(OpCodes.Ldsfld, e.Info);
+            }
             else
             {
                 throw new NotImplementedException();

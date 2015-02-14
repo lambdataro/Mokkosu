@@ -22,6 +22,10 @@ namespace Mokkosu.Main
                 {
                     Start(args);
                 }
+                else
+                {
+                    Console.WriteLine("入力がありません。");
+                }
             }
             catch(MError e)
             {

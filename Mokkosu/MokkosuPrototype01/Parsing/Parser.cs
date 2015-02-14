@@ -924,6 +924,42 @@ namespace Mokkosu.Parsing
                 var expr = ParseFactor(ctx);
                 return new MDelegate(pos, cls_name, expr);
             }
+            else if (ctx.Tkn.Type == TokenType.SET)
+            {
+                ctx.ReadToken(TokenType.SET);
+                var e1 = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.DOT);
+                var name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.EQ);
+                var e2 = ParseExpr(ctx);
+                return new MSet(pos, e1, name, e2);
+            }
+            else if (ctx.Tkn.Type == TokenType.GET)
+            {
+                ctx.ReadToken(TokenType.GET);
+                var e1 = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.DOT);
+                var name = ctx.ReadStrToken(TokenType.ID);
+                return new MGet(pos, e1, name);
+            }
+            else if (ctx.Tkn.Type == TokenType.SSET)
+            {
+                ctx.ReadToken(TokenType.SET);
+                var cls = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.COLCOL);
+                var name = ctx.ReadStrToken(TokenType.ID);
+                ctx.ReadToken(TokenType.EQ);
+                var e = ParseExpr(ctx);
+                return new MSSet(pos, cls, name, e);
+            }
+            else if (ctx.Tkn.Type == TokenType.SGET)
+            {
+                ctx.ReadToken(TokenType.SET);
+                var cls = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.COLCOL);
+                var name = ctx.ReadStrToken(TokenType.ID);
+                return new MSGet(pos, cls, name);
+            }
             else
             {
                 ctx.SyntaxError();
