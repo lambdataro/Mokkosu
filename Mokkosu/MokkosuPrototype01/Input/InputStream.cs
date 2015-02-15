@@ -23,7 +23,7 @@ namespace Mokkosu.Input
             }
             else
             {
-                throw new MError("ソースファイル " + fname + "が見つかりません。");
+                throw new MError("ソースファイル " + Path.GetFileName(fname) + " が見つかりません。");
             }
         }
 

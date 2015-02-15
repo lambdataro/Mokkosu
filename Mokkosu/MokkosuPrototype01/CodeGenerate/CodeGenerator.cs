@@ -687,7 +687,18 @@ namespace Mokkosu.CodeGenerate
                     }
                 }
 
-                il.Emit(OpCodes.Callvirt, e.Info);
+                var dotnet = TypeinfDotNet.MokkosuTypeToDotNetType("", t);
+                if (dotnet.IsValueType)
+                {
+                    var loc = il.DeclareLocal(dotnet);
+                    il.Emit(OpCodes.Stloc, loc);
+                    il.Emit(OpCodes.Ldloca, loc);
+                    il.Emit(OpCodes.Call, e.Info);
+                }
+                else
+                {
+                    il.Emit(OpCodes.Callvirt, e.Info);
+                }
 
                 if (e.Info.ReturnType == typeof(void))
                 {

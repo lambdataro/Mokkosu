@@ -119,7 +119,7 @@ namespace Mokkosu.TypeInference
             return field;
         }
 
-        static Type MokkosuTypeToDotNetType(string pos, MType mtype)
+        public static Type MokkosuTypeToDotNetType(string pos, MType mtype)
         {
             if (mtype is TypeVar)
             {

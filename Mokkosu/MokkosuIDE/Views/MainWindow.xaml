@@ -22,21 +22,88 @@
     </i:Interaction.Triggers>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="ファイル">
-                <MenuItem Header="終了"/>
+            <MenuItem Header="ファイル(_F)">
+                <MenuItem Header="終了(_X)" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="表示(_V)">
+                <MenuItem Header="ソースコード(_S)" Command="{Binding ShowInputCommand}"/>
+                <MenuItem Header="出力(_O)" Command="{Binding ShowOutputCommand}"/>
             </MenuItem>
         </Menu>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button>実行</Button>
+                <Button Command="{Binding RunCommand}">実行</Button>
             </ToolBar>
         </ToolBarTray>
-        <ad:DockingManager AllowMixedOrientation="True">
+        <ad:DockingManager DocumentsSource="{Binding Documents, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                           AnchorablesSource="{Binding Tools, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                           ActiveContent="{Binding ActiveContent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                           AllowMixedOrientation="True">
             <ad:DockingManager.Theme>
                 <ad:AeroTheme/>
             </ad:DockingManager.Theme>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="DocumentClosed">
+                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="DocumentClosed"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ad:DockingManager.LayoutItemTemplateSelector>
+                <v:PanesDataTemplateSelector>
+                    <v:PanesDataTemplateSelector.SourcesViewTemplate>
+                        <DataTemplate>
+                            <ae:TextEditor Document="{Binding Document, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                           FontFamily="MS Gothic" FontSize="16" ShowLineNumbers="True" TabIndex="4"
+                                           SyntaxHighlighting="{Binding Highlighting, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                <ae:TextEditor.Options>
+                                    <ae:TextEditorOptions ConvertTabsToSpaces="True" HighlightCurrentLine="True" EnableImeSupport="True" 
+                                                          EnableRectangularSelection="True" EnableTextDragDrop="True" 
+                                                          HideCursorWhileTyping="True" ShowTabs="True"/>
+                                </ae:TextEditor.Options>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <ei:CallMethodAction TargetObject="{Binding}" MethodName="DocumentChanged"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ae:TextEditor>
+                        </DataTemplate>
+                    </v:PanesDataTemplateSelector.SourcesViewTemplate>
+                    <v:PanesDataTemplateSelector.OutputsViewTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     IsReadOnly="True" FontFamily="MS Gothic" FontSize="16" 
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <ei:CallMethodAction TargetObject="{Binding}" MethodName="DocumentChanged"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </DataTemplate>
+                    </v:PanesDataTemplateSelector.OutputsViewTemplate>
+                </v:PanesDataTemplateSelector>
+            </ad:DockingManager.LayoutItemTemplateSelector>
+            <ad:DockingManager.LayoutItemContainerStyleSelector>
+                <v:PanesStyleSelector>
+                    <v:PanesStyleSelector.SourcesStyle>
+                        <Style TargetType="{x:Type ad:LayoutDocumentItem}">
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+                            <Setter Property="Title" Value="{Binding Model.Title}"/>
+                        </Style>
+                    </v:PanesStyleSelector.SourcesStyle>
+                    <v:PanesStyleSelector.OutputsStyle>
+                        <Style TargetType="{x:Type ad:LayoutDocumentItem}">
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+                            <Setter Property="Title" Value="{Binding Model.Title}"/>
+                        </Style>
+                    </v:PanesStyleSelector.OutputsStyle>
+                </v:PanesStyleSelector>
+            </ad:DockingManager.LayoutItemContainerStyleSelector>
+            <ad:DockingManager.LayoutUpdateStrategy>
+                <v:LayoutInitializer/>
+            </ad:DockingManager.LayoutUpdateStrategy>
             <ad:LayoutRoot>
-                <ad:LayoutPanel>
+                <ad:LayoutPanel Orientation="Horizontal">
                     <ad:LayoutDocumentPane/>
                 </ad:LayoutPanel>
             </ad:LayoutRoot>

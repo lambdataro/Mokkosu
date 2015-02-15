@@ -84,6 +84,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\DocumentsViewModel.cs" />
+    <Compile Include="ViewModels\OutputsViewModel.cs" />
+    <Compile Include="ViewModels\PanesViewModel.cs" />
+    <Compile Include="ViewModels\SourcesViewModel.cs" />
+    <Compile Include="ViewModels\ToolsViewModel.cs" />
+    <Compile Include="Views\PanesDataTemplateSelector.cs" />
+    <Compile Include="Views\PanesStyleSelector.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +101,7 @@
     </Compile>
     <Compile Include="Models\Model.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\LayoutInitializer.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
