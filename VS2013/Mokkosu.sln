@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuIDE", "MokkosuIDE\MokkosuIDE.csproj", "{4B73A169-87C3-460E-9AE3-94DE1F1788E9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuSupport", "MokkosuSupport\MokkosuSupport.csproj", "{8767286C-AEAD-4E73-8C6B-5E72552BF35B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuCore", "MokkosuCore\MokkosuCore.csproj", "{9CBBD81B-A4D7-4340-968D-0E7C2B33C01A}"
@@ -29,16 +27,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|x86.ActiveCfg = Debug|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Debug|x86.Build.0 = Debug|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|Any CPU.ActiveCfg = Release|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|Mixed Platforms.Build.0 = Release|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|x86.ActiveCfg = Release|x86
-		{4B73A169-87C3-460E-9AE3-94DE1F1788E9}.Release|x86.Build.0 = Release|x86
 		{8767286C-AEAD-4E73-8C6B-5E72552BF35B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8767286C-AEAD-4E73-8C6B-5E72552BF35B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8767286C-AEAD-4E73-8C6B-5E72552BF35B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
