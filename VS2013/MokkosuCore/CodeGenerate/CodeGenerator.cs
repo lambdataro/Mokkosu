@@ -108,7 +108,8 @@ namespace Mokkosu.CodeGenerate
             _tag_type = tag.CreateType();
 
             // MokkosuProgram クラス
-            var type_builder = module_builder.DefineType("MokkosuProgram");
+            var type_builder = module_builder.DefineType("MokkosuProgram", 
+                TypeAttributes.Public, typeof(object), new Type[]{ typeof(IMokkosuProgram) });
             _type_builder = type_builder;
 
             foreach (var f in cc_result.FunctionTable)
@@ -131,7 +132,10 @@ namespace Mokkosu.CodeGenerate
 
             // MokkosuEntryPoint
             var builder = type_builder.DefineMethod("MokkosuEntryPoint",
-                MethodAttributes.Static, typeof(void), new Type[] { });
+                MethodAttributes.Virtual, 
+                typeof(void), new Type[] { });
+            type_builder.DefineMethodOverride(builder,
+                typeof(IMokkosuProgram).GetMethod("MokkosuEntryPoint"));
             ilgen = builder.GetILGenerator();
             ilgen.Emit(OpCodes.Ldnull);
             ilgen.Emit(OpCodes.Ldnull);
@@ -148,7 +152,7 @@ namespace Mokkosu.CodeGenerate
             {
                 assembly_builder.SetEntryPoint(builder, PEFileKinds.ConsoleApplication);
             }
-            
+
             return assembly_builder;
         }
 

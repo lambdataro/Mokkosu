@@ -2,7 +2,7 @@
 
 namespace Mokkosu.Utils
 {
-    class MError : Exception
+    public class MError : Exception
     {
         public MError() : base() { }
         public MError(string message) : base(message) { }

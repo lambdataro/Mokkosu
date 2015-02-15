@@ -19,7 +19,7 @@ namespace Mokkosu.TypeInference
             {
                 ShowTEnv(tenv.Tail);
                 var str = ShowTypeScheme(tenv.Head.Item1, tenv.Head.Item2);
-                Console.WriteLine("{0} : {1}", tenv.Head.Item1, str);
+                Global.OutputString(string.Format("{0} : {1}", tenv.Head.Item1, str));
             }
         }
 
@@ -66,10 +66,12 @@ namespace Mokkosu.TypeInference
 
         public static void ShowSingleType(MType left, MType right)
         {
-            Console.WriteLine("左辺: {0}",
-                Show("", left, new Dictionary<int, string>(), false));
-            Console.WriteLine("右辺: {0}",
-                Show("", right, new Dictionary<int, string>(), false));
+            Global.OutputString(
+                string.Format("型1: {0}",
+                    Show("", left, new Dictionary<int, string>(), false)));
+            Global.OutputString(
+                string.Format("型2: {0}",
+                    Show("", right, new Dictionary<int, string>(), false)));
         }
 
         static string Show(string name, MType type, Dictionary<int, string> typevars, bool parens)

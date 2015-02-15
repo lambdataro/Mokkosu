@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2EAC6EF9-47BC-439B-A49F-56139E0CE7D4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{9CBBD81B-A4D7-4340-968D-0E7C2B33C01A}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mokkosu</RootNamespace>
-    <AssemblyName>MokkosuPrototype01</AssemblyName>
+    <AssemblyName>MokkosuCore</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -53,6 +51,7 @@
     <Compile Include="ClosureConversion\TopToExpr.cs" />
     <Compile Include="CodeGenerate\CodeGenerator.cs" />
     <Compile Include="CodeGenerate\CodeGeneratorCommon.cs" />
+    <Compile Include="CodeGenerate\IMokkosuProgram.cs" />
     <Compile Include="CodeGenerate\PrimitiveFunctions.cs" />
     <Compile Include="Input\InputStream.cs" />
     <Compile Include="Input\SourceFile.cs" />
@@ -62,6 +61,7 @@
     <Compile Include="Parsing\ParseContext.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\ParseResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeInference\ShowType.cs" />
     <Compile Include="TypeInference\Typeinf.cs" />
     <Compile Include="TypeInference\TypeInfContext.cs" />
@@ -71,16 +71,6 @@
     <Compile Include="Utils\MError.cs" />
     <Compile Include="Utils\MSet.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Stdlib.m">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Test\Test.m">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

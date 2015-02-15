@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("MokkosuPrototype01")]
+[assembly: AssemblyTitle("MokkosuInterpreter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MokkosuPrototype01")]
+[assembly: AssemblyProduct("MokkosuInterpreter")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 次の GUID は、このプロジェクトが COM に公開される場合の、typelib の ID です
-[assembly: Guid("59d3829a-716d-4cd1-9dcd-29fb61792cfe")]
+[assembly: Guid("f4ee9bd7-61f4-4e0f-ac6e-616ab812a779")]
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
 //
