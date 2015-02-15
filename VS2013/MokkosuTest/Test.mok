@@ -1,0 +1,6 @@
+﻿fun fact = {
+  0 -> 1;
+  n -> n * fact (n - 1);
+};
+
+println (fact 5);

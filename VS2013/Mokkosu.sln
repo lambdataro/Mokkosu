@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuCompiler", "MokkosuC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuTypechecker", "MokkosuTypechecker\MokkosuTypechecker.csproj", "{260D8997-0D36-46D8-B9D4-7B2865179855}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuPad", "MokkosuPad\MokkosuPad.csproj", "{EAAA889C-F677-48C1-90FC-6C92D457CD91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MokkosuTest", "MokkosuTest\MokkosuTest.csproj", "{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +89,26 @@ Global
 		{260D8997-0D36-46D8-B9D4-7B2865179855}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{260D8997-0D36-46D8-B9D4-7B2865179855}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{260D8997-0D36-46D8-B9D4-7B2865179855}.Release|x86.ActiveCfg = Release|Any CPU
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Debug|x86.ActiveCfg = Debug|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Debug|x86.Build.0 = Debug|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Release|Any CPU.ActiveCfg = Release|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Release|Mixed Platforms.Build.0 = Release|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Release|x86.ActiveCfg = Release|x86
+		{EAAA889C-F677-48C1-90FC-6C92D457CD91}.Release|x86.Build.0 = Release|x86
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6BA46D20-DDC1-4CAD-AECA-759DFD2C47C9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
