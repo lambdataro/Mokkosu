@@ -134,15 +134,15 @@ fun reflect = {
   ~Empty -> Empty;
   ~Branch(b1,e,b2) -> Branch(reflect b2, e, reflect b1);
 };
-fun print_tree = {
+let print_tree = {
   ~Empty -> print "Empty";
   ~Branch(b1,e,b2) ->
     do print "Branch(";
-       print_tree b2;
+       print_tree b1;
        print ",";
        print e;
        print ",";
-       print_tree b1;
+       print_tree b2;
        print ")"
     in ();
 };
@@ -156,6 +156,8 @@ do println <| size tree1;
 do println <| depth tree1;
 do print_list <| preorder tree1;
 do print_list <| postorder tree1;
+do print_tree <| tree1;
+do print "\n";
 do print_tree <| reflect tree1;
 do print "\n";
 
