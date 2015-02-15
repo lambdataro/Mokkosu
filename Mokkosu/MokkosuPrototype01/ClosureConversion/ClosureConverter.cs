@@ -69,14 +69,14 @@ namespace Mokkosu.ClosureConversion
                 if (e.ArgPat is PVar)
                 {
                     var ctx2 = new ClosureConversionContext(((PVar)e.ArgPat).Name, fv);
-                    body = Conv(e.Body, ctx2, istail);
+                    body = Conv(e.Body, ctx2, false);
                 }
                 else
                 {
                     var arg_name = GenArgName();
                     var ctx2 = new ClosureConversionContext(arg_name, fv);
                     body = Conv(new MMatch(e.Pos, e.ArgPat, new MBool(e.Pos, true), new MVar(arg_name), e.Body,
-                        new MRuntimeError(e.Pos, "パターンマッチ失敗")), ctx2, istail);
+                        new MRuntimeError(e.Pos, "パターンマッチ失敗")), ctx2, false);
                 }
                 var fun_name = GenFunctionName();
                 _function_table.Add(fun_name, body);
