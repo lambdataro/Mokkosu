@@ -23,7 +23,7 @@ namespace Mokkosu.Main
             _input_stream = new InputStream();
 
             var exe_path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            AddSourceFile(Path.Combine(exe_path, "Stdlib.m"));
+            AddSourceFile(Path.Combine(exe_path, "Stdlib.mok"));
         }
 
         public void OutputVersion()
