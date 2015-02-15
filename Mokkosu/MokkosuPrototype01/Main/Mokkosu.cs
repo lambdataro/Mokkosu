@@ -71,6 +71,8 @@ namespace Mokkosu.Main
             var expr = TopToExpr.Start(parse_result);
             var closure_result = ClosureConverter.Start(expr);
 
+            Console.WriteLine(closure_result);
+
             var name = Path.GetFileNameWithoutExtension(args.Last());
 
             var assembly = CodeGenerator.Start(name, closure_result);

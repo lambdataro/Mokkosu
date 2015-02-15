@@ -301,6 +301,10 @@ namespace Mokkosu.CodeGenerate
                 il.Emit(OpCodes.Ldloc, ary);
                 il.Emit(OpCodes.Ldc_I4_0);
                 il.Emit(OpCodes.Ldelem_Ref);
+                if (e.TailCall)
+                {
+                    il.Emit(OpCodes.Tailcall);
+                }
                 il.EmitCalli(OpCodes.Calli,
                     CallingConventions.Standard,
                     typeof(object),

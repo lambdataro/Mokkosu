@@ -280,17 +280,26 @@ namespace Mokkosu.AST
     {
         public MExpr FunExpr { get; private set; }
         public MExpr ArgExpr { get; private set; }
+        public bool TailCall { get; set; }
 
         public MApp(string pos, MExpr fun_expr, MExpr arg_expr)
             : base(pos)
         {
             FunExpr = fun_expr;
             ArgExpr = arg_expr;
+            TailCall = false;
         }
 
         public override string ToString()
         {
-            return string.Format("({0} {1})", FunExpr, ArgExpr);
+            if (TailCall)
+            {
+                return string.Format("(tail {0} {1})", FunExpr, ArgExpr);
+            }
+            else
+            {
+                return string.Format("({0} {1})", FunExpr, ArgExpr);
+            }
         }
 
         public override MSet<string> FreeVars()
