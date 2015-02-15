@@ -4,6 +4,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+        xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:v="clr-namespace:MokkosuPad.Views"
         xmlns:vm="clr-namespace:MokkosuPad.ViewModels"
         Title="Mokkosu" Height="720" Width="1280">
@@ -19,10 +21,60 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel>
-        <Menu>
+        <Menu DockPanel.Dock="Top">
             <MenuItem Header="ファイル(_F)">
-                <MenuItem Header="終了(_X)"/>
+                <MenuItem Header="終了(_X)" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="操作(_O)">
+                <MenuItem Header="実行(_E)"/>
+                <MenuItem Header="コンパイル(_C)"/>
             </MenuItem>
         </Menu>
+        <ad:DockingManager DocumentsSource="{Binding Documents, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                           AllowMixedOrientation="True">
+            <ad:DockingManager.Theme>
+                <ad:AeroTheme/>
+            </ad:DockingManager.Theme>
+            <ad:DockingManager.LayoutUpdateStrategy>
+                <v:LayoutInitializer/>
+            </ad:DockingManager.LayoutUpdateStrategy>
+            <ad:LayoutRoot>
+                <ad:LayoutPanel Orientation="Horizontal">
+                    <ad:LayoutDocumentPane/>
+                </ad:LayoutPanel>
+            </ad:LayoutRoot>
+            <ad:DockingManager.LayoutItemTemplateSelector>
+                <v:PanesDataTemplateSelector>
+                    <v:PanesDataTemplateSelector.SourceViewTemplate>
+                        <DataTemplate>
+                            <ae:TextEditor Document="{Binding Document, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                           FontFamily="MS Gothic" FontSize="16" ShowLineNumbers="True" TabIndex="4"
+                                           SyntaxHighlighting="{Binding Highlighting, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                <ae:TextEditor.Options>
+                                    <ae:TextEditorOptions ConvertTabsToSpaces="True" HighlightCurrentLine="True" EnableImeSupport="True" 
+                                                          EnableRectangularSelection="True" EnableTextDragDrop="True" 
+                                                          HideCursorWhileTyping="True" ShowTabs="True"/>
+                                </ae:TextEditor.Options>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <ei:CallMethodAction TargetObject="{Binding}" MethodName="DocumentChanged"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ae:TextEditor>
+                        </DataTemplate>
+                    </v:PanesDataTemplateSelector.SourceViewTemplate>
+                </v:PanesDataTemplateSelector>
+            </ad:DockingManager.LayoutItemTemplateSelector>
+            <ad:DockingManager.LayoutItemContainerStyleSelector>
+                <v:PanesStyleSelector>
+                    <v:PanesStyleSelector.SourceViewStyle>
+                        <Style TargetType="{x:Type ad:LayoutDocumentItem}">
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+                            <Setter Property="Title" Value="{Binding Model.Title}"/>
+                        </Style>
+                    </v:PanesStyleSelector.SourceViewStyle>
+                </v:PanesStyleSelector>
+            </ad:DockingManager.LayoutItemContainerStyleSelector>
+        </ad:DockingManager>
     </DockPanel>
 </Window>
