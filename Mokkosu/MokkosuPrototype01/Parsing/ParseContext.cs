@@ -156,6 +156,7 @@ namespace Mokkosu.Parsing
             { TokenType.UNDEFINE, "__undefine" },
             { TokenType.USING, "using" },
             { TokenType.FOR, "for" },
+            { TokenType.END, "end" },
         };
 
         string TypeToString(TokenType type)

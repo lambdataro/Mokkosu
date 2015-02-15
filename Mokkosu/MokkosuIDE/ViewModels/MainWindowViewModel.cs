@@ -23,6 +23,8 @@ namespace MokkosuIDE.ViewModels
         private SourcesViewModel _input = new SourcesViewModel("ソースコード");
         private OutputsViewModel _output = new OutputsViewModel("出力");
 
+        private string _filename = "";
+
         public void Initialize()
         {
             Documents.Add(_input);
@@ -193,6 +195,13 @@ namespace MokkosuIDE.ViewModels
 
         public void Run()
         {
+            if (_filename == "")
+            {
+
+            }
+
+
+
             var info = new ProcessStartInfo();
 
             info.FileName = "MokkosuPrototype01.exe";

@@ -395,9 +395,18 @@ namespace Mokkosu.Parsing
                 var cond_expr = ParseFunExpr(ctx);
                 ctx.ReadToken(TokenType.ARROW);
                 var then_expr = ParseFunExpr(ctx);
-                ctx.ReadToken(TokenType.ELSE);
-                var else_expr = ParseFunExpr(ctx);
-                return new MIf(pos, cond_expr, then_expr, else_expr);
+                if (ctx.Tkn.Type == TokenType.ELSE)
+                {
+                    ctx.ReadToken(TokenType.ELSE);
+                    var else_expr = ParseFunExpr(ctx);
+                    return new MIf(pos, cond_expr, then_expr, else_expr);
+                }
+                else
+                {
+                    var else_expr = new MUnit(pos);
+                    return new MIf(pos, cond_expr, then_expr, else_expr);
+                }
+                
             }
             else if (ctx.Tkn.Type == TokenType.PAT)
             {
@@ -426,9 +435,18 @@ namespace Mokkosu.Parsing
             {
                 var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.DO);
-                var es = ParseExprScList(ctx, TokenType.IN);
-                ctx.ReadToken(TokenType.IN);
-                var e2 = ParseFunExpr(ctx);
+                var es = ParseExprScList(ctx);
+                MExpr e2;
+                if (ctx.Tkn.Type == TokenType.IN)
+                {
+                    ctx.ReadToken(TokenType.IN);
+                    e2 = ParseFunExpr(ctx);
+                }
+                else
+                {
+                    ctx.ReadToken(TokenType.END);
+                    e2 = new MUnit(pos);
+                }
                 es.Reverse();
                 var e1 = es.First();
                 foreach (var e in es.Skip(1))
@@ -1463,14 +1481,14 @@ namespace Mokkosu.Parsing
             return list;
         }
 
-        static List<MExpr> ParseExprScList(ParseContext ctx, TokenType end)
+        static List<MExpr> ParseExprScList(ParseContext ctx)
         {
             var list = new List<MExpr>();
             list.Add(ParseExpr(ctx));
             while (ctx.Tkn.Type == TokenType.SC)
             {
                 ctx.ReadToken(TokenType.SC);
-                if (ctx.Tkn.Type == end)
+                if (ctx.Tkn.Type == TokenType.IN || ctx.Tkn.Type == TokenType.END)
                 {
                     break;
                 }
