@@ -140,7 +140,15 @@ namespace Mokkosu.CodeGenerate
             ilgen.Emit(OpCodes.Ret);
 
             type_builder.CreateType();
-            assembly_builder.SetEntryPoint(builder);
+            if (Global.IdDefineKey("HIDE_CONSOLE"))
+            {
+                assembly_builder.SetEntryPoint(builder, PEFileKinds.WindowApplication);
+            }
+            else
+            {
+                assembly_builder.SetEntryPoint(builder, PEFileKinds.ConsoleApplication);
+            }
+            
             return assembly_builder;
         }
 
