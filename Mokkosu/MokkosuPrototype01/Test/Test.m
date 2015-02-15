@@ -26,6 +26,7 @@ let tick ((obj : {System.Object}), (e : {System.EventArgs})) =
 let timer = new Timer();
 
 do timer.add_Tick(delegate EventHandler tick);
+do timer.set_Interval(33);
 
 let debug x = let x = x in x;
 
