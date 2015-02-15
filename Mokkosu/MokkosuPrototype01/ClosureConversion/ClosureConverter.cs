@@ -14,7 +14,7 @@ namespace Mokkosu.ClosureConversion
         public static ClosureConversionResult Start(MExpr expr)
         {
             _function_table = new Dictionary<string, MExpr>();
-            var ctx = new ClosureConversionContext("", new string[] { });
+            var ctx = new ClosureConversionContext("", new string[] { }, new List<string>());
             var main = Conv(expr, ctx);
             return new ClosureConversionResult(_function_table, main);
         }
@@ -63,18 +63,21 @@ namespace Mokkosu.ClosureConversion
             else if (expr is MLambda)
             {
                 var e = (MLambda)expr;
-                var set = e.Body.FreeVars().Diff(e.ArgPat.FreeVars());
+                var set1 = e.Body.FreeVars().Diff(e.ArgPat.FreeVars());
+                var set2 = new MSet<string>(ctx.RecList);
+                // var set = set1.Union(set2);
+                var set = set1;
                 var fv = set.ToArray();
                 MExpr body;
                 if (e.ArgPat is PVar)
                 {
-                    var ctx2 = new ClosureConversionContext(((PVar)e.ArgPat).Name, fv);
+                    var ctx2 = new ClosureConversionContext(((PVar)e.ArgPat).Name, fv, ctx.RecList);
                     body = Conv(e.Body, ctx2);
                 }
                 else
                 {
                     var arg_name = GenArgName();
-                    var ctx2 = new ClosureConversionContext(arg_name, fv);
+                    var ctx2 = new ClosureConversionContext(arg_name, fv, ctx.RecList);
                     body = Conv(new MMatch(e.Pos, e.ArgPat, new MBool(e.Pos, true), new MVar(arg_name), e.Body,
                         new MRuntimeError(e.Pos, "パターンマッチ失敗")), ctx2);
                 }
@@ -141,9 +144,18 @@ namespace Mokkosu.ClosureConversion
             else if (expr is MFun)
             {
                 var e = (MFun)expr;
+
+                var rec_list = new List<string>(ctx.RecList);
+
+                foreach (var item in e.Items)
+                {
+                    rec_list.Add(item.Name);
+                }
+
+                var ctx2 = new ClosureConversionContext(ctx.ArgName, ctx.Capture, rec_list);
                 var items = e.Items.Select(item => 
-                    new MFunItem(item.Name, Conv(item.Expr, ctx))).ToList();
-                var e2 = Conv(e.E2, ctx);
+                    new MFunItem(item.Name, Conv(item.Expr, ctx2))).ToList();
+                var e2 = Conv(e.E2, ctx2);
                 return new MFun(e.Pos, items, e2);
             }
             else if (expr is MFource)

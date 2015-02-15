@@ -37,7 +37,7 @@ let __operator_mns x y = __prim "sub" (x, y);
 let __operator_ast x y = __prim "mul" (x, y);
 let __operator_sls x y = __prim "div" (x, y);
 let __operator_per x y = __prim "mod" (x, y);
-
+#[]
 let __operator_neg x = 0 - x;
 
 fun __operator_astast x y =
@@ -274,3 +274,5 @@ let curry f a b = f (a, b);
 let uncurry f (a, b) = f a b;
 
 __undefine "HIDE_TYPE";
+
+#]

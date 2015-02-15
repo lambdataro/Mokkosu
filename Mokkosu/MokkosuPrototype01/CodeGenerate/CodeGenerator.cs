@@ -430,8 +430,11 @@ namespace Mokkosu.CodeGenerate
                 for (var i = 0; i < locals.Length; i++)
                 {
                     il.Emit(OpCodes.Newobj, _value_ref_type.GetConstructor(new Type[] { }));
-                    il.Emit(OpCodes.Dup);
                     il.Emit(OpCodes.Stloc, locals[i]);
+                }
+                for (var i = 0; i < locals.Length; i++)
+                {
+                    il.Emit(OpCodes.Ldloc, locals[i]);
                     Compile(il, e.Items[i].Expr, env2);
                     il.Emit(OpCodes.Stfld, _value_ref_field);
                 }
