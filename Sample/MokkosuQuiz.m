@@ -134,7 +134,7 @@ fun reflect = {
   ~Empty -> Empty;
   ~Branch(b1,e,b2) -> Branch(reflect b2, e, reflect b1);
 };
-let print_tree = {
+fun print_tree = {
   ~Empty -> print "Empty";
   ~Branch(b1,e,b2) ->
     do print "Branch(";
