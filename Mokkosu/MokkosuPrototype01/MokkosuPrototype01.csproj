@@ -54,8 +54,8 @@
     <Compile Include="CodeGenerate\CodeGenerator.cs" />
     <Compile Include="CodeGenerate\CodeGeneratorCommon.cs" />
     <Compile Include="CodeGenerate\PrimitiveFunctions.cs" />
-    <Compile Include="CodeGenerate\Input\InputStream.cs" />
-    <Compile Include="CodeGenerate\Input\SourceFile.cs" />
+    <Compile Include="Input\InputStream.cs" />
+    <Compile Include="Input\SourceFile.cs" />
     <Compile Include="Lexing\Lexer.cs" />
     <Compile Include="Lexing\Token.cs" />
     <Compile Include="Main\Mokkosu.cs" />
