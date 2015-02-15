@@ -558,7 +558,8 @@ namespace Mokkosu.AST
                 set1 = item.Expr.FreeVars().Union(set1);
                 set2 = new MSet<string>(item.Name).Union(set2);
             }
-            return E2.FreeVars().Diff(set2).Union(set1);
+            // return E2.FreeVars().Diff(set2).Union(set1);
+            return E2.FreeVars().Union(set1).Diff(set2);
         }
     }
 
