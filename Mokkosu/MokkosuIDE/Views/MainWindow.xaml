@@ -4,9 +4,11 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+        xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:v="clr-namespace:MokkosuIDE.Views"
         xmlns:vm="clr-namespace:MokkosuIDE.ViewModels"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Mokkosu IDE" Height="720" Width="1280">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext> 
@@ -24,10 +26,20 @@
                 <MenuItem Header="終了"/>
             </MenuItem>
         </Menu>
-        <ToolBarTray>
+        <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
                 <Button>実行</Button>
             </ToolBar>
         </ToolBarTray>
+        <ad:DockingManager AllowMixedOrientation="True">
+            <ad:DockingManager.Theme>
+                <ad:AeroTheme/>
+            </ad:DockingManager.Theme>
+            <ad:LayoutRoot>
+                <ad:LayoutPanel>
+                    <ad:LayoutDocumentPane/>
+                </ad:LayoutPanel>
+            </ad:LayoutRoot>
+        </ad:DockingManager>
     </DockPanel>
 </Window>
