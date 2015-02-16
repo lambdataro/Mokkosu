@@ -1,15 +1,1 @@
-﻿#============================================================
-#! @file   Igarashi.mok
-#! @brief  型推論のテストケース
-#!
-#!   五十嵐先生(京都大学)の実験のテストケース
-#!   http://www.fos.kuis.kyoto-u.ac.jp/~t-sekiym/classes/isle4/testcases.html
-#!
-#! @author Sho, lambdataro
-#============================================================
-
-let test01 = 1 + 2;
-let test02 = 
-
-
-
+﻿show_window ();

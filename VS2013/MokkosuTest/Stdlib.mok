@@ -4,28 +4,24 @@
 #! @author  lamndataro
 #============================================================
 
-__define "HIDE_TYPE";
-
 import "mscorlib.dll";
 import "System.dll";
 import "System.Core.dll";
 import "System.Drawing.dll";
 import "System.Windows.Forms.dll";
 
-
-
-
-
-
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Collections;
 
 #------------------------------------------------------------
 # システム関数
 #------------------------------------------------------------
 
-let println x = __prim "println" (x);
-let print x = __prim "print" (x);
 let error x = __prim "error" (x);
 let undefined _ = error "undefined";
+let ignore _ = ();
 
 #------------------------------------------------------------
 # 比較演算
@@ -38,6 +34,9 @@ let __operator_gt x y = __prim "gt" (x, y);
 let __operator_le x y = __prim "le" (x, y);
 let __operator_ge x y = __prim "ge" (x, y);
 
+let max x y = if x > y -> x else y;
+let min x y = if x < y -> x else y;
+
 #------------------------------------------------------------
 # 整数演算
 #------------------------------------------------------------
@@ -47,7 +46,6 @@ let __operator_mns x y = __prim "sub" (x, y);
 let __operator_ast x y = __prim "mul" (x, y);
 let __operator_sls x y = __prim "div" (x, y);
 let __operator_per x y = __prim "mod" (x, y);
-
 let __operator_neg x = 0 - x;
 
 fun __operator_astast x y =
@@ -56,14 +54,7 @@ fun __operator_astast x y =
 
 let succ x = x + 1;
 let pred x = x - 1;
-
 let abs x = if x >= 0 -> x else ~-x;
-
-fun from_to x y =
-  if x > y -> []
-  else x :: from_to (x + 1) y;
-
-let __operator_dotdot = from_to;
 
 #------------------------------------------------------------
 # ビット演算
@@ -122,15 +113,47 @@ let round x = call System.Math::Round((x : Double));
 #------------------------------------------------------------
 
 let __operator_hat x y = __prim "concat" (x, y);
-let tostring x = __prim "tostring" (x);
+let strlen (str : String) = str.get_Length();
+let strnth (str : String) (idx : Int) = str.get_Chars(idx);
 
 #------------------------------------------------------------
-# リファレンスセル
+# 論理演算
 #------------------------------------------------------------
 
-let ref x = __prim "ref" (x);
-let __operator_bang x = __prim "deref" (x);
-let __operator_coleq x y = __prim "assign" (x, y);
+let not = { true -> false; false -> true };
+let xor (a : Bool) (b : Bool) = a <> b; 
+
+#------------------------------------------------------------
+# 変換
+#------------------------------------------------------------
+
+let int_to_string (n : Int) = __prim "tostring" (n);
+let double_to_string (d : Double) = __prim "tostring" (d);
+let char_to_string (c : Char) = __prim "tostring" (c);
+let bool_to_string = { false -> "false"; true -> "true" };
+
+let int = int_to_string;
+let double = double_to_string;
+let char = char_to_string;
+let bool = bool_to_string;
+
+let parse_int (s : String) = call Int32::Parse(s);
+let parse_double (s : String) = call Double::Parse(s);
+
+let int_to_double (n : Int) = call Convert::ToDouble(n);
+let double_to_int (d : Double) = call Convert::ToInt32(d);
+let int_to_char (n : Int) = call Convert::ToChar(n);
+let char_to_int (c : Char) = call Convert::ToInt32(c);
+
+let int_to_float (n : Int) = call Convert::ToSingle(n);
+let float_to_int (f : {Single}) = call Convert::ToInt32(f);
+let double_to_float (n : Double) = call Convert::ToSingle(n);
+let float_to_double (f : {Single}) = call Convert::ToDouble(f);
+
+let int_to_object (n : Int) = cast<Int32, Object>(n);
+let double_to_object (d : Double) = cast<Double, Object>(d);
+let bool_to_object (b : Bool) = cast<Boolean, Object>(b);
+let char_to_object (c : Char) = cast<Char, Object>(c);
 
 #------------------------------------------------------------
 # 関数
@@ -146,29 +169,30 @@ let const x y = x;
 let flip f y x = f x y;
 
 #------------------------------------------------------------
-# 論理演算
+# Tuple
 #------------------------------------------------------------
 
-let not = { true -> false; false -> true };
+let fst (x, _) = x;
+let snd (_, x) = x;
+
+let curry f a b = f (a, b);
+let uncurry f (a, b) = f a b;
+
+#------------------------------------------------------------
+# リファレンスセル
+#------------------------------------------------------------
+
+let ref x = __prim "ref" (x);
+let __operator_bang x = __prim "deref" (x);
+let __operator_coleq x y = __prim "assign" (x, y);
 
 #------------------------------------------------------------
 # リスト
 #------------------------------------------------------------
 
-let print_list lis =
-  fun loop lis =
-    match lis {
-	  [] -> ();
-	  [x] -> print x;
-	  x :: xs ->
-	   do print x in
-	   do print ", " in
-	   loop xs; 
-	}
-  in
-  do print "[" in
-  do loop lis in
-  println "]";
+fun __operator_dotdot x y =
+  if x > y -> []
+  else x :: (x + 1) .. y;
 
 fun __operator_plspls xs ys =
   match xs {
@@ -242,45 +266,63 @@ let __for_bind lis f = concatmap f lis;
 let __for_unit x = [x];
 let __for_zero = [];
 
+# iter, take, drop, split_at, take_while, drop_while, elem, lookup, zip, zip_with, unzip がほしい
 
 #------------------------------------------------------------
-# Maybe<T>
+# 配列
 #------------------------------------------------------------
 
-type Maybe<T> = Nothing | Just(T);
-
-let maybe def f = { ~Nothing -> def; ~Just(x) -> f x };
-
-#------------------------------------------------------------
-# Either<T>
-#------------------------------------------------------------
-
-type Either<T, U> = Left(T) | Right(U);
-
-let either f g = { ~Left(x) -> f x; ~Right(x) -> g x };
+let list_to_array lis =
+  let alist = new ArrayList() in
+  fun loop = {
+    [] -> [];
+	x :: xs -> do alist.Add((x : {Object})) in loop xs; 
+  } in
+  do loop (reverse lis) in
+  alist.ToArray();
 
 #------------------------------------------------------------
-# Ordering
+# リフレクション
 #------------------------------------------------------------
 
-type Ordering = LT | EQ | GT;
-
-let compare x y =
-  if x == y -> EQ
-  else if x < y -> LT
-  else GT;
-
-let max x y = if x > y -> x else y;
-let min x y = if x < y -> x else y;
+let get_type (str : String) = call Type::GetType(str);
 
 #------------------------------------------------------------
-# Tuple
+# メッセージ
 #------------------------------------------------------------
 
-let fst (x, _) = x;
-let snd (_, x) = x;
+let msgbox (str : String) =
+  ignore (call MessageBox::Show(str));
 
-let curry f a b = f (a, b);
-let uncurry f (a, b) = f a b;
+#------------------------------------------------------------
+# ウインドウ
+#------------------------------------------------------------
 
-__undefine "HIDE_TYPE";
+let _timer = new Timer();
+
+let set_inserval (n : Int) =
+  _timer.set_Interval(n);
+
+let form = new Form();
+
+do form.set_SizeGripStyle(sget SizeGripStyle::Hide);
+
+do form.set_FormBorderStyle(sget FormBorderStyle::FixedSingle);
+
+let set_title (str : String) =
+  form.set_Text(str);
+
+let set_size (w : Int) (h : Int) = 
+  form.set_ClientSize(new Size(w, h));
+
+let show_window () =
+  form.ShowDialog();
+
+let _cur_x = ref 0;
+let _cur_y = ref 0;
+
+let move x y = do _cur_x := x; _cur_y := y end;
+
+let _font = new Font("ＭＳ ゴシック", 12);
+
+type message = Draw({Graphics});
