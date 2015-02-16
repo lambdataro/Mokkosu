@@ -46,9 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Stdlib.mok">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Test.mok">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -6,6 +6,7 @@ using System.Text;
 using Livet;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace MokkosuPad.Models
 {
@@ -79,6 +80,22 @@ namespace MokkosuPad.Models
             if (_mokkosu != null)
             {
                 _mokkosu.SaveExe(fname + ".exe");
+            }
+        }
+
+        public static string GetLogoString()
+        {
+            _mokkosu = new Mokkosu.Main.Mokkosu();
+            return _mokkosu.GetVersionString();
+        }
+
+        public static string GetSampleProgramString()
+        {
+            var exe_path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            using (var strm = new StreamReader(Path.Combine(exe_path, "Startup.mok")))
+            {
+                var str = strm.ReadToEnd();
+                return str;
             }
         }
     }

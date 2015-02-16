@@ -20,6 +20,7 @@ using Xceed.Wpf.AvalonDock;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System.IO;
 using System.Xml;
+using System.Reflection;
 
 namespace MokkosuPad.ViewModels
 {
@@ -29,7 +30,6 @@ namespace MokkosuPad.ViewModels
         private OutputViewModel _output_vm = new OutputViewModel("出力");
         private string _source_fname = "";
 
-
         public void Initialize()
         {
             _source_vm.Highlighting = LoadHighlight("MokkosuPad.Resources.Mokkosu.xshd");
@@ -37,8 +37,6 @@ namespace MokkosuPad.ViewModels
             Documents.Add(_source_vm);
             Documents.Add(_output_vm);
         }
-
-
 
         private static IHighlightingDefinition LoadHighlight(string name)
         {
@@ -53,7 +51,6 @@ namespace MokkosuPad.ViewModels
                 }
             }
         }
-
 
         #region ExitCommand
         private ViewModelCommand _ExitCommand;
@@ -409,9 +406,6 @@ namespace MokkosuPad.ViewModels
                 Model.SaveExe(_source_fname);
             }
         }
-
-
-
 
         #endregion
     }

@@ -1,8 +1,10 @@
 ﻿#============================================================
 #! @file    Stdlib.mok
 #! @brief   Mokkosu 標準ライブラリ
-#! @author  lamndataro
+#! @author  lamndataro, kielnow
 #============================================================
+
+__define "HIDE_TYPE";
 
 import "mscorlib.dll";
 import "System.dll";
@@ -107,6 +109,7 @@ let tanh x = call System.Math::Tanh((x : Double));
 let ceiling x = call System.Math::Ceiling((x : Double));
 let truncate x = call System.Math::Truncate((x : Double));
 let round x = call System.Math::Round((x : Double));
+let floor x = call System.Math::Floor((x : Double));
 
 #------------------------------------------------------------
 # 文字列演算
@@ -295,6 +298,84 @@ let msgbox (str : String) =
   ignore (call MessageBox::Show(str));
 
 #------------------------------------------------------------
+# Color
+#------------------------------------------------------------
+type Color = RGBA(Int,Int,Int,Int)
+           | RGB(Int,Int,Int)
+           | FRGBA(Double,Double,Double,Double)
+           | FRGB(Double,Double,Double)
+           | HSVA(Double,Double,Double,Double)
+           | HSV(Double,Double,Double);
+
+#------------------------------------------------------------
+# Convert to RGB/RGBA
+#------------------------------------------------------------
+fun toRGBA color =
+  let toFF x = (double_to_int (round (255.0 *. x))) % 256 in
+  match color {
+    ~RGBA(r,g,b,a)  -> RGBA(r,g,b,a);
+    ~RGB(r,g,b)     -> RGBA(r,g,b,0xff);
+    ~FRGBA(r,g,b,a) -> RGBA(toFF r,toFF g,toFF b,toFF a);
+    ~FRGB(r,g,b)    -> RGBA(toFF r,toFF g,toFF b,0xff);
+    ~HSVA(h,s,v,a)  -> let ~RGBA(r,g,b,_) = toRGBA <| HSV(h,s,v) in RGBA(r,g,b,toFF a);
+    ~HSV(h,s,v) -> 
+      let c  = v *. s in
+      let hh = (double_to_int (floor (h /. 60.0))) % 6 in
+      let x  = c *. int_to_double (1 - abs (hh % 2 - 1)) in
+      let vc = v -. c in
+      let (r,g,b) = match hh {
+        0 -> (vc+.c, vc+.x, vc  );
+        1 -> (vc+.x, vc+.c, vc  );
+        2 -> (vc,    vc+.c, vc+.x);
+        3 -> (vc,    vc+.x, vc+.c);
+        4 -> (vc+.x, vc,    vc+.c);
+        5 -> (vc+.c, vc,    vc+.x);
+        _ -> (vc,vc,vc);
+      }
+      in RGBA(toFF r,toFF g,toFF b,0xff);
+  };
+let toRGB c = let ~RGBA(r,g,b,_) = toRGBA c in RGB(r,g,b);
+
+#------------------------------------------------------------
+# Convert to FRGB/FRGBA
+#------------------------------------------------------------
+fun toFRGBA color =
+  let fromFF x = int_to_double x /. 255.0 in
+  match color {
+    ~RGB(r,g,b)     -> FRGBA(fromFF r,fromFF g,fromFF b,1.0);
+    ~RGBA(r,g,b,a)  -> FRGBA(fromFF r,fromFF g,fromFF b,fromFF a);
+    ~HSV(_,_,_)     -> toFRGBA (toRGBA color);
+    ~HSVA(_,_,_,_)  -> toFRGBA (toRGBA color);
+    ~FRGB(r,g,b)    -> FRGBA(r,g,b,1.0);
+    ~FRGBA(r,g,b,a) -> FRGBA(r,g,b,a);
+  };
+let toFRGB c = let ~FRGBA(r,g,b,_) = toFRGBA c in FRGB(r,g,b);
+
+#------------------------------------------------------------
+# Convert to HSV/HSVA
+#------------------------------------------------------------
+fun toHSVA color = match color {
+  ~RGBA(r,g,b,a)  -> toHSVA (toFRGBA color);
+  ~RGB(r,g,b)     -> toHSVA (toFRGBA color);
+  ~HSVA(h,s,v,a)  -> HSVA(h,s,v,a);
+  ~HSV(h,s,v)     -> HSVA(h,s,v,1.0);
+  ~FRGBA(r,g,b,a) -> let ~HSVA(h,s,v,_) = toHSVA <| FRGB(r,g,b) in HSVA(h,s,v,a);
+  ~FRGB(r,g,b) ->
+    let mx = max (max r g) b in
+    let mn = min (min r g) b in
+    let mxn = mx -. mn in
+    let h = if mn == b -> 60.0 *. (g -. r) /. mxn +. 60.0
+       else if mn == r -> 60.0 *. (b -. g) /. mxn +. 180.0
+       else if mn == g -> 60.0 *. (r -. b) /. mxn +. 300.0
+       else 0.0
+    in
+    let s = mx in
+    let v = mxn /. mx
+    in HSVA(h,s,v,1.0);
+};
+let toHSV c = let ~HSVA(h,s,v,_) = toHSVA c in HSV(h,s,v);
+
+#------------------------------------------------------------
 # ウインドウ
 #------------------------------------------------------------
 
@@ -326,3 +407,5 @@ let move x y = do _cur_x := x; _cur_y := y end;
 let _font = new Font("ＭＳ ゴシック", 12);
 
 type message = Draw({Graphics});
+
+__undefine "HIDE_TYPE";

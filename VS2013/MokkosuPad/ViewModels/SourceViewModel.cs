@@ -1,11 +1,13 @@
 ﻿using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using MokkosuPad.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml;
 
 namespace MokkosuPad.ViewModels
@@ -69,6 +71,11 @@ namespace MokkosuPad.ViewModels
         public void DocumentChanged(object sender, System.EventArgs e)
         {
             DirtyFlag = true;
+        }
+
+        public void Loaded(object sender, RoutedEventArgs e)
+        {
+            Text = Model.GetSampleProgramString();
         }
     }
 }

@@ -45,10 +45,6 @@
 			<Name>MokkosuPad</Name>
 			<Project>{EAAA889C-F677-48C1-90FC-6C92D457CD91}</Project>
 		</ProjectReference>
-		<ProjectReference Include="..\MokkosuSupport\MokkosuSupport.csproj">
-			<Name>MokkosuSupport</Name>
-			<Project>{8767286C-AEAD-4E73-8C6B-5E72552BF35B}</Project>
-		</ProjectReference>
 		<ProjectReference Include="..\MokkosuTypechecker\MokkosuTypechecker.csproj">
 			<Name>MokkosuTypechecker</Name>
 			<Project>{260D8997-0D36-46D8-B9D4-7B2865179855}</Project>

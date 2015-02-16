@@ -1,4 +1,5 @@
 ﻿using ICSharpCode.AvalonEdit.Document;
+using MokkosuPad.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace MokkosuPad.ViewModels
 
 
         #region Document変更通知プロパティ
-        private TextDocument _Document;
+        private TextDocument _Document = new TextDocument(Model.GetLogoString());
 
         public TextDocument Document
         {
