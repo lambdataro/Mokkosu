@@ -61,8 +61,19 @@ namespace Mokkosu.Main
             var parse_result = Parser.Start(parse_context);
 
             Typeinf.Start(parse_result);
+
+            if (Global.IdDefineKey("SHOW_PARSE_RESULT"))
+            {
+                Global.OutputString(parse_result.ToString());
+            }
+
             var expr = TopToExpr.Start(parse_result);
             var closure_result = ClosureConverter.Start(expr);
+
+            if (Global.IdDefineKey("SHOW_CLOSURE_RESULT"))
+            {
+                Global.OutputString(closure_result.ToString());
+            }
 
             var path2 = Path.GetFullPath(path);
             var name = Path.GetFileNameWithoutExtension(path2);

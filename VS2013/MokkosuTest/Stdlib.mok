@@ -1,7 +1,7 @@
 ﻿#============================================================
-#! @file	 Stdlib.mok
-#! @brief	 Mokkosu 標準ライブラリ
-#! @author Naoki Takashima
+#! @file    Stdlib.mok
+#! @brief   Mokkosu 標準ライブラリ
+#! @author  lamndataro
 #============================================================
 
 __define "HIDE_TYPE";
@@ -9,6 +9,14 @@ __define "HIDE_TYPE";
 import "mscorlib.dll";
 import "System.dll";
 import "System.Core.dll";
+import "System.Drawing.dll";
+import "System.Windows.Forms.dll";
+
+
+
+
+
+
 
 #------------------------------------------------------------
 # システム関数

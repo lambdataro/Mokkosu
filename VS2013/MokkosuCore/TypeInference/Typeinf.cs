@@ -352,6 +352,22 @@ namespace Mokkosu.TypeInference
             {
                 return true;
             }
+            else if (expr is MApp)
+            {
+                var app = (MApp)expr;
+                if (app.FunExpr is MVar && ((MVar)app.FunExpr).IsTag)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (expr is MCons)
+            {
+                return true;
+            }
             else
             {
                 return false;

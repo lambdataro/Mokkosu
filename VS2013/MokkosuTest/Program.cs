@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace MokkosuTest
@@ -18,6 +19,7 @@ namespace MokkosuTest
             {
                 var name = Path.GetFileNameWithoutExtension(args.Last());
                 mokkosu.Compile(name, true);
+                Console.WriteLine(mokkosu.GetOutput());
                 mokkosu.Run();
             }
         }

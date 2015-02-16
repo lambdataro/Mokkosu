@@ -1,15 +1,19 @@
 #============================================================
-#! @file Typetest.mok
-#! @brief 型推論のテストケース
+#! @file   Igarashi.mok
+#! @brief  型推論のテストケース
 #!
-#! このテストは、五十嵐先生（京都大学）の実験のテストケースを
-#! Mokkosuで書き直したものです。
+#!   このテストは、五十嵐先生（京都大学）の実験のテストケースを
+#!   Mokkosuで書き直したものです。
 #! 
-#! 型推論のテストケース
-#! http://www.fos.kuis.kyoto-u.ac.jp/~t-sekiym/classes/isle4/testcases.html
-#! @author Sho
+#!   型推論のテストケース
+#!   http://www.fos.kuis.kyoto-u.ac.jp/~t-sekiym/classes/isle4/testcases.html
+#!
+#! @author Sho, lambdataro
 #============================================================
 
+#====================
+# OK
+#====================
 let e1 = 1 + 2;
 let e2 = ~-2 * 2;
 let e3 = 1 < 2;
@@ -29,6 +33,11 @@ let e16 = {x -> {y -> x y}};
 let e17 = {x -> {y -> x (y x)}};
 let e18 = {x -> {y -> x (y x) (y x)}};
 let e19 = {x -> {y -> {z -> x (z x) (y (z x y))}}};
+
+
+
+
+
 #e20 : ((? -> ?) -> ?) -> ?
 let e20 = let id = {x -> x} in let f = {y -> id (y id)} in f;
 #e21 : ((? -> ? -> ?) -> ?) -> ? -> ? -> ?
