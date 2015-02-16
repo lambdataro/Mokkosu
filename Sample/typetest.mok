@@ -1,0 +1,107 @@
+#============================================================
+#! @file Typetest.mok
+#! @brief 型推論のテストケース
+#!
+#! このテストは、五十嵐先生（京都大学）の実験のテストケースを
+#! Mokkosuで書き直したものです。
+#! 
+#! 型推論のテストケース
+#! http://www.fos.kuis.kyoto-u.ac.jp/~t-sekiym/classes/isle4/testcases.html
+#! @author Sho
+#============================================================
+
+let e1 = 1 + 2;
+let e2 = ~-2 * 2;
+let e3 = 1 < 2;
+let e4 = {x -> x};
+let e5 = {x -> {y -> x}};
+let e6 = {x -> {y -> y}};
+let e7 = {x -> x + 1} 2 + {x -> x + ~-1} 3;
+let e8 = {f -> {g -> {x -> g (f x)}}};
+let e9 = {x -> {y -> {z -> x z (y z)}}};
+let e10 = {x -> let y = x + 1 in x};
+let e11 = {x -> let y = x + 1 in y};
+let e12 = {b -> {x -> if x b -> x else {x -> b}}};
+let e13 = {x -> if true -> x else (if x -> true else false)};
+let e14 = {x -> {y -> if x -> x else y}};
+let e15 = {n -> {x -> x {y -> y}} {f -> f n}};
+let e16 = {x -> {y -> x y}};
+let e17 = {x -> {y -> x (y x)}};
+let e18 = {x -> {y -> x (y x) (y x)}};
+let e19 = {x -> {y -> {z -> x (z x) (y (z x y))}}};
+#e20 : ((? -> ?) -> ?) -> ?
+let e20 = let id = {x -> x} in let f = {y -> id (y id)} in f;
+#e21 : ((? -> ? -> ?) -> ?) -> ? -> ? -> ?
+let e21 = let k = {x -> {y -> x}} in let k1 = {x -> {y -> k (x k)}} in k1;
+#e22 : (((? -> ? -> ?) -> (? -> ?) -> ? -> ?) -> ? -> ? -> ?) -> (((? -> ? -> ?) -> (? -> ?) -> ? -> ?) -> ? -> ?) -> (((? -> ? -> ?) -> (? -> ?) -> ? -> ?) -> ?) -> ?
+let e22 = let s = {x -> {y -> {z -> x z (y z)}}} in let s1 = {x -> {y -> {z -> x s (z s) (y s (z s))}}} in s1;
+#e23 : ? -> ((? -> ? -> ?) -> ? -> ?) -> (? -> ? -> ?) -> ? -> ?
+let e23 = let g = {h -> {t -> {f -> {x -> f h (t f x)}}}} in g;
+#e24 : ? -> ?
+let e24 = let s = {x -> {y -> {z -> x z (y z)}}} in let k = {x -> {y -> x}} in let k1 = {x -> {y -> x}} in s k k1;
+#e25 : ? -> ?
+let e25 = let s = {x -> {y -> {z -> x z (y z)}}} in let k = {x -> {y -> x}} in s k k;
+#e26 : ? -> ? -> ?
+let e26 = let s = {x -> {y -> {z -> x z (y z)}}} in let k1 = {x -> {y -> y}} in s k1 k1;
+let e27 = {x -> {y -> {z -> let b = x y z in if b -> z y else y}}};
+let e28 =
+  let pair = {x1 -> {x2 -> {y -> y x1 x2}}} in
+  let proj1 = {p -> p {x1 -> {x2 -> x1}}} in
+  let proj2 = {p -> p {x1 -> {x2 -> x2}}} in
+  proj1 (proj2 (pair 10 (pair 20 30)));
+let e28 = let f = {x -> x} in if f true -> f 1 else f 2;
+let e29 = let f = {x -> 3} in f true + f 4;
+let e30 = {b -> let f = {x -> x} in let g = {y -> y} in if b -> f g else g f};
+let e31 = {b -> {f -> let g1 = {x -> x f} in let g2 = {x -> x f} in {z -> if b -> g1 z g2 else g2 z g1}}};
+
+#コメントアウトは型エラー
+#let e31 = 1 + true;
+#let e32 = 2 + {x -> x};
+#let e33 = ~-2 * false;
+#let e34 = {x -> x x};
+#let e35 = let f = {x -> {g -> g (x x g)}} in f f;
+#let e36 = let g = {f -> {x -> f x (f x)}} in g;
+#let e37 = let g = {f -> {x -> f x (x f)}} in g;
+#let e38 = {x -> {y -> x y + y x}};
+#let e39 = {x -> {y -> x y + x}};
+#let e40 = {x -> {y -> if x y -> x else y}};
+#let e41 = {x -> {y -> if x y -> {z -> if y z -> z else x} else {x -> x}}};
+#let e42 = {x -> {y -> {z -> if x y -> z x else y z}}};
+#let e43 = {x -> if x -> 1 else x};
+#let e44 = {x -> x + 1} true;
+#let e45 = {x -> {y -> y (x (y x))}};
+#let e46 = {f -> {x -> f (f x)}} {x -> {y -> x}};
+#let e47 = {x -> {y -> y (x {z1 -> {z2 -> z1}})} (x {z -> z})};
+#let e48 = {b -> {f -> let g1 = {x -> f x} in let g2 = {x -> f x} in if b -> g1 g2 else g2 g1}};
+#let e49 = fun f = {x -> f} in f;
+
+#e50 : ? -> ?
+let e50 = fun f = {x -> f x} in f;
+#e51 : ? -> ?
+let e51 = fun f = {x -> f (f x)} in f;
+#e52 : ((? -> ?) -> ? -> ?) -> ? -> ?
+let e52 = fun fix_fun = {g -> {x -> g (fix_fun g) x}} in fix_fun;
+let e53 = {f -> fun x = {z -> f (x z)} in x 666};
+#e54 : Int -> ? -> ?
+let e54 = fun f = {x -> {y -> if x < 0 -> y else f (x + ~-1) y}} in f;
+let e55 = {f -> {g -> fun h = {x -> h (g (f x))} in h}};
+#e56 : (? -> ?) -> ? -> ?
+let e56 = fun loop = {f -> {x -> (loop f) (f x)}} in loop;
+#let e57 = fun looq = {f -> {x -> (looq f) (x f)}} in looq;
+let e58 = {x -> fun f = {y -> x + 1} in x};
+#e59 : ? -> (? -> ?) -> Int -> ?
+let e59 = fun ind = {x -> {f -> {n -> if n < 1 -> x else f (ind x f (n + ~-1))}}} in ind;
+#let e60 = fun f = {x -> f (x f)} in f;
+#let e61 = fun f = {z -> f z {g -> {h -> h (g h)}}} in f;
+
+let e62 = [];
+#e63 : [[?]]
+let e63 = [] :: [];
+let e64 = {x -> {y -> x :: y}};
+let e65 = {x -> {f -> f (f x :: [])}};
+let e66 = {[] -> 0; h::t -> h};
+#let e67 = 3 :: true :: [];
+#let e68 = {x -> x :: x};
+#let e69 = {x -> {y -> x :: x y}};
+#let e70 = {x -> {y -> {z -> x y :: z x :: y z :: []}}};
+#let e71 = {x -> match x {[] -> 0; h::t -> x::t}};
