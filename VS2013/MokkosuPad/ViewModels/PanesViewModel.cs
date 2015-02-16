@@ -46,7 +46,7 @@ namespace MokkosuPad.ViewModels
         public string Title
         {
             get
-            { return _Title; }
+            { return _Title + (DirtyFlag ? "*" : ""); }
             set
             { 
                 if (_Title == value)
@@ -56,6 +56,26 @@ namespace MokkosuPad.ViewModels
             }
         }
         #endregion
+
+
+        #region DirtyFlag変更通知プロパティ
+        private bool _DirtyFlag = false;
+
+        public bool DirtyFlag
+        {
+            get
+            { return _DirtyFlag; }
+            set
+            { 
+                if (_DirtyFlag == value)
+                    return;
+                _DirtyFlag = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("Title");
+            }
+        }
+        #endregion
+
 
         public override string ToString()
         {

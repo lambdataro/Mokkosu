@@ -86,13 +86,14 @@ namespace Mokkosu.CodeGenerate
 
         static TypeBuilder _type_builder;
 
-        public static AssemblyBuilder Start(string name, ClosureConversionResult cc_result)
+        public static AssemblyBuilder Start(string directory, string name,
+            ClosureConversionResult cc_result, bool is_dynamic)
         {
             _function_table = new Dictionary<string, MethodBuilder>();
 
             var assembly_name = new AssemblyName(name);
             var assembly_builder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-                assembly_name, AssemblyBuilderAccess.RunAndSave);
+                assembly_name, AssemblyBuilderAccess.RunAndSave, directory);
             var module_builder = assembly_builder.DefineDynamicModule(name, name + ".exe");
 
             // ValueRef クラス
@@ -107,9 +108,17 @@ namespace Mokkosu.CodeGenerate
             _tag_args = tag.DefineField("args", typeof(object), FieldAttributes.Public);
             _tag_type = tag.CreateType();
 
+            TypeBuilder type_builder;
             // MokkosuProgram クラス
-            var type_builder = module_builder.DefineType("MokkosuProgram", 
-                TypeAttributes.Public, typeof(object), new Type[]{ typeof(IMokkosuProgram) });
+            if (is_dynamic)
+            {
+                type_builder = module_builder.DefineType("MokkosuProgram",
+                                TypeAttributes.Public, typeof(object), new Type[] { typeof(IMokkosuProgram) });
+            }
+            else
+            {
+                type_builder = module_builder.DefineType("MokkosuProgram", TypeAttributes.Public);
+            }
             _type_builder = type_builder;
 
             foreach (var f in cc_result.FunctionTable)
@@ -131,11 +140,22 @@ namespace Mokkosu.CodeGenerate
             ilgen.Emit(OpCodes.Ret);
 
             // MokkosuEntryPoint
-            var builder = type_builder.DefineMethod("MokkosuEntryPoint",
-                MethodAttributes.Virtual, 
-                typeof(void), new Type[] { });
-            type_builder.DefineMethodOverride(builder,
-                typeof(IMokkosuProgram).GetMethod("MokkosuEntryPoint"));
+
+            MethodBuilder builder;
+            if (is_dynamic)
+            {
+                builder = type_builder.DefineMethod("MokkosuEntryPoint",
+                    MethodAttributes.Virtual,
+                    typeof(void), new Type[] { });
+                type_builder.DefineMethodOverride(builder,
+                    typeof(IMokkosuProgram).GetMethod("MokkosuEntryPoint"));
+            }
+            else
+            {
+                builder = type_builder.DefineMethod("MokkosuStaticEntryPoint",
+                    MethodAttributes.Static, typeof(void), new Type[] { });
+            }
+
             ilgen = builder.GetILGenerator();
             ilgen.Emit(OpCodes.Ldnull);
             ilgen.Emit(OpCodes.Ldnull);
@@ -144,13 +164,13 @@ namespace Mokkosu.CodeGenerate
             ilgen.Emit(OpCodes.Ret);
 
             type_builder.CreateType();
-            if (Global.IdDefineKey("HIDE_CONSOLE"))
+            if (Global.IdDefineKey("CONSOLE_APPLICATION"))
             {
-                assembly_builder.SetEntryPoint(builder, PEFileKinds.WindowApplication);
+                assembly_builder.SetEntryPoint(builder, PEFileKinds.ConsoleApplication);
             }
             else
             {
-                assembly_builder.SetEntryPoint(builder, PEFileKinds.ConsoleApplication);
+                assembly_builder.SetEntryPoint(builder, PEFileKinds.WindowApplication);
             }
 
             return assembly_builder;

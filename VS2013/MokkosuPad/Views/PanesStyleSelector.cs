@@ -12,12 +12,17 @@ namespace MokkosuPad.Views
     class PanesStyleSelector : StyleSelector
     {
         public Style SourceViewStyle { get; set; }
+        public Style OutputViewStyle { get; set; }
 
         public override Style SelectStyle(object item, DependencyObject container)
         {
             if (item is SourceViewModel)
             {
                 return SourceViewStyle;
+            }
+            else if (item is OutputViewModel)
+            {
+                return OutputViewStyle;
             }
             else
             {

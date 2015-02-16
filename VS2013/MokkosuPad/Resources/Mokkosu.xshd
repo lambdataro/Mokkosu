@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyntaxDefinition name="Mokkosu"
+        xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="#5CE55C" />
+  <Color name="Keyword" foreground="#5C5CE5" />
+  <Color name="String" foreground="#E55C5C" />
+  <Color name="Digits" foreground="#E55C5C" />
+
+  <!-- This is the main ruleset. -->
+  <RuleSet>
+    <Span color="Comment" multiline="true" begin="\#\[" end="\#\]" />
+    <Span color="Comment" begin="\#" />
+
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- nested span for escape sequences -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <Keywords color="Keyword">
+      <Word>type</Word>
+      <Word>and</Word>
+      <Word>do</Word>
+      <Word>if</Word>
+      <Word>else</Word>
+      <Word>pat</Word>
+      <Word>true</Word>
+      <Word>false</Word>
+      <Word>let</Word>
+      <Word>fun</Word>
+      <Word>include</Word>
+      <Word>as</Word>
+      <Word>in</Word>
+      <Word>__prim</Word>
+      <Word>call</Word>
+      <Word>cast</Word>
+      <Word>import</Word>
+      <Word>new</Word>
+      <Word>get</Word>
+      <Word>set</Word>
+      <Word>sget</Word>
+      <Word>sset</Word>
+      <Word>delegate</Word>
+      <Word>__define</Word>
+      <Word>__undefine</Word>
+      <Word>using</Word>
+      <Word>for</Word>
+      <Word>end</Word>
+    </Keywords>
+
+    <!-- Digits -->
+    <Rule color="Digits">
+      \b0[xX][0-9a-fA-F]+  # hex number
+      |    \b
+      (    \d+(\.[0-9]+)?   #number with optional floating point
+      |    \.[0-9]+         #or just starting with floating point
+      )
+      ([eE][+-]?[0-9]+)? # optional exponent
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>

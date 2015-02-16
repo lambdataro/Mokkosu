@@ -17,7 +17,7 @@ namespace MokkosuTest
             if (args.Length != 0)
             {
                 var name = Path.GetFileNameWithoutExtension(args.Last());
-                mokkosu.Compile(name);
+                mokkosu.Compile(name, true);
                 mokkosu.Run();
             }
         }

@@ -23,14 +23,39 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="ファイル(_F)">
+                <MenuItem Header="新規(_N)" Command="{Binding NewCommand}"/>
+                <MenuItem Header="開く(_O)" Command="{Binding OpenCommand}"/>
+                <Separator/>
+                <MenuItem Header="保存(_S)" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="名前を付けて保存(_A)" Command="{Binding SaveAsCommand}"/>
+                <Separator/>
                 <MenuItem Header="終了(_X)" Command="{Binding ExitCommand}"/>
             </MenuItem>
+            <MenuItem Header="表示(_V)">
+                <MenuItem Header="ソースコード(_S)" Command="{Binding ShowSourceCommand}"/>
+                <MenuItem Header="出力(_O)" Command="{Binding ShowOutputCommand}"/>
+            </MenuItem>
             <MenuItem Header="操作(_O)">
-                <MenuItem Header="実行(_E)"/>
-                <MenuItem Header="コンパイル(_C)"/>
+                <MenuItem Header="実行(_E)" Command="{Binding RunProgramCommand}"/>
+                <MenuItem Header="コンパイル(_C)" Command="{Binding CompileProgramCommand}"/>
             </MenuItem>
         </Menu>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Command="{Binding OpenCommand}">
+                    <Image Source="/Resources/openHS.png"/>
+                </Button>
+                <Button Command="{Binding SaveAsCommand}">
+                    <Image Source="/Resources/saveHS.png"/>
+                </Button>
+                <Separator/>
+                <Button Command="{Binding RunProgramCommand}">
+                    <Image Source="/Resources/playHS.png"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
         <ad:DockingManager DocumentsSource="{Binding Documents, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                           ActiveContent="{Binding ActiveContent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                            AllowMixedOrientation="True">
             <ad:DockingManager.Theme>
                 <ad:AeroTheme/>
@@ -38,6 +63,11 @@
             <ad:DockingManager.LayoutUpdateStrategy>
                 <v:LayoutInitializer/>
             </ad:DockingManager.LayoutUpdateStrategy>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="DocumentClosed">
+                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="DocumentClosed"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <ad:LayoutRoot>
                 <ad:LayoutPanel Orientation="Horizontal">
                     <ad:LayoutDocumentPane/>
@@ -63,6 +93,15 @@
                             </ae:TextEditor>
                         </DataTemplate>
                     </v:PanesDataTemplateSelector.SourceViewTemplate>
+                    <v:PanesDataTemplateSelector.OutputViewTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     IsReadOnly="True" FontFamily="MS Gothic" FontSize="16" 
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible" >
+                            </TextBox>
+                        </DataTemplate>
+                    </v:PanesDataTemplateSelector.OutputViewTemplate>
                 </v:PanesDataTemplateSelector>
             </ad:DockingManager.LayoutItemTemplateSelector>
             <ad:DockingManager.LayoutItemContainerStyleSelector>
@@ -73,6 +112,12 @@
                             <Setter Property="Title" Value="{Binding Model.Title}"/>
                         </Style>
                     </v:PanesStyleSelector.SourceViewStyle>
+                    <v:PanesStyleSelector.OutputViewStyle>
+                        <Style TargetType="{x:Type ad:LayoutDocumentItem}">
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+                            <Setter Property="Title" Value="{Binding Model.Title}"/>
+                        </Style>
+                    </v:PanesStyleSelector.OutputViewStyle>
                 </v:PanesStyleSelector>
             </ad:DockingManager.LayoutItemContainerStyleSelector>
         </ad:DockingManager>

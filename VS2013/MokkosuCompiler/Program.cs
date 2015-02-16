@@ -25,9 +25,9 @@ namespace MokkosuCompiler
                 if (args.Length != 0)
                 {
                     var name = Path.GetFileNameWithoutExtension(args.Last());
-                    mokkosu.Compile(name);
+                    mokkosu.Compile(name, false);
                     Console.WriteLine(mokkosu.GetOutput());
-                    mokkosu.SaveExe(Path.Combine(Path.GetDirectoryName(args.Last()), name) + ".exe");
+                    mokkosu.SaveExe(name + ".exe");
                     Console.WriteLine("コンパイルに成功しました。\n");
                 }
                 return 0;

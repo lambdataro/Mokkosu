@@ -22,7 +22,7 @@ namespace MokkosuTypechecker
                 if (args.Length != 0)
                 {
                     var name = Path.GetFileNameWithoutExtension(args.Last());
-                    mokkosu.Compile(name);
+                    mokkosu.Compile(name, false);
                     Console.WriteLine(mokkosu.GetOutput());
                 }
                 return 0;

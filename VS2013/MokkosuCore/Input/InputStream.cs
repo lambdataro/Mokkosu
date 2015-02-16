@@ -162,5 +162,13 @@ namespace Mokkosu.Input
                 NextChar();
             }
         }
+
+        public void CloseFile()
+        {
+            if (_current_srcfile != null)
+            {
+                _current_srcfile.Close();
+            }
+        }
     }
 }

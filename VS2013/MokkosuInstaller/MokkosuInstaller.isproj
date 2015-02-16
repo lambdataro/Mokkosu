@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<!-- Select a Product Configuration -->
+		<InstallShieldProductConfiguration>Express</InstallShieldProductConfiguration>
+		<!-- Select a Visual Studio Configuration / InstallShield Release -->
+		<Configuration>Debug</Configuration>
+		<InstallShieldRelease>$(Configuration)</InstallShieldRelease>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- The InstallShieldProject item selects the project to build -->
+		<InstallShieldProject Include="$(MSBuildProjectDirectory)\$(MSBuildProjectName).isl"/>
+		<!-- The InstallShieldReleaseFlags sets Release Flags -->
+		<!--<InstallShieldReleaseFlags Include=""/>-->
+		<!-- The InstallShieldMergeModulePath specifies what directories are
+		searched for Merge Modules -->
+		<!--<InstallShieldMergeModulePath Include=""/>-->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The ProjectReference items refer to any Visual Studio solutions you want to automatically probe for Project Output Groups.  -->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The TaggedOutputs items allow you to explicitly add extra files to output groups. Each item must include both Name and OutputGroup, as well as TargetPath metadata values. -->
+		<!--<TaggedOutputs Include="C:\My Test Exe.exe">
+			<Name>My Test Project</Name>
+			<OutputGroup>Primary output</OutputGroup>
+			<TargetPath>My Test Exe.exe</TargetPath>
+		</TaggedOutputs> -->
+	</ItemGroup>
+	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2013Limited\InstallShield.targets"/>
+	<ItemGroup>
+		<ProjectReference Include="..\MokkosuCompiler\MokkosuCompiler.csproj">
+			<Name>MokkosuCompiler</Name>
+			<Project>{3F18EB63-1DA5-488B-BC06-F461A79352CA}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\MokkosuCore\MokkosuCore.csproj">
+			<Name>MokkosuCore</Name>
+			<Project>{9CBBD81B-A4D7-4340-968D-0E7C2B33C01A}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\MokkosuInterpreter\MokkosuInterpreter.csproj">
+			<Name>MokkosuInterpreter</Name>
+			<Project>{254A1CF2-7BAA-47A9-B613-F6C3F6AB10CB}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\MokkosuPad\MokkosuPad.csproj">
+			<Name>MokkosuPad</Name>
+			<Project>{EAAA889C-F677-48C1-90FC-6C92D457CD91}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\MokkosuSupport\MokkosuSupport.csproj">
+			<Name>MokkosuSupport</Name>
+			<Project>{8767286C-AEAD-4E73-8C6B-5E72552BF35B}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\MokkosuTypechecker\MokkosuTypechecker.csproj">
+			<Name>MokkosuTypechecker</Name>
+			<Project>{260D8997-0D36-46D8-B9D4-7B2865179855}</Project>
+		</ProjectReference>
+	</ItemGroup>
+</Project>

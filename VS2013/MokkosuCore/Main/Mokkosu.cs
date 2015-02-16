@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 
 namespace Mokkosu.Main
 {
@@ -26,16 +27,23 @@ namespace Mokkosu.Main
             AddSourceFile(Path.Combine(exe_path, "Stdlib.mok"));
         }
 
+        public string GetVersionString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(" =============================================");
+            sb.AppendLine("  __  __         _     _                      ");
+            sb.AppendLine(" |  \\/  |  ___  | | __| | __ ___   ___  _   _ ");
+            sb.AppendLine(" | |\\/| | / _ \\ | |/ /| |/ // _ \\ / __|| | | |");
+            sb.AppendLine(" | |  | || (_) ||   < |   <| (_) |\\__ \\| |_| |");
+            sb.AppendLine(" |_|  |_| \\___/ |_|\\_\\|_|\\_\\\\___/ |___/ \\__,_|");
+            sb.AppendLine("");
+            sb.AppendLine(" =============== Version 0.0.1 ===============");
+            return sb.ToString();
+        }
+
         public void OutputVersion()
         {
-            Console.WriteLine(" =============================================");
-            Console.WriteLine("  __  __         _     _                      ");
-            Console.WriteLine(" |  \\/  |  ___  | | __| | __ ___   ___  _   _ ");
-            Console.WriteLine(" | |\\/| | / _ \\ | |/ /| |/ // _ \\ / __|| | | |");
-            Console.WriteLine(" | |  | || (_) ||   < |   <| (_) |\\__ \\| |_| |");
-            Console.WriteLine(" |_|  |_| \\___/ |_|\\_\\|_|\\_\\\\___/ |___/ \\__,_|");
-            Console.WriteLine("");
-            Console.WriteLine(" =============== Version 0.0.1 ===============");
+            Console.WriteLine(GetVersionString());
         }
 
         public void AddSourceFile(string fname)
@@ -43,8 +51,10 @@ namespace Mokkosu.Main
             _input_stream.AddSourceFile(fname);
         }
 
-        public void Compile(string name)
+        public void Compile(string path, bool is_dynamic)
         {
+            Global.ClearOutput();
+
             var lexer = new Lexer(_input_stream);
             var parse_context = new ParseContext(lexer);
 
@@ -54,7 +64,11 @@ namespace Mokkosu.Main
             var expr = TopToExpr.Start(parse_result);
             var closure_result = ClosureConverter.Start(expr);
 
-            _assembly = CodeGenerator.Start(name, closure_result);
+            var path2 = Path.GetFullPath(path);
+            var name = Path.GetFileNameWithoutExtension(path2);
+            var dir = Path.GetDirectoryName(path2);
+
+            _assembly = CodeGenerator.Start(dir, name, closure_result, is_dynamic);
         }
 
         public void SaveExe(string savename)
@@ -79,70 +93,9 @@ namespace Mokkosu.Main
             return Global.GetOutput();
         }
 
-
-        //static void Main(string[] args)
-        //{
-        //    Console.WriteLine(" =============================================");
-        //    Console.WriteLine("  __  __         _     _                      ");
-        //    Console.WriteLine(" |  \\/  |  ___  | | __| | __ ___   ___  _   _ ");
-        //    Console.WriteLine(" | |\\/| | / _ \\ | |/ /| |/ // _ \\ / __|| | | |");
-        //    Console.WriteLine(" | |  | || (_) ||   < |   <| (_) |\\__ \\| |_| |");
-        //    Console.WriteLine(" |_|  |_| \\___/ |_|\\_\\|_|\\_\\\\___/ |___/ \\__,_|");
-        //    Console.WriteLine("");
-        //    Console.WriteLine(" =============== Version 0.0.1 ===============");
-        //    Console.WriteLine("");
-
-        //    try
-        //    {
-        //        if (args.Length > 0)
-        //        {
-        //            Start(args);
-        //            Console.WriteLine();
-        //            Console.WriteLine("コンパイルに成功しました。");
-        //            Console.WriteLine();
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("入力がありません。");
-        //        }
-        //    }
-        //    catch(MError e)
-        //    {
-        //        Console.Error.WriteLine(e.Message);
-        //    }
-        //    //catch(NotImplementedException)
-        //    //{
-        //    //    Console.Error.WriteLine("エラー。");
-        //    //}
-        //}
-
-        //static void Start(string[] args)
-        //{
-        //    var input_stream = new InputStream();
-
-        //    var exe_path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        //    input_stream.AddSourceFile(Path.Combine(exe_path, "Stdlib.m"));
-
-        //    foreach (var file in args)
-        //    {
-        //        input_stream.AddSourceFile(file);
-        //    }
-
-        //    var lexer = new Lexer(input_stream);
-        //    var parse_context = new ParseContext(lexer);
-
-        //    var parse_result = Parser.Start(parse_context);
-
-        //    Typeinf.Start(parse_result);
-        //    var expr = TopToExpr.Start(parse_result);
-        //    var closure_result = ClosureConverter.Start(expr);
-
-        //    // Console.WriteLine(closure_result);
-
-        //    var name = Path.GetFileNameWithoutExtension(args.Last());
-
-        //    var assembly = CodeGenerator.Start(name, closure_result);
-        //    assembly.Save(name + ".exe");
-        //}
+        public void Close()
+        {
+            _input_stream.CloseFile();
+        }
     }
 }

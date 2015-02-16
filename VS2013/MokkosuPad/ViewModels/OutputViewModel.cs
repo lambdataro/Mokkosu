@@ -1,18 +1,15 @@
 ﻿using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Highlighting;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace MokkosuPad.ViewModels
 {
-    class SourceViewModel : PanesViewModel
+    class OutputViewModel : PanesViewModel
     {
-        public SourceViewModel(string title) : base(title)
+        public OutputViewModel(string title) : base(title)
         {
         }
 
@@ -39,7 +36,7 @@ namespace MokkosuPad.ViewModels
             get
             { return _Document; }
             set
-            { 
+            {
                 if (_Document == value)
                     return;
                 _Document = value;
@@ -48,27 +45,5 @@ namespace MokkosuPad.ViewModels
             }
         }
         #endregion
-
-        #region Highlighting変更通知プロパティ
-        private IHighlightingDefinition _Highlighting;
-
-        public IHighlightingDefinition Highlighting
-        {
-            get
-            { return _Highlighting; }
-            set
-            { 
-                if (_Highlighting == value)
-                    return;
-                _Highlighting = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        public void DocumentChanged(object sender, System.EventArgs e)
-        {
-            DirtyFlag = true;
-        }
     }
 }

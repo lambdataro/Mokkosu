@@ -32,5 +32,10 @@ namespace Mokkosu.Utils
         {
             return _string_builder.ToString();
         }
+
+        public static void ClearOutput()
+        {
+            _string_builder.Clear();
+        }
     }
 }
