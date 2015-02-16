@@ -374,38 +374,3 @@ fun toHSVA color = match color {
     in HSVA(h,s,v,1.0);
 };
 let toHSV c = let ~HSVA(h,s,v,_) = toHSVA c in HSV(h,s,v);
-
-#------------------------------------------------------------
-# ウインドウ
-#------------------------------------------------------------
-
-let _timer = new Timer();
-
-let set_inserval (n : Int) =
-  _timer.set_Interval(n);
-
-let form = new Form();
-
-do form.set_SizeGripStyle(sget SizeGripStyle::Hide);
-
-do form.set_FormBorderStyle(sget FormBorderStyle::FixedSingle);
-
-let set_title (str : String) =
-  form.set_Text(str);
-
-let set_size (w : Int) (h : Int) = 
-  form.set_ClientSize(new Size(w, h));
-
-let show_window () =
-  form.ShowDialog();
-
-let _cur_x = ref 0;
-let _cur_y = ref 0;
-
-let move x y = do _cur_x := x; _cur_y := y end;
-
-let _font = new Font("ＭＳ ゴシック", 12);
-
-type message = Draw({Graphics});
-
-__undefine "HIDE_TYPE";

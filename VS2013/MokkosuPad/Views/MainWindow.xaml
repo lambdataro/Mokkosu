@@ -12,6 +12,13 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding Path=NewCommand}" Key="N" Modifiers="Ctrl" />
+        <KeyBinding Command="{Binding Path=OpenCommand}" Key="O" Modifiers="Ctrl" />
+        <KeyBinding Command="{Binding Path=SaveCommand}" Key="S" Modifiers="Ctrl" />
+        <KeyBinding Command="{Binding Path=SaveAsCommand}" Key="S" Modifiers="Ctrl+Shift" />
+        <KeyBinding Command="{Binding Path=RunProgramCommand}" Key="E" Modifiers="Ctrl" />
+    </Window.InputBindings>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="ContentRendered">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
@@ -23,11 +30,11 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="ファイル(_F)">
-                <MenuItem Header="新規(_N)" Command="{Binding NewCommand}"/>
-                <MenuItem Header="開く(_O)" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="新規(_N)" Command="{Binding NewCommand}" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="開く(_O)" Command="{Binding OpenCommand}" InputGestureText="Ctrl+O"/>
                 <Separator/>
-                <MenuItem Header="保存(_S)" Command="{Binding SaveCommand}"/>
-                <MenuItem Header="名前を付けて保存(_A)" Command="{Binding SaveAsCommand}"/>
+                <MenuItem Header="保存(_S)" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S"/>
+                <MenuItem Header="名前を付けて保存(_A)" Command="{Binding SaveAsCommand}" InputGestureText="Ctrl+Shift+S"/>
                 <Separator/>
                 <MenuItem Header="終了(_X)" Command="{Binding ExitCommand}"/>
             </MenuItem>
@@ -36,7 +43,7 @@
                 <MenuItem Header="出力(_O)" Command="{Binding ShowOutputCommand}"/>
             </MenuItem>
             <MenuItem Header="操作(_O)">
-                <MenuItem Header="実行(_E)" Command="{Binding RunProgramCommand}"/>
+                <MenuItem Header="実行(_E)" Command="{Binding RunProgramCommand}"  InputGestureText="Ctrl+E"/>
                 <MenuItem Header="コンパイル(_C)" Command="{Binding CompileProgramCommand}"/>
             </MenuItem>
         </Menu>
@@ -45,7 +52,7 @@
                 <Button Command="{Binding OpenCommand}">
                     <Image Source="/Resources/openHS.png"/>
                 </Button>
-                <Button Command="{Binding SaveAsCommand}">
+                <Button Command="{Binding SaveCommand}">
                     <Image Source="/Resources/saveHS.png"/>
                 </Button>
                 <Separator/>

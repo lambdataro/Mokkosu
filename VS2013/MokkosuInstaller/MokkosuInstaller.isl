@@ -4390,7 +4390,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKAPPPOOLS</td><td>##IDS_PROGMSG_IIS_ROLLBACKAPPPOOLS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
-		<row><td>ProductCode</td><td>{9FD84B19-F8A1-4270-BDFF-5657751B9724}</td><td/></row>
+		<row><td>ProductCode</td><td>{C71A9F22-6B39-42B7-A3B7-C996899B4A1D}</td><td/></row>
 		<row><td>ProductName</td><td>Mokkosu</td><td/></row>
 		<row><td>ProductVersion</td><td>0.0.1</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
