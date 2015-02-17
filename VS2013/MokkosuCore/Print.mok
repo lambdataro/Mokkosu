@@ -3,6 +3,7 @@
 #! @brief	Print
 #! @author	kielnow
 #=============================================================================
+__define "HIDE_TYPE";
 
 let bracket m = do print "["; m (); print "]" end;
 let paren m = do print "("; m (); print ")" end;
@@ -58,3 +59,4 @@ let println_tuple4_with pppp tpl = endl {() -> print_tuple4_with pppp tpl};
 let print_tuple4 tpl             = print_tuple4_with (print,print,print,print) tpl;
 let println_tuple4 tpl           = println_tuple4_with (print,print,print,print) tpl;
 
+__undefine "HIDE_TYPE";

@@ -3,6 +3,7 @@
 #! @brief	HSV Color
 #! @author	kielnow
 #=============================================================================
+__define "HIDE_TYPE";
 
 #-----------------------------------------------------------------------------
 # Color
@@ -106,3 +107,4 @@ let print_color color =
   };
 let println_color color = do print_color color; print "\n" end;
 
+__undefine "HIDE_TYPE";
