@@ -461,3 +461,5 @@ fun toHSVA color = match color {
     in HSVA(h,s,v,1.0);
 };
 let toHSV c = let ~HSVA(h,s,v,_) = toHSVA c in HSV(h,s,v);
+
+__undefine "HIDE_TYPE";

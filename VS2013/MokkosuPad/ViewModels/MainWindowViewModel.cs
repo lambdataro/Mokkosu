@@ -23,6 +23,7 @@ namespace MokkosuPad.ViewModels
         private OutputViewModel _output_vm = new OutputViewModel("出力");
         private string _source_fname = "";
         private ConsoleRedirectWriter consoleRedirectWriter;
+        private const string ProgramName = "MokkosuPad";
 
         public void Initialize()
         {
@@ -108,6 +109,7 @@ namespace MokkosuPad.ViewModels
         public void SaveAs()
         {
             _source_fname = "";
+            WindowTitle = ProgramName;
             SaveSourceFile();
         }
         #endregion
@@ -175,6 +177,22 @@ namespace MokkosuPad.ViewModels
         }
         #endregion
 
+        #region WindowTitle変更通知プロパティ
+        private string _WindowTitle = ProgramName;
+
+        public string WindowTitle
+        {
+            get
+            { return _WindowTitle; }
+            set
+            { 
+                if (_WindowTitle == value)
+                    return;
+                _WindowTitle = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         public void SaveSourceFile()
         {
@@ -187,6 +205,7 @@ namespace MokkosuPad.ViewModels
                 if (result.HasValue && dialog.FileName != "")
                 {
                     _source_fname = dialog.FileName;
+                    WindowTitle = ProgramName + " - " + Path.GetFileName(_source_fname);
                 }
                 else
                 {
@@ -206,22 +225,25 @@ namespace MokkosuPad.ViewModels
             var result = dialog.ShowDialog();
             if (result.HasValue && dialog.FileName != "")
             {
+                if (_source_vm.DirtyFlag)
+                {
+                    var mr = MessageBox.Show("内容を置き換えますか？", "確認",
+                        MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (mr != MessageBoxResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
                 _source_fname = dialog.FileName;
+                WindowTitle = ProgramName + " - " + Path.GetFileName(_source_fname);
             }
             else
             {
                 return;
             }
 
-            if (_source_vm.DirtyFlag)
-            {
-                var mr = MessageBox.Show("内容を置き換えますか？", "確認", 
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (mr != MessageBoxResult.Yes)
-                {
-                    return;
-                }
-            }
+            
 
             var str = Model.OpenFile(_source_fname);
             _source_vm.Text = str;
@@ -368,7 +390,7 @@ namespace MokkosuPad.ViewModels
             if (_source_fname != "")
             {
                 var output = Model.CompileProgram(_source_fname, true);
-                _output_vm.Text = output;
+                _output_vm.Text = output + "\n";
 
                 consoleRedirectWriter = new ConsoleRedirectWriter();
                 consoleRedirectWriter.OnWrite += new Action<string>(AppendOutput);

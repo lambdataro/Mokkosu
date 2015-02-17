@@ -8,7 +8,7 @@
         xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:v="clr-namespace:MokkosuPad.Views"
         xmlns:vm="clr-namespace:MokkosuPad.ViewModels"
-        Title="MokkosuPad" Height="720" Width="1280">
+        Title="{Binding WindowTitle}" Height="720" Width="1280">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>

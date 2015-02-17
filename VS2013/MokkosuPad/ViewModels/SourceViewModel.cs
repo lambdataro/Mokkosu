@@ -76,6 +76,7 @@ namespace MokkosuPad.ViewModels
         public void Loaded(object sender, RoutedEventArgs e)
         {
             Text = Model.GetSampleProgramString();
+            DirtyFlag = false;
         }
     }
 }
