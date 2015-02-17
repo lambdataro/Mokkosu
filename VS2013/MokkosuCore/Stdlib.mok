@@ -279,14 +279,6 @@ let __for_bind lis f = concatmap f lis;
 let __for_unit x = [x];
 let __for_zero = [];
 
-let print_list_with p lis =
-  fun loop = {
-      [] -> ();
-      [x] -> p x;
-      x::xs -> do p x; print "," in loop xs; 
-    }
-  in do print "["; loop lis; println "]" in ();
-
 fun take n lst =
   match (n,lst) {
     (n,_) ? n <= 0 -> [];

@@ -1,2 +1,84 @@
-﻿println (format "{0} + {1}"
-  [ int_to_object 3, string_to_object "hello" ] ) ;
+﻿#------------------------------------------------------------
+# 2D描画ライブラリ
+#------------------------------------------------------------
+
+# タイマー
+
+let _timer = new Timer();
+
+let set_interval (n : Int) =
+  _timer.set_Interval(n);
+
+# Tickイベント
+
+let _tick_function = ref (\() -> ());
+
+let add_tick_function g =
+  let f = !_tick_function in
+  _tick_function := (\() -> do
+    f ();
+    g ();
+  end);
+
+let _tick_callback ((sender : {Object}), (e : {EventArgs})) =
+  do !_tick_function () end;
+
+_timer.add_Tick (delegate EventHandler _tick_callback);
+
+# ウインドウ
+
+let _form = new Form();
+do _form.set_SizeGripStyle(sget SizeGripStyle::Hide);
+do _form.set_FormBorderStyle(sget FormBorderStyle::FixedSingle);
+
+let show_window () =
+  do _timer.Start();
+     _form.ShowDialog() end;
+
+let set_title (str : String) =
+  _form.set_Text(str);
+
+let set_size (w : Int) (h : Int) = 
+  _form.set_ClientSize(new Size(w, h));
+
+# Paintイベント
+
+let _paint_function = ref (\() -> ());
+
+let _get_graphics = ref (undefined : () -> {Graphics});
+
+let get_graphics () = !_get_graphics();
+
+let _paint_callback ((sender : {Object}), (e : {PaintEventArgs})) =
+  do _get_graphics := (\() -> e.get_Graphics());
+     !_paint_function () end;
+
+let add_paint_function g =
+  let f = !_paint_function in
+  _paint_function := (\() -> do
+    f ();
+    g ();
+  end);
+
+do _form.add_Paint (delegate PaintEventHandler _paint_callback);
+
+let draw_line (color : Color) (x1 : Int) (y1 : Int) (x2 : Int) (y2 : Int) =
+  let graphics = get_graphics () in
+  let ~RGBA (r, g, b, a) = toRGBA color in
+  let color = call Color::FromArgb(a, r, g, b) in
+  let pen = new Pen(color) in
+  graphics.DrawLine(pen, x1, y1, x2, y2);
+
+#------------------------------------------------------------
+# テスト
+#------------------------------------------------------------
+
+add_paint_function { () ->
+  let color = FRGB (1.0, 0.0, 0.0) in
+  do
+	# draw_line color 0 0 100 100;
+    # draw_line color 100 0 0 100;
+  end
+};
+
+show_window ();

@@ -182,6 +182,7 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.LP);
                 if (ctx.Tkn.Type == TokenType.RP)
                 {
+                    ctx.ReadToken(TokenType.RP);
                     return new UnitType();
                 }
                 else
@@ -435,6 +436,11 @@ namespace Mokkosu.Parsing
             {
                 var pos = ctx.Tkn.Pos;
                 ctx.ReadToken(TokenType.DO);
+                if (ctx.Tkn.Type == TokenType.END)
+                {
+                    ctx.ReadToken(TokenType.END);
+                    return new MUnit(pos);
+                }
                 var es = ParseExprScList(ctx);
                 MExpr e2;
                 if (ctx.Tkn.Type == TokenType.IN)
