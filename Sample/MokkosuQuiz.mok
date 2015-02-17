@@ -2,14 +2,26 @@
 #! @file	MokkosuQuiz.mok
 #! @brief	Mokkosu Quiz
 #!
-#!   このクイズは、香川考司先生（香川大学）の講義資料の問題を
-#!   Mokkosuで書き直したものです。
-#!
 #!   香川考司. 関数型プログラミング言語 haskell の理論と応用（2007 年度・集中）
 #!   http://guppy.eng.kagawa-u.ac.jp/2007/HaskellKyoto/
 #!
 #! @author	kielnow
 #============================================================
+__define "CONSOLE_APPLICATION";
+
+let print_list_with p lst =
+  fun loop = {
+      [] -> ();
+      [x] -> p x;
+      x::xs -> do p x; print "," in loop xs; 
+    }
+  in do print "["; loop lst; print "]" in ();
+
+let println_list_with p lst = do print_list_with p lst; print "\n" end;
+
+let print_list lst = print_list_with print lst;
+
+let println_list lst = println_list_with print lst;
 
 #------------------------------------------------------------
 # Q1. fib 30を計算せよ。
@@ -35,7 +47,7 @@ let mySum lis =
   }
   in loop 0 lis;
 
-do println <| mySum (from_to 1 10);
+do println <| mySum (1 .. 10);
 
 #------------------------------------------------------------
 # Q3. 真偽値のリストを2進数とみなして、対応する整数を計算する関数
@@ -55,7 +67,7 @@ do println <| fromBin [true,false,true,false];
 #     sumf : [Double] -> (Double -> Double) -> Double
 #     を定義せよ。
 #------------------------------------------------------------
-let sumf xs f = foldr (\x y -> x +. y) 0.0 <| map f (xs : [Double]);
+let sumf (xs : [Double]) f = foldl (\acc x -> acc +. f x) 0.0 xs;
 
 do println <| sumf [1.0, 2.0, 3.0] sqrt;
 
@@ -68,7 +80,7 @@ do println <| sumf [1.0, 2.0, 3.0] sqrt;
 let evalPoly cs x = foldr (\c acc -> c +. acc *. x) 0.0 cs;
 
 # 1.0 + 2.0 * x + 3.0 * x^2
-do print_list <| map (evalPoly [1.0,2.0,3.0]) [0.0,1.0,2.0,3.0,4.0,5.0];
+do println_list <| map (evalPoly [1.0,2.0,3.0]) [0.0,1.0,2.0,3.0,4.0,5.0];
 
 #------------------------------------------------------------
 # Q6. リストを集合だとみなして、そのべき集合（部分集合の集合）を
@@ -77,30 +89,13 @@ do print_list <| map (evalPoly [1.0,2.0,3.0]) [0.0,1.0,2.0,3.0,4.0,5.0];
 #         => [[],[1],[2],[3],[1,2],[2,3],[3,1],[1,2,3]]
 #     （ただし、順番はこの通りでなくてもよい。）
 #------------------------------------------------------------
-let concat lis = foldr (++) [] lis;
 fun powerset = {
   [] -> [];
   [x] -> [[],[x]];
   x::xs -> let ys = powerset xs in ys ++ map {y->x::y} ys;
 };
 
-let print_list_with p lis =
-  fun loop = {
-      [] -> ();
-      [x] -> p x;
-      x::xs -> do p x; print "," in loop xs; 
-    }
-  in do print "["; loop lis; println "]" in ();
-
-let print_list_wo_ln lis =
-  fun loop = {
-      [] -> ();
-      [x] -> print x;
-      x::xs -> do print x; print "," in loop xs; 
-    }
-  in do print "["; loop lis; print "]" in ();
-
-do print_list_with print_list_wo_ln <| powerset [1,2,3];
+do println_list_with print_list <| powerset [1,2,3];
 
 #------------------------------------------------------------
 # Q7. 以下の代数的データ型は、二分木を表すデータ型を定義している。
@@ -146,6 +141,7 @@ fun print_tree = {
        print ")"
     in ();
 };
+let println_tree tree = do print_tree tree; print "\n" end;
 
 let tree1 =
   let b1 = Branch(Empty,2,Empty) in
@@ -154,20 +150,18 @@ let tree1 =
 
 do println <| size tree1;
 do println <| depth tree1;
-do print_list <| preorder tree1;
-do print_list <| postorder tree1;
-do print_tree <| tree1;
-do print "\n";
-do print_tree <| reflect tree1;
-do print "\n";
+do println_list <| preorder tree1;
+do println_list <| postorder tree1;
+do println_tree <| tree1;
+do println_tree <| reflect tree1;
 
 #------------------------------------------------------------
 # Q8. geom2を初項1, 項比1の等比数列のリスト[1,2,4,8,16,...]
 #     として定義せよ。
 #------------------------------------------------------------
-let geom2 n = map {x->2**x} <| from_to 0 (n-1);
+let geom2 n = map {x->2**x} (0 .. (n-1));
 
-do print_list <| geom2 10;
+do println_list <| geom2 10;
 
 #------------------------------------------------------------
 # Q9. takeと反対に、リストの最初のn個の要素を取り除く関数
@@ -175,7 +169,7 @@ do print_list <| geom2 10;
 #------------------------------------------------------------
 fun myDrop n ((_::xs) as lis) = if n <= 0 -> lis else myDrop (n-1) xs;
 
-do print_list <| myDrop 4 (from_to 1 10);
+do println_list <| myDrop 4 (1 .. 10);
 
 #------------------------------------------------------------
 # Q10. fibsをフィボナッチ数列のリストとして定義せよ。
@@ -189,7 +183,7 @@ let fibs n =
     }
   in loop n (0,1);
 
-do print_list <| fibs 20;
+do println_list <| fibs 20;
 
 #------------------------------------------------------------
 # Q11. 2つの要素に重複のない昇順に並んだリストをマージして、
@@ -212,7 +206,7 @@ let merge xs ys =
   }
   in loop (xs,ys);
 
-do print_list <| merge [1,2,4,5,7,9] [2,3,4,6,8,10];
+do println_list <| merge [1,2,4,5,7,9] [2,3,4,6,8,10];
 
 #------------------------------------------------------------
 # Q12. 2^i * 3^j * 5^k (i,j,kは0以上の整数)の形で表せる
@@ -220,13 +214,8 @@ do print_list <| merge [1,2,4,5,7,9] [2,3,4,6,8,10];
 #------------------------------------------------------------
 let minimum = {
   [] -> error "minimum";
-  (x::xs) -> foldr (\x m -> if x < m -> x else m) x xs;
+  x::xs -> foldl (\m x -> if x < m -> x else m) x xs;
 };
-fun index lis n =
-  match lis {
-    [] -> error "index";
-    x::xs -> if n == 0 -> x else index xs (n-1);
-  };
 fun while p m = if p () -> do m () in while p m else ();
 let hamming n =
   let ham = ref [] in
@@ -236,14 +225,14 @@ let hamming n =
     0 -> !ham;
     n -> let h = minimum [!x2,!x3,!x5] in
          do ham := !ham ++ [h];
-            while {() -> !x2 <= h} {() -> do x2 := 2 * index !ham !j2; j2 := !j2+1 in ()};
-            while {() -> !x3 <= h} {() -> do x3 := 3 * index !ham !j3; j3 := !j3+1 in ()};
-            while {() -> !x5 <= h} {() -> do x5 := 5 * index !ham !j5; j5 := !j5+1 in ()};
+            while {() -> !x2 <= h} {() -> do x2 := 2 * nth !j2 !ham; j2 := !j2+1 end};
+            while {() -> !x3 <= h} {() -> do x3 := 3 * nth !j3 !ham; j3 := !j3+1 end};
+            while {() -> !x5 <= h} {() -> do x5 := 5 * nth !j5 !ham; j5 := !j5+1 end};
          in loop (n-1);
   }
   in loop n;
 
-do print_list <| hamming 20;
+do println_list <| hamming 20;
 
 #------------------------------------------------------------
 # Q13. 非負の整数nを受け取り、0<=x<=y<nとなるすべてのx,yの組を
@@ -255,10 +244,9 @@ let foo n =
       if x <= y;
   in (x,y);
 
-let print_pair (x,y) =
-  do print "("; print x; print ","; print y; print ")" in ();
+let print_pair (x,y) = do print "("; print x; print ","; print y; print ")" end;
 
-do print_list_with print_pair <| foo 4;
+do println_list_with print_pair <| foo 4;
 
 #------------------------------------------------------------
 # Q14. 非負の整数nを受け取り、0<x<y<z<=nの範囲でx^2+y^2=z^2
@@ -271,28 +259,13 @@ let chokkaku n =
       if x**2 + y**2 == z**2;
   in (x,y,z);
 
-let print_tuple3 (x,y,z) =
-  do print "("; print x; print ","; print y; print ","; print z; print ")" in ();
+let print_tuple3 (x,y,z) = do print "("; print x; print ","; print y; print ","; print z; print ")" end;
 
-do print_list_with print_tuple3 <| chokkaku 20;
+do println_list_with print_tuple3 <| chokkaku 20;
 
 #------------------------------------------------------------
 # Q15. primesを素数列[2,3,5,7,11,...]のリストとして定義せよ。
 #------------------------------------------------------------
-fun take n lst =
-  match (n,lst) {
-    (n,_) ? n <= 0 -> [];
-    (_,[]) -> [];
-    (n,x::xs) -> x::take (n-1) xs;
-  };
-fun all p = {
-  [] -> true;
-  x::xs -> if p x -> all p xs else false;
-};
-fun any p = {
-  [] -> false;
-  x::xs -> if p x -> true else any p xs;
-};
 let primes n =
   let p = ref (take n [2,3,5,7]) in
   let sieve m = any {i -> m % i == 0} !p in
@@ -302,7 +275,7 @@ let primes n =
     else do p := !p ++ [m] in loop (n-1) (m+2)
   in loop (n-4) 11;
 
-do print_list <| primes 20;
+do println_list <| primes 20;
 
 #------------------------------------------------------------
 # Q16. 8-Queens問題を解く関数queensを定義せよ。
@@ -319,21 +292,12 @@ do print_list <| primes 20;
 #           . . . . . Q . .
 #
 #------------------------------------------------------------
-let zip xs ys =
-  fun loop = {
-    ([],_) -> [];
-    (_,[]) -> [];
-    (x::xs,y::ys) -> (x,y)::loop (xs,ys);
-  }
-  in loop (xs,ys);
-let mapi f lst = map f <| zip (0 .. length lst) lst;
-let ignore _ = ();
 let queens n =
   let ans = ref [] in
-  let check q qs = foldr (&&) true <| mapi {(i,x) -> x<>q && x-(i+1)<>q && x+(i+1)<>q} qs in
+  let check q qs = all id <| mapi {(i,x) -> x<>q && x-(i+1)<>q && x+(i+1)<>q} qs in
   fun loop qs =
     if (length qs) == n -> ans := qs::!ans
     else ignore (for q <- 0 .. (n-1); if check q qs; in loop (q::qs))
   in do loop [] in !ans;
 
-do map print_list << take 10 <| queens 8;
+do map println_list << take 10 <| queens 8;
