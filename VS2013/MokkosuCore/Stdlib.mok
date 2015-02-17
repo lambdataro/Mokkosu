@@ -1,7 +1,7 @@
 ﻿#============================================================
 #! @file    Stdlib.mok
 #! @brief   Mokkosu 標準ライブラリ
-#! @author  lamndataro, kielnow
+#! @author  lambdataro, kielnow
 #============================================================
 
 __define "HIDE_TYPE";
