@@ -3,6 +3,7 @@
 #! @brief	Sort sample
 #! @author	kielnow
 #============================================================
+__define "CONSOLE_APPLICATION";
 
 #------------------------------------------------------------
 # Quick sort
@@ -10,7 +11,6 @@
 fun sort lis =
   match lis {
     [] -> [];
-    [x] -> [x];
     x::xs ->
       let (ls,gs) = (filter {i->i<x} xs, filter {i->x<i} xs) in
       sort ls ++ [x] ++ sort gs;
@@ -20,5 +20,14 @@ fun sort lis =
 # Test
 #------------------------------------------------------------
 let list1 = [6,1,9,3,2,7,4,8,5,0];
-do print_list list1;
-do print_list <| sort list1;
+
+let println_list lst =
+  fun loop = {
+      [] -> ();
+      [x] -> print x;
+      x::xs -> do print x; print "," in loop xs; 
+    }
+  in do print "["; loop lst; println "]" in ();
+
+do println_list list1;
+do println_list <| sort list1;
