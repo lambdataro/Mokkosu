@@ -26,3 +26,38 @@ Mokkosuの標準ライブラリには関数型スタイルで2Dの描画やマ�
 ## 充実したドキュメント
 言語マニュアルとライブラリマニュアルに加えて、関数型言語初心者をターゲットとしたチュートリアルを
 用意しており、だれでも手軽に始められる環境を整備しています。
+
+# プログラム例
+## Hello, World.
+```
+msgbox "Hello, World.";
+```
+
+## 階乗計算
+```
+fun fact = {
+  0 -> 1;
+  n -> n * fact (n - 1);
+};
+```
+
+## 代数的データ型とパターンマッチ
+```
+type Expr = Num<Int> | Add(Expr, Expr) | Mul(Expr, Expr);
+
+fun eval = {
+  ~Num(n) -> n;
+  ~Add(e1, e2) -> eval e1 + eval e2;
+  ~Mul(e1, e2) -> eval e1 * eval e2;
+};
+```
+
+## リスト内包表記
+```
+for x <- 1 .. 10;
+    y <- 1 .. 10;
+    z <- 1 .. 10;
+    if x * x + y * y == z * z;
+in  println(format "{0}, {1}, {2}"
+      [int_to_object x, int_to_object y, int_to_object z]);
+```
