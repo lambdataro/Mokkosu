@@ -21,6 +21,8 @@ using System.Collections;
 # システム関数
 #------------------------------------------------------------
 
+let println x = __prim "println" (x);
+let print x = __prim "print" (x);
 let error x = __prim "error" (x);
 let undefined _ = error "undefined";
 let ignore _ = ();
@@ -84,6 +86,7 @@ let __operator_negdot x = 0.0 -. x;
 let fabs x = if x >= 0.0 -> x else ~-.x;
 
 let pi = sget System.Math::PI;
+let pi2 = pi *. 2.0;
 let e = sget System.Math::E;
 
 let sqrt x = call System.Math::Sqrt((x : Double));
@@ -116,6 +119,7 @@ let floor x = call System.Math::Floor((x : Double));
 #------------------------------------------------------------
 
 let __operator_hat x y = __prim "concat" (x, y);
+let tostring x = __prim "tostring" (x);
 let strlen (str : String) = str.get_Length();
 let strnth (str : String) (idx : Int) = str.get_Chars(idx);
 
@@ -157,6 +161,7 @@ let int_to_object (n : Int) = cast<Int32, Object>(n);
 let double_to_object (d : Double) = cast<Double, Object>(d);
 let bool_to_object (b : Bool) = cast<Boolean, Object>(b);
 let char_to_object (c : Char) = cast<Char, Object>(c);
+let string_to_object (s : String) = cast<String, Object>(s);
 
 #------------------------------------------------------------
 # 関数
@@ -220,6 +225,11 @@ fun map f = {
   x :: xs -> f x :: map f xs;
 };
 
+fun iter f = {
+  [] -> [];
+  x :: xs -> do f x in iter f xs
+};
+
 fun filter p = {
   [] -> [];
   x :: xs ? p x -> x :: filter p xs;
@@ -269,7 +279,87 @@ let __for_bind lis f = concatmap f lis;
 let __for_unit x = [x];
 let __for_zero = [];
 
-# iter, take, drop, split_at, take_while, drop_while, elem, lookup, zip, zip_with, unzip がほしい
+let print_list_with p lis =
+  fun loop = {
+      [] -> ();
+      [x] -> p x;
+      x::xs -> do p x; print "," in loop xs; 
+    }
+  in do print "["; loop lis; println "]" in ();
+
+fun take n lst =
+  match (n,lst) {
+    (n,_) ? n <= 0 -> [];
+    (_,[]) -> [];
+    (n,x::xs) -> x::take (n-1) xs;
+  };
+
+fun drop n lst =
+  if n <= 0 -> lst
+  else drop (n - 1) (tail lst);
+
+fun take_while p = {
+  [] -> [];
+  x::xs -> if p x -> x :: take_while p xs else []
+};
+
+fun drop_while p = {
+  [] -> [];
+  x::xs -> if p x -> drop_while p xs else x::xs
+};
+
+fun all p = {
+  [] -> true;
+  x::xs -> if p x -> all p xs else false;
+};
+
+fun any p = {
+  [] -> false;
+  x::xs -> if p x -> true else any p xs;
+};
+
+let zip xs ys =
+  fun loop = {
+    ([],_) -> [];
+    (_,[]) -> [];
+    (x::xs,y::ys) -> (x,y)::loop (xs,ys);
+  }
+  in loop (xs,ys);
+
+let mapi f lst = map f <| zip (0 .. length lst) lst;
+
+let zip_with f xs ys =
+  fun loop = {
+    ([], _) -> [];
+	(_, []) -> [];
+	(x::xs, y::ys) -> f x y :: loop (xs, ys)
+  }
+  in loop (xs, ys);
+
+fun unzip = {
+  [] -> ([], []);
+  (x,y) :: rest ->
+    let (xs, ys) = unzip rest in
+	(x::xs, y::ys);
+  };
+
+fun split_at n lis =
+  if n == 0 -> ([], lis)
+  else
+    let (a, b) = split_at (n - 1) (tail lis) in
+	(head lis :: a, b);
+
+fun elem x = {
+  [] -> false;
+  y :: ys -> x == y || elem x ys;
+};
+
+fun lookup x = {
+  [] -> error "lookup: not found";
+  (k, v) :: rest ->
+    if k == x -> v
+	else lookup x rest;
+};
 
 #------------------------------------------------------------
 # 配列
@@ -283,6 +373,9 @@ let list_to_array lis =
   } in
   do loop (reverse lis) in
   alist.ToArray();
+
+let format (str : String) (args : [{Object}]) =
+  call String::Format(str, list_to_array args);
 
 #------------------------------------------------------------
 # リフレクション
@@ -307,9 +400,7 @@ type Color = RGBA(Int,Int,Int,Int)
            | HSVA(Double,Double,Double,Double)
            | HSV(Double,Double,Double);
 
-#------------------------------------------------------------
 # Convert to RGB/RGBA
-#------------------------------------------------------------
 fun toRGBA color =
   let toFF x = (double_to_int (round (255.0 *. x))) % 256 in
   match color {
@@ -336,9 +427,7 @@ fun toRGBA color =
   };
 let toRGB c = let ~RGBA(r,g,b,_) = toRGBA c in RGB(r,g,b);
 
-#------------------------------------------------------------
 # Convert to FRGB/FRGBA
-#------------------------------------------------------------
 fun toFRGBA color =
   let fromFF x = int_to_double x /. 255.0 in
   match color {
@@ -351,9 +440,7 @@ fun toFRGBA color =
   };
 let toFRGB c = let ~FRGBA(r,g,b,_) = toFRGBA c in FRGB(r,g,b);
 
-#------------------------------------------------------------
 # Convert to HSV/HSVA
-#------------------------------------------------------------
 fun toHSVA color = match color {
   ~RGBA(r,g,b,a)  -> toHSVA (toFRGBA color);
   ~RGB(r,g,b)     -> toHSVA (toFRGBA color);

@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 using Livet;
 using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
 
 using Microsoft.Win32;
 
@@ -20,7 +12,8 @@ using Xceed.Wpf.AvalonDock;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System.IO;
 using System.Xml;
-using System.Reflection;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace MokkosuPad.ViewModels
 {
@@ -29,6 +22,7 @@ namespace MokkosuPad.ViewModels
         private SourceViewModel _source_vm = new SourceViewModel("ソースファイル");
         private OutputViewModel _output_vm = new OutputViewModel("出力");
         private string _source_fname = "";
+        private ConsoleRedirectWriter consoleRedirectWriter;
 
         public void Initialize()
         {
@@ -375,7 +369,13 @@ namespace MokkosuPad.ViewModels
             {
                 var output = Model.CompileProgram(_source_fname, true);
                 _output_vm.Text = output;
-                Model.RunProgram();
+
+                consoleRedirectWriter = new ConsoleRedirectWriter();
+                consoleRedirectWriter.OnWrite += new Action<string>(AppendOutput);
+                output = Model.RunProgram();
+                consoleRedirectWriter.Release();
+
+                _output_vm.Text += output;
             }
         }
         #endregion
@@ -405,6 +405,11 @@ namespace MokkosuPad.ViewModels
                 _output_vm.Text = output;
                 Model.SaveExe(_source_fname);
             }
+        }
+
+        public void AppendOutput(string line)
+        {
+            _output_vm.Text += line;
         }
 
         #endregion

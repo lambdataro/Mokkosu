@@ -105,10 +105,11 @@
                     </v:PanesDataTemplateSelector.SourceViewTemplate>
                     <v:PanesDataTemplateSelector.OutputViewTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <TextBox v:TextBoxBehaviour.ScrollOnTextChanged="True"
+                                     Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      IsReadOnly="True" FontFamily="Consolas" FontSize="16" 
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                     ScrollViewer.VerticalScrollBarVisibility="Visible" >
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible">
                             </TextBox>
                         </DataTemplate>
                     </v:PanesDataTemplateSelector.OutputViewTemplate>

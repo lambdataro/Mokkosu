@@ -178,7 +178,8 @@ namespace Mokkosu.CodeGenerate
 
         static string GenDelegateName()
         {
-            return string.Format("delegate@{0:000}", ++_count);
+            _count++;
+            return string.Format("delegate@{0:000}", _count);
         }
 
         static string GenFieldName()

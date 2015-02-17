@@ -1,1 +1,2 @@
-﻿show_window ();
+﻿println (format "{0} + {1}"
+  [ int_to_object 3, string_to_object "hello" ] ) ;

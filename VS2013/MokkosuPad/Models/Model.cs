@@ -65,12 +65,20 @@ namespace MokkosuPad.Models
             }
         }
 
-        public static void RunProgram()
+        public static string RunProgram()
         {
             if (_mokkosu != null)
             {
-                _mokkosu.Run();
+                try
+                {
+                    _mokkosu.Run();
+                }
+                catch (Exception e)
+                {
+                    return "実行時エラー\n" + e.ToString();
+                }
             }
+            return "";
         }
 
         public static void SaveExe(string src_fname)
