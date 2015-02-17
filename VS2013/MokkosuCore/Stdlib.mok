@@ -363,7 +363,7 @@ let list_to_array lis =
     [] -> [];
 	x :: xs -> do alist.Add((x : {Object})) in loop xs; 
   } in
-  do loop (reverse lis) in
+  do loop lis in
   alist.ToArray();
 
 let format (str : String) (args : [{Object}]) =
