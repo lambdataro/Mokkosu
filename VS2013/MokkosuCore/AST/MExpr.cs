@@ -364,9 +364,10 @@ namespace Mokkosu.AST
 
         public override MSet<string> FreeVars()
         {
-            var fv1 = Guard.FreeVars().Union(ThenExpr.FreeVars());
-            var fv2 = fv1.Diff(Pat.FreeVars());
-            return fv2.Union(Expr.FreeVars()).Union(ElseExpr.FreeVars());
+            var fv1 = Expr.FreeVars().Union(ElseExpr.FreeVars());
+            var fv2 = Guard.FreeVars().Union(ThenExpr.FreeVars());
+            var fv3 = fv2.Diff(Pat.FreeVars());
+            return fv1.Union(fv3);
         }
     }
 

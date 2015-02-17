@@ -95,8 +95,7 @@ namespace Mokkosu.Utils
             }
             else
             {
-                // throw new MError("Not Found: " + key);
-                throw new ApplicationException();
+                throw new MError(key + "が見つかりません。");
             }
         }
 

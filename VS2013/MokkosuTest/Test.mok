@@ -1,84 +1,66 @@
-﻿#------------------------------------------------------------
-# 2D描画ライブラリ
-#------------------------------------------------------------
+﻿__define "CONSOLE_APPLICATION";
+__define "SHOW_CLOSURE_RESULT";
 
-# タイマー
+let println x = __prim "println" (x);
 
-let _timer = new Timer();
+#-----------------------------------------------------------------------------
+# おかしくない
+#-----------------------------------------------------------------------------
+let test1 (foo : String) =
+  do println foo in
+  let (foo : Int) = 1 in
+  do println foo end;
 
-let set_interval (n : Int) =
-  _timer.set_Interval(n);
+do println "----------------------";
+do test1 "String";
 
-# Tickイベント
+# 出力
+#> String
+#> 1
 
-let _tick_function = ref (\() -> ());
+#-----------------------------------------------------------------------------
+# おかしい
+#-----------------------------------------------------------------------------
+let test2 (foo : String) bar =
+  do println foo in
+  let (foo : Int) = 1 in
+  do println foo end;
 
-let add_tick_function g =
-  let f = !_tick_function in
-  _tick_function := (\() -> do
-    f ();
-    g ();
-  end);
+do println "----------------------";
+do test2 "String" 0;
 
-let _tick_callback ((sender : {Object}), (e : {EventArgs})) =
-  do !_tick_function () end;
+# 出力
+#> String
+#> String
 
-_timer.add_Tick (delegate EventHandler _tick_callback);
+#-----------------------------------------------------------------------------
+# おかしい
+#-----------------------------------------------------------------------------
+let test3 (foo1 : String) (foo2 : String) =
+  do println foo1;
+     println foo2;
+  in
+  let (foo1 : Int) = 1 in
+  let (foo2 : Int) = 2 in
+  do println foo1;
+     println foo2;
+  end;
 
-# ウインドウ
+do println "----------------------";
+do test3 "String1" "String2";
 
-let _form = new Form();
-do _form.set_SizeGripStyle(sget SizeGripStyle::Hide);
-do _form.set_FormBorderStyle(sget FormBorderStyle::FixedSingle);
+#-----------------------------------------------------------------------------
+# おかしい
+#-----------------------------------------------------------------------------
+let test4 (foo1 : String) (foo2 : String) bar1 =
+  do println foo1;
+     println foo2;
+  in
+  let (foo1 : Int) = 1 in
+  let (foo2 : Int) = 2 in
+  do println foo1;
+     println foo2;
+  end;
 
-let show_window () =
-  do _timer.Start();
-     _form.ShowDialog() end;
-
-let set_title (str : String) =
-  _form.set_Text(str);
-
-let set_size (w : Int) (h : Int) = 
-  _form.set_ClientSize(new Size(w, h));
-
-# Paintイベント
-
-let _paint_function = ref (\() -> ());
-
-let _get_graphics = ref (undefined : () -> {Graphics});
-
-let get_graphics () = !_get_graphics();
-
-let _paint_callback ((sender : {Object}), (e : {PaintEventArgs})) =
-  do _get_graphics := (\() -> e.get_Graphics());
-     !_paint_function () end;
-
-let add_paint_function g =
-  let f = !_paint_function in
-  _paint_function := (\() -> do
-    f ();
-    g ();
-  end);
-
-do _form.add_Paint (delegate PaintEventHandler _paint_callback);
-
-let draw_line (color : Color) (x1 : Int) (y1 : Int) (x2 : Int) (y2 : Int) =
-  let graphics = get_graphics () in
-  let ~RGBA (r, g, b, a) = toRGBA color in
-  let color = call Color::FromArgb(a, r, g, b) in
-  let pen = new Pen(color) in
-  graphics.DrawLine(pen, x1, y1, x2, y2);
-
-#------------------------------------------------------------
-# テスト
-#------------------------------------------------------------
-
-add_paint_function { () ->
-  let color = FRGB (1.0, 0.0, 0.0) in
-  do
-	# draw_line color 0 0 100 100;
-    # draw_line color 100 0 0 100;
-  end
-};
-
-show_window ();
+do println "----------------------";
+do test4 "String1" "String2" 0;

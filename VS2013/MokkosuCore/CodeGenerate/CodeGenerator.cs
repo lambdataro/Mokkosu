@@ -156,6 +156,9 @@ namespace Mokkosu.CodeGenerate
                     MethodAttributes.Static, typeof(void), new Type[] { });
             }
 
+            // Type.GetType("System.STAThreadAttribute").GetConstructor(new Type)
+            // builder.SetCustomAttribute(new CustomAttributeBuilder(  ))
+
             ilgen = builder.GetILGenerator();
             ilgen.Emit(OpCodes.Ldnull);
             ilgen.Emit(OpCodes.Ldnull);
@@ -1089,7 +1092,7 @@ namespace Mokkosu.CodeGenerate
                 il.Emit(OpCodes.Pop);
                 il.Emit(OpCodes.Br, fail_label);
                 il.MarkLabel(lbl3);
-                return env1.Append(env2);
+                return env2.Append(env1);
             }
             else if (pat is PTuple)
             {
