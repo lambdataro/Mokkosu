@@ -1305,6 +1305,9 @@ namespace Mokkosu.CodeGenerate
                 case "assign":
                     il.Emit(OpCodes.Call, _assign);
                     break;
+                case "loadnull":
+                    il.Emit(OpCodes.Ldnull);
+                    break;
                 default:
                     throw new NotImplementedException();
             }

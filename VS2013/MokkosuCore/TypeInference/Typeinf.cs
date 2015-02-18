@@ -915,6 +915,17 @@ namespace Mokkosu.TypeInference
                     }
                     break;
 
+                case "loadnull":
+                    if (args.Count == 0)
+                    {
+                        Unification(pos, ret, new DotNetType(typeof(object)));
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
                 default:
                     throw new MError(pos + ": プリミティブ演算型エラー");
             }
@@ -1324,6 +1335,14 @@ namespace Mokkosu.TypeInference
             else if (type1 is BoolType && type2 is BoolType)
             {
                 return;
+            }
+            else if (type1 is DotNetType && ((DotNetType)type1).Type.IsEnum)
+            {
+                Unification(pos, new IntType(), type2);
+            }
+            else if (type2 is DotNetType && ((DotNetType)type2).Type.IsEnum)
+            {
+                Unification(pos, new IntType(), type1);
             }
             else if (type1 is DotNetType && type2 is DotNetType)
             {

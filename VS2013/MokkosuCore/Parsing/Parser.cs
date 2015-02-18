@@ -1276,7 +1276,15 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.PRIM);
                 var name = ctx.ReadStrToken(TokenType.STR);
                 ctx.ReadToken(TokenType.LP);
-                var items = ParseExprList(ctx);
+                List<MExpr> items;
+                if (ctx.Tkn.Type == TokenType.RP)
+                {
+                    items = new List<MExpr>();
+                }
+                else
+                {
+                    items = ParseExprList(ctx);
+                }
                 ctx.ReadToken(TokenType.RP);
                 return new MPrim(pos, name, items);
             }

@@ -16,12 +16,6 @@ type Color = RGBA(Int,Int,Int,Int)
            | HSV(Double,Double,Double);
 
 #-----------------------------------------------------------------------------
-# for .NET System.Drawing.Color
-#-----------------------------------------------------------------------------
-let toARGB32 color = let ~RGBA(r,g,b,a) = toRGBA color in (((bshl a 24) `bor` (bshl r 16)) `bor` (bshl g 8)) `bor` b;
-let fromARGB32 argb = RGBA((bshr argb 16)`band`0xff, (bshr argb 8)`band`0xff, argb`band`0xff, (bshr argb 24)`band`0xff);
-
-#-----------------------------------------------------------------------------
 # Convert to RGB/RGBA
 #-----------------------------------------------------------------------------
 fun toRGBA color =
@@ -88,6 +82,12 @@ fun toHSVA color = match color {
     in HSVA(h,s,v,1.0);
 };
 let toHSV color = let ~HSVA(h,s,v,_) = toHSVA color in HSV(h,s,v);
+
+#-----------------------------------------------------------------------------
+# for .NET System.Drawing.Color
+#-----------------------------------------------------------------------------
+let toARGB32 color = let ~RGBA(r,g,b,a) = toRGBA color in (((bshl a 24) `bor` (bshl r 16)) `bor` (bshl g 8)) `bor` b;
+let fromARGB32 argb = RGBA((bshr argb 16)`band`0xff, (bshr argb 8)`band`0xff, argb`band`0xff, (bshr argb 24)`band`0xff);
 
 #-----------------------------------------------------------------------------
 # print_color
