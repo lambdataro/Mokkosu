@@ -1308,6 +1308,23 @@ namespace Mokkosu.CodeGenerate
                 case "loadnull":
                     il.Emit(OpCodes.Ldnull);
                     break;
+                case "intequal":
+                    {
+                        var loc1 = il.DeclareLocal(typeof(int));
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                        il.Emit(OpCodes.Stloc, loc1);
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                        il.Emit(OpCodes.Ldloc, loc1);
+                        il.Emit(OpCodes.Beq, lbl1);
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Br, lbl2);
+                        il.MarkLabel(lbl1);
+                        il.Emit(OpCodes.Ldc_I4_1);
+                        il.MarkLabel(lbl2);
+                        il.Emit(OpCodes.Box, typeof(bool));
+                    }
+                    
+                    break;
                 default:
                     throw new NotImplementedException();
             }

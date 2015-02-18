@@ -16,6 +16,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections;
+using System.Reflection;
 
 #------------------------------------------------------------
 # システム関数
@@ -37,6 +38,8 @@ let __operator_lt x y = __prim "lt" (x, y);
 let __operator_gt x y = __prim "gt" (x, y);
 let __operator_le x y = __prim "le" (x, y);
 let __operator_ge x y = __prim "ge" (x, y);
+
+let intequal x y = __prim "intequal" (x, y);
 
 let max x y = if x > y -> x else y;
 let min x y = if x < y -> x else y;
@@ -193,6 +196,8 @@ let uncurry f (a, b) = f a b;
 let ref x = __prim "ref" (x);
 let __operator_bang x = __prim "deref" (x);
 let __operator_coleq x y = __prim "assign" (x, y);
+let incr r = r := !r + 1;
+let decr r = r := !r - 1;
 
 #------------------------------------------------------------
 # リスト
@@ -391,3 +396,4 @@ __undefine "HIDE_TYPE";
 #------------------------------------------------------------
 include "Print.mok";
 include "Color.mok";
+include "2D.mok";

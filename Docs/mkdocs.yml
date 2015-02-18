@@ -3,5 +3,4 @@ repo_url: https://github.com/lambdataro/Mokkosu
 theme: Bootstrap
 pages:
 - ['index.md', 'トップ']
-- ['quickstart.md', 'クイックスタートガイド']
-- ['language.md', ランゲージマニュアル]
+- ['tutorial.md', 'チュートリアル']

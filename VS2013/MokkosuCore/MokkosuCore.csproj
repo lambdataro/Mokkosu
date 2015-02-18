@@ -73,6 +73,9 @@
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="2D.mok">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Color.mok">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

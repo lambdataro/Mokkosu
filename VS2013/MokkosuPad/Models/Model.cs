@@ -49,7 +49,7 @@ namespace MokkosuPad.Models
                 }
                 else
                 {
-                    return _mokkosu.GetVersionString() + "\nエラー:\n" + e.Message;
+                    return _mokkosu.GetVersionString() + "\n" + _mokkosu.GetOutput() + "エラー:\n" + e.Message;
                 }
             }
             catch (Exception e)

@@ -943,7 +943,7 @@
 		<row><td>InstallChangeFolder</td><td>Up</td><td>DirectoryListUp</td><td>0</td><td>1</td><td>0</td></row>
 		<row><td>InstallWelcome</td><td>Back</td><td>NewDialog</td><td>SplashBitmap</td><td>Display_IsBitmapDlg</td><td>0</td></row>
 		<row><td>InstallWelcome</td><td>Cancel</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>InstallWelcome</td><td>Next</td><td>NewDialog</td><td>DestinationFolder</td><td>1</td><td>0</td></row>
+		<row><td>InstallWelcome</td><td>Next</td><td>NewDialog</td><td>ReadyToInstall</td><td>1</td><td>0</td></row>
 		<row><td>LicenseAgreement</td><td>Back</td><td>NewDialog</td><td>InstallWelcome</td><td>1</td><td>0</td></row>
 		<row><td>LicenseAgreement</td><td>Cancel</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>LicenseAgreement</td><td>ISPrintButton</td><td>DoAction</td><td>ISPrint</td><td>1</td><td>0</td></row>
@@ -978,7 +978,7 @@
 		<row><td>ReadmeInformation</td><td>Cancel</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>
 		<row><td>ReadmeInformation</td><td>Next</td><td>NewDialog</td><td>CustomerInformation</td><td>1</td><td>1</td></row>
 		<row><td>ReadyToInstall</td><td>Back</td><td>NewDialog</td><td>CustomSetup</td><td>Installed OR _IsSetupTypeMin = "Custom"</td><td>2</td></row>
-		<row><td>ReadyToInstall</td><td>Back</td><td>NewDialog</td><td>DestinationFolder</td><td>NOT Installed</td><td>1</td></row>
+		<row><td>ReadyToInstall</td><td>Back</td><td>NewDialog</td><td>InstallWelcome</td><td>NOT Installed</td><td>1</td></row>
 		<row><td>ReadyToInstall</td><td>Back</td><td>NewDialog</td><td>MaintenanceType</td><td>Installed AND _IsMaintenance = "Reinstall"</td><td>3</td></row>
 		<row><td>ReadyToInstall</td><td>Cancel</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>ReadyToInstall</td><td>InstallNow</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>0</td></row>
@@ -1893,6 +1893,9 @@
 		<row><td>File3</td><td>Component3</td><td>MokkosuCompiler.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuCompiler&gt;|Built</td><td>3</td><td/></row>
 		<row><td>File4</td><td>Component4</td><td>MokkosuTypechecker.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuTypechecker&gt;|Built</td><td>3</td><td/></row>
 		<row><td>File5</td><td>Component5</td><td>MokkosuPad.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuPad&gt;|Built</td><td>3</td><td/></row>
+		<row><td>_d.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>2D.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\2D.mok</td><td>1</td><td/></row>
+		<row><td>color.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Color.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Color.mok</td><td>1</td><td/></row>
+		<row><td>print.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Print.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Print.mok</td><td>1</td><td/></row>
 		<row><td>startup.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Startup.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Startup.mok</td><td>1</td><td/></row>
 		<row><td>stdlib.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Stdlib.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Stdlib.mok</td><td>1</td><td/></row>
 	</table>
@@ -4323,7 +4326,8 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISComments</col>
 		<row><td>ALLUSERS</td><td>1</td><td/></row>
 		<row><td>ARPINSTALLLOCATION</td><td/><td/></row>
-		<row><td>ARPNOREMOVE</td><td>1</td><td/></row>
+		<row><td>ARPNOMODIFY</td><td>1</td><td/></row>
+		<row><td>ARPNOREPAIR</td><td>1</td><td/></row>
 		<row><td>ARPPRODUCTICON</td><td>ARPPRODUCTICON.exe</td><td/></row>
 		<row><td>ARPSIZE</td><td/><td/></row>
 		<row><td>ARPURLINFOABOUT</td><td>##ID_STRING2##</td><td/></row>
@@ -4392,7 +4396,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{2B5611E6-D6BD-48F7-B117-9EC883AC2FAA}</td><td/></row>
 		<row><td>ProductName</td><td>Mokkosu</td><td/></row>
-		<row><td>ProductVersion</td><td>0.0.1</td><td/></row>
+		<row><td>ProductVersion</td><td>1.0.0</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>

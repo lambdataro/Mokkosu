@@ -926,6 +926,19 @@ namespace Mokkosu.TypeInference
                     }
                     break;
 
+                case "intequal":
+                    if (args.Count == 2)
+                    {
+                        Unification(pos, args[0], new IntType());
+                        Unification(pos, args[1], new IntType());
+                        Unification(pos, ret, new BoolType());
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
                 default:
                     throw new MError(pos + ": プリミティブ演算型エラー");
             }
