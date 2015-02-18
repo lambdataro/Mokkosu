@@ -4,7 +4,7 @@
 
 Mokkosuはインタラクティブなコンテンツを手軽に作成可能な関数型プログラミング言語です。
 
-(公式サイトはこちら)[http://lambdataro.sakura.ne.jp/mokkosu/]
+[公式サイトはこちら](http://lambdataro.sakura.ne.jp/mokkosu/)
 
 # 主な機能
 ## 関数型プログラミング言語
