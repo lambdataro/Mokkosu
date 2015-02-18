@@ -1,6 +1,6 @@
-![Mokkosu](img/image01.png)
+![Mokkosu](img/topimage.png)
 
-# プログラミング言語Mokkosu
+# プログラミング言語 Mokkosu
 
 Mokkosuは全くのゼロから設計・開発されたオープンソースのプログラミング言語です。
 Mokkosuは.NET Framework上で動作する関数型プログラミング言語で、ゲームや
