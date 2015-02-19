@@ -1,4 +1,4 @@
-site_name: プログラミング言語 Mokkosu
+site_name: 'プログラミング言語 Mokkosu'
 repo_url: https://github.com/lambdataro/Mokkosu
 theme: Bootstrap
 pages:
@@ -7,4 +7,4 @@ pages:
 - ['tutorial.md', 'チュートリアル']
 - ['langmanual.md', '言語マニュアル']
 - ['libmanual.md', 'ライブラリマニュアル']
-- ['sample.md', サンプルプログラム]
+- ['sample.md', 'サンプルプログラム']

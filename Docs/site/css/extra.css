@@ -4,15 +4,56 @@ div.col-md-9 img {
     margin-right: auto;
 }
 
-table {
+div.col-md-9 p {
+    margin: 20px 0;
+    font-size: medium;
+    line-height: 1.5;
+    font-size: 12pt;
+}
+
+div.col-md-9 h1 {
+    margin: 50px 0 30px;
+    font-size: 36pt;
+    color: DimGray;
+}
+
+div.col-md-9 h2 {
+    border-top: solid 2px;
+    border-bottom: solid 2px;
+    border-color: DimGray;
+    padding: 8px;
+    margin: 40px 0 20px;
+    font-size: 30pt;
+    text-align: center;
+    color: DimGray;
+}
+
+div.col-md-9 h3 {
+    margin: 35px 0 15px;
+    font-size: 20pt;
+    color: DimGray;
+}
+
+div.col-md-9 table {
     border-collapse: collapse;
     
 }
 
-th {
-  border: 1px solid black;
+div.col-md-9 th {
+  border: 1px solid gray;
+  padding: 5px;
 }
 
-td {
-  border: 1px solid black;
+div.col-md-9 td {
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+div.col-md-9 code {
+  background-color: WhiteSmoke;
+  color: black;
+}
+
+body {
+  margin-bottom: 80px;
 }
