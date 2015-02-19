@@ -146,15 +146,15 @@
 <h2 id="mokkosu">Mokkosuをインストールしよう</h2>
 <p><a href="https://github.com/lambdataro/Mokkosu/releases">Mokkosuのリリースページ</a>
 から最新バージョンのインストーラをダウンロードしてきます。</p>
-<p><img alt="リリースページ" src="../../../img/release.png" /></p>
+<p><img alt="リリースページ" src="../../img/release.png" /></p>
 <p>ダウンロードしてきたインストーラーをダブルクリックして実行し、
 画面の指示に従ってインストールします。</p>
 <p>インストールが完了するとスタートメニューとディスクトップに
 MokkosuPadのショートカットが作成されます。</p>
-<p><img alt="ショートカット" src="../../../img/shortcut.png" /></p>
+<p><img alt="ショートカット" src="../../img/shortcut.png" /></p>
 <p>作成されたショートカットをダブルクリックすると、
 MokkosuPadが起動し以下の画面が表示されればインストールは成功です。</p>
-<p><img alt="MokkosuPad" src="../../../img/mokkosupad.png" /></p>
+<p><img alt="MokkosuPad" src="../../img/mokkosupad.png" /></p>
 <h2 id="_1">メッセージを表示しよう</h2>
 <h3 id="_2">メッセージボックスの表示</h3>
 <p>ソースファイルの緑色の文字を消去して以下のプログラムを入力
@@ -166,7 +166,7 @@ MokkosuPadが起動し以下の画面が表示されればインストールは�
 ソースコードを<code>Hello.mok</code>という名前で保存します。</p>
 <p><code>操作</code>メニューから<code>実行</code>を選ぶと、
 Hello, World.と書かれたメッセージボックスが表示されます。</p>
-<p><img alt="MokkosuPad" src="../../../img/hello.png" /></p>
+<p><img alt="MokkosuPad" src="../../img/hello.png" /></p>
 <h3 id="1_1">練習問題1</h3>
 <p>画面に自分の名前を表示するプログラムを作成して実行してみましょう。</p>
 <h2 id="_3">式の計算をしよう</h2>
@@ -179,7 +179,7 @@ Hello, World.と書かれたメッセージボックスが表示されます。<
 <code>msgbox</code>関数の引数は文字列でなければならないのでこのような
 変換が必要になります。</p>
 <p>プログラムを実行すると以下の表示が出ます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial01.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial01.png" /></p>
 <p>計算結果が<code>14</code>になっていることに注目してください。
 Mokkosuでは数学のように足し算や引き算よりも掛け算や割り算の方が
 先に計算されます。</p>
@@ -190,7 +190,7 @@ Mokkosuでは数学のように足し算や引き算よりも掛け算や割り�
 </code></pre>
 
 <p>と書きます。実行すると今度は以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial02.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial02.png" /></p>
 <p>上のプログラムは括弧が多くて見づらいと感じる方もいると思います。
 その場合、以下のように書くことで多少見やすくすることができます。</p>
 <pre><code>msgbox((2 + 3) * 4 |&gt; int);
@@ -212,7 +212,7 @@ msgbox message;
 <p>Mokkosuでは関数の引数に括弧は不要です。
 複数の引数をスペースで区切って与えることが関数の呼び出しが実現できます。</p>
 <p>上のプログラムを実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial03.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial03.png" /></p>
 <p>今回のプログラムはこれまでのものと違って、
 出力ウインドウに以下のように表示されます。</p>
 <pre><code>message : String
@@ -230,7 +230,7 @@ msgbox(x * x |&gt; int);
 </code></pre>
 
 <p>と表示されて以下が表示されます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial04.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial04.png" /></p>
 <p><code>x : Int</code>は<code>x</code>に整数値が格納されていることを
 表しています。</p>
 <h3 id="3">練習問題3</h3>
@@ -243,7 +243,7 @@ msgbox (double 10 |&gt; int);
 </code></pre>
 
 <p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial05.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial05.png" /></p>
 <p>右の出力ウインドウに注目すると、</p>
 <pre><code>double : Int -&gt; Int
 </code></pre>
@@ -259,7 +259,7 @@ msgbox (area 3 5 |&gt; int);
 </code></pre>
 
 <p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial06.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial06.png" /></p>
 <p>型は以下のようになります。</p>
 <pre><code>area : Int -&gt; Int -&gt; Int
 </code></pre>
@@ -280,8 +280,8 @@ msgbox (abs ~-3 |&gt; int);
 
 <p>ここで<code>~-</code>は符号を反転させる演算子です。</p>
 <p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial07.png" /></p>
-<p><img alt="実行結果" src="../../../img/tutorial08.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial07.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial08.png" /></p>
 <h3 id="5">練習問題5</h3>
 <p>引数を2つ受け取ってそれらが等しければ2倍した値を返す関数を定義してください。
 2つの値が等しいかどうかを調べる演算子は<code>==</code>です。</p>
@@ -297,7 +297,7 @@ msgbox (fact 5 |&gt; int);
 </code></pre>
 
 <p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../../img/tutorial09.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial09.png" /></p>
 <h3 id="6">練習問題6</h3>
 <p>1から10までの整数を足した和を計算する関数を再帰関数を用いて定義してください。</p>
 <h3 id="7">練習問題7</h3>
@@ -377,7 +377,7 @@ msgbox (fact 5 |&gt; int);
 <pre><code>msgbox(&quot;hello\nworld&quot;);
 </code></pre>
 
-<p><img alt="実行結果" src="../../../img/tutorial10.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial10.png" /></p>
 <p>と表示されます。</p>
 <h3 id="_11">整数リテラル</h3>
 <p>整数値は</p>
@@ -435,7 +435,7 @@ msgbox (fact 5 |&gt; int);
 <pre><code>msgbox (&quot;2 * 3 = &quot; ^ int (2 * 3));
 </code></pre>
 
-<p><img alt="実行結果" src="../../../img/tutorial11.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial11.png" /></p>
 <p>と表示されます。</p>
 <h3 id="_15">関数適用演算子</h3>
 <pre><code>式2 |&gt; 式1
@@ -481,6 +481,71 @@ else if 条件式2 -&gt; 式2
 else 式
 </code></pre>
 
+<h3 id="_16">比較演算子</h3>
+<p>比較に関する演算子には以下のものがあります。
+比較演算子は<code>true</code>または<code>false</code>を返します。
+比較演算子は整数にも文字列にも使うことができます。</p>
+<table>
+<thead>
+<tr>
+<th>演算子</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>式1 == 式2</td>
+<td>等しい</td>
+</tr>
+<tr>
+<td>式1 &lt;&gt; 式2</td>
+<td>等しくない</td>
+</tr>
+<tr>
+<td>式1 &lt; 式2</td>
+<td>より小さい</td>
+</tr>
+<tr>
+<td>式1 &gt; 式2</td>
+<td>より大きい</td>
+</tr>
+<tr>
+<td>式1 &lt;= 式2</td>
+<td>以下</td>
+</tr>
+<tr>
+<td>式1 &gt;= 式2</td>
+<td>以上</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_17">論理演算子</h3>
+<p>真偽値すなわち<code>true</code>または<code>false</code>に関する演算子には以下のものがあります。</p>
+<table>
+<thead>
+<tr>
+<th>演算子</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>式1 &amp;&amp; 式2</td>
+<td>かつ</td>
+</tr>
+<tr>
+<td>式1</td>
+<td></td>
+</tr>
+<tr>
+<td>not 式</td>
+<td>否定</td>
+</tr>
+</tbody>
+</table>
+<p><code>(&amp;&amp;)</code>と<code>(||)</code>はショートサーキット評価されます。
+すなわち、(&amp;&amp;)の右辺の式が<code>false</code>の場合は左辺は計算されず、
+(||)の右辺の式が<code>true</code>の場合は左辺は計算されません。</p>
 </div>
         </div>
 
