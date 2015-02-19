@@ -4,7 +4,7 @@ theme: Bootstrap
 pages:
 - ['index.md', 'トップ']
 - ['start.md', '始め方']
-- ['tutorial.md', 'チュートリアル']
-- ['langmanual.md', '言語マニュアル']
-- ['libmanual.md', 'ライブラリマニュアル']
-- ['sample.md', 'サンプルプログラム']
+- ['tutorial/part01.md', 'チュートリアル', 'パート1']
+- ['langmanual.md', '言語']
+- ['libmanual.md', 'ライブラリ']
+- ['sample.md', 'サンプル']
