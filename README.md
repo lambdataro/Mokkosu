@@ -6,6 +6,8 @@ Mokkosuはインタラクティブなコンテンツを手軽に作成可能な�
 
 [公式サイトはこちら](http://lambdataro.sakura.ne.jp/mokkosu/)
 
+[ダウンロードはこちら](https://github.com/lambdataro/Mokkosu/releases)
+
 # 主な機能
 ## 関数型プログラミング言語
 ラムダ式や一級関数、自動カリー化、代数的データ型、パターンマッチ、リスト内包表記、末尾再帰最適化といった
