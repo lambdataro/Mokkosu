@@ -163,15 +163,17 @@ namespace Mokkosu.TypeInference
                 var dict = new Dictionary<string, TypeVar>();
                 var bounded = new MSet<int>();
                 var type_args = new List<MType>();
+                var type_names = new List<string>();
                 foreach (var p in type_params)
                 {
                     var tv = new TypeVar();
                     dict.Add(p, tv);
                     bounded = bounded.Union(new MSet<int>(tv.Id));
                     type_args.Add(tv);
+                    type_names.Add(p);
                 }
 
-                var arg_types = tags[i].Args.Select(typ => MapTypeParam(typ, dict, ctx));
+                var arg_types = tags[i].Args.Select(typ => MapTypeParam(typ, dict, ctx, type_names));
                 var type = new UserType(type_name, type_args);
 
                 var tag = new Tag(name, index, bounded, arg_types.ToList(), type);
@@ -187,7 +189,7 @@ namespace Mokkosu.TypeInference
         /// <param name="type">型</param>
         /// <param name="dict">型パラメータと型変数の対応</param>
         /// <returns>型</returns>
-        static MType MapTypeParam(MType type, Dictionary<string, TypeVar> dict, TypeInfContext ctx)
+        static MType MapTypeParam(MType type, Dictionary<string, TypeVar> dict, TypeInfContext ctx, List<string> arg_names)
         {
             if (type is TypeVar)
             {
@@ -198,14 +200,14 @@ namespace Mokkosu.TypeInference
                 }
                 else
                 {
-                    return MapTypeParam(t.Value, dict, ctx);
+                    return MapTypeParam(t.Value, dict, ctx, arg_names);
                 }
             }
             else if (type is UserType)
             {
                 var t = (UserType)type;
 
-                if (!ctx.UserTypes.Contains(t.Name))
+                if (!ctx.UserTypes.Contains(t.Name) && !arg_names.Contains(t.Name))
                 {
                     throw new MError("型" + t.Name + "は未定義です。");
                 }
@@ -219,7 +221,7 @@ namespace Mokkosu.TypeInference
                     var args = new List<MType>();
                     foreach (var arg in t.Args)
                     {
-                        args.Add(MapTypeParam(arg, dict, ctx));
+                        args.Add(MapTypeParam(arg, dict, ctx, arg_names));
                     }
                     return new UserType(t.Name, args);
                 }
@@ -232,26 +234,26 @@ namespace Mokkosu.TypeInference
             else if (type is FunType)
             {
                 var t = (FunType)type;
-                var arg = MapTypeParam(t.ArgType, dict, ctx);
-                var ret = MapTypeParam(t.RetType, dict, ctx);
+                var arg = MapTypeParam(t.ArgType, dict, ctx, arg_names);
+                var ret = MapTypeParam(t.RetType, dict, ctx, arg_names);
                 return new FunType(arg, ret);
             }
             else if (type is ListType)
             {
                 var t = (ListType)type;
-                var elem_type = MapTypeParam(t.ElemType, dict, ctx);
+                var elem_type = MapTypeParam(t.ElemType, dict, ctx, arg_names);
                 return new ListType(elem_type);
             }
             else if (type is RefType)
             {
                 var t = (RefType)type;
-                var elem_type = MapTypeParam(t.ElemType, dict, ctx);
+                var elem_type = MapTypeParam(t.ElemType, dict, ctx, arg_names);
                 return new RefType(elem_type);
             }
             else if (type is TupleType)
             {
                 var t = (TupleType)type;
-                var types = t.Types.Select(typ => MapTypeParam(typ, dict, ctx)).ToList();
+                var types = t.Types.Select(typ => MapTypeParam(typ, dict, ctx, arg_names)).ToList();
                 return new TupleType(types);
             }
             else if (type is DotNetType)

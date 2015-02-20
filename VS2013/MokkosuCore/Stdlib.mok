@@ -13,6 +13,8 @@ import "System.Drawing.dll";
 import "System.Windows.Forms.dll";
 
 using System;
+using System.Collections;
+using System.Reflection;
 
 #------------------------------------------------------------
 # システム関数
@@ -141,6 +143,17 @@ let double_to_int (d : Double) = call Convert::ToInt32(d);
 let int_to_char (n : Int) = call Convert::ToChar(n);
 let char_to_int (c : Char) = call Convert::ToInt32(c);
 
+let int_to_single (n : Int) = call Convert::ToSingle(n);
+let single_to_int (f : {Single}) = call Convert::ToInt32(f);
+let double_to_single (n : Double) = call Convert::ToSingle(n);
+let single_to_double (f : {Single}) = call Convert::ToDouble(f);
+
+let int_to_object (n : Int) = cast<Int32, Object>(n);
+let double_to_object (d : Double) = cast<Double, Object>(d);
+let bool_to_object (b : Bool) = cast<Boolean, Object>(b);
+let char_to_object (c : Char) = cast<Char, Object>(c);
+let string_to_object (s : String) = cast<String, Object>(s);
+
 #------------------------------------------------------------
 # 関数
 #------------------------------------------------------------
@@ -222,16 +235,89 @@ fun foldr f seed = {
   x :: xs -> f x (foldr f seed xs)
 };
 
+fun lookup x = {
+  [] -> error "lookup: not found";
+  (k, v) :: rest ->
+    if k == x -> v
+	else lookup x rest;
+};
+
 fun concat = {
   [] -> [];
   x :: xs -> x ++ concat xs;
 };
 
-let concatmap f lis = concat (map f lis);
+let concat_map f lis = concat (map f lis);
 
-let __for_bind lis f = concatmap f lis;
+let __for_bind lis f = concat_map f lis;
 let __for_unit x = [x];
 let __for_zero = [];
+
+#------------------------------------------------------------
+# Maybe
+#------------------------------------------------------------
+
+type Maybe<T> = Nothing | Just(T);
+
+let meybe x f = {
+  ~Nothing -> x;
+  ~Just(y) -> f y;
+};
+
+let map_maybe f = {
+  ~Nothing -> Nothing;
+  ~Just(x) -> Just(f x);
+};
+
+let is_just = {
+  ~Just(_) -> true;
+  ~Nothing -> false;
+};
+
+let is_nothing = {
+  ~Just(_) -> false;
+  ~Nothing -> true;
+};
+
+let from_just = {
+  ~Just(x) -> x;
+  ~Nothing -> error "from_just";
+};
+
+#------------------------------------------------------------
+# Either
+#------------------------------------------------------------
+
+type Either<T, U> = Left(T) | Right(U);
+
+let either f g = {
+  ~Left(x) -> f x;
+  ~Right(x) -> g x;
+};
+
+#------------------------------------------------------------
+# 配列
+#------------------------------------------------------------
+
+let list_to_array lis =
+  let alist = new ArrayList() in
+  fun loop = {
+    [] -> [];
+	x :: xs -> do alist.Add((x : {Object})) |> ignore in loop xs; 
+  } in
+  do loop lis |> ignore in
+  alist.ToArray();
+
+let format (str : String) (args : [{Object}]) =
+  call String::Format(str, list_to_array args);
+
+#------------------------------------------------------------
+# リフレクション
+#------------------------------------------------------------
+
+let get_type (str : String) = call Type::GetType(str);
+
+let null = __prim "loadnull" ();
 
 #------------------------------------------------------------
 # メッセージ

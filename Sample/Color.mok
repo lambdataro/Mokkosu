@@ -1,0 +1,112 @@
+#=============================================================================
+#! @file	Color.mok
+#! @brief	HSV Color
+#! @author	kielnow
+#=============================================================================
+__define "HIDE_TYPE";
+
+#-----------------------------------------------------------------------------
+# Color
+#-----------------------------------------------------------------------------
+type Color = RGBA(Int,Int,Int,Int)
+           | RGB(Int,Int,Int)
+           | FRGBA(Double,Double,Double,Double)
+           | FRGB(Double,Double,Double)
+           | HSVA(Double,Double,Double,Double)
+           | HSV(Double,Double,Double);
+
+#-----------------------------------------------------------------------------
+# Convert to RGB/RGBA
+#-----------------------------------------------------------------------------
+fun toRGBA color =
+  let toFF x = (double_to_int (round (255.0 *. x))) % 256 in
+  match color {
+    ~RGBA(r,g,b,a)  -> RGBA(r,g,b,a);
+    ~RGB(r,g,b)     -> RGBA(r,g,b,0xff);
+    ~FRGBA(r,g,b,a) -> RGBA(toFF r,toFF g,toFF b,toFF a);
+    ~FRGB(r,g,b)    -> RGBA(toFF r,toFF g,toFF b,0xff);
+    ~HSVA(h,s,v,a)  -> let ~RGBA(r,g,b,_) = toRGBA <| HSV(h,s,v) in RGBA(r,g,b,toFF a);
+    ~HSV(h,s,v) ->
+      let v = v *. 255.0 in
+      let i = (double_to_int (floor(h /. 60.0))) % 6 in
+      let f = (h /. 60.0) -. floor(h /. 60.0) in
+      let p = double_to_int (round (v *. (1.0 -. s))) in
+      let q = double_to_int (round (v *. (1.0 -. s *. f))) in
+      let t = double_to_int (round (v *. (1.0 -. s *. (1.0 -. f)))) in
+      let v = double_to_int v in
+      let (r,g,b) = match i {
+        0 -> (v, t, p);
+        1 -> (q, v, p);
+        2 -> (p, v, t);
+        3 -> (p, q, v);
+        4 -> (t, p, v);
+        5 -> (v, p, q);
+      }
+      in RGBA(r, g, b, 0xff);
+  };
+let toRGB color = let ~RGBA(r,g,b,_) = toRGBA color in RGB(r,g,b);
+
+#-----------------------------------------------------------------------------
+# Convert to FRGB/FRGBA
+#-----------------------------------------------------------------------------
+fun toFRGBA color =
+  let fromFF x = int_to_double x /. 255.0 in
+  match color {
+    ~RGBA(r,g,b,a)  -> FRGBA(fromFF r,fromFF g,fromFF b,fromFF a);
+    ~RGB(r,g,b)     -> FRGBA(fromFF r,fromFF g,fromFF b,1.0);
+    ~HSVA(_,_,_,_)  -> toFRGBA (toRGBA color);
+    ~HSV(_,_,_)     -> toFRGBA (toRGBA color);
+    ~FRGBA(r,g,b,a) -> FRGBA(r,g,b,a);
+    ~FRGB(r,g,b)    -> FRGBA(r,g,b,1.0);
+  };
+let toFRGB color = let ~FRGBA(r,g,b,_) = toFRGBA color in FRGB(r,g,b);
+
+#-----------------------------------------------------------------------------
+# Convert to HSV/HSVA
+#-----------------------------------------------------------------------------
+fun toHSVA color = match color {
+  ~RGBA(_,_,_,_)  -> toHSVA (toFRGBA color);
+  ~RGB(_,_,_)     -> toHSVA (toFRGBA color);
+  ~HSVA(h,s,v,a)  -> HSVA(h,s,v,a);
+  ~HSV(h,s,v)     -> HSVA(h,s,v,1.0);
+  ~FRGBA(r,g,b,a) -> let ~HSVA(h,s,v,_) = toHSVA <| FRGB(r,g,b) in HSVA(h,s,v,a);
+  ~FRGB(r,g,b) ->
+    let mx = max (max r g) b in
+    let mn = min (min r g) b in
+    let mxn = mx -. mn in
+    let h = if mn == b -> 60.0 *. (g -. r) /. mxn +. 60.0
+       else if mn == r -> 60.0 *. (b -. g) /. mxn +. 180.0
+       else if mn == g -> 60.0 *. (r -. b) /. mxn +. 300.0
+       else 0.0
+    in
+    let s = mx in
+    let v = mxn /. mx
+    in HSVA(h,s,v,1.0);
+};
+let toHSV color = let ~HSVA(h,s,v,_) = toHSVA color in HSV(h,s,v);
+
+#-----------------------------------------------------------------------------
+# for .NET System.Drawing.Color
+#-----------------------------------------------------------------------------
+let toARGB32 color = let ~RGBA(r,g,b,a) = toRGBA color in (((bshl a 24) `bor` (bshl r 16)) `bor` (bshl g 8)) `bor` b;
+let fromARGB32 argb = RGBA((bshr argb 16)`band`0xff, (bshr argb 8)`band`0xff, argb`band`0xff, (bshr argb 24)`band`0xff);
+
+#-----------------------------------------------------------------------------
+# print_color
+#-----------------------------------------------------------------------------
+let print_color color =
+  let print_tuple3 (a,b,c) =
+    do print "("; print a; print ","; print b; print ","; print c; print ")" end in
+  let print_tuple4 (a,b,c,d) =
+    do print "("; print a; print ","; print b; print ","; print c; print ","; print d; print ")" end in
+  match color {
+    ~RGBA(r,g,b,a)  -> do print "RGBA";  print_tuple4 (r,g,b,a) end; 
+    ~RGB(r,g,b)     -> do print "RGB";   print_tuple3 (r,g,b)   end; 
+    ~FRGBA(r,g,b,a) -> do print "FRGBA"; print_tuple4 (r,g,b,a) end; 
+    ~FRGB(r,g,b)    -> do print "FRGB";  print_tuple3 (r,g,b)   end; 
+    ~HSVA(h,s,v,a)  -> do print "HSVA";  print_tuple4 (h,s,v,a) end; 
+    ~HSV(h,s,v)     -> do print "HSV";   print_tuple3 (h,s,v)   end; 
+  };
+let println_color color = do print_color color; print "\n" end;
+
+__undefine "HIDE_TYPE";

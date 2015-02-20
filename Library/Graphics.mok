@@ -1,0 +1,205 @@
+#------------------------------------------------------------
+#! @file    Graphics.mok
+#! @brief   グラフィック描画フレームワーク
+#! @author  lambdataro
+#------------------------------------------------------------
+
+__define "HIDE_TYPE";
+
+using System.Drawing;
+using System.Windows.Forms;
+
+type MouseButton =
+    LeftButton
+  | RightButton
+  | MiddleButton
+  | UnknownButton;
+
+type Event =
+    Draw({Graphics})
+  | Tick
+  | MouseDown(MouseButton, Int, Int)
+  | MouseMove(Int, Int)
+  | MouseUp(MouseButton, Int, Int);
+
+# シーン
+
+let (_scenes : Ref<[(String, Event -> ())]>) = ref [];
+let (_current : Ref<Event -> ()>) = ref (\_ -> ());
+
+let scene name f =
+  _scenes := (name, f) :: !_scenes;
+
+let switch name =
+  _current := lookup name !_scenes;
+
+# タイマー
+let _timer = new Timer();
+
+let _tick ((sender : {Object}), (e : {EventArgs})) =
+  !_current Tick;
+
+do _timer.add_Tick(
+  delegate EventHandler _tick
+);
+
+let set_speed (n : Int) =
+  _timer.set_Interval(n);
+
+# フォーム
+let _form = new Form();
+
+do _form.GetType().InvokeMember("DoubleBuffered",
+    (((sget System.Reflection.BindingFlags::NonPublic) `bor`
+      (sget System.Reflection.BindingFlags::Instance) `bor`
+	  (sget System.Reflection.BindingFlags::SetProperty)) : {System.Reflection.BindingFlags}),
+  cast<Object,System.Reflection.Binder>(null),
+  _form,
+  list_to_array [bool_to_object true]) |> ignore;
+  
+do _form.set_SizeGripStyle(sget SizeGripStyle::Hide);
+do _form.set_FormBorderStyle(sget FormBorderStyle::FixedSingle);
+do _form.set_Text("Mokkosu");
+
+let _paint ((sender : {Object}), (e : {PaintEventArgs})) =
+  !_current (Draw (e.get_Graphics()));
+
+do _form.add_Paint (delegate PaintEventHandler _paint);
+
+let _closed ((sender : {Object}), (e : {EventArgs})) =
+  _timer.Dispose();
+
+do _form.add_Closed (delegate EventHandler _closed);
+
+let _mouse_down ((sender : {Object}), (e : {MouseEventArgs})) =
+  let x = e.get_X() in
+  let y = e.get_Y() in
+  let b = (e.get_Button() : Int) in
+  let btn = 
+    if intequal b ((sget MouseButtons::Left) : Int) -> LeftButton
+    else if intequal b ((sget MouseButtons::Right) : Int) -> RightButton
+    else if intequal b ((sget MouseButtons::Middle) : Int) -> MiddleButton
+    else UnknownButton
+  in
+  !_current (MouseDown (btn, x, y));
+
+do _form.add_MouseDown (delegate MouseEventHandler _mouse_down);
+
+let _mouse_up ((sender : {Object}), (e : {MouseEventArgs})) =
+  let x = e.get_X() in
+  let y = e.get_Y() in
+  let b = (e.get_Button() : Int) in
+  let btn = 
+    if intequal b ((sget MouseButtons::Left) : Int) -> LeftButton
+    else if intequal b ((sget MouseButtons::Right) : Int) -> RightButton
+    else if intequal b ((sget MouseButtons::Middle) : Int) -> MiddleButton
+    else UnknownButton
+  in
+  !_current (MouseUp (btn, x, y));
+
+do _form.add_MouseUp (delegate MouseEventHandler _mouse_up);
+
+let _mouse_move ((sender : {Object}), (e : {MouseEventArgs})) =
+  let x = e.get_X() in
+  let y = e.get_Y() in
+  !_current (MouseMove (x, y));
+
+do _form.add_MouseMove (delegate MouseEventHandler _mouse_move);
+
+let show_window name =
+  do _current := lookup name !_scenes in
+  do _timer.Start() in
+  _form.ShowDialog();
+
+let set_title (name : String) =
+  _form.set_Text(name);
+
+let set_size (w : Int) (h : Int) =
+  _form.set_ClientSize(new Size(w, h));
+  
+let redraw () =
+  _form.Invalidate();
+  
+# ペン
+let new_pen (r : Int) (g : Int) (b : Int) (width : Int) =
+  let c = call Color::FromArgb(0xff, r, g, b) in
+  new Pen(c, width);
+
+let black_pen = call Pens::get_Black();
+let white_pen = call Pens::get_White();
+let red_pen = call Pens::get_Red();
+let green_pen = call Pens::get_Green();
+let blue_pen = call Pens::get_Blue();
+let yellow_pen = call Pens::get_Yellow();
+let cyan_pen = call Pens::get_Cyan();
+let magenta_pen = call Pens::get_Magenta();
+
+# draw系関数
+
+let draw_line (gr : {Graphics}) (pen : {Pen})
+    (x1 : Int) (y1 : Int) (x2 : Int) (y2 : Int) =
+  gr.DrawLine (pen, x1, y1, x2, y2);
+
+let draw_rectangle (gr : {Graphics}) (pen : {Pen})
+    (x : Int) (y : Int) (w : Int) (h : Int) =
+  gr.DrawRectangle(pen, x, y, w, h);
+
+let draw_ellipse (gr : {Graphics}) (pen : {Pen})
+    (x : Int) (y : Int) (w : Int) (h : Int) =
+  gr.DrawEllipse(pen, x, y, w, h);
+
+# ブラシ
+
+let new_solid_brush (r : Int) (g : Int) (b : Int) =
+  let c = call Color::FromArgb(0xff, r, g, b) in
+  cast<SolidBrush, Brush>(new SolidBrush(c));
+
+let black_brush = call Brushes::get_Black();
+let white_brush = call Brushes::get_White();
+let red_brush = call Brushes::get_Red();
+let green_brush = call Brushes::get_Green();
+let blue_brush = call Brushes::get_Blue();
+let yellow_brush = call Brushes::get_Yellow();
+let cyan_brush = call Brushes::get_Cyan();
+let magenta_brush = call Brushes::get_Magenta();
+
+# fill系関数
+
+let draw_string (gr : {Graphics}) (brush : {Brush})
+    (str : String) (size : Int) (x : Int) (y : Int) =
+  let font = new Font("メイリオ", int_to_single size) in
+  gr.DrawString(str, font, brush, 
+    int_to_single x, int_to_single y);
+
+let fill_rectangle (gr : {Graphics}) (brush : {Brush})
+    (x : Int) (y : Int) (w : Int) (h : Int) =
+  gr.FillRectangle(brush, x, y, w, h);
+
+let fill_ellipse (gr : {Graphics}) (brush : {Brush})
+    (x : Int) (y : Int) (w : Int) (h : Int) =
+  gr.FillEllipse(brush, x, y, w, h);
+
+let draw_pixel (gr : {Graphics}) (r : Int) (g :  Int) (b : Int) (x : Int) (y : Int) =
+  let brush = new_solid_brush r g b in
+  fill_rectangle gr brush x y 1 1;
+
+# 色の変換
+
+let hsv_to_rgb (h : Double) (s : Double) (v : Double) =
+  let v = v *. 255.0 in
+  let i = (double_to_int (floor(h /. 60.0))) % 6 in
+  let f = (h /. 60.0) -. floor(h /. 60.0) in
+  let p = double_to_int (round (v *. (1.0 -. s))) in
+  let q = double_to_int (round (v *. (1.0 -. s *. f))) in
+  let t = double_to_int (round (v *. (1.0 -. s *. (1.0 -. f)))) in
+  let v = double_to_int v in
+  match i {
+    0 -> (v, t, p);
+    1 -> (q, v, p);
+    2 -> (p, v, t);
+    3 -> (p, q, v);
+    4 -> (t, p, v);
+    5 -> (v, p, q);
+  };
+
+__undefine "HIDE_TYPE";

@@ -444,6 +444,7 @@ namespace MokkosuPad.ViewModels
                 Model.SaveExe(_source_fname);
             }
         }
+        #endregion
 
         public void AppendOutput(string line)
         {
@@ -454,7 +455,5 @@ namespace MokkosuPad.ViewModels
         {
             DispatcherHelper.UIDispatcher.InvokeAsync(() => AppendOutput(line));
         }
-
-        #endregion
     }
 }
