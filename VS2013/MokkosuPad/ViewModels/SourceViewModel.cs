@@ -73,10 +73,17 @@ namespace MokkosuPad.ViewModels
             DirtyFlag = true;
         }
 
+        static bool loaded_flg = false;
+
         public void Loaded(object sender, RoutedEventArgs e)
         {
-            Text = Model.GetSampleProgramString();
-            DirtyFlag = false;
+            if (!loaded_flg)
+            {
+                Text = Model.GetSampleProgramString();
+                DirtyFlag = false;
+                loaded_flg = true;
+            }
+            
         }
     }
 }
