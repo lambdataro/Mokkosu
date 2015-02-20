@@ -1,4 +1,4 @@
-![Mokkosu](img/topimage.png)
+![Mokkosu](img/topimage2.png)
 
 # プログラミング言語 Mokkosu
 
