@@ -14,6 +14,10 @@ namespace MokkosuPad.Models
     {
         static Mokkosu.Main.Mokkosu _mokkosu;
 
+        public delegate void OutputReceiveDelegate(string line);
+
+        public static event OutputReceiveDelegate OutputReceived;
+
         public static void SaveFile(string fname, string contents)
         {
             using (var writer = new StreamWriter(fname))
@@ -65,29 +69,52 @@ namespace MokkosuPad.Models
             }
         }
 
-        public static string RunProgram()
+        public static void RunProgram(string src_fname)
         {
-            if (_mokkosu != null)
+            var exe_name = SaveExe(src_fname);
+
+            if (_mokkosu != null && exe_name != "")
             {
-                try
-                {
-                    _mokkosu.Run();
-                }
-                catch (Exception e)
-                {
-                    return "実行時エラー\n" + e.ToString();
-                }
+                var info = new ProcessStartInfo();
+                info.FileName = exe_name;
+                info.CreateNoWindow = true;
+                info.RedirectStandardOutput = true;
+                info.RedirectStandardError = true;
+                info.RedirectStandardInput = false;
+                info.UseShellExecute = false;
+
+                var proc = new Process();
+                proc.OutputDataReceived += OutputDataReceived;
+                proc.ErrorDataReceived += OutputDataReceived;
+                proc.StartInfo = info;
+                proc.Start();
+
+                proc.BeginOutputReadLine();
+                proc.BeginErrorReadLine();
+
+                proc.WaitForExit();
+                proc.Close();
             }
-            return "";
         }
 
-        public static void SaveExe(string src_fname)
+        static void OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            OutputReceived(e.Data);
+        }
+
+        public static string SaveExe(string src_fname)
         {
             var fname = Path.GetFileNameWithoutExtension(src_fname);
 
             if (_mokkosu != null)
             {
-                _mokkosu.SaveExe(fname + ".exe");
+                var save_name = fname + ".exe";
+                _mokkosu.SaveExe(save_name);
+                return Path.ChangeExtension(src_fname, ".exe");
+            }
+            else
+            {
+                return "";
             }
         }
 

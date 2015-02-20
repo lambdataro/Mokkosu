@@ -1,4 +1,5 @@
-﻿do set_size 300 300;
+﻿
+do set_size 300 300;
 
 do scene "main" {
   ~Draw(gr) -> do

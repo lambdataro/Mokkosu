@@ -37,17 +37,9 @@
 			<Name>MokkosuCore</Name>
 			<Project>{9CBBD81B-A4D7-4340-968D-0E7C2B33C01A}</Project>
 		</ProjectReference>
-		<ProjectReference Include="..\MokkosuInterpreter\MokkosuInterpreter.csproj">
-			<Name>MokkosuInterpreter</Name>
-			<Project>{254A1CF2-7BAA-47A9-B613-F6C3F6AB10CB}</Project>
-		</ProjectReference>
 		<ProjectReference Include="..\MokkosuPad\MokkosuPad.csproj">
 			<Name>MokkosuPad</Name>
 			<Project>{EAAA889C-F677-48C1-90FC-6C92D457CD91}</Project>
-		</ProjectReference>
-		<ProjectReference Include="..\MokkosuTypechecker\MokkosuTypechecker.csproj">
-			<Name>MokkosuTypechecker</Name>
-			<Project>{260D8997-0D36-46D8-B9D4-7B2865179855}</Project>
 		</ProjectReference>
 	</ItemGroup>
 </Project>

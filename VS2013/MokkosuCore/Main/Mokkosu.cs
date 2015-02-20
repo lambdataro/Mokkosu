@@ -30,14 +30,14 @@ namespace Mokkosu.Main
         public string GetVersionString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine(" =============================================");
-            sb.AppendLine("  __  __         _     _                      ");
-            sb.AppendLine(" |  \\/  |  ___  | | __| | __ ___   ___  _   _ ");
-            sb.AppendLine(" | |\\/| | / _ \\ | |/ /| |/ // _ \\ / __|| | | |");
-            sb.AppendLine(" | |  | || (_) ||   < |   <| (_) |\\__ \\| |_| |");
-            sb.AppendLine(" |_|  |_| \\___/ |_|\\_\\|_|\\_\\\\___/ |___/ \\__,_|");
-            sb.AppendLine("");
-            sb.AppendLine(" =============== Version 1.0.1 ===============");
+            sb.AppendLine(@" =============================================");
+            sb.AppendLine(@"  __  __         _     _                      ");
+            sb.AppendLine(@" |  \/  |  ___  | | __| | __ ___   ___  _   _ ");
+            sb.AppendLine(@" | |\/| | / _ \ | |/ /| |/ // _ \ / __|| | | |");
+            sb.AppendLine(@" | |  | || (_) ||   < |   <| (_) |\__ \| |_| |");
+            sb.AppendLine(@" |_|  |_| \___/ |_|\_\|_|\_\\___/ |___/ \__,_|");
+            sb.AppendLine(@"");
+            sb.AppendLine(@" =============== Version 1.0.1 ===============");
             return sb.ToString();
         }
 
@@ -88,15 +88,6 @@ namespace Mokkosu.Main
             {
                 _assembly.Save(savename);
             }
-        }
-
-        public void Run()
-        {
-            if (_assembly != null)
-            {
-                var asm_instance = (IMokkosuProgram)_assembly.CreateInstance("MokkosuProgram");
-                asm_instance.MokkosuEntryPoint();
-            }            
         }
 
         public string GetOutput()

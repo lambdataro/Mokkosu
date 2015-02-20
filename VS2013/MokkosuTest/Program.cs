@@ -19,7 +19,6 @@ namespace MokkosuTest
             {
                 var name = Path.GetFileNameWithoutExtension(args.Last());
                 mokkosu.Compile(name, true);
-                mokkosu.SaveExe(name + ".exe");
                 mokkosu.Run();
             }
         }

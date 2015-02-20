@@ -31,6 +31,8 @@ namespace MokkosuPad.ViewModels
 
             Documents.Add(_source_vm);
             Documents.Add(_output_vm);
+
+            Model.OutputReceived += OutputReceived;
         }
 
         private static IHighlightingDefinition LoadHighlight(string name)
@@ -389,19 +391,16 @@ namespace MokkosuPad.ViewModels
             SaveSourceFile();
             if (_source_fname != "")
             {
-                var output = Model.CompileProgram(_source_fname, true);
+                var output = Model.CompileProgram(_source_fname, false);
                 _output_vm.Text = output + "\n";
 
                 consoleRedirectWriter = new ConsoleRedirectWriter();
                 consoleRedirectWriter.OnWrite += new Action<string>(AppendOutput);
-                output = Model.RunProgram();
+                Model.RunProgram(_source_fname);
                 consoleRedirectWriter.Release();
-
-                _output_vm.Text += output;
             }
         }
         #endregion
-
 
         #region CompileProgramCommand
         private ViewModelCommand _CompileProgramCommand;
@@ -431,7 +430,12 @@ namespace MokkosuPad.ViewModels
 
         public void AppendOutput(string line)
         {
-            _output_vm.Text += line;
+            _output_vm.Text += line + "\n";
+        }
+
+        void OutputReceived(string line)
+        {
+            DispatcherHelper.BeginInvoke(() => AppendOutput(line));
         }
 
         #endregion

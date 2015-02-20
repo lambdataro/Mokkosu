@@ -340,9 +340,7 @@
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>Component1</td><td>{8FC80656-B953-4CC1-9505-3C4AE2E68391}</td><td>INSTALLDIR</td><td>2</td><td/><td>File1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Component2</td><td>{F7562B81-DDE8-4A8B-9096-E5A8F57E70C6}</td><td>INSTALLDIR</td><td>2</td><td/><td>File2</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Component3</td><td>{F4DD8C23-BB27-425D-912C-5B59F8F1F779}</td><td>INSTALLDIR</td><td>2</td><td/><td>File3</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Component4</td><td>{CFA2A878-A7B3-4537-981C-477199595804}</td><td>INSTALLDIR</td><td>2</td><td/><td>File4</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Component5</td><td>{E2DA27F1-AE6F-433D-926A-E46222F06F1A}</td><td>INSTALLDIR</td><td>2</td><td/><td>File5</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{A09FE93F-58C9-4680-8629-D94A45BFAFE8}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
@@ -1867,9 +1865,7 @@
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>Component1</td></row>
-		<row><td>AlwaysInstall</td><td>Component2</td></row>
 		<row><td>AlwaysInstall</td><td>Component3</td></row>
-		<row><td>AlwaysInstall</td><td>Component4</td></row>
 		<row><td>AlwaysInstall</td><td>Component5</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 	</table>
@@ -1887,9 +1883,7 @@
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
 		<row><td>File1</td><td>Component1</td><td>MokkosuCore.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuCore&gt;|Built</td><td>3</td><td/></row>
-		<row><td>File2</td><td>Component2</td><td>MokkosuInterpreter.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuInterpreter&gt;|Built</td><td>3</td><td/></row>
 		<row><td>File3</td><td>Component3</td><td>MokkosuCompiler.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuCompiler&gt;|Built</td><td>3</td><td/></row>
-		<row><td>File4</td><td>Component4</td><td>MokkosuTypechecker.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuTypechecker&gt;|Built</td><td>3</td><td/></row>
 		<row><td>File5</td><td>Component5</td><td>MokkosuPad.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuPad&gt;|Built</td><td>3</td><td/></row>
 		<row><td>_d.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>2D.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\2D.mok</td><td>1</td><td/></row>
 		<row><td>color.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Color.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Color.mok</td><td>1</td><td/></row>
@@ -2041,9 +2035,7 @@
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
 		<row><td>Component1</td><td/><td/><td>_DABF757E_92ED_4E91_83E6_CE32EE4A3D9E_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Component2</td><td/><td/><td>_947F45AC_0027_4E44_BDDF_0CF12E95CA88_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Component3</td><td/><td/><td>_9AA45D51_E32B_4545_A791_9345547753D9_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Component4</td><td/><td/><td>_461D970A_2246_493F_9107_800AE4B87FE6_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Component5</td><td/><td/><td>_A483D467_E306_4224_B119_F4DF9A4FB434_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_B142FBA3_F86B_434E_87F2_8E968D44F779_FILTER</td><td/><td/><td/><td/></row>
 	</table>
