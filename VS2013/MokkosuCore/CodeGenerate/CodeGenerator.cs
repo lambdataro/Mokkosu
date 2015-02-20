@@ -156,8 +156,11 @@ namespace Mokkosu.CodeGenerate
                     MethodAttributes.Static, typeof(void), new Type[] { });
             }
 
-            // Type.GetType("System.STAThreadAttribute").GetConstructor(new Type)
-            // builder.SetCustomAttribute(new CustomAttributeBuilder(  ))
+            if (Global.IsDefineKey("STA_THREAD"))
+            {
+                var stathread = Type.GetType("System.STAThreadAttribute").GetConstructor(new Type[] { });
+                builder.SetCustomAttribute(new CustomAttributeBuilder(stathread, new Type[] { }));
+            }
 
             ilgen = builder.GetILGenerator();
             ilgen.Emit(OpCodes.Ldnull);
@@ -167,7 +170,7 @@ namespace Mokkosu.CodeGenerate
             ilgen.Emit(OpCodes.Ret);
 
             type_builder.CreateType();
-            if (Global.IdDefineKey("CONSOLE_APPLICATION"))
+            if (Global.IsDefineKey("CONSOLE_APPLICATION"))
             {
                 assembly_builder.SetEntryPoint(builder, PEFileKinds.ConsoleApplication);
             }

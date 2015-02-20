@@ -311,7 +311,7 @@ namespace Mokkosu.Parsing
             ctx.ReadToken(TokenType.EQ);
             var expr = ParseExpr(ctx);
             ctx.ReadToken(TokenType.SC);
-            var hide_type = Global.IdDefineKey("HIDE_TYPE");
+            var hide_type = Global.IsDefineKey("HIDE_TYPE");
             return new MTopLet(pos, pat, ArgsToLambda(args, expr), hide_type);
         }
 
@@ -335,7 +335,7 @@ namespace Mokkosu.Parsing
                 items.Add(ParseFunItem(ctx));
             }
             ctx.ReadToken(TokenType.SC);
-            var hide_type = Global.IdDefineKey("HIDE_TYPE");
+            var hide_type = Global.IsDefineKey("HIDE_TYPE");
             return new MTopFun(pos, items, hide_type);
         }
 

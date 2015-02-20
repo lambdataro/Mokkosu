@@ -18,7 +18,7 @@ namespace Mokkosu.Utils
             _defined_list.Remove(key);
         }
 
-        public static bool IdDefineKey(string key)
+        public static bool IsDefineKey(string key)
         {
             return _defined_list.Contains(key);
         }
