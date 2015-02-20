@@ -13,4 +13,4 @@
 1. 標準ライブラリのソースコードを読む
 2. [Sampleディレクトリ](https://github.com/lambdataro/Mokkosu/tree/master/Sample)の
 ソースコードを読む。
-3. [言語マニュアル](langmanual.md)を読む。
+3. リファレンスマニュアルを読む。

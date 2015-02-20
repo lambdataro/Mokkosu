@@ -8,12 +8,12 @@ div.col-md-9 p {
     margin: 20px 0;
     font-size: medium;
     line-height: 1.5;
-    font-size: 12pt;
+    font-size: 11pt;
 }
 
 div.col-md-9 h1 {
     margin: 50px 0 30px;
-    font-size: 36pt;
+    font-size: 30pt;
     color: DimGray;
 }
 
@@ -23,14 +23,14 @@ div.col-md-9 h2 {
     border-color: DimGray;
     padding: 8px;
     margin: 40px 0 20px;
-    font-size: 30pt;
+    font-size: 24pt;
     text-align: center;
     color: DimGray;
 }
 
 div.col-md-9 h3 {
     margin: 35px 0 15px;
-    font-size: 20pt;
+    font-size: 18pt;
     color: DimGray;
 }
 
