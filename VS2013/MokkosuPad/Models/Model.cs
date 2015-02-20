@@ -69,33 +69,43 @@ namespace MokkosuPad.Models
             }
         }
 
-        public static void RunProgram(string src_fname)
+        public static string RunProgram(string exe_name)
         {
-            var exe_name = SaveExe(src_fname);
-
             if (_mokkosu != null && exe_name != "")
             {
-                var info = new ProcessStartInfo();
-                info.FileName = exe_name;
-                info.CreateNoWindow = true;
-                info.RedirectStandardOutput = true;
-                info.RedirectStandardError = true;
-                info.RedirectStandardInput = false;
-                info.UseShellExecute = false;
-                info.CreateNoWindow = true;
-
                 var proc = new Process();
-                proc.OutputDataReceived += OutputDataReceived;
-                proc.ErrorDataReceived += OutputDataReceived;
-                proc.StartInfo = info;
-                proc.Start();
 
-                proc.BeginOutputReadLine();
-                proc.BeginErrorReadLine();
+                try
+                {
+                    var info = new ProcessStartInfo();
+                    info.FileName = exe_name;
+                    info.CreateNoWindow = true;
+                    info.RedirectStandardOutput = true;
+                    info.RedirectStandardError = true;
+                    info.RedirectStandardInput = false;
+                    info.UseShellExecute = false;
+                    info.CreateNoWindow = true;
 
-                proc.WaitForExit();
-                proc.Close();
+                    proc.OutputDataReceived += OutputDataReceived;
+                    proc.ErrorDataReceived += OutputDataReceived;
+                    proc.StartInfo = info;
+                    proc.Start();
+
+                    proc.BeginOutputReadLine();
+                    proc.BeginErrorReadLine();
+
+                    proc.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+                finally
+                {
+                    proc.Close();
+                }
             }
+            return "";
         }
 
         static void OutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -103,19 +113,11 @@ namespace MokkosuPad.Models
             OutputReceived(e.Data);
         }
 
-        public static string SaveExe(string src_fname)
+        public static void SaveExe(string save_fname)
         {
-            var fname = Path.GetFileNameWithoutExtension(src_fname);
-
             if (_mokkosu != null)
             {
-                var save_name = fname + ".exe";
-                _mokkosu.SaveExe(save_name);
-                return Path.ChangeExtension(src_fname, ".exe");
-            }
-            else
-            {
-                return "";
+                _mokkosu.SaveExe(Path.GetFileName(save_fname));
             }
         }
 

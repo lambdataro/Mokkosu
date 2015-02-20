@@ -1885,9 +1885,6 @@
 		<row><td>File1</td><td>Component1</td><td>MokkosuCore.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuCore&gt;|Built</td><td>3</td><td/></row>
 		<row><td>File3</td><td>Component3</td><td>MokkosuCompiler.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuCompiler&gt;|Built</td><td>3</td><td/></row>
 		<row><td>File5</td><td>Component5</td><td>MokkosuPad.プライマリ出力</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;MokkosuPad&gt;|Built</td><td>3</td><td/></row>
-		<row><td>_d.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>2D.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\2D.mok</td><td>1</td><td/></row>
-		<row><td>color.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Color.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Color.mok</td><td>1</td><td/></row>
-		<row><td>print.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Print.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Print.mok</td><td>1</td><td/></row>
 		<row><td>startup.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Startup.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Startup.mok</td><td>1</td><td/></row>
 		<row><td>stdlib.mok</td><td>ISX_DEFAULTCOMPONENT1</td><td>Stdlib.mok</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Naoki\Documents\GitHub\Mokkosu\VS2013\MokkosuCore\Stdlib.mok</td><td>1</td><td/></row>
 	</table>

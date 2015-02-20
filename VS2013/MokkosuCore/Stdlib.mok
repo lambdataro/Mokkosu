@@ -13,10 +13,6 @@ import "System.Drawing.dll";
 import "System.Windows.Forms.dll";
 
 using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Collections;
-using System.Reflection;
 
 #------------------------------------------------------------
 # システム関数
@@ -137,16 +133,6 @@ let xor (a : Bool) (b : Bool) = a <> b;
 # 変換
 #------------------------------------------------------------
 
-let int_to_string (n : Int) = __prim "tostring" (n);
-let double_to_string (d : Double) = __prim "tostring" (d);
-let char_to_string (c : Char) = __prim "tostring" (c);
-let bool_to_string = { false -> "false"; true -> "true" };
-
-let int = int_to_string;
-let double = double_to_string;
-let char = char_to_string;
-let bool = bool_to_string;
-
 let parse_int (s : String) = call Int32::Parse(s);
 let parse_double (s : String) = call Double::Parse(s);
 
@@ -154,17 +140,6 @@ let int_to_double (n : Int) = call Convert::ToDouble(n);
 let double_to_int (d : Double) = call Convert::ToInt32(d);
 let int_to_char (n : Int) = call Convert::ToChar(n);
 let char_to_int (c : Char) = call Convert::ToInt32(c);
-
-let int_to_float (n : Int) = call Convert::ToSingle(n);
-let float_to_int (f : {Single}) = call Convert::ToInt32(f);
-let double_to_float (n : Double) = call Convert::ToSingle(n);
-let float_to_double (f : {Single}) = call Convert::ToDouble(f);
-
-let int_to_object (n : Int) = cast<Int32, Object>(n);
-let double_to_object (d : Double) = cast<Double, Object>(d);
-let bool_to_object (b : Bool) = cast<Boolean, Object>(b);
-let char_to_object (c : Char) = cast<Char, Object>(c);
-let string_to_object (s : String) = cast<String, Object>(s);
 
 #------------------------------------------------------------
 # 関数
@@ -213,48 +188,23 @@ fun __operator_plspls xs ys =
 	hd :: tl -> hd :: (tl ++ ys);
   };
 
-fun length lis =
-  match lis {
-    [] -> 0;
-	_ :: xs -> 1 + length xs;
-  };
+fun length = {
+  [] -> 0;
+  _ :: xs -> 1 + length xs;
+};
 
-fun reverse lis =
-  match lis {
-    [] -> [];
-	x :: xs -> reverse xs ++ [x];
-  };
+fun reverse = {
+  [] -> [];
+  x :: xs -> reverse xs ++ [x];
+};
 
 fun map f = {
   [] -> [];
   x :: xs -> f x :: map f xs;
 };
 
-fun iter f = {
-  [] -> [];
-  x :: xs -> do f x in iter f xs
-};
-
-fun filter p = {
-  [] -> [];
-  x :: xs ? p x -> x :: filter p xs;
-  _ :: xs -> filter p xs;
-};
-
 let head (x :: _) = x;
 let tail (_ :: xs) = xs;
-
-fun last lis =
-  match lis {
-    [x] -> x;
-	_ :: xs -> last xs;
-  };
-
-fun init lis =
-  match lis {
-    [x] -> [];
-	x :: xs -> x :: init xs; 
-  };
 
 fun nth n lis =
   if n == 0 -> head lis
@@ -272,128 +222,22 @@ fun foldr f seed = {
   x :: xs -> f x (foldr f seed xs)
 };
 
-fun concat lis =
-  match lis {
-    [] -> [];
-	x :: xs -> x ++ concat xs;
-  };
+fun concat = {
+  [] -> [];
+  x :: xs -> x ++ concat xs;
+};
 
-let concatmap f lis = concat (map f lis); 
+let concatmap f lis = concat (map f lis);
 
 let __for_bind lis f = concatmap f lis;
 let __for_unit x = [x];
 let __for_zero = [];
-
-fun take n lst =
-  match (n,lst) {
-    (n,_) ? n <= 0 -> [];
-    (_,[]) -> [];
-    (n,x::xs) -> x::take (n-1) xs;
-  };
-
-fun drop n lst =
-  if n <= 0 -> lst
-  else drop (n - 1) (tail lst);
-
-fun take_while p = {
-  [] -> [];
-  x::xs -> if p x -> x :: take_while p xs else []
-};
-
-fun drop_while p = {
-  [] -> [];
-  x::xs -> if p x -> drop_while p xs else x::xs
-};
-
-fun all p = {
-  [] -> true;
-  x::xs -> if p x -> all p xs else false;
-};
-
-fun any p = {
-  [] -> false;
-  x::xs -> if p x -> true else any p xs;
-};
-
-let zip xs ys =
-  fun loop = {
-    ([],_) -> [];
-    (_,[]) -> [];
-    (x::xs,y::ys) -> (x,y)::loop (xs,ys);
-  }
-  in loop (xs,ys);
-
-let mapi f lst = map f <| zip (0 .. length lst) lst;
-
-let zip_with f xs ys =
-  fun loop = {
-    ([], _) -> [];
-	(_, []) -> [];
-	(x::xs, y::ys) -> f x y :: loop (xs, ys)
-  }
-  in loop (xs, ys);
-
-fun unzip = {
-  [] -> ([], []);
-  (x,y) :: rest ->
-    let (xs, ys) = unzip rest in
-	(x::xs, y::ys);
-  };
-
-fun split_at n lis =
-  if n == 0 -> ([], lis)
-  else
-    let (a, b) = split_at (n - 1) (tail lis) in
-	(head lis :: a, b);
-
-fun elem x = {
-  [] -> false;
-  y :: ys -> x == y || elem x ys;
-};
-
-fun lookup x = {
-  [] -> error "lookup: not found";
-  (k, v) :: rest ->
-    if k == x -> v
-	else lookup x rest;
-};
-
-#------------------------------------------------------------
-# 配列
-#------------------------------------------------------------
-
-let list_to_array lis =
-  let alist = new ArrayList() in
-  fun loop = {
-    [] -> [];
-	x :: xs -> do alist.Add((x : {Object})) in loop xs; 
-  } in
-  do loop lis in
-  alist.ToArray();
-
-let format (str : String) (args : [{Object}]) =
-  call String::Format(str, list_to_array args);
-
-#------------------------------------------------------------
-# リフレクション
-#------------------------------------------------------------
-
-let get_type (str : String) = call Type::GetType(str);
-
-let null = __prim "loadnull" ();
 
 #------------------------------------------------------------
 # メッセージ
 #------------------------------------------------------------
 
 let msgbox (str : String) =
-  ignore (call MessageBox::Show(str));
+  call System.Windows.Forms.MessageBox::Show(str) |> ignore;
 
 __undefine "HIDE_TYPE";
-
-#------------------------------------------------------------
-# その他
-#------------------------------------------------------------
-include "Print.mok";
-include "Color.mok";
-include "2D.mok";

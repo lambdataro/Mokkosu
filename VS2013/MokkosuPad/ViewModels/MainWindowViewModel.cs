@@ -391,13 +391,30 @@ namespace MokkosuPad.ViewModels
             SaveSourceFile();
             if (_source_fname != "")
             {
+                var output_name = Path.ChangeExtension(_source_fname, ".exe");
+
+                if (File.Exists(output_name))
+                {
+                    File.Delete(output_name);
+                }
+
                 var output = Model.CompileProgram(_source_fname, false);
                 _output_vm.Text = output + "\n";
 
-                consoleRedirectWriter = new ConsoleRedirectWriter();
-                consoleRedirectWriter.OnWrite += new Action<string>(AppendOutput);
-                Model.RunProgram(_source_fname);
-                consoleRedirectWriter.Release();
+                Model.SaveExe(output_name);
+
+                if (File.Exists(output_name))
+                {
+                    consoleRedirectWriter = new ConsoleRedirectWriter();
+                    consoleRedirectWriter.OnWrite += new Action<string>(AppendOutput);
+                    var ret = Model.RunProgram(output_name);
+                    consoleRedirectWriter.Release();
+
+                    if (ret != "")
+                    {
+                        MessageBox.Show(ret, "実行時エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
             }
         }
         #endregion
@@ -435,7 +452,7 @@ namespace MokkosuPad.ViewModels
 
         void OutputReceived(string line)
         {
-            DispatcherHelper.BeginInvoke(() => AppendOutput(line));
+            DispatcherHelper.UIDispatcher.InvokeAsync(() => AppendOutput(line));
         }
 
         #endregion

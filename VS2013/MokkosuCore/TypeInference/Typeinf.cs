@@ -271,6 +271,7 @@ namespace Mokkosu.TypeInference
         /// <param name="ctx">型推論文脈</param>
         static void TypeinfTopDo(MTopDo top_do, TypeInfContext ctx)
         {
+            Unification(top_do.Pos, new UnitType(), top_do.Type);
             Inference(top_do.Expr, top_do.Type, ctx.TEnv, ctx);
         }
 
@@ -497,6 +498,7 @@ namespace Mokkosu.TypeInference
                 var e = (MDo)expr;
                 Inference(e.E1, e.E1Type, tenv, ctx);
                 Inference(e.E2, e.E2Type, tenv, ctx);
+                Unification(expr.Pos, new UnitType(), e.E1Type);
                 Unification(expr.Pos, type, e.E2Type);
             }
             else if (expr is MLet)
