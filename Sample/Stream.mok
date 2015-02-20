@@ -1,0 +1,99 @@
+#============================================================
+#! @file Stream.mok
+#! @brief 遅延リストの例
+#! @author Yoshimura Yuu
+#============================================================
+
+__define "CONSOLE_APPLICATION";
+
+type streamCell<T> = Cons(T, stream<T>) | Nil
+and  stream<T>     = Stream(() -> streamCell<T>);
+
+let nil _    = Stream(\_ -> Nil);
+
+let cons x y = Stream(\_ -> Cons(x, y));
+
+let head ~Stream(x) = match (x ()) {
+    ~Cons(h, t) -> h;
+};
+
+let tail ~Stream(x) = match (x ()) {
+    ~Cons(h, t)     -> t;
+    ~Nil            -> nil ();
+};
+
+fun length ~Stream(x) = match (x ()) {
+    ~Cons(h, t)     -> 1 + (length t);
+    ~Nil            -> 0;
+};
+
+let reverse ~Stream(x) =
+    fun loop x a = match (x ()) {
+        ~Cons(h, ~Stream(t)) -> loop t (Cons(h, Stream(\_ -> a)));
+        ~Nil                 -> a;
+    }
+    in
+    Stream(\_ -> loop x Nil);
+
+let append ~Stream(a) ~Stream(b) =
+    fun loop x = match (x ()) {
+        ~Cons(h, ~Stream(t)) -> Cons(h, Stream(\_ -> loop t));
+        ~Nil                 -> b ();
+    }
+    in
+    Stream(\_ -> loop a);
+
+fun take x = {
+    0    -> nil ();
+    n    -> cons (head x) (take (tail x) (n - 1));
+};
+
+fun drop x = {
+    0   -> x;
+    n   -> drop (tail x) (n - 1);
+};
+
+fun pp ~Stream(x) = match (x ()) {
+    ~Cons(h, t) -> do print h; print ", " in pp t;
+    ~Nil        -> print "\n";
+};
+
+#------------------------------------------------------------
+# test code
+#------------------------------------------------------------
+
+let a = (cons 1 (cons 2 (cons 3 (nil ()))));
+let b = (cons 4 (cons 5 (nil ())));
+
+print "----- a, b -----\n";
+print "a : "; pp a; # 1, 2, 3,
+print "b : "; pp b; # 4, 5,
+print "\n";
+
+print "----- head -----\n";
+print "head of a : "; print (head a); print "\n";
+print "\n";
+
+print "----- tail -----\n";
+print "tail of a : "; pp (tail a);
+print "\n";
+
+print "----- length ------\n";
+print "length of a : "; print (length a); print "\n";
+print "\n";
+
+print "----- reverse -----\n";
+print "reverse a : "; pp (reverse a);
+print "\n";
+
+print "----- take -----\n";
+print "take 2 for a : "; pp (take a 2);
+print "\n";
+
+print "----- drop -----\n";
+print "drop 2 for a : "; pp (drop a 2);
+print "\n";
+
+print "----- append -----\n";
+print "a + b : "; pp (append a b);
+print "\n";
