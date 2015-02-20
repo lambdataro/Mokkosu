@@ -82,6 +82,7 @@ namespace MokkosuPad.Models
                 info.RedirectStandardError = true;
                 info.RedirectStandardInput = false;
                 info.UseShellExecute = false;
+                info.CreateNoWindow = true;
 
                 var proc = new Process();
                 proc.OutputDataReceived += OutputDataReceived;
