@@ -47,7 +47,7 @@ fun fact = {
 
 ## 代数的データ型とパターンマッチ
 ```
-type Expr = Num<Int> | Add(Expr, Expr) | Mul(Expr, Expr);
+type Expr = Num(Int) | Add(Expr, Expr) | Mul(Expr, Expr);
 
 fun eval = {
   ~Num(n) -> n;
