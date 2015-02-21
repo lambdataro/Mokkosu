@@ -89,11 +89,19 @@
                         </li>
                     
                         <li >
+                            <a href="../pattern">パターン</a>
+                        </li>
+                    
+                        <li >
                             <a href="../dotnet">.NET関連の式</a>
                         </li>
                     
                         <li >
-                            <a href="../pattern">パターン</a>
+                            <a href="../corelib">コアライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../graphics">グラフィックスライブラリ</a>
                         </li>
                     
                     </ul>
@@ -117,7 +125,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../dotnet">
+                    <a rel="prev" href="../pattern">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -174,7 +182,9 @@
         
             <li><a href="#_15">関数の中置</a></li>
         
-            <li><a href="#_16">プリミティブ関数呼び出し</a></li>
+            <li><a href="#_16">演算子優先順位</a></li>
+        
+            <li><a href="#_17">プリミティブ関数呼び出し</a></li>
         
     
     </ul>
@@ -585,7 +595,72 @@ let式やfun式があったら、新しい変数や関数が定義されます�
 <pre><code>関数名 式1 式2
 </code></pre>
 
-<h2 id="_16">プリミティブ関数呼び出し</h2>
+<h2 id="_16">演算子優先順位</h2>
+<p>演算子の結合と優先順位は以下のようになっています。
+表の下から上に向かって優先度が高くなっています。</p>
+<table>
+<thead>
+<tr>
+<th>結合</th>
+<th>演算子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>右</td>
+<td>(~-), (~-.), (!)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>メソッド呼び出し</td>
+</tr>
+<tr>
+<td>左</td>
+<td>関数適用</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(**), (&lt;&lt;), (&gt;&gt;), (..)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(*), (/), (%), (*.), (/.)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(+), (-), (+.), (-.)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(++), (^), (::)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(&lt;), (&gt;), (&lt;=), (&gt;=), (==), (&lt;&gt;)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(&amp;&amp;)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(&#124;&#124;)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>`関数名`</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(:=), (&lt;&#124;), (&#124;&gt;), ($), (&gt;&gt;=), (=&lt;&lt;), (=&lt;), <br/> (&lt;*&gt;), (&lt;*), (*&gt;), (&lt;+&gt;), (&lt;+), (+&gt;), (&lt;-&gt;),<br/> (&lt;&#124;&gt;), (&lt;$&gt;), (&lt;**&gt;), (&lt;**), (**&gt;), (!!), (??), <br/>(***), (&amp;&amp;&amp;),(+++), (&#124;&#124;&#124;), (--), (---)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(&lt;</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_17">プリミティブ関数呼び出し</h2>
 <pre><code>__prim &quot;プリミティブ名&quot; (式1, 式2, ...)
 </code></pre>
 

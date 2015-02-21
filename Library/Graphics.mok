@@ -1,6 +1,6 @@
 #------------------------------------------------------------
 #! @file    Graphics.mok
-#! @brief   繧ｰ繝ｩ繝輔ぅ繝�繧ｯ謠冗判繝輔Ξ繝ｼ繝繝ｯ繝ｼ繧ｯ
+#! @brief   グラフィック描画フレームワーク
 #! @author  lambdataro
 #------------------------------------------------------------
 
@@ -22,7 +22,7 @@ type Event =
   | MouseMove(Int, Int)
   | MouseUp(MouseButton, Int, Int);
 
-# 繧ｷ繝ｼ繝ｳ
+# シーン
 
 let (_scenes : Ref<[(String, Event -> ())]>) = ref [];
 let (_current : Ref<Event -> ()>) = ref (\_ -> ());
@@ -33,7 +33,7 @@ let scene name f =
 let switch name =
   _current := lookup name !_scenes;
 
-# 繧ｿ繧､繝槭�ｼ
+# タイマー
 let _timer = new Timer();
 
 let _tick ((sender : {Object}), (e : {EventArgs})) =
@@ -46,7 +46,7 @@ do _timer.add_Tick(
 let set_speed (n : Int) =
   _timer.set_Interval(n);
 
-# 繝輔か繝ｼ繝
+# フォーム
 let _form = new Form();
 
 do _form.GetType().InvokeMember("DoubleBuffered",
@@ -109,7 +109,7 @@ do _form.add_MouseMove (delegate MouseEventHandler _mouse_move);
 let show_window name =
   do _current := lookup name !_scenes in
   do _timer.Start() in
-  _form.ShowDialog();
+  _form.ShowDialog() |> ignore;
 
 let set_title (name : String) =
   _form.set_Text(name);
@@ -120,7 +120,7 @@ let set_size (w : Int) (h : Int) =
 let redraw () =
   _form.Invalidate();
   
-# 繝壹Φ
+# ペン
 let new_pen (r : Int) (g : Int) (b : Int) (width : Int) =
   let c = call Color::FromArgb(0xff, r, g, b) in
   new Pen(c, width);
@@ -134,7 +134,7 @@ let yellow_pen = call Pens::get_Yellow();
 let cyan_pen = call Pens::get_Cyan();
 let magenta_pen = call Pens::get_Magenta();
 
-# draw邉ｻ髢｢謨ｰ
+# draw系関数
 
 let draw_line (gr : {Graphics}) (pen : {Pen})
     (x1 : Int) (y1 : Int) (x2 : Int) (y2 : Int) =
@@ -148,7 +148,7 @@ let draw_ellipse (gr : {Graphics}) (pen : {Pen})
     (x : Int) (y : Int) (w : Int) (h : Int) =
   gr.DrawEllipse(pen, x, y, w, h);
 
-# 繝悶Λ繧ｷ
+# ブラシ
 
 let new_solid_brush (r : Int) (g : Int) (b : Int) =
   let c = call Color::FromArgb(0xff, r, g, b) in
@@ -163,11 +163,11 @@ let yellow_brush = call Brushes::get_Yellow();
 let cyan_brush = call Brushes::get_Cyan();
 let magenta_brush = call Brushes::get_Magenta();
 
-# fill邉ｻ髢｢謨ｰ
+# fill系関数
 
 let draw_string (gr : {Graphics}) (brush : {Brush})
     (str : String) (size : Int) (x : Int) (y : Int) =
-  let font = new Font("繝｡繧､繝ｪ繧ｪ", int_to_single size) in
+  let font = new Font("メイリオ", int_to_single size) in
   gr.DrawString(str, font, brush, 
     int_to_single x, int_to_single y);
 
@@ -183,7 +183,7 @@ let draw_pixel (gr : {Graphics}) (r : Int) (g :  Int) (b : Int) (x : Int) (y : I
   let brush = new_solid_brush r g b in
   fill_rectangle gr brush x y 1 1;
 
-# 濶ｲ縺ｮ螟画鋤
+# 色の変換
 
 let hsv_to_rgb (h : Double) (s : Double) (v : Double) =
   let v = v *. 255.0 in

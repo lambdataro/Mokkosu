@@ -120,7 +120,7 @@ let floor x = call System.Math::Floor((x : Double));
 #------------------------------------------------------------
 
 let __operator_hat x y = __prim "concat" (x, y);
-let tostring x = __prim "tostring" (x);
+let to_string x = __prim "tostring" (x);
 let strlen (str : String) = str.get_Length();
 let strnth (str : String) (idx : Int) = str.get_Chars(idx);
 
@@ -219,11 +219,9 @@ fun map f = {
 let head (x :: _) = x;
 let tail (_ :: xs) = xs;
 
-fun nth n lis =
+fun nth lis n =
   if n == 0 -> head lis
   else nth (n - 1) (tail lis);
-
-let null = { [] -> true; _ -> false };
 
 fun foldl f seed = {
   [] -> seed;
@@ -324,6 +322,6 @@ let null = __prim "loadnull" ();
 #------------------------------------------------------------
 
 let msgbox (str : String) =
-  call System.Windows.Forms.MessageBox::Show(str) |> ignore;
+  call System.Windows.Forms.MessageBox::Show(to_string str) |> ignore;
 
 __undefine "HIDE_TYPE";
