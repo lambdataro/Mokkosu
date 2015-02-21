@@ -4382,7 +4382,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{2B5611E6-D6BD-48F7-B117-9EC883AC2FAA}</td><td/></row>
 		<row><td>ProductName</td><td>Mokkosu</td><td/></row>
-		<row><td>ProductVersion</td><td>1.0.2</td><td/></row>
+		<row><td>ProductVersion</td><td>1.0.3</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>

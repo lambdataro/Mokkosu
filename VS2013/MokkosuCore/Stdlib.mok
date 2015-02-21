@@ -221,7 +221,7 @@ let tail (_ :: xs) = xs;
 
 fun nth lis n =
   if n == 0 -> head lis
-  else nth (n - 1) (tail lis);
+  else nth (tail lis) (n - 1);
 
 fun foldl f seed = {
   [] -> seed;
