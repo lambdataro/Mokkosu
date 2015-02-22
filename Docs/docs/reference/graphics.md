@@ -129,7 +129,7 @@ draw_ellipse : {System.Drawing.Graphics} -> {System.Drawing.Pen} ->
 ### draw_stringŠÖ”
 ```
 draw_string : {System.Drawing.Graphics} -> {System.Drawing.Brush} ->
-    String -> Int -> Int -> Int -> ()
+    ƒ¿ -> Int -> Int -> Int -> ()
 ```
 `draw_string graphics brush string size x y `‚Å•¶š—ñ‚ğ•`‚­B
 

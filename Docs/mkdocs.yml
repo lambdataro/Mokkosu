@@ -7,7 +7,7 @@ pages:
 - ['start/beginner.md', '始め方', 'プログラミング初心者向け']
 - ['start/programmer.md', '始め方', 'プログラミング経験者向け']
 - ['start/fptomok.md', '始め方', '関数型言語経験者向け']
-- ['tutorial/part01.md', 'チュートリアル', 'パート1']
+- ['tutorial/part01.md', 'チュートリアル', '第1章 はじめよう']
 - ['reference/basic.md', 'リファレンスマニュアル', '基本事項']
 - ['reference/statement.md', 'リファレンスマニュアル', '文']
 - ['reference/type.md', 'リファレンスマニュアル', '型とリテラル']

@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>パート1 - プログラミング言語 Mokkosu</title>
+        <title>第1章 はじめよう - プログラミング言語 Mokkosu</title>
 
         <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -79,7 +79,7 @@
                     <ul class="dropdown-menu">
                     
                         <li class="active">
-                            <a href=".">パート1</a>
+                            <a href=".">第1章 はじめよう</a>
                         </li>
                     
                     </ul>
@@ -167,46 +167,22 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#1">チュートリアル (パート1)</a></li>
+        <li class="main active"><a href="#1">第1章 はじめよう</a></li>
         
-            <li><a href="#mokkosu">Mokkosuをインストールしよう</a></li>
-        
-            <li><a href="#_1">メッセージを表示しよう</a></li>
+            <li><a href="#_1">初めてのプログラム</a></li>
         
             <li><a href="#_3">式の計算をしよう</a></li>
-        
-            <li><a href="#_4">計算結果に名前を付けよう</a></li>
-        
-            <li><a href="#_5">関数を定義しよう</a></li>
-        
-            <li><a href="#_6">条件に応じて分岐しよう</a></li>
-        
-            <li><a href="#_7">再帰関数を定義しよう</a></li>
         
     
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="1">チュートリアル (パート1)</h1>
-<p>注意: 子のチュートリアルは内容が古くなっているので、
-最新バージョンではそのままでは動作しません。</p>
-<h2 id="mokkosu">Mokkosuをインストールしよう</h2>
-<p><a href="https://github.com/lambdataro/Mokkosu/releases">Mokkosuのリリースページ</a>
-から最新バージョンのインストーラをダウンロードしてきます。</p>
-<p><img alt="リリースページ" src="../../img/release.png" /></p>
-<p>ダウンロードしてきたインストーラーをダブルクリックして実行し、
-画面の指示に従ってインストールします。</p>
-<p>インストールが完了するとスタートメニューとディスクトップに
-MokkosuPadのショートカットが作成されます。</p>
-<p><img alt="ショートカット" src="../../img/shortcut.png" /></p>
-<p>作成されたショートカットをダブルクリックすると、
-MokkosuPadが起動し以下の画面が表示されればインストールは成功です。</p>
-<p><img alt="MokkosuPad" src="../../img/mokkosupad.png" /></p>
-<h2 id="_1">メッセージを表示しよう</h2>
-<h3 id="_2">メッセージボックスの表示</h3>
-<p>ソースファイルの緑色の文字を消去して以下のプログラムを入力
-してみましょう。</p>
+<h1 id="1">第1章 はじめよう</h1>
+<h2 id="_1">初めてのプログラム</h2>
+<p>最初は画面に<code>"Hello, World."</code>と表示するプログラムを作りましょう。</p>
+<p>MokkosuPadを起動して、ソースファイルウインドウに以下のプログラムを
+入力してください。</p>
 <pre><code>msgbox &quot;Hello, World.&quot;;
 </code></pre>
 
@@ -214,142 +190,30 @@ MokkosuPadが起動し以下の画面が表示されればインストールは�
 ソースコードを<code>Hello.mok</code>という名前で保存します。</p>
 <p><code>操作</code>メニューから<code>実行</code>を選ぶと、
 Hello, World.と書かれたメッセージボックスが表示されます。</p>
-<p><img alt="MokkosuPad" src="../../img/hello.png" /></p>
-<h3 id="1_1">練習問題1</h3>
-<p>画面に自分の名前を表示するプログラムを作成して実行してみましょう。</p>
+<p><img alt="MokkosuPad" src="../../img/tutorial01.png" /></p>
+<h3 id="_2">練習問題</h3>
+<p>画面に自分の名前を表示するプログラムを作成しましょう。</p>
 <h2 id="_3">式の計算をしよう</h2>
 <p>Mokkosu で式を計算して結果を表示するプログラムを書きましょう。</p>
 <p>以下は<code>2 + 3 * 4</code>を計算して表示するプログラムです。</p>
-<pre><code>msgbox(int (2 + 3 * 4));
+<pre><code>msgbox (2 + 3 * 4);
 </code></pre>
 
-<p>ここで<code>int</code>は整数値を文字列に変換する関数です。
-<code>msgbox</code>関数の引数は文字列でなければならないのでこのような
-変換が必要になります。</p>
 <p>プログラムを実行すると以下の表示が出ます。</p>
-<p><img alt="実行結果" src="../../img/tutorial01.png" /></p>
+<p><img alt="実行結果" src="../../img/tutorial02.png" /></p>
 <p>計算結果が<code>14</code>になっていることに注目してください。
 Mokkosuでは数学のように足し算や引き算よりも掛け算や割り算の方が
 先に計算されます。</p>
 <p>数学と同じように括弧を使って先に計算する
 部分を明示することもできます。
 例えば上の式で<code>2 + 3</code>を先に計算したければ、</p>
-<pre><code>msgbox(int ((2 + 3) * 4));
+<pre><code>msgbox((2 + 3) * 4);
 </code></pre>
 
 <p>と書きます。実行すると今度は以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../img/tutorial02.png" /></p>
-<p>上のプログラムは括弧が多くて見づらいと感じる方もいると思います。
-その場合、以下のように書くことで多少見やすくすることができます。</p>
-<pre><code>msgbox((2 + 3) * 4 |&gt; int);
-</code></pre>
-
-<p>ここで<code>|&gt;</code>は左辺の計算結果を右辺の関数に受け渡す役割があります。</p>
-<h3 id="2">練習問題2</h3>
-<p>底辺の長さが10高さが5の三角形の面積を計算するプログラムを書いて
-実行してください。</p>
-<h2 id="_4">計算結果に名前を付けよう</h2>
-<p><code>let</code>文を使うと計算結果に名前を付けてプログラムを分かりやすくしたり、
-結果を保存したりできます。</p>
-<p>以下のプログラムでは、文字列<code>"Hello, World."</code>に<code>message</code>と名前を
-を付けて、<code>msgbox</code>関数の内部で参照しています。</p>
-<pre><code>let message = &quot;Hello, World.&quot;;
-msgbox message;
-</code></pre>
-
-<p>Mokkosuでは関数の引数に括弧は不要です。
-複数の引数をスペースで区切って与えることが関数の呼び出しが実現できます。</p>
-<p>上のプログラムを実行すると以下のように表示されます。</p>
 <p><img alt="実行結果" src="../../img/tutorial03.png" /></p>
-<p>今回のプログラムはこれまでのものと違って、
-出力ウインドウに以下のように表示されます。</p>
-<pre><code>message : String
-</code></pre>
-
-<p>これは変数<code>message</code>に文字列値が格納されていることを
-表しています。</p>
-<p>以下は変数に整数値を格納した例です。</p>
-<pre><code>let x = 1 + 2;
-msgbox(x * x |&gt; int);
-</code></pre>
-
-<p>実行すると出力ウインドウに</p>
-<pre><code>x : Int
-</code></pre>
-
-<p>と表示されて以下が表示されます。</p>
-<p><img alt="実行結果" src="../../img/tutorial04.png" /></p>
-<p><code>x : Int</code>は<code>x</code>に整数値が格納されていることを
-表しています。</p>
-<h3 id="3">練習問題3</h3>
-<p><code>let</code>と変数を使って2の8乗を計算するプログラムを書いて実行してください。</p>
-<h2 id="_5">関数を定義しよう</h2>
-<p>Mokkosuでは簡単に関数を定義することができます。</p>
-<p>以下は引数の値を倍にして返す関数<code>double</code>を定義して使う例です。</p>
-<pre><code>fun double x = x * 2;
-msgbox (double 10 |&gt; int);
-</code></pre>
-
-<p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../img/tutorial05.png" /></p>
-<p>右の出力ウインドウに注目すると、</p>
-<pre><code>double : Int -&gt; Int
-</code></pre>
-
-<p>と表示されていることに気付くと思います。
-これは関数<code>double</code>が整数を受け取って整数を返す関数であることを示しています。
-矢印の左側が引数の型で、右側が戻り値の型です。</p>
-<p>関数が引数を複数持つ場合は、引数名を複数並べます。</p>
-<p>以下は四角形の幅と高さが与えられた時に、
-その四角形の面積を返す関数を定義して使う例です。</p>
-<pre><code>fun area width height = width * height;
-msgbox (area 3 5 |&gt; int);
-</code></pre>
-
-<p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../img/tutorial06.png" /></p>
-<p>型は以下のようになります。</p>
-<pre><code>area : Int -&gt; Int -&gt; Int
-</code></pre>
-
-<p>複数の引数をもつ関数の型はこのように引数の型を<code>-&gt;</code>で区切った型になります。</p>
-<h3 id="4">練習問題4</h3>
-<p>三角形の面積を求める関数を定義してください。</p>
-<h2 id="_6">条件に応じて分岐しよう</h2>
-<p>条件に応じて分岐するには<code>if</code>式を使います。</p>
-<p>例えば、引数の整数の絶対値を求める関数<code>abs</code>は以下のように定義できます。</p>
-<pre><code>fun abs x =
-  if x &lt; 0 -&gt; ~-x
-  else x;
-
-msgbox (abs 5 |&gt; int);
-msgbox (abs ~-3 |&gt; int);
-</code></pre>
-
-<p>ここで<code>~-</code>は符号を反転させる演算子です。</p>
-<p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../img/tutorial07.png" /></p>
-<p><img alt="実行結果" src="../../img/tutorial08.png" /></p>
-<h3 id="5">練習問題5</h3>
-<p>引数を2つ受け取ってそれらが等しければ2倍した値を返す関数を定義してください。
-2つの値が等しいかどうかを調べる演算子は<code>==</code>です。</p>
-<h2 id="_7">再帰関数を定義しよう</h2>
-<p>再帰関数とは自分自身を呼び出す関数のことです。
-以下のプログラムでは自分自身を呼び出すことで、
-引数の整数の階乗を計算する関数<code>fact</code>を定義して使っています。</p>
-<pre><code>fun fact n =
-  if n == 0 -&gt; 1
-  else n * fact (n - 1);
-
-msgbox (fact 5 |&gt; int);
-</code></pre>
-
-<p>実行すると以下のように表示されます。</p>
-<p><img alt="実行結果" src="../../img/tutorial09.png" /></p>
-<h3 id="6">練習問題6</h3>
-<p>1から10までの整数を足した和を計算する関数を再帰関数を用いて定義してください。</p>
-<h3 id="7">練習問題7</h3>
-<p>フィボナッチ数列のn項目を計算する関数を再帰関数を用いて定義してください。</p>
+<h3 id="2">練習問題2</h3>
+<p>底辺の長さが10高さが5の三角形の面積を計算するプログラムを書いてください。</p>
 </div>
         </div>
 

@@ -321,7 +321,7 @@ let null = __prim "loadnull" ();
 # メッセージ
 #------------------------------------------------------------
 
-let msgbox (str : String) =
-  call System.Windows.Forms.MessageBox::Show(to_string str) |> ignore;
+let msgbox value =
+  call System.Windows.Forms.MessageBox::Show(to_string value) |> ignore;
 
 __undefine "HIDE_TYPE";

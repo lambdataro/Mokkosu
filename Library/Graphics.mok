@@ -166,9 +166,9 @@ let magenta_brush = call Brushes::get_Magenta();
 # fillånä÷êî
 
 let draw_string (gr : {Graphics}) (brush : {Brush})
-    (str : String) (size : Int) (x : Int) (y : Int) =
+      value (size : Int) (x : Int) (y : Int) =
   let font = new Font("ÉÅÉCÉäÉI", int_to_single size) in
-  gr.DrawString(str, font, brush, 
+  gr.DrawString(to_string value, font, brush, 
     int_to_single x, int_to_single y);
 
 let fill_rectangle (gr : {Graphics}) (brush : {Brush})
