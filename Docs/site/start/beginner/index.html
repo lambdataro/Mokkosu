@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>プログラミング初心者向け - プログラミング言語 Mokkosu</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/prettify-1.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../css\extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">プログラミング言語 Mokkosu</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">始め方 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../install">インストールと実行</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href=".">プログラミング初心者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../programmer">プログラミング経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../fptomok">関数型言語経験者向け</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">チュートリアル <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../tutorial/part01">パート1</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">リファレンスマニュアル <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../reference/basic">基本事項</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/statement">文</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/type">型とリテラル</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/expression">式</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/pattern">パターン</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/dotnet">.NET関連の式</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/corelib">コアライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/graphics">グラフィックスライブラリ</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../sample">サンプル</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li >
+                    <a rel="next" href="../install">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../programmer">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/lambdataro/Mokkosu">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#mokkosu">Mokkosuの始め方 (プログラミング初心者向け)</a></li>
+        
+            <li><a href="#_1">はじめに</a></li>
+        
+            <li><a href="#_2">関数</a></li>
+        
+            <li><a href="#_3">関数の合成</a></li>
+        
+            <li><a href="#_4">再帰的(帰納的)定義</a></li>
+        
+            <li><a href="#_5">数学じゃなくてプログラミングがやりたいんだ！</a></li>
+        
+            <li><a href="#_6">次のステップ</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="mokkosu">Mokkosuの始め方 (プログラミング初心者向け)</h1>
+<p>ここではプログラミング未経験者もしくは始めて間もない人を対象として、
+Mokkosuでのプログラミングについて説明します。</p>
+<h2 id="_1">はじめに</h2>
+<p>Mokkosuはプログラミング言語です。
+技術的には関数型プログラミング言語という分類に属しています。
+関数型プログラミングでは、プログラムを関数として記述します。
+そして作った関数を組み合わせることでより大きなプログラムを
+構築していくことができます。</p>
+<h2 id="_2">関数</h2>
+<p>Mokkosuにおける関数は数学の関数と同じく値を受け取って値を
+返すものです。
+例えば、以下は引数の値を2倍する関数<code>f</code>を定義した例です。</p>
+<pre><code>fun f x = x * 2;
+</code></pre>
+
+<p><code>fun</code>はこれから関数の定義が始まることを示しています。
+<code>f</code>が関数の名前そのあとの<code>x</code>引数です。
+<code>=</code>の右側に関数の定義を記述します。</p>
+<p>上の関数の定義は数学らしい定義ですが、
+Mokkosuでは以下のようにもっと直感的に関数を定義することができます。</p>
+<pre><code>fun f = { x -&gt; x * 2 };
+</code></pre>
+
+<p>これは、<code>f</code>は<code>x</code>を<code>x * 2</code>に対応付ける関数であることを示しています。</p>
+<h2 id="_3">関数の合成</h2>
+<p>次に、作った関数を組み合わせて大きな関数を作ってみましょう。
+数学と同じように、関数は合成することができます。
+以下の関数<code>g</code>は関数<code>f</code>と関数<code>f</code>を合成したもので、
+引数の値を4倍する関数になります。</p>
+<pre><code>fun g = f &lt;&lt; f;
+</code></pre>
+
+<p><code>&lt;&lt;</code>は数学の<code>.</code>と同じ働きをします。</p>
+<p>上で説明したように<code>f</code>は<code>{ x -&gt; x * 2 }</code>と定義
+できたことを思い出してください。
+これは以下のように書けることを意味しています。</p>
+<pre><code>fun g = { x -&gt; x * 2 } &lt;&lt; { x -&gt; x * 2 };
+</code></pre>
+
+<p>つまりいちいち関数に<code>f</code>とか<code>g</code>とか名前を付ける必要はなく、
+必要な場所に直接関数を記述できることを意味しています。</p>
+<h2 id="_4">再帰的(帰納的)定義</h2>
+<p>数学で階乗(n!)は以下のように帰納的に定義できます。</p>
+<p><img alt="階乗の数学的定義" src="../../img/start01.png" /></p>
+<p>Mokkosuではこのような数学的な定義を以下のように直接プログラムに落とし込めます。</p>
+<pre><code>fun fact n = {
+  0 -&gt; 1;
+  _ -&gt; n * fact (n - 1);
+}
+</code></pre>
+
+<p>他のプログラミング言語(ここではC)での階乗の計算例を見てみましょう。</p>
+<pre><code>int fact(int n)
+{
+    int i, r = 1;
+    for (i = n; i &gt; 0; i--) {
+        r = r * i;
+    }
+    return r;
+}
+</code></pre>
+
+<p>C言語は手続型言語とよばれ、コンピュータのCPUに実行してほしい処理の
+手順を記述します。
+そのため数学的な定義をどのようにコンピュータに計算させるか、
+自分で考えて記述する必要があります。</p>
+<p>プログラムを直感的に記述できる関数型プログラミングですが、
+すべてのプログラムが関数型で記述しやすいわけではありません。
+場合によっては手続的な記述の方がやりやすい場合もあります。
+これはどちらが優れているという問題ではなく、
+関数型と手続型は適材適所で使い分ける必要があることを意味しています。</p>
+<p>Mokoksuは関数型のスタイルでプログラムを記述することを基本としていますが、
+手続的な記述が適している場合には、そのようなスタイルでプログラムを
+記述することもできるお得なプログラミング言語です。</p>
+<h2 id="_5">数学じゃなくてプログラミングがやりたいんだ！</h2>
+<p>これまで皆さんがなじみ深いであろう数学を題材に話を進めてきましたが、
+おそらく皆さんがやりたいと思っていることは、数学ではなく、
+ゲームなどの具体的なアプリケーションを作ることだと思います。</p>
+<p>プログラミング言語の中には、単にウインドウを表示するだけでも、
+面倒な環境構築が必要であったり、また、大量に(場合によっては100行近く)
+プログラムを書く必要があるものもありますが、
+Mokkosuでは簡単にウインドウを表示することができます。</p>
+<p>以下はMokkosuでウインドウを表示するプログラムです。</p>
+<pre><code>include &quot;Graphics.mok&quot;;    # おまじない
+scene &quot;main&quot; { _ -&gt; () };  # mainという名前のシーンを定義
+show_window &quot;main&quot;;        # mainというシーンを表示
+</code></pre>
+
+<p>実行すると以下のようにウインドウが表示されます。</p>
+<p><img alt="ウインドウの表示" src="../../img/start02.png" /></p>
+<p>上のプログラムをよく見てみてください。
+2行目で先ほど出てきたその場で関数を定義する構文が使われていることに
+気づくはずです。</p>
+<p>ここでの関数はマウスがクリックされたとか一定時間が経過したとかいった
+イベントが発生した時にどう処理するかを定義したものです。
+ここでは、すべての場合に何もしないという処理を記述しています。
+この<code>{</code>と<code>}</code>の間に処理を追加していくことで、描画をしたり、
+入力を受け取ったりといったプログラムが記述できます。</p>
+<p>Mokkosuではイベントを処理する小さな関数を複数組み合わせて、
+大きな関数に組み上げていくことができます。
+この組み上げていく部分でMokkosuは数学の概念をお借りしています。</p>
+<h2 id="_6">次のステップ</h2>
+<p>プログラミングを始めたものの途中で挫折してしまう原因はいろいろあります。</p>
+<p>まずは、プログラミングの環境を構築するのに高度な知識が必要である場合です。
+Mokkosuは専用のインストーラを使うことで簡単にプログラミング環境を
+構築することが可能になっており、誰でも簡単にプログラミングを
+始められるようにしています。</p>
+<p>次に、適切なチュートリアルやマニュアルが存在しない場合です。
+Mokkosuは日本語のチュートリアルとマニュアルが用意されており、
+英語が苦手な方でも難なくプログラミングを始めることが可能です。</p>
+<p>さらに、なかなか面白いプログラムが作れるようにならない場合です。
+チュートリアルを読んでも、いつまでたっても黒いコンソール画面に
+文字を表示するだけのプログラムしか作れず、
+次第に飽きてしまい実際に作りたいゲームなどのプログラムを作る段階まで
+到達できないということがあります。
+Mokkosuではなるべくチュートリアルなどでなるべく実行して面白い、
+考えて面白い例をたくさん出すようにして、初学者が途中で飽きてしまわない
+ように気を付けています。</p>
+<p>最後に、適切な指導者がいない場合です。
+Mokkosuはまだまだ生まれたばかりの言語で、コミュニティーも小さいため、
+くだらないと思えるような質問でも直接開発者に聞くことができます。
+いずれコミュニティが大きくなるとそうもいかなくなるのかもしれませんが、
+今であれば開発者である私 <a href="https://twitter.com/lambdataro">@lambdataro</a>
+が直接質問や相談にお答えします。
+周りにプログラミングができる人がいないという場合でも安心して
+始めることができます。</p>
+<p>さて、いよいよMokkosuを学び始めるときです。
+最初は以下のチュートリアルを読み始めることから始めましょう。</p>
+<ul>
+<li>チュートリアル (準備中)</li>
+</ul>
+<p>あなたがMokkosuをそしてプログラミングを好きになって、
+面白い作品をたくさん作ってくれることを祈っています。</p>
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

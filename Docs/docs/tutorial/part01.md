@@ -1,5 +1,8 @@
 # チュートリアル (パート1)
 
+注意: 子のチュートリアルは内容が古くなっているので、
+最新バージョンではそのままでは動作しません。
+
 ## Mokkosuをインストールしよう
 
 [Mokkosuのリリースページ](https://github.com/lambdataro/Mokkosu/releases)
