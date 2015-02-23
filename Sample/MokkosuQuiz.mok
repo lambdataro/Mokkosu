@@ -9,19 +9,33 @@
 #============================================================
 __define "CONSOLE_APPLICATION";
 
-let print_list_with p lst =
+include "Print.mok";
+
+#------------------------------------------------------------
+# List
+#------------------------------------------------------------
+fun take n lst =
+  match (n,lst) {
+    (n,_) ? n <= 0 -> [];
+    (_,[]) -> [];
+    (n,x::xs) -> x::take (n-1) xs;
+  };
+fun all p = {
+  [] -> true;
+  x::xs -> if p x -> all p xs else false;
+};
+fun any p = {
+  [] -> false;
+  x::xs -> if p x -> true else any p xs;
+};
+let zip xs ys =
   fun loop = {
-      [] -> ();
-      [x] -> p x;
-      x::xs -> do p x; print "," in loop xs; 
-    }
-  in do print "["; loop lst; print "]" in ();
-
-let println_list_with p lst = do print_list_with p lst; print "\n" end;
-
-let print_list lst = print_list_with print lst;
-
-let println_list lst = println_list_with print lst;
+    ([],_) -> [];
+    (_,[]) -> [];
+    (x::xs,y::ys) -> (x,y)::loop (xs,ys);
+  }
+  in loop (xs,ys);
+let mapi f lst = map f <| zip (0 .. length lst) lst;
 
 #------------------------------------------------------------
 # Q1. fib 30を計算せよ。
@@ -225,9 +239,9 @@ let hamming n =
     0 -> !ham;
     n -> let h = minimum [!x2,!x3,!x5] in
          do ham := !ham ++ [h];
-            while {() -> !x2 <= h} {() -> do x2 := 2 * nth !j2 !ham; j2 := !j2+1 end};
-            while {() -> !x3 <= h} {() -> do x3 := 3 * nth !j3 !ham; j3 := !j3+1 end};
-            while {() -> !x5 <= h} {() -> do x5 := 5 * nth !j5 !ham; j5 := !j5+1 end};
+            while {() -> !x2 <= h} {() -> do x2 := 2 * nth !ham !j2; j2 := !j2+1 end};
+            while {() -> !x3 <= h} {() -> do x3 := 3 * nth !ham !j3; j3 := !j3+1 end};
+            while {() -> !x5 <= h} {() -> do x5 := 5 * nth !ham !j5; j5 := !j5+1 end};
          in loop (n-1);
   }
   in loop n;
@@ -300,4 +314,4 @@ let queens n =
     else ignore (for q <- 0 .. (n-1); if check q qs; in loop (q::qs))
   in do loop [] in !ans;
 
-do map println_list << take 10 <| queens 8;
+do ignore <| map println_list << take 10 <| queens 8;
