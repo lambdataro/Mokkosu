@@ -266,6 +266,9 @@ namespace MokkosuPad.ViewModels
 
             _source_vm.Text = "";
             _source_vm.DirtyFlag = false;
+            _source_fname = "";
+            WindowTitle = ProgramName;
+            
         }
 
         public void DocumentClosed(object sender, DocumentClosedEventArgs e)
