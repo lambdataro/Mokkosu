@@ -188,6 +188,48 @@ let incr r = r := !r + 1;
 let decr r = r := !r - 1;
 
 #------------------------------------------------------------
+# Maybe
+#------------------------------------------------------------
+
+type Maybe<T> = Nothing | Just(T);
+
+let maybe x f = {
+  ~Nothing -> x;
+  ~Just(y) -> f y;
+};
+
+let map_maybe f = {
+  ~Nothing -> Nothing;
+  ~Just(x) -> Just(f x);
+};
+
+let is_just = {
+  ~Just(_) -> true;
+  ~Nothing -> false;
+};
+
+let is_nothing = {
+  ~Just(_) -> false;
+  ~Nothing -> true;
+};
+
+let from_just = {
+  ~Just(x) -> x;
+  ~Nothing -> error "from_just";
+};
+
+#------------------------------------------------------------
+# Either
+#------------------------------------------------------------
+
+type Either<T, U> = Left(T) | Right(U);
+
+let either f g = {
+  ~Left(x) -> f x;
+  ~Right(x) -> g x;
+};
+
+#------------------------------------------------------------
 # リスト
 #------------------------------------------------------------
 
@@ -256,48 +298,6 @@ let concat_map f lis = concat (map f lis);
 let __for_bind lis f = concat_map f lis;
 let __for_unit x = [x];
 let __for_zero = [];
-
-#------------------------------------------------------------
-# Maybe
-#------------------------------------------------------------
-
-type Maybe<T> = Nothing | Just(T);
-
-let maybe x f = {
-  ~Nothing -> x;
-  ~Just(y) -> f y;
-};
-
-let map_maybe f = {
-  ~Nothing -> Nothing;
-  ~Just(x) -> Just(f x);
-};
-
-let is_just = {
-  ~Just(_) -> true;
-  ~Nothing -> false;
-};
-
-let is_nothing = {
-  ~Just(_) -> false;
-  ~Nothing -> true;
-};
-
-let from_just = {
-  ~Just(x) -> x;
-  ~Nothing -> error "from_just";
-};
-
-#------------------------------------------------------------
-# Either
-#------------------------------------------------------------
-
-type Either<T, U> = Left(T) | Right(U);
-
-let either f g = {
-  ~Left(x) -> f x;
-  ~Right(x) -> g x;
-};
 
 #------------------------------------------------------------
 # 配列

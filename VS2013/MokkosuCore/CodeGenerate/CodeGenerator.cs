@@ -1160,6 +1160,7 @@ namespace Mokkosu.CodeGenerate
                     var loc2 = env2.Lookup(env.Head.Item1);
                     il.Emit(OpCodes.Ldloc, loc2);
                     il.Emit(OpCodes.Stloc, loc1);
+                    env = env.Tail;
                 }
                 il.MarkLabel(lbl_end);
 
