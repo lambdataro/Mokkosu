@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>文 - プログラミング言語 Mokkosu</title>
+        <title>リストライブラリ - プログラミング言語 Mokkosu</title>
 
         <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -103,8 +103,8 @@
                             <a href="../basic">基本事項</a>
                         </li>
                     
-                        <li class="active">
-                            <a href=".">文</a>
+                        <li >
+                            <a href="../statement">文</a>
                         </li>
                     
                         <li >
@@ -127,8 +127,8 @@
                             <a href="../corelib">コアライブラリ</a>
                         </li>
                     
-                        <li >
-                            <a href="../list">リストライブラリ</a>
+                        <li class="active">
+                            <a href=".">リストライブラリ</a>
                         </li>
                     
                         <li >
@@ -151,12 +151,12 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 <li >
-                    <a rel="next" href="../basic">
+                    <a rel="next" href="../corelib">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../type">
+                    <a rel="prev" href="../graphics">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -179,149 +179,173 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#_1">文</a></li>
+        <li class="main active"><a href="#_1">リストライブラリ</a></li>
         
-            <li><a href="#do">do文</a></li>
+            <li><a href="#_2">基本的な関数</a></li>
         
-            <li><a href="#let">let文</a></li>
+            <li><a href="#_3">リストの特別な畳み込み</a></li>
         
-            <li><a href="#fun">fun文</a></li>
+            <li><a href="#_4">リストの生成</a></li>
         
-            <li><a href="#type">type文</a></li>
+            <li><a href="#_5">部分リスト</a></li>
         
-            <li><a href="#include">include文</a></li>
+            <li><a href="#_6">リストの検索</a></li>
         
-            <li><a href="#import">import文</a></li>
+            <li><a href="#zipunzip">リストのzip関数とunzip関数</a></li>
         
-            <li><a href="#using">using文</a></li>
+            <li><a href="#_7">リストの走査</a></li>
         
-            <li><a href="#__define">__define文</a></li>
-        
-            <li><a href="#__undefine">__undefine文</a></li>
+            <li><a href="#_8">リストの整列</a></li>
         
     
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="_1">文</h1>
-<p>文はMokkosuの最上位レベルの命令です。
-文はソースファイルの上から順番に評価されていきます。
-文は必ずセミコロンで終わります。</p>
-<h2 id="do">do文</h2>
-<pre><code>do 式;
-式;
+<h1 id="_1">リストライブラリ</h1>
+<h2 id="_2">基本的な関数</h2>
+<h3 id="last">last</h3>
+<pre><code>last : [α] -&gt; α
 </code></pre>
 
-<p>do文は値が<code>()</code>になる式を評価して結果を捨てます。
-キーワードの<code>do</code>は省略することができます。</p>
-<h2 id="let">let文</h2>
-<h3 id="_2">基本形</h3>
-<pre><code>let パターン = 式;
+<p>リストの最後の要素を返します。</p>
+<h3 id="init">init</h3>
+<pre><code>init : [α] -&gt; [α]
 </code></pre>
 
-<p>let文は式を評価してその結果をパターンにマッチさせます。
-パターンマッチに失敗した場合、実行時エラーになります。</p>
-<h3 id="_3">拡張形式</h3>
-<pre><code>let パターン パターン1 パターン2 ... = 式;
+<p>最後の要素を除いたリストを返します。</p>
+<h3 id="is_null">is_null</h3>
+<pre><code>is_null : [α] -&gt; Bool
 </code></pre>
 
-<p>上の形式のlet文は以下のlet文と同じ意味です。</p>
-<pre><code>let パターン = \パターン1 パターン2 ... -&gt; 式;
+<p>リストが空か調べます。</p>
+<h2 id="_3">リストの特別な畳み込み</h2>
+<h3 id="any">any</h3>
+<pre><code>any : (α -&gt; Bool) -&gt; [α] -&gt; Bool
 </code></pre>
 
-<h2 id="fun">fun文</h2>
-<h3 id="_4">基本形</h3>
-<pre><code>fun 関数名 パターン1 パターン2 ... = 式;
+<p><code>any p xs</code>でリスト<code>xs</code>の要素のいずれかが述語<code>p</code>を満たすか調べます。</p>
+<h3 id="all">all</h3>
+<pre><code>all : (α -&gt; Bool) -&gt; [α] -&gt; Bool
 </code></pre>
 
-<p>fun式は(再帰)関数を定義する際に用います。</p>
-<h3 id="_5">特殊形式</h3>
-<pre><code>fun 関数名 = ブロック式;
+<p><code>all p xs</code>でリスト<code>xs</code>の要素のすべてが述語<code>p</code>を満たすか調べます。</p>
+<h3 id="sum">sum</h3>
+<pre><code>sum : [Int] -&gt; Int
 </code></pre>
 
-<p>関数の本体がブロック式の場合、引数を省略することができます。</p>
-<h3 id="_6">相互再帰</h3>
-<pre><code>fun 関数名1 パターン11 パターン12 ... = 式1
-and 関数名2 パターン21 パターン22 ... = 式2
-...
-and 関数名n パターンn1 パターンn2 ... = 式n;
+<p>整数のリストの総和を返します。</p>
+<h3 id="product">product</h3>
+<pre><code>product : [Int] -&gt; Int
 </code></pre>
 
-<p>相互再帰させるときは、<code>and</code>で区切って定義を並べます。</p>
-<h2 id="type">type文</h2>
-<h3 id="_7">単相型</h3>
-<pre><code>type 型名 = タグ1(引数型11, 引数型12, ...) | タグ2(引数型21, 引数型22, ...) | ...;
+<p>整数のリストの総乗を返します。</p>
+<h3 id="maximum">maximum</h3>
+<pre><code>maximum : [α] -&gt; α
 </code></pre>
 
-<p>type文は列挙したタグの値から構成される型を定義します。
-タグはオプションで引数を持たせることができます。
-引数が0個のタグを定義する場合は、括弧は省略します。</p>
-<h3 id="_8">多相型</h3>
-<pre><code>type 型名 &lt;型パラメータ1, 型パラメータ2, ...&gt;  =
-  タグ1(引数型11, 引数型12, ...) | タグ2(引数型21, 引数型22, ...) | ...;
+<p>最大値を返します。</p>
+<h3 id="minimum">minimum</h3>
+<pre><code>minimum : [α] -&gt; α
 </code></pre>
 
-<p>type文には型パラメータを持たせることができます。</p>
-<h3 id="_9">相互再帰</h3>
-<pre><code>type 型名1 &lt;型パラメータ11, ...&gt; = タグ11(引数型111, ...) | ...
-and  型名2 &lt;型パラメータ21, ...&gt; = タグ21(引数型211, ...) | ...;
+<p>最小値を返します。</p>
+<h2 id="_4">リストの生成</h2>
+<h3 id="replicate">replicate</h3>
+<pre><code>replicate : Int -&gt; α -&gt; [α]
 </code></pre>
 
-<p>型の定義を相互参照する場合は<code>and</code>で区切って指定します。</p>
-<h2 id="include">include文</h2>
-<pre><code>include &quot;ファイル名&quot;;
+<p><code>replicate n x</code>で長さ<code>n</code>ですべての要素が<code>x</code>のリストを返します。</p>
+<h2 id="_5">部分リスト</h2>
+<h3 id="take">take</h3>
+<pre><code>take : Int -&gt; [α] -&gt; [α]
 </code></pre>
 
-<p>include文は指定したファイルを読み込み展開します。</p>
-<h2 id="import">import文</h2>
-<pre><code>import &quot;DLL名&quot;;
+<p><code>take n xs</code>でリスト<code>xs</code>の先頭から<code>n</code>番目までのリストを返します。</p>
+<h3 id="drop">drop</h3>
+<pre><code>drop : Int -&gt; [α] -&gt; [α]
 </code></pre>
 
-<p>import文は指定したDLLをプログラムに読み込みます。</p>
-<h2 id="using">using文</h2>
-<pre><code>using 名前空間;
+<p><code>drop n xs</code>でリスト<code>xs</code>の先頭から<code>n</code>番目より後ろのリストを返します。</p>
+<h3 id="split_at">split_at</h3>
+<pre><code>split_at : Int -&gt; [α] -&gt; ([α], [α])
 </code></pre>
 
-<p>using文は指定した.NETの名前空間を修飾なしで使えるように指定する文です。</p>
-<h2 id="__define">__define文</h2>
-<pre><code>__define &quot;シンボル&quot;;
+<p><code>split n xs</code>でリスト<code>xs</code>の戦闘から<code>n</code>番目までのリストとそれより後ろのリストのペアを返します。</p>
+<h3 id="take_while">take_while</h3>
+<pre><code>take_while : (α -&gt; Bool) -&gt; [α] -&gt; [α]
 </code></pre>
 
-<p>__define文は指定したシンボルを定義状態にします。
-シンボルを定義することでコンパイラの動作を変更することができます。</p>
-<p>利用可能なシンボルには以下のものがあります。</p>
-<table>
-<thead>
-<tr>
-<th>シンボル</th>
-<th>役割</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>CONSOLE_APPLICATION</code></td>
-<td>コンソールアプリケーションとしてコンパイルする</td>
-</tr>
-<tr>
-<td><code>HIDE_TYPE</code></td>
-<td>型の表示を抑制する</td>
-</tr>
-<tr>
-<td><code>SHOW_PARSE_RESULT</code></td>
-<td>構文解析・型推論結果を表示する</td>
-</tr>
-<tr>
-<td><code>SHOW_CLOSURE_RESULT</code></td>
-<td>クロージャ変換の結果を表示する</td>
-</tr>
-</tbody>
-</table>
-<h2 id="__undefine">__undefine文</h2>
-<pre><code>__undefine &quot;シンボル&quot;;
+<p><code>take_while p xs</code>でリスト<code>xs</code>の先頭から述語<code>p</code>を満たす範囲のリストを返します。</p>
+<h3 id="drop_while">drop_while</h3>
+<pre><code>drop_while : (α -&gt; Bool) -&gt; [α] -&gt; [α]
 </code></pre>
 
-<p>__undefine文は指定したシンボルを未定義状態にします。</p>
+<p><code>drop_while p xs</code>でリスト<code>xs</code>の先頭から述語<code>p</code>を満たす範囲を除いたリストを返します。</p>
+<h2 id="_6">リストの検索</h2>
+<h3 id="elem">elem</h3>
+<pre><code>elem : α -&gt; [α] -&gt; Bool
+</code></pre>
+
+<p><code>elem x xs</code>で<code>x</code>がリスト<code>xs</code>に含まれるか調べます。</p>
+<h3 id="not_elem">not_elem</h3>
+<pre><code>not_elem : α -&gt; [α] -&gt; Bool
+</code></pre>
+
+<p><code>not_elem x xs</code>で<code>x</code>がリスト<code>xs</code>に含まれないか調べます。</p>
+<h3 id="find">find</h3>
+<pre><code>find : (α -&gt; Bool) -&gt; [α] -&gt; Maybe&lt;α&gt;
+</code></pre>
+
+<p><code>find p xs</code>で述語<code>p</code>を満たすリスト<code>xs</code>の最初の要素を返します。</p>
+<h3 id="filter">filter</h3>
+<pre><code>filter : (α -&gt; Bool) -&gt; [α] -&gt; [α]
+</code></pre>
+
+<p><code>filter p xs</code>で述語<code>p</code>を満たすリスト<code>xs</code>の要素をすべて返します。</p>
+<h3 id="partition">partition</h3>
+<pre><code>partition : (α -&gt; Bool) -&gt; [α] -&gt; ([α], [α])
+</code></pre>
+
+<p><code>partition p xs</code>でリスト<code>xs</code>のうち述語<code>p</code>を満たすものとそうでないもののペアを返します。</p>
+<h2 id="zipunzip">リストのzip関数とunzip関数</h2>
+<h3 id="zip">zip</h3>
+<pre><code>zip : [α] -&gt; [β] -&gt; [(α, β)]
+</code></pre>
+
+<p>2つのリストを受け取り、ペアのリストを返します。</p>
+<h3 id="zip_with">zip_with</h3>
+<pre><code>zip_with : (α -&gt; β -&gt; γ) -&gt; [α] -&gt; [β] -&gt; [γ]
+</code></pre>
+
+<p>一般化したzip関数</p>
+<h3 id="unzip">unzip</h3>
+<pre><code>unzip : [(α, β)] -&gt; ([α], [β])
+</code></pre>
+
+<p>ペアのリストを受け取り、リストのペアを返します。</p>
+<h2 id="_7">リストの走査</h2>
+<h3 id="iter">iter</h3>
+<pre><code>iter : (α -&gt; ()) -&gt; [α] -&gt; ()
+</code></pre>
+
+<p>リストの各要素のアクションを適用します。</p>
+<h3 id="iteri">iteri</h3>
+<pre><code>iteri : (Int -&gt; α -&gt; ()) -&gt; [α] -&gt; ()
+</code></pre>
+
+<p>インデックス付きのiter関数</p>
+<h3 id="mapi">mapi</h3>
+<pre><code>mapi : (Int -&gt; α -&gt; β) -&gt; [α] -&gt; [β]
+</code></pre>
+
+<p>インデックス付きのmap関数</p>
+<h2 id="_8">リストの整列</h2>
+<h3 id="sort">sort</h3>
+<pre><code>sort : [α] -&gt; [α]
+</code></pre>
+
+<p>リストをソートします。</p>
 </div>
         </div>
 

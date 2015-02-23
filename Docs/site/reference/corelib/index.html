@@ -128,6 +128,10 @@
                         </li>
                     
                         <li >
+                            <a href="../list">リストライブラリ</a>
+                        </li>
+                    
+                        <li >
                             <a href="../graphics">グラフィックスライブラリ</a>
                         </li>
                     
@@ -152,7 +156,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../graphics">
+                    <a rel="prev" href="../list">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -754,10 +758,11 @@ atan : Double -&gt; Double
 
 <p>リストを右から左に向かって畳み込みする。</p>
 <h3 id="lookup">lookup関数</h3>
-<pre><code>lookup : [(α, β)] -&gt; α -&gt; β
+<pre><code>lookup : α -&gt; [(α, β)] -&gt; Maybe&lt;β&gt;
 </code></pre>
 
-<p>連想リストから対応する値を探索する。</p>
+<p>連想リストから対応する値を探索する。
+見つからなければ<code>Nothing</code>を見つかった場合は<code>Just</code>でくるんだ値を返す。</p>
 <h3 id="concat">concat関数</h3>
 <pre><code>concat : [[α]] -&gt; [α]
 </code></pre>

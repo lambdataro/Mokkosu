@@ -17,5 +17,6 @@ pages:
 - ['reference/pattern.md', 'リファレンスマニュアル', 'パターン']
 - ['reference/dotnet.md', 'リファレンスマニュアル', '.NET関連の式']
 - ['reference/corelib.md', 'リファレンスマニュアル', 'コアライブラリ']
+- ['reference/list.md', 'リファレンスマニュアル', 'リストライブラリ']
 - ['reference/graphics.md', 'リファレンスマニュアル', 'グラフィックスライブラリ']
 - ['sample.md', 'サンプル']
