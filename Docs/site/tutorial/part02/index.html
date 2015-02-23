@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>第2章 基本的な構文と型 - プログラミング言語 Mokkosu</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/prettify-1.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../css\extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">プログラミング言語 Mokkosu</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">始め方 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../start/install">インストールと実行</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/beginner">プログラミング初心者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/programmer">プログラミング経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/fptomok">関数型言語経験者向け</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">チュートリアル <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../part01">第1章 はじめよう</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href=".">第2章 基本的な構文と型</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">リファレンスマニュアル <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../reference/basic">基本事項</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/statement">文</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/type">型とリテラル</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/expression">式</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/pattern">パターン</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/dotnet">.NET関連の式</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/corelib">コアライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../reference/graphics">グラフィックスライブラリ</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../sample">サンプル</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li >
+                    <a rel="next" href="../part01">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../../reference/basic">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/lambdataro/Mokkosu">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#2">第2章 基本的な構文と型</a></li>
+        
+            <li><a href="#_1">出力ウインドウへの書き込み</a></li>
+        
+            <li><a href="#_2">局所変数</a></li>
+        
+            <li><a href="#_3">浮動小数点数</a></li>
+        
+            <li><a href="#_4">文字と文字列</a></li>
+        
+            <li><a href="#_5">真偽値</a></li>
+        
+            <li><a href="#_6">ユニット</a></li>
+        
+            <li><a href="#do">do式</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="2">第2章 基本的な構文と型</h1>
+<h2 id="_1">出力ウインドウへの書き込み</h2>
+<p>これまで計算結果を表示するのに<code>msgbox</code>関数を使ってきましたが、
+<code>println</code>関数を使うとMokkosuPadの出力ウインドウに結果を書き込むことができます。
+以下のプログラムを実行すると、出力ウインドウに<code>"Hello, World."</code>と表示されます。</p>
+<pre><code>println &quot;Hello, World.&quot;;
+</code></pre>
+
+<p>類似の関数として<code>print</code>関数があります。
+<code>println</code>関数は出力後に改行するのに対し、<code>print</code>関数は改行しません。
+以下は<code>print</code>関数の使用例です。</p>
+<pre><code>print &quot;2 * 3 = &quot;;
+println (2 * 3);
+</code></pre>
+
+<p>実行すると、</p>
+<pre><code>2 * 3 = 6
+</code></pre>
+
+<p>と表示されます。</p>
+<h2 id="_2">局所変数</h2>
+<p>関数の定義中にその中でのみ有効な変数を使いたいことがあります。
+そのような時は、局所変数を使います。
+局所変数はlet式で定義します。</p>
+<pre><code>let 変数名 = 式1 in 式2
+</code></pre>
+
+<p>let式は<code>式1</code>を計算してその結果に名前を付けて<code>式2</code>を計算します。
+付けた名前は<code>式2</code>の中でのみ有効です。</p>
+<p>以下は局所変数を使って、xの4乗を求める関数<code>pow4</code>を定義した例です。</p>
+<pre><code>fun pow4 x =
+  let x = x * x in
+  x * x;
+</code></pre>
+
+<p>この例のようにlet式は既存の定義済みの名前を上書きします。
+上のプログラムでlet式の右辺の<code>x</code>は引数のx。 
+<code>in</code>以降の式の<code>x</code>はlet式で導入した<code>x</code>です。
+分かりやすく名前を変えると以下のようになります。</p>
+<pre><code>fun pow4 x =
+  let y = x * x in
+  y * y;
+</code></pre>
+
+<p>プログラムの既存の変数を上書きすると、プログラムが読みにくくなる可能性がありますが、
+同時に、古い値を参照してしまうのを防止する効果もあります。</p>
+<p>let式は以下のように連続して使うことができます。</p>
+<pre><code>fun f x y =
+  let a = x * x in
+  let b = y * y in
+  a + b;
+</code></pre>
+
+<h2 id="_3">浮動小数点数</h2>
+<p>これまでは整数の演算を扱ってきましたが、次は浮動小数点数を扱ってみましょう。
+浮動小数点数をつかうと、<code>3.14</code>のような小数点を含む値、
+<code>6.22e23</code>のようなとても大きな数、
+<code>-1.60e-19</code>のようなとても小さな数を扱うことが可能になります。</p>
+<p>浮動小数点数の型は<code>Double</code>型です。</p>
+<p>Mokkosuでは<code>Double</code>型の演算に整数とは異なる演算子を使います。
+<code>Double</code>型に関する演算子を以下に示します。</p>
+<table>
+<thead>
+<tr>
+<th>演算子</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>式1 +. 式2</code></td>
+<td>加算</td>
+</tr>
+<tr>
+<td><code>式1 -. 式2</code></td>
+<td>減算</td>
+</tr>
+<tr>
+<td><code>式1 *. 式2</code></td>
+<td>乗算</td>
+</tr>
+<tr>
+<td><code>式1 /. 式2</code></td>
+<td>除算</td>
+</tr>
+<tr>
+<td><code>~-.式</code></td>
+<td>符号反転</td>
+</tr>
+</tbody>
+</table>
+<p>以下は円の面積を求める関数を定義して使う例です。</p>
+<pre><code>fun area_of_circle r = r *. r *. pi;
+
+print &quot;半径5.0の円の面積: &quot;;
+println (area_of_circle 5.0);
+</code></pre>
+
+<p>実行すると出力ウインドウに以下のように表示されます。</p>
+<pre><code>area_of_circle : Double -&gt; Double
+
+半径5.0の円の面積: 78.5398163397448
+</code></pre>
+
+<p>浮動小数点数を整数を相互変換するには、
+<code>int_to_double</code>関数と<code>double_to_int</code>関数を使います。</p>
+<pre><code>int_to_double : Int -&gt; Double
+double_to_int : Double -&gt; Int
+</code></pre>
+
+<p>浮動小数点数に関しては、平方根や三角関数など有用な関数が数多く
+標準ライブラリに定義されています。
+詳細は<a href="../../reference/corelib#_16">リファレンスマニュアルの浮動小数点数の節</a>
+を参照してください。</p>
+<h3 id="21">練習問題 2.1</h3>
+<p>円錐の体積を求める関数を定義してください。</p>
+<h3 id="22">練習問題 2.2</h3>
+<p>適当な公式を使って円周率πの値を求めるプログラムを書いてください。</p>
+<h2 id="_4">文字と文字列</h2>
+<p><code>'A'</code>や<code>'あ'</code>のように文字をシングルクォーテーションで囲ったものを
+文字定数とよび<code>Char</code>型を持ちます。</p>
+<p><code>Char</code>型の値は文字コードすなわち整数値と相互変換できます。</p>
+<pre><code>char_to_int : Char -&gt; Int
+int_to_char : Int -&gt; Char
+</code></pre>
+
+<p><code>"abc"</code>のように文字列をダブルクォーテーションで囲ったものを
+文字列定数とよび<code>String</code>型を持ちます。</p>
+<p>文字列は<code>^</code>演算子を使って連結できます。</p>
+<pre><code>let message = &quot;Hello, &quot; ^ &quot;World.&quot;;
+</code></pre>
+
+<p>文字列の長さを求めるには<code>strlen</code>関数、
+文字列中のn番目の文字を取り出すには<code>strnth</code>関数を使います。</p>
+<pre><code>strlen : String -&gt; Int
+strnth : String -&gt; Int -&gt; Char
+</code></pre>
+
+<h2 id="_5">真偽値</h2>
+<p><code>true</code>と<code>false</code>の2通りの値をもつ型<code>Bool</code>が定義されています。
+<code>==</code>や<code>&lt;</code>などの比較演算子の戻り値の型は<code>Bool</code>型になります。</p>
+<p><code>Bool</code>型に関する演算として、以下のものが定義されています。</p>
+<table>
+<thead>
+<tr>
+<th>演算</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>式1 &amp;&amp; 式2</td>
+<td>論理積(かつ)</td>
+</tr>
+<tr>
+<td>式1 &#124;&#124; 式2</td>
+<td>論理和(または)</td>
+</tr>
+<tr>
+<td>xor 式1 式2</td>
+<td>排他的論理和</td>
+</tr>
+<tr>
+<td>not 式1</td>
+<td>否定</td>
+</tr>
+</tbody>
+</table>
+<p>上の表のうち、<code>&amp;&amp;</code>と<code>||</code>はショートサーキット評価されます。
+すなわち、<code>&amp;&amp;</code>の場合<code>式1</code>が<code>false</code>の場合は<code>式2</code>の計算は行われず、
+<code>||</code>の場合<code>式1</code>が<code>true</code>の場合は<code>式2</code>の計算は行われません。</p>
+<h2 id="_6">ユニット</h2>
+<p>Mokkosuには結果がないことを表す<code>()</code>型の値<code>()</code>が定義されています。
+<code>println</code>関数は引数の値を表示しますが、関数自体の戻り値として
+何か意味のある値を返す必要はありません。
+このような関数の戻り値に<code>()</code>型を使います。</p>
+<p>例えば<code>println</code>の型は以下のようになっています。</p>
+<pre><code>println : α -&gt; ()
+</code></pre>
+
+<p>ここでαは任意の型を表しています。
+<code>println</code>は使われ方によって、</p>
+<pre><code>println : Int -&gt; ()
+</code></pre>
+
+<p>にも、</p>
+<pre><code>println : String -&gt; ()
+</code></pre>
+
+<p>にもなり、その代表としてαと表記しています。</p>
+<h2 id="do">do式</h2>
+<p>do式は以下の構文をした式です。</p>
+<pre><code>do 式1 in 式2
+</code></pre>
+
+<p>do式は<code>()</code>型になる<code>式1</code>を計算して、
+その後に<code>式2</code>を計算しその結果を返します。</p>
+<p>以下のプログラムは1から10までの数値を出力ウインドウに表示します。</p>
+<pre><code>fun print10 n =
+  if n &gt; 10 -&gt; ()
+  else
+    do println n in
+    print10 (n + 1);
+
+print10 1;
+</code></pre>
+
+<p>出力結果は以下のようになります。</p>
+<pre><code>print10 : Int -&gt; ()
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</code></pre>
+
+<h3 id="23">練習問題 2.3</h3>
+<p><code>"Hello"</code>という文字列の各文字を1行に1文字づつ表示するプログラムを作ってください。</p>
+<h3 id="24">練習問題 2.4</h3>
+<p>以下のような掛け算の九九の表を表示するプログラムを作ってください。</p>
+<pre><code> 1  2  3  4  5  6  7  8  9
+ 2  4  6  8 10 12 14 16 18
+ 3  6  9 12 15 18 21 24 27
+ 4  8 12 16 20 24 28 32 36
+ 5 10 15 20 25 30 35 40 45
+ 6 12 18 24 30 36 42 48 54
+ 7 14 21 28 35 42 49 56 63
+ 8 16 24 32 40 48 56 64 72
+ 9 18 27 36 45 54 63 72 81
+</code></pre>
+
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

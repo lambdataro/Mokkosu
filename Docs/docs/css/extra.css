@@ -36,7 +36,7 @@ div.col-md-9 h3 {
 
 div.col-md-9 table {
     border-collapse: collapse;
-    
+    margin: 0 auto;
 }
 
 div.col-md-9 th {
