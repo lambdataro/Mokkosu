@@ -1,737 +1,737 @@
-# ƒRƒAƒ‰ƒCƒuƒ‰ƒŠ
-## ƒVƒXƒeƒ€ŠÖ”
+# ã‚³ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+## ã‚·ã‚¹ãƒ†ãƒ é–¢æ•°
 
-### printlnŠÖ”
+### printlné–¢æ•°
 ```
-println : ƒ¿ -> ()
+println : Î± -> ()
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶Žš‚Ì’l‚ð•\Ž¦‚µ‚Ä‰üs‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã®å€¤ã‚’è¡¨ç¤ºã—ã¦æ”¹è¡Œã—ã¾ã™ã€‚
 
-### printŠÖ”
+### printé–¢æ•°
 ```
-print : ƒ¿ -> ()
+print : Î± -> ()
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶Žš‚Ì’l‚ð•\Ž¦‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã®å€¤ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
 
-### errorŠÖ”
+### erroré–¢æ•°
 ```
-error : String -> ƒ¿
+error : String -> Î±
 ```
-ŽÀsŽžƒGƒ‰[‚ð”­¶‚³‚¹‚Ü‚·B
-ˆø”‚É‚ÍƒGƒ‰[“à—e‚ð‹Lq‚µ‚Ü‚·B
+å®Ÿè¡Œæ™‚ã‚¨ãƒ©ãƒ¼ã‚’ç™ºç”Ÿã•ã›ã¾ã™ã€‚
+å¼•æ•°ã«ã¯ã‚¨ãƒ©ãƒ¼å†…å®¹ã‚’è¨˜è¿°ã—ã¾ã™ã€‚
 
-### undefinedŠÖ”
+### undefinedé–¢æ•°
 ```
-undefined : ƒ¿ -> ƒÀ
+undefined : Î± -> Î²
 ```
-•Ï”‚âŠÖ”‚ª–¢’è‹`‚Å‚ ‚é‚±‚Æ‚ðŽ¦‚µ‚Ü‚·B
+å¤‰æ•°ã‚„é–¢æ•°ãŒæœªå®šç¾©ã§ã‚ã‚‹ã“ã¨ã‚’ç¤ºã—ã¾ã™ã€‚
 
-### ignoreŠÖ”
+### ignoreé–¢æ•°
 ```
-ignore : ƒ¿ -> ()
+ignore : Î± -> ()
 ```
-ˆø”‚ð–³Ž‹‚µ‚Ä`()`‚ð•Ô‚µ‚Ü‚·B
+å¼•æ•°ã‚’ç„¡è¦–ã—ã¦`()`ã‚’è¿”ã—ã¾ã™ã€‚
 
-## ”äŠr‰‰ŽZ
-### (==)‰‰ŽZŽq
+## æ¯”è¼ƒæ¼”ç®—
+### (==)æ¼”ç®—å­
 ```
-__operator_eqeq : ƒ¿ -> ƒ¿ -> Bool
+__operator_eqeq : Î± -> Î± -> Bool
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚ð”äŠr‚µA
-“™‚µ‚¯‚ê‚Î`true`‚ð‚»‚¤‚Å‚È‚¯‚ê‚Î`false`‚ð•Ô‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã‚’æ¯”è¼ƒã—ã€
+ç­‰ã—ã‘ã‚Œã°`true`ã‚’ãã†ã§ãªã‘ã‚Œã°`false`ã‚’è¿”ã—ã¾ã™ã€‚
 
-### (<>)‰‰ŽZŽq
+### (<>)æ¼”ç®—å­
 ```
-__operator_ltgt : ƒ¿ -> ƒ¿ -> Bool
+__operator_ltgt : Î± -> Î± -> Bool
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚ð”äŠr‚µA
-“™‚µ‚¯‚ê‚Î`false`‚ð‚»‚¤‚Å‚È‚¯‚ê‚Î`true`‚ð•Ô‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã‚’æ¯”è¼ƒã—ã€
+ç­‰ã—ã‘ã‚Œã°`false`ã‚’ãã†ã§ãªã‘ã‚Œã°`true`ã‚’è¿”ã—ã¾ã™ã€‚
 
-### (<)‰‰ŽZŽq
+### (<)æ¼”ç®—å­
 ```
-__operator_lt : ƒ¿ -> ƒ¿ -> Bool
+__operator_lt : Î± -> Î± -> Bool
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚ð”äŠr‚µA
-¶•Ó‚Ì•û‚ª‰E•Ó‚Ì’l‚æ‚è¬‚³‚¢ê‡‚É`true`‚ðA
-‚»‚¤‚Å‚È‚¢ê‡‚É`false`‚ð•Ô‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã‚’æ¯”è¼ƒã—ã€
+å·¦è¾ºã®æ–¹ãŒå³è¾ºã®å€¤ã‚ˆã‚Šå°ã•ã„å ´åˆã«`true`ã‚’ã€
+ãã†ã§ãªã„å ´åˆã«`false`ã‚’è¿”ã—ã¾ã™ã€‚
 
-### (>)‰‰ŽZŽq
+### (>)æ¼”ç®—å­
 ```
-__operator_gt : ƒ¿ -> ƒ¿ -> Bool
+__operator_gt : Î± -> Î± -> Bool
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚ð”äŠr‚µA
-¶•Ó‚Ì•û‚ª‰E•Ó‚Ì’l‚æ‚è‘å‚«‚¢ê‡‚É`true`‚ðA
-‚»‚¤‚Å‚È‚¢ê‡‚É`false`‚ð•Ô‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã‚’æ¯”è¼ƒã—ã€
+å·¦è¾ºã®æ–¹ãŒå³è¾ºã®å€¤ã‚ˆã‚Šå¤§ãã„å ´åˆã«`true`ã‚’ã€
+ãã†ã§ãªã„å ´åˆã«`false`ã‚’è¿”ã—ã¾ã™ã€‚
 
-### (<=)‰‰ŽZŽq
+### (<=)æ¼”ç®—å­
 ```
-__operator_le : ƒ¿ -> ƒ¿ -> Bool
+__operator_le : Î± -> Î± -> Bool
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚ð”äŠr‚µA
-¶•Ó‚Ì•û‚ª‰E•Ó‚Ì’lˆÈ‰º‚Ìê‡‚É`true`‚ðA
-‚»‚¤‚Å‚È‚¢ê‡‚É`false`‚ð•Ô‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã‚’æ¯”è¼ƒã—ã€
+å·¦è¾ºã®æ–¹ãŒå³è¾ºã®å€¤ä»¥ä¸‹ã®å ´åˆã«`true`ã‚’ã€
+ãã†ã§ãªã„å ´åˆã«`false`ã‚’è¿”ã—ã¾ã™ã€‚
 
-### (>=)‰‰ŽZŽq
+### (>=)æ¼”ç®—å­
 ```
-__operator_le : ƒ¿ -> ƒ¿ -> Bool
+__operator_le : Î± -> Î± -> Bool
 ```
-®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚ð”äŠr‚µA
-¶•Ó‚Ì•û‚ª‰E•Ó‚Ì’lˆÈã‚Ìê‡‚É`true`‚ðA
-‚»‚¤‚Å‚È‚¢ê‡‚É`false`‚ð•Ô‚µ‚Ü‚·B
+æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã‚’æ¯”è¼ƒã—ã€
+å·¦è¾ºã®æ–¹ãŒå³è¾ºã®å€¤ä»¥ä¸Šã®å ´åˆã«`true`ã‚’ã€
+ãã†ã§ãªã„å ´åˆã«`false`ã‚’è¿”ã—ã¾ã™ã€‚
 
-### intequalŠÖ”
+### intequalé–¢æ•°
 ```
 intequal : Int -> Int -> Bool
 ```
-2‚Â‚Ì’l‚ð®”‚Æ‚µ‚Ä”äŠr‚µ‚ÄA“™‚µ‚¢ê‡‚É`true`‚ðA
-‚»‚¤‚Å‚È‚¢ê‡‚É`false`‚ð•Ô‚µ‚Ü‚·B
-—ñ‹“‘Ì‚Ì’l‚ð“™‚µ‚³‚ð”»’è‚·‚éê‡‚ÉŽg‚¢‚Ü‚·B
+2ã¤ã®å€¤ã‚’æ•´æ•°ã¨ã—ã¦æ¯”è¼ƒã—ã¦ã€ç­‰ã—ã„å ´åˆã«`true`ã‚’ã€
+ãã†ã§ãªã„å ´åˆã«`false`ã‚’è¿”ã—ã¾ã™ã€‚
+åˆ—æŒ™ä½“ã®å€¤ã‚’ç­‰ã—ã•ã‚’åˆ¤å®šã™ã‚‹å ´åˆã«ä½¿ã„ã¾ã™ã€‚
 
-### maxŠÖ”
+### maxé–¢æ•°
 ```
-max : ƒ¿ -> ƒ¿ -> ƒ¿
+max : Î± -> Î± -> Î±
 ```
-2‚Â‚Ìˆø”‚Ì‚¤‚¿‘å‚«‚¢•û‚Ì’l‚ð•Ô‚µ‚Ü‚·B
-’l‚ÍA®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚Ì
-‚¢‚¸‚ê‚©‚Å‚ ‚é•K—v‚ª‚ ‚è‚Ü‚·B
+2ã¤ã®å¼•æ•°ã®ã†ã¡å¤§ãã„æ–¹ã®å€¤ã‚’è¿”ã—ã¾ã™ã€‚
+å€¤ã¯ã€æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã®
+ã„ãšã‚Œã‹ã§ã‚ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 
-### minŠÖ”
+### miné–¢æ•°
 ```
-min : ƒ¿ -> ƒ¿ -> ƒ¿
+min : Î± -> Î± -> Î±
 ```
-2‚Â‚Ìˆø”‚Ì‚¤‚¿¬‚³‚¢•û‚Ì’l‚ð•Ô‚µ‚Ü‚·B
-’l‚ÍA®”A•‚“®¬”“_”A•¶Žš—ñA•¶ŽšA^‹U’lAƒ†ƒjƒbƒg‚Ì’l‚Ì
-‚¢‚¸‚ê‚©‚Å‚ ‚é•K—v‚ª‚ ‚è‚Ü‚·B
+2ã¤ã®å¼•æ•°ã®ã†ã¡å°ã•ã„æ–¹ã®å€¤ã‚’è¿”ã—ã¾ã™ã€‚
+å€¤ã¯ã€æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã€çœŸå½å€¤ã€ãƒ¦ãƒ‹ãƒƒãƒˆã®å€¤ã®
+ã„ãšã‚Œã‹ã§ã‚ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 
-## ®”‰‰ŽZ
-### (+)‰‰ŽZŽq
+## æ•´æ•°æ¼”ç®—
+### (+)æ¼”ç®—å­
 ```
 __operator_pls : Int -> Int -> Int
 ```
-®”“¯Žm‚Ì‰ÁŽZ‚Å‚·B
+æ•´æ•°åŒå£«ã®åŠ ç®—ã§ã™ã€‚
 
-### (-)‰‰ŽZŽq
+### (-)æ¼”ç®—å­
 ```
 __operator_mns : Int -> Int -> Int
 ```
-®”“¯Žm‚ÌŒ¸ŽZ‚Å‚·B
+æ•´æ•°åŒå£«ã®æ¸›ç®—ã§ã™ã€‚
 
-### (*)‰‰ŽZŽq
+### (*)æ¼”ç®—å­
 ```
 __operator_ast : Int -> Int -> Int
 ```
-®”“¯Žm‚ÌæŽZ‚Å‚·B
+æ•´æ•°åŒå£«ã®ä¹—ç®—ã§ã™ã€‚
 
-### (/)‰‰ŽZŽq
+### (/)æ¼”ç®—å­
 ```
 __operator_sls : Int -> Int -> Int
 ```
-®”“¯Žm‚ÌœŽZ‚Å‚·B
+æ•´æ•°åŒå£«ã®é™¤ç®—ã§ã™ã€‚
 
-### (%)‰‰ŽZŽq
+### (%)æ¼”ç®—å­
 ```
 __operator_per : Int -> Int -> Int
 ```
-®”“¯Žm‚Ìè—]‚Å‚·B
+æ•´æ•°åŒå£«ã®å‰°ä½™ã§ã™ã€‚
 
-### (~-)‰‰ŽZŽq
+### (~-)æ¼”ç®—å­
 ```
 __operator_neg : Int -> Int
 ```
-®”‚Ì•„†‚ð”½“]‚µ‚Ü‚·B
+æ•´æ•°ã®ç¬¦å·ã‚’åè»¢ã—ã¾ã™ã€‚
 
-### succŠÖ”
+### succé–¢æ•°
 ```
 succ : Int -> Int
 ```
-ˆø”‚Ì’l‚É1‘«‚µ‚½’l‚ð•Ô‚µ‚Ü‚·B
+å¼•æ•°ã®å€¤ã«1è¶³ã—ãŸå€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
-### predŠÖ”
+### predé–¢æ•°
 ```
 pred : Int -> Int
 ```
-ˆø”‚Ì’l‚©‚ç1ˆø‚¢‚½’l‚ð•Ô‚µ‚Ü‚·B
+å¼•æ•°ã®å€¤ã‹ã‚‰1å¼•ã„ãŸå€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
-### absŠÖ”
+### absé–¢æ•°
 ```
 abs : Int -> Int
 ```
-ˆø”‚Ì®”‚Ìâ‘Î’l‚ð‹‚ß‚Ü‚·B
+å¼•æ•°ã®æ•´æ•°ã®çµ¶å¯¾å€¤ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-## ƒrƒbƒg‰‰ŽZ
-### bandŠÖ”
+## ãƒ“ãƒƒãƒˆæ¼”ç®—
+### bandé–¢æ•°
 ```
 band : Int -> Int -> Int
 ```
-2‚Â‚Ì®”‚Ìƒrƒbƒg‚²‚Æ‚Ì˜_—Ï‚ð‹‚ß‚Ü‚·B
+2ã¤ã®æ•´æ•°ã®ãƒ“ãƒƒãƒˆã”ã¨ã®è«–ç†ç©ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### borŠÖ”
+### boré–¢æ•°
 ```
 bor : Int -> Int -> Int
 ```
-2‚Â‚Ì®”‚Ìƒrƒbƒg‚²‚Æ‚Ì˜_—˜a‚ð‹‚ß‚Ü‚·B
+2ã¤ã®æ•´æ•°ã®ãƒ“ãƒƒãƒˆã”ã¨ã®è«–ç†å’Œã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### bxorŠÖ”
+### bxoré–¢æ•°
 ```
 bxor : Int -> Int -> Int
 ```
-2‚Â‚Ì®”‚Ìƒrƒbƒg‚²‚Æ‚Ì”r‘¼“I˜_—˜a‚ð‹‚ß‚Ü‚·B
+2ã¤ã®æ•´æ•°ã®ãƒ“ãƒƒãƒˆã”ã¨ã®æŽ’ä»–çš„è«–ç†å’Œã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### bnotŠÖ”
+### bnoté–¢æ•°
 ```
 bnot : Int -> Int
 ```
-®”‚Ì‚·‚×‚Ä‚Ìƒrƒbƒg‚ð”½“]‚µ‚½’l‚ð•Ô‚µ‚Ü‚·B
+æ•´æ•°ã®ã™ã¹ã¦ã®ãƒ“ãƒƒãƒˆã‚’åè»¢ã—ãŸå€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
-### bshrŠÖ”
+### bshré–¢æ•°
 ```
 bshr : Int -> Int -> Int
 ```
-®”‚ðŽw’è‚µ‚½’l•ª‚¾‚¯‰E‚ÉŽZpƒVƒtƒg‚µ‚Ü‚·B
+æ•´æ•°ã‚’æŒ‡å®šã—ãŸå€¤åˆ†ã ã‘å³ã«ç®—è¡“ã‚·ãƒ•ãƒˆã—ã¾ã™ã€‚
 
-### bshlŠÖ”
+### bshlé–¢æ•°
 ```
 bshl : Int -> Int -> Int
 ```
-®”‚ðŽw’è‚µ‚½’l•ª‚¾‚¯¶‚ÉƒVƒtƒg‚µ‚Ü‚·B
+æ•´æ•°ã‚’æŒ‡å®šã—ãŸå€¤åˆ†ã ã‘å·¦ã«ã‚·ãƒ•ãƒˆã—ã¾ã™ã€‚
 
-### bshrunŠÖ”
+### bshruné–¢æ•°
 ```
 bshrun : Int -> Int -> Int
 ```
-®”‚ðŽw’è‚µ‚½’l•ª‚¾‚¯‰E‚É˜_—ƒVƒtƒg‚µ‚Ü‚·B
+æ•´æ•°ã‚’æŒ‡å®šã—ãŸå€¤åˆ†ã ã‘å³ã«è«–ç†ã‚·ãƒ•ãƒˆã—ã¾ã™ã€‚
 
-## •‚“®¬”“_”‰‰ŽZ
-### (+.)‰‰ŽZŽq
+## æµ®å‹•å°æ•°ç‚¹æ•°æ¼”ç®—
+### (+.)æ¼”ç®—å­
 ```
 __operator_plsdot : Double -> Double -> Double
 ```
-•‚“®¬”“_”“¯Žm‚Ì˜a‚ð‹‚ß‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°åŒå£«ã®å’Œã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### (-.)‰‰ŽZŽq
+### (-.)æ¼”ç®—å­
 ```
 __operator_mnsdot : Double -> Double -> Double
 ```
-•‚“®¬”“_”“¯Žm‚Ì·‚ð‹‚ß‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°åŒå£«ã®å·®ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### (*.)‰‰ŽZŽq
+### (*.)æ¼”ç®—å­
 ```
 __operator_astdot : Double -> Double -> Double
 ```
-•‚“®¬”“_”“¯Žm‚ÌÏ‚ð‹‚ß‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°åŒå£«ã®ç©ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### (/.)‰‰ŽZŽq
+### (/.)æ¼”ç®—å­
 ```
 __operator_astdot : Double -> Double -> Double
 ```
-•‚“®¬”“_”‚Ì¶•Ó‚Ì’l‚ð‰E•Ó‚Ì’l‚ÅŠ„‚Á‚½’l‚ð‹‚ß‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°ã®å·¦è¾ºã®å€¤ã‚’å³è¾ºã®å€¤ã§å‰²ã£ãŸå€¤ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### (~-.)‰‰ŽZŽq
+### (~-.)æ¼”ç®—å­
 ```
 __operator_negdot : Double -> Double
 ```
-•‚“®¬”“_”‚Ì•„†‚ð”½“]‚µ‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°ã®ç¬¦å·ã‚’åè»¢ã—ã¾ã™ã€‚
 
-### fabsŠÖ”
+### fabsé–¢æ•°
 ```
 fabs : Double -> Double
 ```
 
-### pi’è”
+### piå®šæ•°
 ```
 pi : Double
 ```
-‰~Žü—¦‚Å‚·B
+å††å‘¨çŽ‡ã§ã™ã€‚
 
-### pi2’è”
+### pi2å®šæ•°
 ```
 pi2 : Double
 ```
-‰~Žü—¦‚Ì2”{‚Å‚·B
+å††å‘¨çŽ‡ã®2å€ã§ã™ã€‚
 
-### e’è”
+### eå®šæ•°
 ```
 e : Double
 ```
-Ž©‘R‘Î”‚Ì’ê‚Å‚·B
+è‡ªç„¶å¯¾æ•°ã®åº•ã§ã™ã€‚
 
-### sqrtŠÖ”
+### sqrté–¢æ•°
 ```
 sqrt : Double -> Double
 ```
-•½•ûª‚ð‹‚ß‚Ü‚·B
+å¹³æ–¹æ ¹ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### expŠÖ”
+### expé–¢æ•°
 ```
 exp : Double -> Double
 ```
-Ž©‘R‘Î”‚Ì’ê‚Ì—Ýæ‚ð‹‚ß‚Ü‚·B
+è‡ªç„¶å¯¾æ•°ã®åº•ã®ç´¯ä¹—ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### logŠÖ”
+### logé–¢æ•°
 ```
 log : Double -> Double
 ```
-Ž©‘R‘Î”‚Å‚·B
+è‡ªç„¶å¯¾æ•°ã§ã™ã€‚
 
-### log10ŠÖ”
+### log10é–¢æ•°
 ```
 log10 : Double -> Double
 ```
-í—p‘Î”‚Å‚·B
+å¸¸ç”¨å¯¾æ•°ã§ã™ã€‚
 
-### lognŠÖ”
+### logné–¢æ•°
 ```
 logn : Double -> Double -> Double
 ```
-`logn x base`‚Å‘Î”‚Ì’ê`base`‚ðŽw’è‚µ‚Ä`x`‚Ì‘Î”‚ð‹‚ß‚Ü‚·B
+`logn x base`ã§å¯¾æ•°ã®åº•`base`ã‚’æŒ‡å®šã—ã¦`x`ã®å¯¾æ•°ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### powŠÖ”
+### powé–¢æ•°
 ```
 pow : Double -> Double -> Double
 ```
-`pow x y`‚Å`x`‚Ì`y`æ‚ð‹‚ß‚Ü‚·B
+`pow x y`ã§`x`ã®`y`ä¹—ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### sinŠÖ”, cosŠÖ”, tanŠÖ”
+### siné–¢æ•°, cosé–¢æ•°, tané–¢æ•°
 ```
 sin : Double -> Double
 cos : Double -> Double
 tan : Double -> Double
 ```
-ŽOŠpŠÖ”‚Å‚·B’PˆÊ‚Íƒ‰ƒWƒAƒ“‚Å‚·B
+ä¸‰è§’é–¢æ•°ã§ã™ã€‚å˜ä½ã¯ãƒ©ã‚¸ã‚¢ãƒ³ã§ã™ã€‚
 
-### asinŠÖ”, acosŠÖ”, atanŠÖ”
+### asiné–¢æ•°, acosé–¢æ•°, atané–¢æ•°
 ```
 asin : Double -> Double
 acos : Double -> Double
 atan : Double -> Double
 ```
-‹tŽOŠpŠÖ”‚Å‚·B
+é€†ä¸‰è§’é–¢æ•°ã§ã™ã€‚
 
-### atan2ŠÖ”
+### atan2é–¢æ•°
 ```
 atan2 : Double -> Double -> Double
 ```
-`atan2 x y`‚Å`x/y`‚Ì‹t³Ú‚ð‹‚ß‚Ü‚·B
+`atan2 x y`ã§`x/y`ã®é€†æ­£æŽ¥ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### sinhŠÖ”AcoshŠÖ”AtanhŠÖ”
+### sinhé–¢æ•°ã€coshé–¢æ•°ã€tanhé–¢æ•°
 ```
-‘o‹ÈüŠÖ”‚Å‚·B
+åŒæ›²ç·šé–¢æ•°ã§ã™ã€‚
 ```
 
-### ceilingŠÖ”
+### ceilingé–¢æ•°
 ```
 ceiling : Double -> Double
 ```
-Žw’è‚µ‚½”ˆÈã‚Ì”‚Ì‚¤‚¿Å¬‚Ì®”’l‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã—ãŸæ•°ä»¥ä¸Šã®æ•°ã®ã†ã¡æœ€å°ã®æ•´æ•°å€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
-### truncateŠÖ”
+### truncateé–¢æ•°
 ```
 truncate : Double -> Double
 ```
-Žw’è‚µ‚½”‚Ì®”•”‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã—ãŸæ•°ã®æ•´æ•°éƒ¨ã‚’è¿”ã—ã¾ã™ã€‚
 
-### roundŠÖ”
+### roundé–¢æ•°
 ```
 round : Double -> Double
 ```
-Žw’è‚µ‚½”‚ðÅ‚à‹ß‚¢®”‚ÉŠÛ‚ß‚Ü‚·B
+æŒ‡å®šã—ãŸæ•°ã‚’æœ€ã‚‚è¿‘ã„æ•´æ•°ã«ä¸¸ã‚ã¾ã™ã€‚
 
-### floorŠÖ”
+### flooré–¢æ•°
 ```
 floor : Double -> Double
 ```
-Žw’è‚µ‚½”ˆÈ‰º‚Ì”‚Ì‚¤‚¿Å‘å‚Ì®”’l‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã—ãŸæ•°ä»¥ä¸‹ã®æ•°ã®ã†ã¡æœ€å¤§ã®æ•´æ•°å€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
-## •¶Žš—ñ‰‰ŽZ
-### (^)‰‰ŽZŽq
+## æ–‡å­—åˆ—æ¼”ç®—
+### (^)æ¼”ç®—å­
 ```
 __operator_hat : String -> String -> String
 ```
-2‚Â‚Ì•¶Žš—ñ‚ð˜AŒ‹‚µ‚Ü‚·B
+2ã¤ã®æ–‡å­—åˆ—ã‚’é€£çµã—ã¾ã™ã€‚
 
-### to_stringŠÖ”
+### to_stringé–¢æ•°
 ```
-to_string : ƒ¿ -> String
+to_string : Î± -> String
 ```
-ˆø”‚Ì’l‚ð•¶Žš—ñ‰»‚µ‚Ü‚·B
-’l‚ÍA®”A•‚“®¬”“_”A•¶Žš—ñA•¶Žš‚Ì‚¢‚¸‚ê‚©‚Å‚ ‚é•K—v‚ª‚ ‚è‚Ü‚·B
+å¼•æ•°ã®å€¤ã‚’æ–‡å­—åˆ—åŒ–ã—ã¾ã™ã€‚
+å€¤ã¯ã€æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã®ã„ãšã‚Œã‹ã§ã‚ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 
-### strlenŠÖ”
+### strlené–¢æ•°
 ```
 strlen : String -> Int
 ```
-•¶Žš—ñ‚Ì’·‚³‚ð‹‚ß‚Ü‚·B
+æ–‡å­—åˆ—ã®é•·ã•ã‚’æ±‚ã‚ã¾ã™ã€‚
 
-### strnthŠÖ”
+### strnthé–¢æ•°
 ```
 strnth : String -> Int -> Char
 ```
-•¶Žš—ñ‚Ìn”Ô–Ú‚Ì•¶Žš‚ð•Ô‚µ‚Ü‚·B
+æ–‡å­—åˆ—ã®nç•ªç›®ã®æ–‡å­—ã‚’è¿”ã—ã¾ã™ã€‚
 
-## ˜_—‰‰ŽZ
+## è«–ç†æ¼”ç®—
 
-### notŠÖ”
+### noté–¢æ•°
 ```
 not : Bool -> Bool
 ```
-^‹U’l‚Ì”½“]‚Å‚·B
+çœŸå½å€¤ã®åè»¢ã§ã™ã€‚
 
 ```
 xor : Bool -> Bool -> Bool
 ```
-^‹U’l‚Ì”r‘¼“I˜_—˜a‚Å‚·B
+çœŸå½å€¤ã®æŽ’ä»–çš„è«–ç†å’Œã§ã™ã€‚
 
-## •ÏŠ·
-### parse_intŠÖ”
+## å¤‰æ›
+### parse_inté–¢æ•°
 ```
 parse_int : String -> Int
 ```
-®”‚ð•\‚·•¶Žš—ñ‚ð®”’l‚É•ÏŠ·‚µ‚Ü‚·B
+æ•´æ•°ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’æ•´æ•°å€¤ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### parse_doubleŠÖ”
+### parse_doubleé–¢æ•°
 ```
 parse_double : String -> Double
 ```
-•‚“®¬”“_”‚ð•\‚·•¶Žš—ñ‚ð•‚“®¬”“_”’l‚É•ÏŠ·‚µ‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’æµ®å‹•å°æ•°ç‚¹æ•°å€¤ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### int_to_doubleŠÖ”
+### int_to_doubleé–¢æ•°
 ```
 int_to_double : Int -> Double
 ```
-®”‚ð•‚“®¬”“_”’l‚É•ÏŠ·‚µ‚Ü‚·B
+æ•´æ•°ã‚’æµ®å‹•å°æ•°ç‚¹æ•°å€¤ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### double_to_intŠÖ”
+### double_to_inté–¢æ•°
 ```
 double_to_int : Double -> Int
 ```
-•‚“®¬”“_”’l‚ð®”‚É•ÏŠ·‚µ‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°å€¤ã‚’æ•´æ•°ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### int_to_charŠÖ”
+### int_to_charé–¢æ•°
 ```
 int_to_char : Int -> Char
 ```
-•¶ŽšƒR[ƒh‚ð•¶Žš‚É•ÏŠ·‚µ‚Ü‚·B
+æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’æ–‡å­—ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### char_to_intŠÖ”
+### char_to_inté–¢æ•°
 ```
 char_to_int : Char -> Int
 ```
-•¶Žš‚Ì•¶ŽšƒR[ƒh‚ð•Ô‚µ‚Ü‚·B
+æ–‡å­—ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã—ã¾ã™ã€‚
 
-### int_to_singleŠÖ”
+### int_to_singleé–¢æ•°
 ```
 int_to_single : Int -> {System.Single}
 ```
-®”‚ð’P¸“x•‚“®¬”“_”‚É•ÏŠ·‚µ‚Ü‚·B
+æ•´æ•°ã‚’å˜ç²¾åº¦æµ®å‹•å°æ•°ç‚¹æ•°ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### single_to_intŠÖ”
+### single_to_inté–¢æ•°
 ```
 single_to_int : {System.Single} -> Int
 ```
-’P¸“x•‚“®¬”“_”‚ð®”‚É•ÏŠ·‚µ‚Ü‚·B
+å˜ç²¾åº¦æµ®å‹•å°æ•°ç‚¹æ•°ã‚’æ•´æ•°ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### double_to_singleŠÖ”
+### double_to_singleé–¢æ•°
 ```
 double_to_single : Double -> {System.Single}
 ```
-”{¸“x•‚“®¬”“_”‚ð’P¸“x•‚“®¬”“_”‚É•ÏŠ·‚µ‚Ü‚·B
+å€ç²¾åº¦æµ®å‹•å°æ•°ç‚¹æ•°ã‚’å˜ç²¾åº¦æµ®å‹•å°æ•°ç‚¹æ•°ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### single_to_doubleŠÖ”
+### single_to_doubleé–¢æ•°
 ```
 single_to_double : {System.Single} -> Double
 ```
-’P¸“x•‚“®¬”“_”‚ð”{¸“x•‚“®¬”“_”‚É•ÏŠ·‚µ‚Ü‚·B
+å˜ç²¾åº¦æµ®å‹•å°æ•°ç‚¹æ•°ã‚’å€ç²¾åº¦æµ®å‹•å°æ•°ç‚¹æ•°ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### int_to_objectŠÖ”
+### int_to_objecté–¢æ•°
 ```
 int_to_object : Int -> {System.Object}
 ```
-®”‚ðObjectŒ^‚É•ÏŠ·‚µ‚Ü‚·B
+æ•´æ•°ã‚’Objectåž‹ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### double_to_objectŠÖ”
+### double_to_objecté–¢æ•°
 ```
 double_to_object : Double -> {System.Object}
 ```
-•‚“®¬”“_”‚ðObjectŒ^‚É•ÏŠ·‚µ‚Ü‚·B
+æµ®å‹•å°æ•°ç‚¹æ•°ã‚’Objectåž‹ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### bool_to_objectŠÖ”
+### bool_to_objecté–¢æ•°
 ```
 bool_to_object : Bool -> {System.Object}
 ```
-^‹U’l‚ðObjectŒ^‚É•ÏŠ·‚µ‚Ü‚·B
+çœŸå½å€¤ã‚’Objectåž‹ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### char_to_objectŠÖ”
+### char_to_objecté–¢æ•°
 ```
 char_to_object : Char -> {System.Object}
 ```
-•¶Žš‚ðObjectŒ^‚É•ÏŠ·‚µ‚Ü‚·B
+æ–‡å­—ã‚’Objectåž‹ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-### string_to_objectŠÖ”
+### string_to_objecté–¢æ•°
 ```
 string_to_object : String -> {System.Object}
 ```
-•¶Žš—ñ‚ðObjectŒ^‚É•ÏŠ·‚µ‚Ü‚·B
+æ–‡å­—åˆ—ã‚’Objectåž‹ã«å¤‰æ›ã—ã¾ã™ã€‚
 
-## ŠÖ”
+## é–¢æ•°
 
-### (<|)‰‰ŽZŽq
+### (<|)æ¼”ç®—å­
 ```
-__operator_ltbar : (ƒ¿ -> ƒÀ) -> ƒ¿ -> ƒÀ
+__operator_ltbar : (Î± -> Î²) -> Î± -> Î²
 ```
-ŠÖ”“K—p‰‰ŽZŽqB
+é–¢æ•°é©ç”¨æ¼”ç®—å­ã€‚
 
-### (|>)‰‰ŽZŽq
+### (|>)æ¼”ç®—å­
 ```
-__operator_bargt : ƒ¿ -> (ƒ¿ -> ƒÀ) -> ƒÀ
+__operator_bargt : Î± -> (Î± -> Î²) -> Î²
 ```
-‹t•ûŒüŠÖ”“K—p‰‰ŽZŽq
+é€†æ–¹å‘é–¢æ•°é©ç”¨æ¼”ç®—å­
 
-### (<<)‰‰ŽZŽq
+### (<<)æ¼”ç®—å­
 ```
-__operator_ltlt : (ƒ¿ -> ƒÀ) -> (ƒÁ -> ƒ¿) -> ƒÁ -> ƒÀ
+__operator_ltlt : (Î± -> Î²) -> (Î³ -> Î±) -> Î³ -> Î²
 ```
-ŠÖ”‡¬B
+é–¢æ•°åˆæˆã€‚
 
-### (>>)‰‰ŽZŽq
+### (>>)æ¼”ç®—å­
 ```
-__operator_gtgt : (ƒ¿ -> ƒÀ) -> (ƒÀ -> ƒÁ) -> ƒ¿ -> ƒÁ
+__operator_gtgt : (Î± -> Î²) -> (Î² -> Î³) -> Î± -> Î³
 ```
-‹t•ûŒüŠÖ”‡¬B
+é€†æ–¹å‘é–¢æ•°åˆæˆã€‚
 
-### matchŠÖ”
+### matché–¢æ•°
 ```
-match : ƒ¿ -> (ƒ¿ -> ƒÀ) -> ƒÀ
+match : Î± -> (Î± -> Î²) -> Î²
 ```
-‘æ1ˆø”‚Ì’l‚ð‘æ2ˆø”‚ÌŠÖ”‚É“K—p‚·‚éB
+ç¬¬1å¼•æ•°ã®å€¤ã‚’ç¬¬2å¼•æ•°ã®é–¢æ•°ã«é©ç”¨ã™ã‚‹ã€‚
 
-### idŠÖ”
+### idé–¢æ•°
 ```
-id : ƒ¿ -> ƒ¿
+id : Î± -> Î±
 ```
-P“™ŠÖ”B
+æ’ç­‰é–¢æ•°ã€‚
 
-### constŠÖ”
+### consté–¢æ•°
 ```
-const : ƒ¿ -> ƒÀ -> ƒ¿
+const : Î± -> Î² -> Î±
 ```
-2ˆø”Žó‚¯Žæ‚Á‚ÄA1ˆø”–Ú‚ð•Ô‚·B
+2å¼•æ•°å—ã‘å–ã£ã¦ã€1å¼•æ•°ç›®ã‚’è¿”ã™ã€‚
 
-### flipŠÖ”
+### flipé–¢æ•°
 ```
-flip : (ƒ¿ -> ƒÀ -> ƒÁ) -> ƒÀ -> ƒ¿ -> ƒÁ
+flip : (Î± -> Î² -> Î³) -> Î² -> Î± -> Î³
 ```
-ŠÖ”‚Ìˆø”‡‚ð“ü‚ê‘Ö‚¦‚éB
+é–¢æ•°ã®å¼•æ•°é †ã‚’å…¥ã‚Œæ›¿ãˆã‚‹ã€‚
 
-## ƒ^ƒvƒ‹
-### fstŠÖ”
+## ã‚¿ãƒ—ãƒ«
+### fsté–¢æ•°
 ```
-fst : (ƒ¿, ƒÀ) -> ƒ¿
+fst : (Î±, Î²) -> Î±
 ```
-2—v‘fƒ^ƒvƒ‹‚ÌÅ‰‚Ì—v‘f‚ð•Ô‚·B
+2è¦ç´ ã‚¿ãƒ—ãƒ«ã®æœ€åˆã®è¦ç´ ã‚’è¿”ã™ã€‚
 
-### sndŠÖ”
+### sndé–¢æ•°
 ```
-snd : (ƒ¿, ƒÀ) -> ƒÀ
+snd : (Î±, Î²) -> Î²
 ```
-2—v‘fƒ^ƒvƒ‹‚Ì2”Ô–Ú‚Ì—v‘f‚ð•Ô‚·B
+2è¦ç´ ã‚¿ãƒ—ãƒ«ã®2ç•ªç›®ã®è¦ç´ ã‚’è¿”ã™ã€‚
 
-### curryŠÖ”
+### curryé–¢æ•°
 ```
-curry : ((ƒ¿, ƒÀ) -> ƒÁ) -> ƒ¿ -> ƒÀ -> ƒÁ
+curry : ((Î±, Î²) -> Î³) -> Î± -> Î² -> Î³
 ```
-ŠÖ”‚ðƒJƒŠ[‰»‚·‚éB
+é–¢æ•°ã‚’ã‚«ãƒªãƒ¼åŒ–ã™ã‚‹ã€‚
 
-### uncurryŠÖ”
+### uncurryé–¢æ•°
 ```
-uncurry : (ƒ¿ -> ƒÀ -> ƒÁ) -> (ƒ¿, ƒÀ) -> ƒÁ
+uncurry : (Î± -> Î² -> Î³) -> (Î±, Î²) -> Î³
 ```
-ŠÖ”‚ÌƒJƒŠ[‰»‚ð‰ðœ‚·‚éB
+é–¢æ•°ã®ã‚«ãƒªãƒ¼åŒ–ã‚’è§£é™¤ã™ã‚‹ã€‚
 
-## ƒŠƒtƒ@ƒŒƒ“ƒXƒZƒ‹
-### refŠÖ”
+## ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚»ãƒ«
+### refé–¢æ•°
 ```
-ref : ƒ¿ -> Ref<ƒ¿>
+ref : Î± -> Ref<Î±>
 ```
-ƒŠƒtƒ@ƒŒƒ“ƒXƒZƒ‹‚ðì‚éB
+ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚»ãƒ«ã‚’ä½œã‚‹ã€‚
 
-### (!)‰‰ŽZŽq
+### (!)æ¼”ç®—å­
 ```
-__operator_bang : Ref<ƒ¿> -> ƒ¿
+__operator_bang : Ref<Î±> -> Î±
 ```
-ŽQÆ‚ð”‚ª‚·B
+å‚ç…§ã‚’å‰¥ãŒã™ã€‚
 
-### (:=)‰‰ŽZŽq
+### (:=)æ¼”ç®—å­
 ```
-__operator_coleq : Ref<ƒ¿> -> ƒ¿ -> ()
+__operator_coleq : Ref<Î±> -> Î± -> ()
 ```
-ŽQÆ‚É‘ã“ü‚·‚éB
+å‚ç…§ã«ä»£å…¥ã™ã‚‹ã€‚
 
-### incrŠÖ”
+### incré–¢æ•°
 ```
 incr : Ref<Int> -> ()
 ```
-ŽQÆ‚Ì’l‚ð1‘‚â‚·B
+å‚ç…§ã®å€¤ã‚’1å¢—ã‚„ã™ã€‚
 
-### decrŠÖ”
+### decré–¢æ•°
 ```
 decr : Ref<Int> -> ()
 ```
-ŽQÆ‚Ì’l‚ð1Œ¸‚ç‚·
+å‚ç…§ã®å€¤ã‚’1æ¸›ã‚‰ã™
 
-## ƒŠƒXƒg
-### (..)‰‰ŽZŽq
+## ãƒªã‚¹ãƒˆ
+### (..)æ¼”ç®—å­
 ```
 __operator_dotdot : Int -> Int -> [Int]
 ```
-Žw’è‚µ‚½”ÍˆÍ‚Ì®”‚ðŠÜ‚ÞƒŠƒXƒg‚ð¶¬‚·‚éB
+æŒ‡å®šã—ãŸç¯„å›²ã®æ•´æ•°ã‚’å«ã‚€ãƒªã‚¹ãƒˆã‚’ç”Ÿæˆã™ã‚‹ã€‚
 
-### (++)‰‰ŽZŽq
+### (++)æ¼”ç®—å­
 ```
-__operator_plspls : [ƒ¿] -> [ƒ¿] -> [ƒ¿]
+__operator_plspls : [Î±] -> [Î±] -> [Î±]
 ```
-2‚Â‚ÌƒŠƒXƒg‚ð˜AŒ‹‚·‚éB
+2ã¤ã®ãƒªã‚¹ãƒˆã‚’é€£çµã™ã‚‹ã€‚
 
-### lengthŠÖ”
+### lengthé–¢æ•°
 ```
-length : [ƒ¿] -> Int
+length : [Î±] -> Int
 ```
-ƒŠƒXƒg‚Ì’·‚³‚ð•Ô‚·B
+ãƒªã‚¹ãƒˆã®é•·ã•ã‚’è¿”ã™ã€‚
 
-### reverseŠÖ”
+### reverseé–¢æ•°
 ```
-reverse : [ƒ¿] -> [ƒ¿]
+reverse : [Î±] -> [Î±]
 ```
-”½“]‚µ‚½ƒŠƒXƒg‚ð•Ô‚·B
+åè»¢ã—ãŸãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
 
-### mapŠÖ”
+### mapé–¢æ•°
 ```
-map : (ƒ¿ -> ƒÀ) -> [ƒ¿] -> [ƒÀ]
+map : (Î± -> Î²) -> [Î±] -> [Î²]
 ```
-ƒŠƒXƒg‚ÌŠe—v‘f‚ÉŠÖ”‚ð“K—p‚µ‚½ƒŠƒXƒg‚ð•Ô‚·B
+ãƒªã‚¹ãƒˆã®å„è¦ç´ ã«é–¢æ•°ã‚’é©ç”¨ã—ãŸãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
 
-### headŠÖ”
+### headé–¢æ•°
 ```
-head : [ƒ¿] -> ƒ¿
+head : [Î±] -> Î±
 ```
-ƒŠƒXƒg‚Ìæ“ª—v‘f‚ð•Ô‚·B
+ãƒªã‚¹ãƒˆã®å…ˆé ­è¦ç´ ã‚’è¿”ã™ã€‚
 
-### tailŠÖ”
+### tailé–¢æ•°
 ```
-tail : [ƒ¿] -> [ƒ¿]
+tail : [Î±] -> [Î±]
 ```
-ƒŠƒXƒg‚Ìæ“ª‚ðŽæ‚èœ‚¢‚½ƒŠƒXƒg‚ð•Ô‚·B
+ãƒªã‚¹ãƒˆã®å…ˆé ­ã‚’å–ã‚Šé™¤ã„ãŸãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
 
-### nthŠÖ”
+### nthé–¢æ•°
 ```
-nth : [ƒ¿] -> Int -> ƒ¿
+nth : [Î±] -> Int -> Î±
 ```
-ƒŠƒXƒg‚Ìn”Ô–Ú‚Ì—v‘f‚ð•Ô‚·
+ãƒªã‚¹ãƒˆã®nç•ªç›®ã®è¦ç´ ã‚’è¿”ã™
 
-### foldlŠÖ”
+### foldlé–¢æ•°
 ```
-foldl : (ƒ¿ -> ƒÀ -> ƒ¿) -> ƒ¿ -> [ƒÀ] -> ƒ¿
+foldl : (Î± -> Î² -> Î±) -> Î± -> [Î²] -> Î±
 ```
-ƒŠƒXƒg‚ð¶‚©‚ç‰E‚ÉŒü‚©‚Á‚Äô‚Ýž‚Ý‚·‚éB
+ãƒªã‚¹ãƒˆã‚’å·¦ã‹ã‚‰å³ã«å‘ã‹ã£ã¦ç•³ã¿è¾¼ã¿ã™ã‚‹ã€‚
 
-### foldrŠÖ”
+### foldré–¢æ•°
 ```
-foldr : (ƒ¿ -> ƒÀ -> ƒÀ) -> ƒÀ -> [ƒ¿] -> ƒÀ
+foldr : (Î± -> Î² -> Î²) -> Î² -> [Î±] -> Î²
 ```
-ƒŠƒXƒg‚ð‰E‚©‚ç¶‚ÉŒü‚©‚Á‚Äô‚Ýž‚Ý‚·‚éB
+ãƒªã‚¹ãƒˆã‚’å³ã‹ã‚‰å·¦ã«å‘ã‹ã£ã¦ç•³ã¿è¾¼ã¿ã™ã‚‹ã€‚
 
-### lookupŠÖ”
+### lookupé–¢æ•°
 ```
-lookup : [(ƒ¿, ƒÀ)] -> ƒ¿ -> ƒÀ
+lookup : [(Î±, Î²)] -> Î± -> Î²
 ```
-˜A‘zƒŠƒXƒg‚©‚ç‘Î‰ž‚·‚é’l‚ð’Tõ‚·‚éB
+é€£æƒ³ãƒªã‚¹ãƒˆã‹ã‚‰å¯¾å¿œã™ã‚‹å€¤ã‚’æŽ¢ç´¢ã™ã‚‹ã€‚
 
-### concatŠÖ”
+### concaté–¢æ•°
 ```
-concat : [[ƒ¿]] -> [ƒ¿]
+concat : [[Î±]] -> [Î±]
 ```
-ƒŠƒXƒg‚ÌƒŠƒXƒg‚ðƒŠƒXƒg‚É•ÏŠ·‚·‚éB
+ãƒªã‚¹ãƒˆã®ãƒªã‚¹ãƒˆã‚’ãƒªã‚¹ãƒˆã«å¤‰æ›ã™ã‚‹ã€‚
 
-### concat_mapŠÖ”
+### concat_mapé–¢æ•°
 ```
-concat_map : (ƒ¿ -> [ƒÀ]) -> [ƒ¿] -> [ƒÀ]
+concat_map : (Î± -> [Î²]) -> [Î±] -> [Î²]
 ```
-`map`‚µ‚Ä‚»‚ÌŒ‹‰Ê‚ð`concat`‚·‚éB
+`map`ã—ã¦ãã®çµæžœã‚’`concat`ã™ã‚‹ã€‚
  
 ## Maybe
 ```
 type Maybe<T> = Nothing | Just(T);
 ```
-### maybeŠÖ”
+### maybeé–¢æ•°
 ```
-meybe : ƒ¿ -> (ƒÀ -> ƒ¿) -> Maybe<ƒÀ> -> ƒ¿
+maybe : Î± -> (Î² -> Î±) -> Maybe<Î²> -> Î±
 ```
-`Maybe`’l‚ÉŠÖ”‚ð“K—p‚·‚éB`Nothing`‚Ì‚Æ‚«‚ÍƒfƒtƒHƒ‹ƒg’l‚ð•Ô‚·B
+`Maybe`å€¤ã«é–¢æ•°ã‚’é©ç”¨ã™ã‚‹ã€‚`Nothing`ã®ã¨ãã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’è¿”ã™ã€‚
 
-### map_maybeŠÖ”
+### map_maybeé–¢æ•°
 ```
-map_maybe : (ƒ¿ -> ƒÀ) -> Maybe<ƒ¿> -> Maybe<ƒÀ>
+map_maybe : (Î± -> Î²) -> Maybe<Î±> -> Maybe<Î²>
 ```
-`Maybe`’l‚ÉŠÖ”‚ð“K—p‚·‚éB`Nothing`‚Ì‚Æ‚«‚Í`Nothing`‚ð•Ô‚·B
+`Maybe`å€¤ã«é–¢æ•°ã‚’é©ç”¨ã™ã‚‹ã€‚`Nothing`ã®ã¨ãã¯`Nothing`ã‚’è¿”ã™ã€‚
 
-### is_justŠÖ”
+### is_justé–¢æ•°
 ```
-is_just : Maybe<ƒ¿> -> Bool
+is_just : Maybe<Î±> -> Bool
 ```
-`Just(_)`‚Å‚ ‚ê‚Î`true`‚ð•Ô‚µA‚»‚¤‚Å‚È‚¯‚ê‚Î`false`‚ð•Ô‚·B
+`Just(_)`ã§ã‚ã‚Œã°`true`ã‚’è¿”ã—ã€ãã†ã§ãªã‘ã‚Œã°`false`ã‚’è¿”ã™ã€‚
 
-### is_nothingŠÖ”
+### is_nothingé–¢æ•°
 ```
-is_nothing : Maybe<ƒ¿> -> Bool
+is_nothing : Maybe<Î±> -> Bool
 ```
-`Nothing`‚Å‚ ‚ê‚Î`true`‚ð•Ô‚µA‚»‚¤‚Å‚È‚¯‚ê‚Î`false`‚ð•Ô‚·B
+`Nothing`ã§ã‚ã‚Œã°`true`ã‚’è¿”ã—ã€ãã†ã§ãªã‘ã‚Œã°`false`ã‚’è¿”ã™ã€‚
 
-### from_justŠÖ”
+### from_justé–¢æ•°
 ```
-from_just : Maybe<ƒ¿> -> ƒ¿
+from_just : Maybe<Î±> -> Î±
 ```
-`Maybe`’l‚©‚ç’l‚ðŽæ‚èo‚·B`Nothing`‚Ìê‡‚ÍƒGƒ‰[
+`Maybe`å€¤ã‹ã‚‰å€¤ã‚’å–ã‚Šå‡ºã™ã€‚`Nothing`ã®å ´åˆã¯ã‚¨ãƒ©ãƒ¼
 
 ## Either
 ```
 type Either<T, U> = Left(T) | Right(U);
 ```
 
-### eitherŠÖ”
+### eitheré–¢æ•°
 ```
-either : (ƒ¿ -> ƒÀ) -> (ƒÁ -> ƒÀ) -> Either<ƒ¿, ƒÁ> -> ƒÀ
+either : (Î± -> Î²) -> (Î³ -> Î²) -> Either<Î±, Î³> -> Î²
 ```
-`Either`’l‚ÉŠÖ”‚ð“K—p‚·‚éB
+`Either`å€¤ã«é–¢æ•°ã‚’é©ç”¨ã™ã‚‹ã€‚
 
-## ”z—ñ
-### list_to_arrayŠÖ”
+## é…åˆ—
+### list_to_arrayé–¢æ•°
 ```
 list_to_array : [{System.Object}] -> {System.Object[]}
 ```
-`Object`‚ÌƒŠƒXƒg‚ð`Object[]`‚É•ÏŠ·‚·‚éB
+`Object`ã®ãƒªã‚¹ãƒˆã‚’`Object[]`ã«å¤‰æ›ã™ã‚‹ã€‚
 
-### formatŠÖ”
+### formaté–¢æ•°
 ```
 format : String -> [{System.Object}] -> String
 ```
-ƒtƒH[ƒ}ƒbƒg•¶Žš—ñ‚É]‚Á‚ÄA’l‚ð•¶Žš—ñ‚É•ÏŠ·‚·‚éB
+ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆæ–‡å­—åˆ—ã«å¾“ã£ã¦ã€å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹ã€‚
 
-## ƒŠƒtƒŒƒNƒVƒ‡ƒ“
-### get_typeŠÖ”
+## ãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
+### get_typeé–¢æ•°
 ```
 get_type : String -> {System.Type}
 ```
-Žw’è‚µ‚½–¼‘O‚Ì`Type`ƒIƒuƒWƒFƒNƒg‚ð•Ô‚·B
+æŒ‡å®šã—ãŸåå‰ã®`Type`ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™ã€‚
 
-### null’è”
+### nullå®šæ•°
 ```
 null : {System.Object}
 ```
-null’lB
+nullå€¤ã€‚
 
-## ƒƒbƒZ[ƒW
-### msgboxŠÖ”
+## ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+### msgboxé–¢æ•°
 ```
-msgbox : ƒ¿ -> ()
+msgbox : Î± -> ()
 ```
-ƒƒbƒZ[ƒWƒ{ƒbƒNƒX‚É’l‚ð•\Ž¦‚·‚éB
-’l‚Í®”A•‚“®¬”“_”A•¶Žš—ñA•¶Žš‚Ì‚¢‚¸‚ê‚©B
+ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹ã«å€¤ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
+å€¤ã¯æ•´æ•°ã€æµ®å‹•å°æ•°ç‚¹æ•°ã€æ–‡å­—åˆ—ã€æ–‡å­—ã®ã„ãšã‚Œã‹ã€‚
