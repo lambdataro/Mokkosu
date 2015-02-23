@@ -257,7 +257,7 @@ let __for_zero = [];
 
 type Maybe<T> = Nothing | Just(T);
 
-let meybe x f = {
+let maybe x f = {
   ~Nothing -> x;
   ~Just(y) -> f y;
 };
