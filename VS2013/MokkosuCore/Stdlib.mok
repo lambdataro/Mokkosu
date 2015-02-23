@@ -216,8 +216,15 @@ fun map f = {
   x :: xs -> f x :: map f xs;
 };
 
-let head (x :: _) = x;
-let tail (_ :: xs) = xs;
+let head = {
+  [] -> error "head";
+  x::_ -> x;
+};
+
+let tail = {
+  [] -> error "tail";
+  _::xs -> xs;
+};
 
 fun nth lis n =
   if n == 0 -> head lis
@@ -233,11 +240,10 @@ fun foldr f seed = {
   x :: xs -> f x (foldr f seed xs)
 };
 
-fun lookup x = {
-  [] -> error "lookup: not found";
-  (k, v) :: rest ->
-    if k == x -> v
-	else lookup x rest;
+fun lookup key = {
+  [] -> Nothing;
+  (k,v)::_ ? key == k -> Just(v);
+  _::xs -> lookup key xs;
 };
 
 fun concat = {

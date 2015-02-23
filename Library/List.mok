@@ -1,0 +1,253 @@
+#=============================================================================
+#! @file	List.mok
+#! @brief	List
+#! @author	kielnow
+#=============================================================================
+__define "HYDE_TYPE";
+
+#-----------------------------------------------------------------------------
+# List comprehension
+#-----------------------------------------------------------------------------
+#let __for_bind lis f = concat_map f lis;
+#let __for_unit x = [x];
+#let __for_zero = [];
+
+#-----------------------------------------------------------------------------
+# Basic functions
+#-----------------------------------------------------------------------------
+#fun __operator_dotdot a z = if a > z -> [] else a :: (a+1)..z;
+
+#fun __operator_plspls xs ys =
+#  match xs {
+#    [] -> ys;
+#    x::xs -> x::xs ++ ys;
+#  };
+
+#let head = {
+#  [] -> error "head";
+#  x::_ -> x;
+#};
+
+#let tail = {
+#  [] -> error "tail";
+#  _::xs -> xs;
+#};
+
+fun last = {
+  [] -> error "last";
+  [x] -> x;
+  _::xs -> last xs;
+};
+
+fun init = {
+  [] -> error "init";
+  [x] -> [];
+  x::xs -> x::init xs;
+};
+
+let is_null = {
+  [] -> true;
+  _ -> false;
+};
+
+#fun length = {
+#  [] -> 0;
+#  _::xs -> 1 + length xs;
+#};
+
+#-----------------------------------------------------------------------------
+# List transformations
+#-----------------------------------------------------------------------------
+#fun map f = {
+#  [] -> [];
+#  x::xs -> f x :: map f xs;
+#};
+
+#fun reverse = {
+#  [] -> [];
+#  x::xs -> reverse xs ++ [x];
+#};
+
+#-----------------------------------------------------------------------------
+# Reducing lists
+#-----------------------------------------------------------------------------
+#fun foldl f z = {
+#  [] -> z;
+#  x::xs -> foldl f (f z x) xs;
+#};
+
+#fun foldr f z = {
+#  [] -> z;
+#  x::xs -> f x (foldr f z xs)
+#};
+
+#-----------------------------------------------------------------------------
+# Special folds
+#-----------------------------------------------------------------------------
+#fun concat = {
+#  [] -> [];
+#  x::xs -> x ++ concat xs;
+#};
+
+#let concat_map f lis = concat (map f lis);
+
+fun any p = {
+  [] -> false;
+  x::xs -> if p x -> true else any p xs;
+};
+
+fun all p = {
+  [] -> true;
+  x::xs -> if p x -> all p xs else false;
+};
+
+let sum xs = foldl (\z x -> z+x) 0 xs;
+
+let product xs = foldl (\z x -> z*x) 1 xs;
+
+let maximum = {
+  [] -> error "maximum";
+  x::xs -> foldl (\m x -> if x > m -> x else m) x xs;
+};
+
+let minimum = {
+  [] -> error "minimum";
+  x::xs -> foldl (\m x -> if x < m -> x else m) x xs;
+};
+
+#-----------------------------------------------------------------------------
+# List creation
+#-----------------------------------------------------------------------------
+let replicate n x = fun loop n = if n <= 0 -> [] else x::loop n in loop n;
+
+#-----------------------------------------------------------------------------
+# Extracting sublists
+#-----------------------------------------------------------------------------
+fun take n xs =
+  match (n,xs) {
+    (n,_) ? n <= 0 -> [];
+    (_,[]) -> [];
+    (n,x::xs) -> x::take (n-1) xs;
+  };
+
+fun drop n xs =
+  match (n,xs) {
+    (n,xs) ? n <= 0 -> xs;
+    (_,[]) -> [];
+    (n,_::xs) -> drop (n-1) xs;
+  };
+
+fun split_at n xs =
+  match (n,xs) {
+    (n,xs) ? n <= 0 -> ([],xs);
+    (_,[]) -> ([],[]);
+    (n,x::xs) -> let (ys,zs) = split_at (n-1) xs in (x::ys,zs);
+  };
+
+fun take_while p = {
+  [] -> [];
+  x::xs ? p x -> x :: take_while p xs;
+  _ -> [];
+};
+
+fun drop_while p = {
+  [] -> [];
+  x::xs ? p x -> drop_while p xs;
+  xs -> xs;
+};
+
+#-----------------------------------------------------------------------------
+# Searching lists
+#-----------------------------------------------------------------------------
+fun elem x = {
+  [] -> false;
+  y::ys -> x == y || elem x ys;
+};
+
+fun not_elem x = {
+  [] -> true;
+  y::ys -> x <> y && not_elem x ys;
+};
+
+fun lookup key = {
+  [] -> Nothing;
+  (k,v)::_ ? key == k -> Just(v);
+  _::xs -> lookup key xs;
+};
+
+fun find p = {
+  [] -> Nothing;
+  x::xs ? p x -> Just(x);
+  _::xs -> find p xs;
+};
+
+fun filter p = {
+  [] -> [];
+  x::xs ? p x -> x :: filter p xs;
+  _::xs -> filter p xs;
+};
+
+fun partition p = {
+  [] -> ([],[]);
+  x::xs ->
+    let (ys,zs) = partition p xs in
+    if p x -> (x::ys,zs) else (ys,x::zs);
+};
+
+#-----------------------------------------------------------------------------
+# Indexing lists
+#-----------------------------------------------------------------------------
+#fun nth xs n =
+#  match (xs,n) {
+#    (_,n) ? n < 0 -> error "nth";
+#    ([],_) -> error "nth";
+#    (x::_,0) -> x;
+#    (_::xs,n) -> nth xs (n-1);
+#  };
+
+#-----------------------------------------------------------------------------
+# Zipping and unzipping lists
+#-----------------------------------------------------------------------------
+fun zip xs ys =
+  match (xs,ys) {
+    ([],_) -> [];
+    (_,[]) -> [];
+    (x::xs,y::ys) -> (x,y)::zip xs ys;
+  };
+
+fun zip_with f xs ys =
+  match (xs,ys) {
+    ([],_) -> [];
+    (_,[]) -> [];
+    (x::xs,y::ys) -> f x y::zip_with f xs ys;
+  };
+
+fun unzip = {
+  [] -> ([],[]);
+  (x,y)::xys -> let (xs,ys) = unzip xys in (x::xs,y::ys);
+};
+
+#-----------------------------------------------------------------------------
+# Iterators
+#-----------------------------------------------------------------------------
+fun iter m = {
+  [] -> ();
+  x::xs -> do m x; iter m xs end;
+};
+
+let iteri m xs = iter m <| zip (0 .. length xs) xs;
+
+let mapi f xs = map f <| zip (0 .. length xs) xs;
+
+#-----------------------------------------------------------------------------
+# Ordered lists
+#-----------------------------------------------------------------------------
+fun sort = {
+  [] -> [];
+  x::xs ->
+    let (ls,gs) = (filter {e->e<x} xs,filter {e->x<e} xs) in
+    sort ls ++ [x] ++ sort gs;
+};
+
+__undefine "HIDE_TYPE";
+
