@@ -31,7 +31,7 @@ let scene name f =
   _scenes := (name, f) :: !_scenes;
 
 let switch name =
-  _current := lookup name !_scenes;
+  _current := from_just (lookup name !_scenes);
 
 # タイマー
 let _timer = new Timer();
@@ -107,7 +107,7 @@ let _mouse_move ((sender : {Object}), (e : {MouseEventArgs})) =
 do _form.add_MouseMove (delegate MouseEventHandler _mouse_move);
 
 let show_window name =
-  do _current := lookup name !_scenes in
+  do _current := from_just (lookup name !_scenes) in
   do _timer.Start() in
   _form.ShowDialog() |> ignore;
 
