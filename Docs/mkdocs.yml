@@ -9,6 +9,7 @@ pages:
 - ['start/fptomok.md', '始め方', '関数型言語経験者向け']
 - ['tutorial/part01.md', 'チュートリアル', '第1章 はじめよう']
 - ['tutorial/part02.md', 'チュートリアル', '第2章 基本的な構文と型']
+- ['tutorial/part03.md', 'チュートリアル', '第3章 リストとタプル']
 - ['reference/basic.md', 'リファレンスマニュアル', '基本事項']
 - ['reference/statement.md', 'リファレンスマニュアル', '文']
 - ['reference/type.md', 'リファレンスマニュアル', '型とリテラル']
