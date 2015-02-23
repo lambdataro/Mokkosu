@@ -169,11 +169,11 @@ fun not_elem x = {
   y::ys -> x <> y && not_elem x ys;
 };
 
-fun lookup key = {
-  [] -> Nothing;
-  (k,v)::_ ? key == k -> Just(v);
-  _::xs -> lookup key xs;
-};
+#fun lookup key = {
+#  [] -> Nothing;
+#  (k,v)::_ ? key == k -> Just(v);
+#  _::xs -> lookup key xs;
+#};
 
 fun find p = {
   [] -> Nothing;
@@ -235,9 +235,9 @@ fun iter m = {
   x::xs -> do m x; iter m xs end;
 };
 
-let iteri m xs = iter m <| zip (0 .. length xs) xs;
+let iteri m xs = iter (uncurry m) <| zip (0 .. length xs) xs;
 
-let mapi f xs = map f <| zip (0 .. length xs) xs;
+let mapi f xs = map (uncurry f) <| zip (0 .. length xs) xs;
 
 #-----------------------------------------------------------------------------
 # Ordered lists
