@@ -233,26 +233,6 @@ let either f g = {
 # リスト
 #------------------------------------------------------------
 
-fun __operator_dotdot x y =
-  if x > y -> []
-  else x :: (x + 1) .. y;
-
-fun __operator_plspls xs ys =
-  match xs {
-    [] -> ys;
-	hd :: tl -> hd :: (tl ++ ys);
-  };
-
-fun length = {
-  [] -> 0;
-  _ :: xs -> 1 + length xs;
-};
-
-fun reverse = {
-  [] -> [];
-  x :: xs -> reverse xs ++ [x];
-};
-
 let is_nil = { [] -> true; _ -> false };
 
 let head = {
@@ -265,11 +245,35 @@ let tail = {
   _::xs -> xs;
 };
 
-fun map f = {
-  [] -> [];
-  x :: xs -> f x :: map f xs;
+let reverse lis =
+  fun loop acc lis =
+    if is_nil lis -> acc
+    else loop (head lis :: acc) (tail lis)
+  in loop [] lis;
+
+let __operator_dotdot x y =
+  fun loop acc i =
+    if i < x -> acc
+	else loop (i :: acc) (i - 1)
+  in loop [] y;
+
+let __operator_plspls xs ys =
+  fun loop acc lis =
+    if is_nil lis -> acc
+	else loop (head lis :: acc) (tail lis)
+  in loop ys (reverse xs);
+
+fun length = {
+  [] -> 0;
+  _ :: xs -> 1 + length xs;
 };
 
+let map f lis =
+  fun loop acc lis =
+    if is_nil lis -> reverse acc
+	else loop (f (head lis) :: acc) (tail lis)
+  in loop [] lis;
+ 
 fun nth lis n =
   if n == 0 -> head lis
   else nth (tail lis) (n - 1);
@@ -294,6 +298,12 @@ fun concat = {
   [] -> [];
   x :: xs -> x ++ concat xs;
 };
+
+let concat_tc lis =
+  fun loop acc lis =
+    if is_nil lis -> acc
+	else loop (acc ++ head lis) (tail lis)
+  in loop [] lis;
 
 let concat_map f lis = concat (map f lis);
 
