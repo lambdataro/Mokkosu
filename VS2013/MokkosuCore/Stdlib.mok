@@ -154,6 +154,13 @@ let bool_to_object (b : Bool) = cast<Boolean, Object>(b);
 let char_to_object (c : Char) = cast<Char, Object>(c);
 let string_to_object (s : String) = cast<String, Object>(s);
 
+let string_to_list str =
+  let len = strlen str in
+  fun loop acc n =
+    if n < 0 -> acc
+	else loop (strnth str n :: acc) (n - 1)
+  in loop [] (len - 1);
+
 #------------------------------------------------------------
 # 関数
 #------------------------------------------------------------
@@ -294,12 +301,7 @@ fun lookup key = {
   _::xs -> lookup key xs;
 };
 
-fun concat = {
-  [] -> [];
-  x :: xs -> x ++ concat xs;
-};
-
-let concat_tc lis =
+let concat lis =
   fun loop acc lis =
     if is_nil lis -> acc
 	else loop (acc ++ head lis) (tail lis)
