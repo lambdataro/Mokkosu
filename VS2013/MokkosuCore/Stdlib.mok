@@ -125,6 +125,23 @@ let strlen (str : String) = str.get_Length();
 let strnth (str : String) (idx : Int) = str.get_Chars(idx);
 
 #------------------------------------------------------------
+# 文字演算
+#------------------------------------------------------------
+
+let is_control (c : Char) = call Char::IsControl(c);
+let is_digit (c : Char) = call Char::IsDigit(c);
+let is_letter (c : Char) = call Char::IsLetter(c);
+let is_letter_or_digit (c : Char) = call Char::IsLetterOrDigit(c);
+let is_lower (c : Char) = call Char::IsLower(c);
+let is_digit (c : Char) = call Char::IsDigit(c);
+let is_symbol (c : Char) = call Char::IsSymbol(c);
+let is_upper (c : Char) = call Char::IsUpper(c);
+let is_whitespace (c : Char) = call Char::IsWhiteSpace(c);
+
+let to_lower (c : Char) = call Char::ToLower(c);
+let to_upper (c : Char) = call Char::ToUpper(c);
+
+#------------------------------------------------------------
 # 論理演算
 #------------------------------------------------------------
 
@@ -153,13 +170,6 @@ let double_to_object (d : Double) = cast<Double, Object>(d);
 let bool_to_object (b : Bool) = cast<Boolean, Object>(b);
 let char_to_object (c : Char) = cast<Char, Object>(c);
 let string_to_object (s : String) = cast<String, Object>(s);
-
-let string_to_list str =
-  let len = strlen str in
-  fun loop acc n =
-    if n < 0 -> acc
-	else loop (strnth str n :: acc) (n - 1)
-  in loop [] (len - 1);
 
 #------------------------------------------------------------
 # 関数
@@ -312,6 +322,23 @@ let concat_map f lis = concat (map f lis);
 let __for_bind lis f = concat_map f lis;
 let __for_unit x = [x];
 let __for_zero = [];
+
+#------------------------------------------------------------
+# 文字のリスト
+#------------------------------------------------------------
+
+let string_to_list str =
+  let len = strlen str in
+  fun loop acc n =
+    if n < 0 -> acc
+	else loop (strnth str n :: acc) (n - 1)
+  in loop [] (len - 1);
+
+let list_to_string lis =
+  fun loop acc lis =
+    if is_nil lis -> acc
+	else loop (acc ^ to_string (head lis)) (tail lis)
+  in loop "" lis;
 
 #------------------------------------------------------------
 # 配列
