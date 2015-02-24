@@ -95,33 +95,42 @@
             
             
             
-                <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">リファレンスマニュアル <b class="caret"></b></a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">言語 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../basic">基本事項</a>
+                            <a href="../../lang/basic">基本事項</a>
                         </li>
                     
                         <li >
-                            <a href="../statement">文</a>
+                            <a href="../../lang/statement">文</a>
                         </li>
                     
                         <li >
-                            <a href="../type">型とリテラル</a>
+                            <a href="../../lang/type">型とリテラル</a>
                         </li>
                     
                         <li >
-                            <a href="../expression">式</a>
+                            <a href="../../lang/expression">式</a>
                         </li>
                     
                         <li >
-                            <a href="../pattern">パターン</a>
+                            <a href="../../lang/pattern">パターン</a>
                         </li>
                     
                         <li >
-                            <a href="../dotnet">.NET関連の式</a>
+                            <a href="../../lang/dotnet">.NET関連の式</a>
                         </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ライブラリ <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                     
                         <li class="active">
                             <a href=".">コアライブラリ</a>
@@ -129,6 +138,10 @@
                     
                         <li >
                             <a href="../list">リストライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../print">表示関数ライブラリ</a>
                         </li>
                     
                         <li >
@@ -151,7 +164,7 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 <li >
-                    <a rel="next" href="../dotnet">
+                    <a rel="next" href="../../lang/dotnet">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -193,27 +206,31 @@
         
             <li><a href="#_20">文字列演算</a></li>
         
-            <li><a href="#_22">論理演算</a></li>
+            <li><a href="#_22">文字演算</a></li>
         
-            <li><a href="#_23">変換</a></li>
+            <li><a href="#_23">論理演算</a></li>
         
-            <li><a href="#_24">関数</a></li>
+            <li><a href="#_24">変換</a></li>
         
-            <li><a href="#_29">タプル</a></li>
+            <li><a href="#_25">関数</a></li>
         
-            <li><a href="#_30">リファレンスセル</a></li>
+            <li><a href="#_30">タプル</a></li>
         
-            <li><a href="#_33">リスト</a></li>
+            <li><a href="#_31">リファレンスセル</a></li>
+        
+            <li><a href="#_34">リスト</a></li>
         
             <li><a href="#maybe">Maybe</a></li>
         
+            <li><a href="#_37">文字のリスト</a></li>
+        
             <li><a href="#either">Either</a></li>
         
-            <li><a href="#_36">配列</a></li>
+            <li><a href="#_38">配列</a></li>
         
-            <li><a href="#_37">リフレクション</a></li>
+            <li><a href="#_39">リフレクション</a></li>
         
-            <li><a href="#_38">メッセージ</a></li>
+            <li><a href="#_40">メッセージ</a></li>
         
     
     </ul>
@@ -532,7 +549,48 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>文字列のn番目の文字を返します。</p>
-<h2 id="_22">論理演算</h2>
+<h2 id="_22">文字演算</h2>
+<pre><code>is_control : Char -&gt; Bool
+</code></pre>
+
+<p>文字が制御文字であれば真を返します。</p>
+<pre><code>is_digit : Char -&gt; Bool
+</code></pre>
+
+<p>文字が十進数字であれば真を返します。</p>
+<pre><code>is_letter : Char -&gt; Bool
+</code></pre>
+
+<p>文字がUnicode文字であれば真を返します。</p>
+<pre><code>is_letter_or_digit : Char -&gt; Bool
+</code></pre>
+
+<p>文字がUnicode文字か十進数字であれば真を返します。</p>
+<pre><code>is_lower : Char -&gt; Bool
+</code></pre>
+
+<p>文字が小文字であれば真を返します。</p>
+<pre><code>is_symbol : Char -&gt; Bool
+</code></pre>
+
+<p>文字が記号であれば真を返します。</p>
+<pre><code>is_upper : Char -&gt; Bool
+</code></pre>
+
+<p>文字が大文字であれば真を返します。</p>
+<pre><code>is_whitespace : Char -&gt; Bool
+</code></pre>
+
+<p>文字が空白文字であれば真を返します。</p>
+<pre><code>to_lower : Char -&gt; Char
+</code></pre>
+
+<p>文字を小文字に変換します。</p>
+<pre><code>to_upper : Char -&gt; Char
+</code></pre>
+
+<p>文字を大文字に変換します。</p>
+<h2 id="_23">論理演算</h2>
 <h3 id="not">not関数</h3>
 <pre><code>not : Bool -&gt; Bool
 </code></pre>
@@ -542,7 +600,7 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>真偽値の排他的論理和です。</p>
-<h2 id="_23">変換</h2>
+<h2 id="_24">変換</h2>
 <h3 id="parse_int">parse_int関数</h3>
 <pre><code>parse_int : String -&gt; Int
 </code></pre>
@@ -618,23 +676,23 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>文字列をObject型に変換します。</p>
-<h2 id="_24">関数</h2>
-<h3 id="_25">(&lt;|)演算子</h3>
+<h2 id="_25">関数</h2>
+<h3 id="_26">(&lt;|)演算子</h3>
 <pre><code>__operator_ltbar : (α -&gt; β) -&gt; α -&gt; β
 </code></pre>
 
 <p>関数適用演算子。</p>
-<h3 id="_26">(|&gt;)演算子</h3>
+<h3 id="_27">(|&gt;)演算子</h3>
 <pre><code>__operator_bargt : α -&gt; (α -&gt; β) -&gt; β
 </code></pre>
 
 <p>逆方向関数適用演算子</p>
-<h3 id="_27">(&lt;&lt;)演算子</h3>
+<h3 id="_28">(&lt;&lt;)演算子</h3>
 <pre><code>__operator_ltlt : (α -&gt; β) -&gt; (γ -&gt; α) -&gt; γ -&gt; β
 </code></pre>
 
 <p>関数合成。</p>
-<h3 id="_28">(&gt;&gt;)演算子</h3>
+<h3 id="_29">(&gt;&gt;)演算子</h3>
 <pre><code>__operator_gtgt : (α -&gt; β) -&gt; (β -&gt; γ) -&gt; α -&gt; γ
 </code></pre>
 
@@ -659,7 +717,7 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>関数の引数順を入れ替える。</p>
-<h2 id="_29">タプル</h2>
+<h2 id="_30">タプル</h2>
 <h3 id="fst">fst関数</h3>
 <pre><code>fst : (α, β) -&gt; α
 </code></pre>
@@ -680,18 +738,18 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>関数のカリー化を解除する。</p>
-<h2 id="_30">リファレンスセル</h2>
+<h2 id="_31">リファレンスセル</h2>
 <h3 id="ref">ref関数</h3>
 <pre><code>ref : α -&gt; Ref&lt;α&gt;
 </code></pre>
 
 <p>リファレンスセルを作る。</p>
-<h3 id="_31">(!)演算子</h3>
+<h3 id="_32">(!)演算子</h3>
 <pre><code>__operator_bang : Ref&lt;α&gt; -&gt; α
 </code></pre>
 
 <p>参照を剥がす。</p>
-<h3 id="_32">(:=)演算子</h3>
+<h3 id="_33">(:=)演算子</h3>
 <pre><code>__operator_coleq : Ref&lt;α&gt; -&gt; α -&gt; ()
 </code></pre>
 
@@ -706,13 +764,13 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>参照の値を1減らす</p>
-<h2 id="_33">リスト</h2>
-<h3 id="_34">(..)演算子</h3>
+<h2 id="_34">リスト</h2>
+<h3 id="_35">(..)演算子</h3>
 <pre><code>__operator_dotdot : Int -&gt; Int -&gt; [Int]
 </code></pre>
 
 <p>指定した範囲の整数を含むリストを生成する。</p>
-<h3 id="_35">(++)演算子</h3>
+<h3 id="_36">(++)演算子</h3>
 <pre><code>__operator_plspls : [α] -&gt; [α] -&gt; [α]
 </code></pre>
 
@@ -732,6 +790,11 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>リストの各要素に関数を適用したリストを返す。</p>
+<h3 id="is_nil">is_nil関数</h3>
+<pre><code>is_nil : [α] -&gt; Bool
+</code></pre>
+
+<p>リストが空リストであれば真を返します。</p>
 <h3 id="head">head関数</h3>
 <pre><code>head : [α] -&gt; α
 </code></pre>
@@ -802,6 +865,16 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p><code>Maybe</code>値から値を取り出す。<code>Nothing</code>の場合はエラー</p>
+<h2 id="_37">文字のリスト</h2>
+<h3 id="string_to_list">string_to_list</h3>
+<pre><code>string_to_list : String -&gt; [Char]
+</code></pre>
+
+<p>文字列を文字のリストに変換します。</p>
+<pre><code>list_to_string : [Char] -&gt; String
+</code></pre>
+
+<p>文字のリストを文字列に変換します。</p>
 <h2 id="either">Either</h2>
 <pre><code>type Either&lt;T, U&gt; = Left(T) | Right(U);
 </code></pre>
@@ -811,7 +884,7 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p><code>Either</code>値に関数を適用する。</p>
-<h2 id="_36">配列</h2>
+<h2 id="_38">配列</h2>
 <h3 id="list_to_array">list_to_array関数</h3>
 <pre><code>list_to_array : [{System.Object}] -&gt; {System.Object[]}
 </code></pre>
@@ -822,7 +895,7 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>フォーマット文字列に従って、値を文字列に変換する。</p>
-<h2 id="_37">リフレクション</h2>
+<h2 id="_39">リフレクション</h2>
 <h3 id="get_type">get_type関数</h3>
 <pre><code>get_type : String -&gt; {System.Type}
 </code></pre>
@@ -833,7 +906,7 @@ atan : Double -&gt; Double
 </code></pre>
 
 <p>null値。</p>
-<h2 id="_38">メッセージ</h2>
+<h2 id="_40">メッセージ</h2>
 <h3 id="msgbox">msgbox関数</h3>
 <pre><code>msgbox : α -&gt; ()
 </code></pre>

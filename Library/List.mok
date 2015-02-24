@@ -45,10 +45,10 @@ fun init = {
   x::xs -> x::init xs;
 };
 
-let is_null = {
-  [] -> true;
-  _ -> false;
-};
+#let is_null = {
+#  [] -> true;
+#  _ -> false;
+#};
 
 #fun length = {
 #  [] -> 0;

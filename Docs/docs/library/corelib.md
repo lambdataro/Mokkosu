@@ -368,6 +368,57 @@ strnth : String -> Int -> Char
 ```
 文字列のn番目の文字を返します。
 
+## 文字演算
+```
+is_control : Char -> Bool
+```
+文字が制御文字であれば真を返します。
+
+```
+is_digit : Char -> Bool
+```
+文字が十進数字であれば真を返します。
+
+```
+is_letter : Char -> Bool
+```
+文字がUnicode文字であれば真を返します。
+
+```
+is_letter_or_digit : Char -> Bool
+```
+文字がUnicode文字か十進数字であれば真を返します。
+
+```
+is_lower : Char -> Bool
+```
+文字が小文字であれば真を返します。
+
+```
+is_symbol : Char -> Bool
+```
+文字が記号であれば真を返します。
+
+```
+is_upper : Char -> Bool
+```
+文字が大文字であれば真を返します。
+
+```
+is_whitespace : Char -> Bool
+```
+文字が空白文字であれば真を返します。
+
+```
+to_lower : Char -> Char
+```
+文字を小文字に変換します。
+
+```
+to_upper : Char -> Char
+```
+文字を大文字に変換します。
+
 ## 論理演算
 
 ### not関数
@@ -609,6 +660,12 @@ map : (α -> β) -> [α] -> [β]
 ```
 リストの各要素に関数を適用したリストを返す。
 
+### is_nil関数
+```
+is_nil : [α] -> Bool
+```
+リストが空リストであれば真を返します。
+
 ### head関数
 ```
 head : [α] -> α
@@ -691,6 +748,18 @@ is_nothing : Maybe<α> -> Bool
 from_just : Maybe<α> -> α
 ```
 `Maybe`値から値を取り出す。`Nothing`の場合はエラー
+
+## 文字のリスト
+### string_to_list
+```
+string_to_list : String -> [Char]
+```
+文字列を文字のリストに変換します。
+
+```
+list_to_string : [Char] -> String
+```
+文字のリストを文字列に変換します。
 
 ## Either
 ```

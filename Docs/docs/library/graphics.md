@@ -1,5 +1,11 @@
 # グラフィックスライブラリ
 
+このライブラリを使うにはソースコードに
+```
+include "Graphics.mok";
+```
+と追加します。
+
 ## MouseButton
 ```
 type MouseButton =

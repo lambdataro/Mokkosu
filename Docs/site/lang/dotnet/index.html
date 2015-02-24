@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>リストライブラリ - プログラミング言語 Mokkosu</title>
+        <title>.NET関連の式 - プログラミング言語 Mokkosu</title>
 
         <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -96,7 +96,7 @@
             
             
                 <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">リファレンスマニュアル <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">言語 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
                         <li >
@@ -119,20 +119,33 @@
                             <a href="../pattern">パターン</a>
                         </li>
                     
-                        <li >
-                            <a href="../dotnet">.NET関連の式</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../corelib">コアライブラリ</a>
-                        </li>
-                    
                         <li class="active">
-                            <a href=".">リストライブラリ</a>
+                            <a href=".">.NET関連の式</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ライブラリ <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../library/corelib">コアライブラリ</a>
                         </li>
                     
                         <li >
-                            <a href="../graphics">グラフィックスライブラリ</a>
+                            <a href="../../library/list">リストライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/print">表示関数ライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/graphics">グラフィックスライブラリ</a>
                         </li>
                     
                     </ul>
@@ -151,12 +164,12 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 <li >
-                    <a rel="next" href="../corelib">
+                    <a rel="next" href="../pattern">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../graphics">
+                    <a rel="prev" href="../../library/corelib">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -179,173 +192,78 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#_1">リストライブラリ</a></li>
+        <li class="main active"><a href="#net">.NET関連の式</a></li>
         
-            <li><a href="#_2">基本的な関数</a></li>
+            <li><a href="#call">call式</a></li>
         
-            <li><a href="#_3">リストの特別な畳み込み</a></li>
+            <li><a href="#new">new式</a></li>
         
-            <li><a href="#_4">リストの生成</a></li>
+            <li><a href="#_1">インスタンスメソッド呼び出し式</a></li>
         
-            <li><a href="#_5">部分リスト</a></li>
+            <li><a href="#set">set式</a></li>
         
-            <li><a href="#_6">リストの検索</a></li>
+            <li><a href="#get">get式</a></li>
         
-            <li><a href="#zipunzip">リストのzip関数とunzip関数</a></li>
+            <li><a href="#sset">sset式</a></li>
         
-            <li><a href="#_7">リストの走査</a></li>
+            <li><a href="#sget">sget式</a></li>
         
-            <li><a href="#_8">リストの整列</a></li>
+            <li><a href="#delegate">delegate式</a></li>
+        
+            <li><a href="#cast">cast式</a></li>
         
     
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="_1">リストライブラリ</h1>
-<h2 id="_2">基本的な関数</h2>
-<h3 id="last">last</h3>
-<pre><code>last : [α] -&gt; α
+<h1 id="net">.NET関連の式</h1>
+<h2 id="call">call式</h2>
+<pre><code>call クラス名::メソッド名(引数, ...)
 </code></pre>
 
-<p>リストの最後の要素を返します。</p>
-<h3 id="init">init</h3>
-<pre><code>init : [α] -&gt; [α]
+<p>.NETの静的メソッドを呼び出します。</p>
+<h2 id="new">new式</h2>
+<pre><code>new クラス名(引数, ...)
 </code></pre>
 
-<p>最後の要素を除いたリストを返します。</p>
-<h3 id="is_null">is_null</h3>
-<pre><code>is_null : [α] -&gt; Bool
+<p>.NETのクラスのコンストラクタを呼び出してオブジェクトのインスタンスを
+作成します。</p>
+<h2 id="_1">インスタンスメソッド呼び出し式</h2>
+<pre><code>式 . メソッド名(引数, ...)
 </code></pre>
 
-<p>リストが空か調べます。</p>
-<h2 id="_3">リストの特別な畳み込み</h2>
-<h3 id="any">any</h3>
-<pre><code>any : (α -&gt; Bool) -&gt; [α] -&gt; Bool
+<p>式のメソッドを呼び出します。</p>
+<h2 id="set">set式</h2>
+<pre><code>set 式 . フィールド名 = 式
 </code></pre>
 
-<p><code>any p xs</code>でリスト<code>xs</code>の要素のいずれかが述語<code>p</code>を満たすか調べます。</p>
-<h3 id="all">all</h3>
-<pre><code>all : (α -&gt; Bool) -&gt; [α] -&gt; Bool
+<p>インスタンスフィールドの値を設定します。</p>
+<h2 id="get">get式</h2>
+<pre><code>get 式 . フィールド名
 </code></pre>
 
-<p><code>all p xs</code>でリスト<code>xs</code>の要素のすべてが述語<code>p</code>を満たすか調べます。</p>
-<h3 id="sum">sum</h3>
-<pre><code>sum : [Int] -&gt; Int
+<p>インスタンスフィールドの値を取得します。</p>
+<h2 id="sset">sset式</h2>
+<pre><code>sset クラス::フィールド名 = 式
 </code></pre>
 
-<p>整数のリストの総和を返します。</p>
-<h3 id="product">product</h3>
-<pre><code>product : [Int] -&gt; Int
+<p>静的フィールドの値を設定します。</p>
+<h2 id="sget">sget式</h2>
+<pre><code>sget クラス::フィールド名
 </code></pre>
 
-<p>整数のリストの総乗を返します。</p>
-<h3 id="maximum">maximum</h3>
-<pre><code>maximum : [α] -&gt; α
+<p>静的フィールドの値を取得します。</p>
+<h2 id="delegate">delegate式</h2>
+<pre><code>delegate クラス名 式
 </code></pre>
 
-<p>最大値を返します。</p>
-<h3 id="minimum">minimum</h3>
-<pre><code>minimum : [α] -&gt; α
+<p>式(関数)を.NETのデリゲートに変換します。</p>
+<h2 id="cast">cast式</h2>
+<pre><code>cast&lt;クラス1, クラス2&gt;(式)
 </code></pre>
 
-<p>最小値を返します。</p>
-<h2 id="_4">リストの生成</h2>
-<h3 id="replicate">replicate</h3>
-<pre><code>replicate : Int -&gt; α -&gt; [α]
-</code></pre>
-
-<p><code>replicate n x</code>で長さ<code>n</code>ですべての要素が<code>x</code>のリストを返します。</p>
-<h2 id="_5">部分リスト</h2>
-<h3 id="take">take</h3>
-<pre><code>take : Int -&gt; [α] -&gt; [α]
-</code></pre>
-
-<p><code>take n xs</code>でリスト<code>xs</code>の先頭から<code>n</code>番目までのリストを返します。</p>
-<h3 id="drop">drop</h3>
-<pre><code>drop : Int -&gt; [α] -&gt; [α]
-</code></pre>
-
-<p><code>drop n xs</code>でリスト<code>xs</code>の先頭から<code>n</code>番目より後ろのリストを返します。</p>
-<h3 id="split_at">split_at</h3>
-<pre><code>split_at : Int -&gt; [α] -&gt; ([α], [α])
-</code></pre>
-
-<p><code>split n xs</code>でリスト<code>xs</code>の戦闘から<code>n</code>番目までのリストとそれより後ろのリストのペアを返します。</p>
-<h3 id="take_while">take_while</h3>
-<pre><code>take_while : (α -&gt; Bool) -&gt; [α] -&gt; [α]
-</code></pre>
-
-<p><code>take_while p xs</code>でリスト<code>xs</code>の先頭から述語<code>p</code>を満たす範囲のリストを返します。</p>
-<h3 id="drop_while">drop_while</h3>
-<pre><code>drop_while : (α -&gt; Bool) -&gt; [α] -&gt; [α]
-</code></pre>
-
-<p><code>drop_while p xs</code>でリスト<code>xs</code>の先頭から述語<code>p</code>を満たす範囲を除いたリストを返します。</p>
-<h2 id="_6">リストの検索</h2>
-<h3 id="elem">elem</h3>
-<pre><code>elem : α -&gt; [α] -&gt; Bool
-</code></pre>
-
-<p><code>elem x xs</code>で<code>x</code>がリスト<code>xs</code>に含まれるか調べます。</p>
-<h3 id="not_elem">not_elem</h3>
-<pre><code>not_elem : α -&gt; [α] -&gt; Bool
-</code></pre>
-
-<p><code>not_elem x xs</code>で<code>x</code>がリスト<code>xs</code>に含まれないか調べます。</p>
-<h3 id="find">find</h3>
-<pre><code>find : (α -&gt; Bool) -&gt; [α] -&gt; Maybe&lt;α&gt;
-</code></pre>
-
-<p><code>find p xs</code>で述語<code>p</code>を満たすリスト<code>xs</code>の最初の要素を返します。</p>
-<h3 id="filter">filter</h3>
-<pre><code>filter : (α -&gt; Bool) -&gt; [α] -&gt; [α]
-</code></pre>
-
-<p><code>filter p xs</code>で述語<code>p</code>を満たすリスト<code>xs</code>の要素をすべて返します。</p>
-<h3 id="partition">partition</h3>
-<pre><code>partition : (α -&gt; Bool) -&gt; [α] -&gt; ([α], [α])
-</code></pre>
-
-<p><code>partition p xs</code>でリスト<code>xs</code>のうち述語<code>p</code>を満たすものとそうでないもののペアを返します。</p>
-<h2 id="zipunzip">リストのzip関数とunzip関数</h2>
-<h3 id="zip">zip</h3>
-<pre><code>zip : [α] -&gt; [β] -&gt; [(α, β)]
-</code></pre>
-
-<p>2つのリストを受け取り、ペアのリストを返します。</p>
-<h3 id="zip_with">zip_with</h3>
-<pre><code>zip_with : (α -&gt; β -&gt; γ) -&gt; [α] -&gt; [β] -&gt; [γ]
-</code></pre>
-
-<p>一般化したzip関数</p>
-<h3 id="unzip">unzip</h3>
-<pre><code>unzip : [(α, β)] -&gt; ([α], [β])
-</code></pre>
-
-<p>ペアのリストを受け取り、リストのペアを返します。</p>
-<h2 id="_7">リストの走査</h2>
-<h3 id="iter">iter</h3>
-<pre><code>iter : (α -&gt; ()) -&gt; [α] -&gt; ()
-</code></pre>
-
-<p>リストの各要素にアクションを適用します。</p>
-<h3 id="iteri">iteri</h3>
-<pre><code>iteri : (Int -&gt; α -&gt; ()) -&gt; [α] -&gt; ()
-</code></pre>
-
-<p>インデックス付きのiter関数</p>
-<h3 id="mapi">mapi</h3>
-<pre><code>mapi : (Int -&gt; α -&gt; β) -&gt; [α] -&gt; [β]
-</code></pre>
-
-<p>インデックス付きのmap関数</p>
-<h2 id="_8">リストの整列</h2>
-<h3 id="sort">sort</h3>
-<pre><code>sort : [α] -&gt; [α]
-</code></pre>
-
-<p>リストをソートします。</p>
+<p>式の型(クラス)をクラス1からクラス2にキャストします。</p>
 </div>
         </div>
 

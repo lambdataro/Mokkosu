@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>パターン - プログラミング言語 Mokkosu</title>
+        <title>基本事項 - プログラミング言語 Mokkosu</title>
 
         <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -96,11 +96,11 @@
             
             
                 <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">リファレンスマニュアル <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">言語 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
-                        <li >
-                            <a href="../basic">基本事項</a>
+                        <li class="active">
+                            <a href=".">基本事項</a>
                         </li>
                     
                         <li >
@@ -115,24 +115,37 @@
                             <a href="../expression">式</a>
                         </li>
                     
-                        <li class="active">
-                            <a href=".">パターン</a>
+                        <li >
+                            <a href="../pattern">パターン</a>
                         </li>
                     
                         <li >
                             <a href="../dotnet">.NET関連の式</a>
                         </li>
                     
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ライブラリ <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
                         <li >
-                            <a href="../corelib">コアライブラリ</a>
+                            <a href="../../library/corelib">コアライブラリ</a>
                         </li>
                     
                         <li >
-                            <a href="../list">リストライブラリ</a>
+                            <a href="../../library/list">リストライブラリ</a>
                         </li>
                     
                         <li >
-                            <a href="../graphics">グラフィックスライブラリ</a>
+                            <a href="../../library/print">表示関数ライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/graphics">グラフィックスライブラリ</a>
                         </li>
                     
                     </ul>
@@ -151,12 +164,12 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 <li >
-                    <a rel="next" href="../expression">
+                    <a rel="next" href="../../tutorial/part03">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../dotnet">
+                    <a rel="prev" href="../statement">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -179,132 +192,59 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#_1">パターン</a></li>
+        <li class="main active"><a href="#_1">基本事項</a></li>
         
-            <li><a href="#_2">ワイルドカードパターン</a></li>
+            <li><a href="#_2">コメント</a></li>
         
-            <li><a href="#_3">変数パターン</a></li>
+            <li><a href="#_3">識別子</a></li>
         
-            <li><a href="#_4">整数パターン</a></li>
+            <li><a href="#_4">キーワード</a></li>
         
-            <li><a href="#_5">浮動小数点数パターン</a></li>
-        
-            <li><a href="#_6">文字列パターン</a></li>
-        
-            <li><a href="#_7">文字パターン</a></li>
-        
-            <li><a href="#_8">真偽値パターン</a></li>
-        
-            <li><a href="#_9">ユニットパターン</a></li>
-        
-            <li><a href="#_10">ユーザ定義タグパターン</a></li>
-        
-            <li><a href="#_11">コンスパターン</a></li>
-        
-            <li><a href="#_12">リストパターン</a></li>
-        
-            <li><a href="#_13">タプルパターン</a></li>
-        
-            <li><a href="#as">asパターン</a></li>
-        
-            <li><a href="#or">orパターン</a></li>
-        
-            <li><a href="#_14">型強制パターン</a></li>
+            <li><a href="#_5">プログラムの構成</a></li>
         
     
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="_1">パターン</h1>
-<h2 id="_2">ワイルドカードパターン</h2>
-<pre><code>_
+<h1 id="_1">基本事項</h1>
+<h2 id="_2">コメント</h2>
+<p>プログラムには自由にコメントを入れることができます。
+コメントは空白と同じ扱いになります。</p>
+<p>コメントには<code>#</code>から改行文字までの単一行コメント</p>
+<pre><code># 単一行コメント
 </code></pre>
 
-<p>あらゆる値にマッチします。</p>
-<h2 id="_3">変数パターン</h2>
-<pre><code>変数名
+<p>と、<code>#[</code>から<code>#]</code>までの複数行コメント</p>
+<pre><code>#[
+複数行コメント
+#]
 </code></pre>
 
-<p>あらゆる値にマッチし、マッチした値に名前を付けます。</p>
-<h2 id="_4">整数パターン</h2>
-<pre><code>整数値
+<p>があります。</p>
+<p>複数行コメントの開始記号を単一行コメントでコメントアウトすると、
+以下のように複数行コメントを一時的に無効にできます。</p>
+<pre><code>##[
+ここはコメントではない
+#]
 </code></pre>
 
-<p>指定した整数値と等しい場合はパターンマッチに成功し、
-そうでない場合は失敗します。</p>
-<h2 id="_5">浮動小数点数パターン</h2>
-<pre><code>浮動小数点数
-</code></pre>
-
-<p>指定した浮動小数点数値と等しい場合はパターンマッチに成功し、
-そうでない場合は失敗します。</p>
-<h2 id="_6">文字列パターン</h2>
-<pre><code>&quot;文字列&quot;
-</code></pre>
-
-<p>指定した文字列値と等しい場合はパターンマッチに成功し、
-そうでない場合は失敗します。</p>
-<h2 id="_7">文字パターン</h2>
-<pre><code>'文字'
-</code></pre>
-
-<p>指定した文字値と等しい場合はパターンマッチに成功し、
-そうでない場合は失敗します。</p>
-<h2 id="_8">真偽値パターン</h2>
-<pre><code>true
-</code></pre>
-
-<p>または</p>
-<pre><code>false
-</code></pre>
-
-<p>指定した真偽値と等しい場合はパターンマッチに成功し、
-そうでない場合は失敗します。</p>
-<h2 id="_9">ユニットパターン</h2>
-<pre><code>()
-</code></pre>
-
-<p>値が<code>()</code>の場合に成功します。失敗することはありません。</p>
-<h2 id="_10">ユーザ定義タグパターン</h2>
-<pre><code>~タグ
-~タグ(引数パターン, ...)
-</code></pre>
-
-<p>指定したユーザ定義タグの場合はパターンマッチに成功し、
-そうでない場合は失敗します。
-引数がある場合はそれぞれの引数とパターンマッチさせます。</p>
-<h2 id="_11">コンスパターン</h2>
-<pre><code>パターン1 :: パターン2
-</code></pre>
-
-<p>リストの先頭をパターン1にリストの先頭以外をパターン2にマッチさせます。</p>
-<h2 id="_12">リストパターン</h2>
-<pre><code>[パターン1, パターン2, ...]
-</code></pre>
-
-<p>リストにマッチします。マッチさせる値と長さが異なる場合は
-失敗します。</p>
-<h2 id="_13">タプルパターン</h2>
-<pre><code>(パターン1, パターン2, ...)
-</code></pre>
-
-<p>タプルにマッチします。</p>
-<h2 id="as">asパターン</h2>
-<pre><code>パターン as 変数名
-</code></pre>
-
-<p>パターンにマッチした値に変数名でアクセスできるようにします。</p>
-<h2 id="or">orパターン</h2>
-<pre><code>パターン1 | パターン2
-</code></pre>
-
-<p>パターン1とパターン2のいずれかでマッチするときに成功します。</p>
-<h2 id="_14">型強制パターン</h2>
-<pre><code>(パターン : 型)
-</code></pre>
-
-<p>パターンが指定した型を持つことを指定します。</p>
+<h2 id="_3">識別子</h2>
+<p>変数名、関数名、仮引数名、ユーザ定義の型名、ユーザ定義のタグなどの名前を
+識別子とよびます。
+識別子はアルファベット、数字、アンダースコアの列です。
+ただし、一文字目はアルファベットまたはアンダースコアである必要があります。
+さらに、キーワードと同じ文字列は利用することはできません。</p>
+<h2 id="_4">キーワード</h2>
+<p>以下の文字列はキーワードとして予約されており、
+識別子として利用することはできません。</p>
+<p><code>and</code> <code>as</code> <code>call</code> <code>cast</code> <code>delegate</code> <code>do</code> <code>else</code> <code>end</code>
+<code>false</code> <code>for</code> <code>fun</code> <code>get</code> <code>if</code> <code>import</code> <code>in</code> <code>include</code>
+<code>let</code> <code>new</code> <code>pat</code> <code>set</code> <code>sget</code> <code>sset</code> <code>true</code> <code>type</code>
+<code>using</code> <code>__define</code> <code>__prim</code> <code>__undefine</code></p>
+<h2 id="_5">プログラムの構成</h2>
+<p>Mokkosu のプログラムは文の列として表現されます。
+文はソースファイルの上から順番に評価されていきます。</p>
 </div>
         </div>
 
