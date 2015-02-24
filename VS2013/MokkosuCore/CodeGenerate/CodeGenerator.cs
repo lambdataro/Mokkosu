@@ -349,7 +349,15 @@ namespace Mokkosu.CodeGenerate
                     typeof(object),
                     new Type[] { typeof(object), typeof(object[]) },
                     null);
-                il.MarkLabel(lbl2);
+                if (e.TailCall)
+                {
+                    il.Emit(OpCodes.Ret);
+                    il.MarkLabel(lbl2);
+                }
+                else
+                {
+                    il.MarkLabel(lbl2);
+                }
             }
             else if (expr is MIf)
             {

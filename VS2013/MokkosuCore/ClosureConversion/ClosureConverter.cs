@@ -88,14 +88,14 @@ namespace Mokkosu.ClosureConversion
                 if (e.ArgPat is PVar)
                 {
                     var ctx2 = new ClosureConversionContext(((PVar)e.ArgPat).Name, fv);
-                    body = Conv(e.Body, ctx2, new MSet<string>(), false);
+                    body = Conv(e.Body, ctx2, new MSet<string>(), true);
                 }
                 else
                 {
                     var arg_name = GenArgName();
                     var ctx2 = new ClosureConversionContext(arg_name, fv);
                     body = Conv(new MMatch(e.Pos, e.ArgPat, new MBool(e.Pos, true), new MVar(arg_name), e.Body,
-                        new MRuntimeError(e.Pos, "パターンマッチ失敗")), ctx2, new MSet<string>(), false);
+                        new MRuntimeError(e.Pos, "パターンマッチ失敗")), ctx2, new MSet<string>(), true);
                 }
                 var fun_name = GenFunctionName();
                 _function_table.Add(fun_name, body);
@@ -167,7 +167,7 @@ namespace Mokkosu.ClosureConversion
                 var locals2 = FunPats(e).Union(locals);
                 var items = e.Items.Select(item =>
                     new MFunItem(item.Name, Conv(item.Expr, ctx, locals2, true))).ToList();
-                var e2 = Conv(e.E2, ctx, locals2, false);
+                var e2 = Conv(e.E2, ctx, locals2, istail);
                 return new MFun(e.Pos, items, e2);
             }
             else if (expr is MFource)

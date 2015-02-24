@@ -253,10 +253,7 @@ fun reverse = {
   x :: xs -> reverse xs ++ [x];
 };
 
-fun map f = {
-  [] -> [];
-  x :: xs -> f x :: map f xs;
-};
+let is_nil = { [] -> true; _ -> false };
 
 let head = {
   [] -> error "head";
@@ -266,6 +263,11 @@ let head = {
 let tail = {
   [] -> error "tail";
   _::xs -> xs;
+};
+
+fun map f = {
+  [] -> [];
+  x :: xs -> f x :: map f xs;
 };
 
 fun nth lis n =

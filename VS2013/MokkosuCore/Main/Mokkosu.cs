@@ -37,7 +37,7 @@ namespace Mokkosu.Main
             sb.AppendLine(@" | |  | || (_) ||   < |   <| (_) |\__ \| |_| |");
             sb.AppendLine(@" |_|  |_| \___/ |_|\_\|_|\_\\___/ |___/ \__,_|");
             sb.AppendLine(@"");
-            sb.AppendLine(@" =============== Version 1.0.7 ===============");
+            sb.AppendLine(@" =============== Version 1.0.8 ===============");
             return sb.ToString();
         }
 
