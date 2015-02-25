@@ -58,10 +58,10 @@ fun eval = {
 
 ## リスト内包表記
 ```
-for x <- 1 .. 10;
-    y <- 1 .. 10;
-    z <- 1 .. 10;
-    if x * x + y * y == z * z;
-in  println(format "{0}, {1}, {2}"
-      [int_to_object x, int_to_object y, int_to_object z]);
+ignore (
+  for x <- 1 .. 10;
+      y <- 1 .. 10;
+      z <- 1 .. 10;
+      if x * x + y * y == z * z;
+  in  println(format "{0}, {1}, {2}" (map box [x, y, z])));
 ```
