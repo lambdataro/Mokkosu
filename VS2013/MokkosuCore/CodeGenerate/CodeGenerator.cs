@@ -1335,8 +1335,12 @@ namespace Mokkosu.CodeGenerate
                         il.MarkLabel(lbl2);
                         il.Emit(OpCodes.Box, typeof(bool));
                     }
-                    
                     break;
+
+                case "box":
+                    // 何もしない
+                    break;
+                    
                 default:
                     throw new NotImplementedException();
             }

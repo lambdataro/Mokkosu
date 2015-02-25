@@ -950,6 +950,17 @@ namespace Mokkosu.TypeInference
                     }
                     break;
 
+                case "box":
+                    if (args.Count == 1)
+                    {
+                        Unification(pos, ret, new DotNetType(typeof(object)));
+                    }
+                    else
+                    {
+                        throw new MError(pos + ": プリミティブ演算の引数の数が不正。");
+                    }
+                    break;
+
                 default:
                     throw new MError(pos + ": プリミティブ演算型エラー");
             }

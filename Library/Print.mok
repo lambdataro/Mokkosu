@@ -3,7 +3,7 @@
 #! @brief	Print
 #! @author	kielnow
 #=============================================================================
-# __define "HIDE_TYPE";
+__define "HIDE_TYPE";
 
 let bracket m = do print "["; m (); print "]" end;
 let paren m = do print "("; m (); print ")" end;
