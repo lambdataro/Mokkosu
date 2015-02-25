@@ -51,7 +51,8 @@ namespace Mokkosu.Lexing
                 { "__undefine", TokenType.UNDEFINE },
                 { "using", TokenType.USING },
                 { "for", TokenType.FOR },
-                { "end", TokenType.END }
+                { "end", TokenType.END },
+                { "istype", TokenType.ISTYPE },
             };
         }
 

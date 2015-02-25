@@ -766,6 +766,39 @@ namespace Mokkosu.AST
         }
     }
 
+    class MIsType : MExpr
+    {
+        public string TypeName { get; private set; }
+        public Type Type { get; set; }
+        public MExpr Expr { get; private set; }
+
+        public MIsType(string pos, string type_name, MExpr expr)
+            : base(pos)
+        {
+            TypeName = type_name;
+            Type = null;
+            Expr = expr;
+        }
+
+        public MIsType(string pos, string src_name, Type src_type, MExpr expr)
+            : base(pos)
+        {
+            TypeName = src_name;
+            Type = src_type;
+            Expr = expr;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("istype<{0}>({1})", TypeName, Expr);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Expr.FreeVars();
+        }
+    }
+
     class MNewClass : MExpr
     {
         public string ClassName { get; private set; }

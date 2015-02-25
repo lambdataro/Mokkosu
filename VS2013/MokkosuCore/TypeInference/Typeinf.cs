@@ -601,6 +601,12 @@ namespace Mokkosu.TypeInference
                 Inference(e.Expr, TypeinfDotNet.DotNetTypeToMokkosuType(src_type), tenv, ctx);
                 Unification(e.Pos, type, TypeinfDotNet.DotNetTypeToMokkosuType(dst_type));
             }
+            else if (expr is MIsType)
+            {
+                var e = (MIsType)expr;
+                e.Type = TypeinfDotNet.LookupDotNetClass(e.Pos, e.TypeName);
+                Unification(e.Pos, type, new BoolType());
+            }
             else if (expr is MNewClass)
             {
                 var e = (MNewClass)expr;

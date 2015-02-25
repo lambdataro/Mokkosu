@@ -1347,6 +1347,17 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.RP);
                 return new MCast(pos, src, dst, expr);
             }
+            else if (ctx.Tkn.Type == TokenType.ISTYPE)
+            {
+                ctx.ReadToken(TokenType.ISTYPE);
+                ctx.ReadToken(TokenType.LT);
+                var name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.GT);
+                ctx.ReadToken(TokenType.LP);
+                var expr = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MIsType(pos, name, expr);
+            }
             else if (ctx.Tkn.Type == TokenType.NEW)
             {
                 ctx.ReadToken(TokenType.NEW);

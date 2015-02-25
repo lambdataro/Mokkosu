@@ -197,6 +197,11 @@ namespace Mokkosu.ClosureConversion
                 return new MCast(e.Pos, e.SrcTypeName, e.SrcType,
                     e.DstTypeName, e.DstType, Conv(e.Expr, ctx, locals, false));
             }
+            else if (expr is MIsType)
+            {
+                var e = (MIsType)expr;
+                return new MIsType(e.Pos, e.TypeName, e.Type, Conv(e.Expr, ctx, locals, false));
+            }
             else if (expr is MNewClass)
             {
                 var e = (MNewClass)expr;

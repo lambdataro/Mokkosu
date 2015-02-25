@@ -630,6 +630,21 @@ namespace Mokkosu.CodeGenerate
                 Compile(il, e.Expr, env);
                 il.Emit(OpCodes.Castclass, e.DstType);
             }
+            else if (expr is MIsType)
+            {
+                var e = (MIsType)expr;
+                var lbl1 = il.DefineLabel();
+                var lbl2 = il.DefineLabel();
+                Compile(il, e.Expr, env);
+                il.Emit(OpCodes.Isinst, e.Type);
+                il.Emit(OpCodes.Brfalse, lbl1);
+                il.Emit(OpCodes.Ldc_I4_1);
+                il.Emit(OpCodes.Br, lbl2);
+                il.MarkLabel(lbl1);
+                il.Emit(OpCodes.Ldc_I4_0);
+                il.MarkLabel(lbl2);
+                il.Emit(OpCodes.Box, typeof(bool));
+            }
             else if (expr is MNewClass)
             {
                 var e = (MNewClass)expr;

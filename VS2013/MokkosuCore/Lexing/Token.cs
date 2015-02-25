@@ -29,6 +29,7 @@
         AS, IN, PRIM, CALL, CAST, IMPORT,
         NEW, GET, SET, SGET, SSET, DELEGATE,
         DEFINE, UNDEFINE, USING, FOR, END,
+        ISTYPE,
         // 制御記号
         EOF
     }
