@@ -368,6 +368,7 @@ namespace Mokkosu.CodeGenerate
             var lbl10 = il.DefineLabel();
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
+            var lbl13 = il.DefineLabel();
 
             // int, unit
             il.Emit(OpCodes.Ldarg_0);
@@ -433,8 +434,26 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Box, typeof(bool));            
             il.Emit(OpCodes.Ret);
 
-            // その他
+            // bool
             il.MarkLabel(lbl10);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Isinst, typeof(bool));
+            il.Emit(OpCodes.Brfalse, lbl11);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Beq, lbl12);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.Emit(OpCodes.Br, lbl13);
+            il.MarkLabel(lbl12);
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.MarkLabel(lbl13);
+            il.Emit(OpCodes.Box, typeof(bool));
+            il.Emit(OpCodes.Ret);
+
+            // その他
+            il.MarkLabel(lbl11);
             il.Emit(OpCodes.Ldstr, "比較演算型エラー");
             il.Emit(OpCodes.Newobj, _application_exception);
             il.Emit(OpCodes.Throw);
@@ -462,6 +481,9 @@ namespace Mokkosu.CodeGenerate
             var lbl10 = il.DefineLabel();
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
+            var lbl13 = il.DefineLabel();
+            var lbl14 = il.DefineLabel();
+            var lbl15 = il.DefineLabel();
 
             // int, unit
             il.Emit(OpCodes.Ldarg_0);
@@ -533,8 +555,26 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
-            // その他
+            // bool
             il.MarkLabel(lbl10);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Isinst, typeof(bool));
+            il.Emit(OpCodes.Brfalse, lbl13);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Beq, lbl14);
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.Emit(OpCodes.Br, lbl15);
+            il.MarkLabel(lbl14);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.MarkLabel(lbl15);
+            il.Emit(OpCodes.Box, typeof(bool));
+            il.Emit(OpCodes.Ret);
+
+            // その他
+            il.MarkLabel(lbl13);
             il.Emit(OpCodes.Ldstr, "比較演算型エラー");
             il.Emit(OpCodes.Newobj, _application_exception);
             il.Emit(OpCodes.Throw);
@@ -562,6 +602,9 @@ namespace Mokkosu.CodeGenerate
             var lbl10 = il.DefineLabel();
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
+            var lbl13 = il.DefineLabel();
+            var lbl14 = il.DefineLabel();
+            var lbl15 = il.DefineLabel();
 
             // int, unit
             il.Emit(OpCodes.Ldarg_0);
@@ -634,8 +677,26 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
-            // その他
+            // bool
             il.MarkLabel(lbl10);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Isinst, typeof(bool));
+            il.Emit(OpCodes.Brfalse, lbl13);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Blt, lbl14);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.Emit(OpCodes.Br, lbl15);
+            il.MarkLabel(lbl14);
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.MarkLabel(lbl15);
+            il.Emit(OpCodes.Box, typeof(bool));
+            il.Emit(OpCodes.Ret);
+
+            // その他
+            il.MarkLabel(lbl13);
             il.Emit(OpCodes.Ldstr, "比較演算型エラー");
             il.Emit(OpCodes.Newobj, _application_exception);
             il.Emit(OpCodes.Throw);
@@ -663,6 +724,9 @@ namespace Mokkosu.CodeGenerate
             var lbl10 = il.DefineLabel();
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
+            var lbl13 = il.DefineLabel();
+            var lbl14 = il.DefineLabel();
+            var lbl15 = il.DefineLabel();
 
             // int, unit
             il.Emit(OpCodes.Ldarg_0);
@@ -735,8 +799,26 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
-            // その他
+            // bool
             il.MarkLabel(lbl10);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Isinst, typeof(bool));
+            il.Emit(OpCodes.Brfalse, lbl13);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Bgt, lbl14);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.Emit(OpCodes.Br, lbl15);
+            il.MarkLabel(lbl14);
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.MarkLabel(lbl15);
+            il.Emit(OpCodes.Box, typeof(bool));
+            il.Emit(OpCodes.Ret);
+
+            // その他
+            il.MarkLabel(lbl13);
             il.Emit(OpCodes.Ldstr, "比較演算型エラー");
             il.Emit(OpCodes.Newobj, _application_exception);
             il.Emit(OpCodes.Throw);
@@ -764,6 +846,9 @@ namespace Mokkosu.CodeGenerate
             var lbl10 = il.DefineLabel();
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
+            var lbl13 = il.DefineLabel();
+            var lbl14 = il.DefineLabel();
+            var lbl15 = il.DefineLabel();
 
             // int, unit
             il.Emit(OpCodes.Ldarg_0);
@@ -836,8 +921,26 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
-            // その他
+            // bool
             il.MarkLabel(lbl10);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Isinst, typeof(bool));
+            il.Emit(OpCodes.Brfalse, lbl13);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Bgt, lbl14);
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.Emit(OpCodes.Br, lbl15);
+            il.MarkLabel(lbl14);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.MarkLabel(lbl15);
+            il.Emit(OpCodes.Box, typeof(bool));
+            il.Emit(OpCodes.Ret);
+
+            // その他
+            il.MarkLabel(lbl13);
             il.Emit(OpCodes.Ldstr, "比較演算型エラー");
             il.Emit(OpCodes.Newobj, _application_exception);
             il.Emit(OpCodes.Throw);
@@ -865,6 +968,9 @@ namespace Mokkosu.CodeGenerate
             var lbl10 = il.DefineLabel();
             var lbl11 = il.DefineLabel();
             var lbl12 = il.DefineLabel();
+            var lbl13 = il.DefineLabel();
+            var lbl14 = il.DefineLabel();
+            var lbl15 = il.DefineLabel();
 
             // int, unit
             il.Emit(OpCodes.Ldarg_0);
@@ -937,8 +1043,26 @@ namespace Mokkosu.CodeGenerate
             il.Emit(OpCodes.Box, typeof(bool));
             il.Emit(OpCodes.Ret);
 
-            // その他
+            // bool
             il.MarkLabel(lbl10);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Isinst, typeof(bool));
+            il.Emit(OpCodes.Brfalse, lbl13);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+            il.Emit(OpCodes.Blt, lbl14);
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.Emit(OpCodes.Br, lbl15);
+            il.MarkLabel(lbl14);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.MarkLabel(lbl15);
+            il.Emit(OpCodes.Box, typeof(bool));
+            il.Emit(OpCodes.Ret);
+
+            // その他
+            il.MarkLabel(lbl13);
             il.Emit(OpCodes.Ldstr, "比較演算型エラー");
             il.Emit(OpCodes.Newobj, _application_exception);
             il.Emit(OpCodes.Throw);
