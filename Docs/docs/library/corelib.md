@@ -369,51 +369,61 @@ strnth : String -> Int -> Char
 文字列のn番目の文字を返します。
 
 ## 文字演算
+### is_control関数
 ```
 is_control : Char -> Bool
 ```
 文字が制御文字であれば真を返します。
 
+### is_digit関数
 ```
 is_digit : Char -> Bool
 ```
 文字が十進数字であれば真を返します。
 
+### is_letter関数
 ```
 is_letter : Char -> Bool
 ```
 文字がUnicode文字であれば真を返します。
 
+### is_letter_or_digit関数
 ```
 is_letter_or_digit : Char -> Bool
 ```
 文字がUnicode文字か十進数字であれば真を返します。
 
+### is_lower関数
 ```
 is_lower : Char -> Bool
 ```
 文字が小文字であれば真を返します。
 
+### is_symbol関数
 ```
 is_symbol : Char -> Bool
 ```
 文字が記号であれば真を返します。
 
+### is_upper関数
 ```
 is_upper : Char -> Bool
 ```
 文字が大文字であれば真を返します。
 
+### is_control関数
 ```
 is_whitespace : Char -> Bool
 ```
 文字が空白文字であれば真を返します。
 
+### to_lower関数
 ```
 to_lower : Char -> Char
 ```
 文字を小文字に変換します。
 
+### to_upper関数
 ```
 to_upper : Char -> Char
 ```
