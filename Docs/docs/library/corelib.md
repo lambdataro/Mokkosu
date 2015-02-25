@@ -493,35 +493,11 @@ single_to_double : {System.Single} -> Double
 ```
 単精度浮動小数点数を倍精度浮動小数点数に変換します。
 
-### int_to_object関数
+### box関数
 ```
-int_to_object : Int -> {System.Object}
+box : α -> {System.Object}
 ```
-整数をObject型に変換します。
-
-### double_to_object関数
-```
-double_to_object : Double -> {System.Object}
-```
-浮動小数点数をObject型に変換します。
-
-### bool_to_object関数
-```
-bool_to_object : Bool -> {System.Object}
-```
-真偽値をObject型に変換します。
-
-### char_to_object関数
-```
-char_to_object : Char -> {System.Object}
-```
-文字をObject型に変換します。
-
-### string_to_object関数
-```
-string_to_object : String -> {System.Object}
-```
-文字列をObject型に変換します。
+値をObject型にキャストします。
 
 ## 関数
 
