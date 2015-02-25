@@ -55,7 +55,7 @@ do _form.GetType().InvokeMember("DoubleBuffered",
 	  (sget System.Reflection.BindingFlags::SetProperty)) : {System.Reflection.BindingFlags}),
   cast<Object,System.Reflection.Binder>(null),
   _form,
-  list_to_array [bool_to_object true]) |> ignore;
+  list_to_array [box true]) |> ignore;
   
 do _form.set_SizeGripStyle(sget SizeGripStyle::Hide);
 do _form.set_FormBorderStyle(sget FormBorderStyle::FixedSingle);

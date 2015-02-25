@@ -158,7 +158,7 @@ fill_ellipse : {System.Drawing.Graphics} -> {System.Drawing.Brush} ->
 draw_pixel : {System.Drawing.Graphics} ->
    Int -> Int -> Int -> Int -> Int -> ()
 ```
-`draw_pixel graphics r h b x y`で指定した座標に指定した色のピクセルを打つ。
+`draw_pixel graphics r g b x y`で指定した座標に指定した色のピクセルを打つ。
 
 ## 色の変換
 ### hsv_to_rgb関数
