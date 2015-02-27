@@ -1,0 +1,184 @@
+#------------------------------------------------------------
+#! @file    MokkosuTest.mok
+#! @brief   Mokkosu動作確認用プログラム (言語 + コアライブラリ)
+#! @author  lambdataro
+#------------------------------------------------------------
+
+do println "====================";
+do println "   Mokkosu Test";
+do println "====================";
+
+include "List.mok";
+include "Print.mok";
+include "Graphics.mok";
+
+let assert expr =
+  if expr -> ()
+  else error "assert";
+
+#----------------------------------------
+# コメント
+#----------------------------------------
+
+#[
+let x = false;
+#]
+
+##[
+let x = true;
+#]
+assert x;
+
+println "コメント: OK";
+
+#----------------------------------------
+# 識別子
+#----------------------------------------
+
+let __test_variable = true;
+let variable123 = true;
+
+println "識別子: OK";
+
+#----------------------------------------
+# let文
+#----------------------------------------
+
+let x = 123;
+assert <| x == 123;
+
+let f x y = x + y;
+assert <| f 10 20 == 30;
+
+let f x = x;
+assert <| f f 10 == 10;
+
+println "let文: OK";
+
+#----------------------------------------
+# fun文
+#----------------------------------------
+
+fun f x = x * 2;
+assert <| f 10 == 20;
+
+fun f x y = x + y;
+assert <| f 10 20 == 30;
+
+fun fact n =
+  if n == 0 -> 1
+  else n * fact (n - 1);
+assert <| fact 5 == 120;
+
+fun fact = {
+  0 -> 1;
+  n -> n * fact (n - 1);
+};
+assert <| fact 5 == 120;
+
+fun even = { 0 -> true;  n -> odd (n - 1)  }
+and odd  = { 0 -> false; n -> even (n - 1) };
+assert <| even 10 == true;
+assert <| even 11 == false;
+assert <| odd 10 == false;
+assert <| odd 11 == true;
+
+println "fun文: OK";
+
+#----------------------------------------
+# type文
+#----------------------------------------
+
+# nat
+
+type nat = zero | succ(nat);
+
+fun addnat x y =
+  match x {
+    ~zero -> y;
+    ~succ(n) -> succ(addnat n y);
+  };
+
+fun eqnat x y =
+  match (x, y) {
+    (~zero, ~zero) -> true;
+    (~zero, ~succ(_)) -> false;
+    (~succ(_), ~zero) -> false;
+    (~succ(n), ~succ(m)) -> eqnat n m;
+  };
+
+fun int_to_nat n =
+  if n == 0 -> zero
+  else succ(int_to_nat (n - 1));
+
+fun nat_to_int = {
+  ~zero -> 0;
+  ~succ(n) -> 1 + nat_to_int n;
+};
+
+assert <| nat_to_int
+  (addnat (int_to_nat 10) (int_to_nat 20)) == 30;
+
+# dict
+
+type Dict<K,V> = Empty | Entry(K, V, Dict<K,V>);
+
+fun list_to_dict = {
+  [] -> Empty;
+  (k,v) :: rest -> Entry(k, v, list_to_dict rest);
+};
+
+fun lookup_dict k = {
+  ~Empty -> error <| "Not found: " ^ to_string k;
+  ~Entry(k2, v, rest) ? k == k2 -> v;
+  ~Entry(k2, v, rest) -> lookup_dict k rest;
+};
+
+assert <| lookup_dict "b" (
+  list_to_dict [("a", 123), ("b", 234), ("c", 345)]) == 234;
+  
+# lambda
+
+type Expr = EInt(Int)
+          | EAdd(Expr, Expr)
+          | EMul(Expr, Expr)
+          | EVar(String)
+          | EFun(String, Expr)
+          | EApp(Expr, Expr);
+
+type Value = VInt(Int)
+           | VFun(String, Expr, Env)
+and Env = Env([(String, Value)]);
+
+fun eval env = {
+  ~EInt(n) -> VInt(n);
+  ~EAdd(e1, e2) ->
+    let ~VInt(n1) = eval env e1 in
+    let ~VInt(n2) = eval env e2 in
+    VInt(n1 + n2);
+  ~EMul(e1, e2) ->
+    let ~VInt(n1) = eval env e1 in
+    let ~VInt(n2) = eval env e2 in
+    VInt(n1 * n2);
+  ~EVar(x) -> lookup_env x env;
+  ~EFun(x, e) -> VFun(x, e, env);
+  ~EApp(e1, e2) ->
+    let ~VFun(x, body, fenv) = eval env e1 in
+    let arg = eval env e2 in
+    let fenv2 = extenv x arg fenv in
+    eval fenv2 body
+}
+and lookup_env x ~Env(env) = from_just (lookup x env)
+and extenv x arg ~Env(env) = Env((x, arg) :: env);
+
+let test =
+  EApp (EApp (EFun ("f", EFun("x",
+    EApp(EVar "f", EApp (EVar "f", EVar "x")))),
+      EFun("x", EMul(EVar "x", EInt 2))), EInt 10);
+
+let ~VInt(result) = eval (Env []) test;
+
+assert <| result == 40;
+
+println "type文: OK";
+
