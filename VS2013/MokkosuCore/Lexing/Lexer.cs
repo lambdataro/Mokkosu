@@ -179,6 +179,16 @@ namespace Mokkosu.Lexing
             {
                 sb.Append('e');
                 _strm.NextChar();
+                if (_strm.Char == '+')
+                {
+                    sb.Append('+');
+                    _strm.NextChar();
+                }
+                else if (_strm.Char == '-')
+                {
+                    sb.Append('-');
+                    _strm.NextChar();
+                }
                 while (_strm.IsDigit())
                 {
                     sb.Append(_strm.Char);
