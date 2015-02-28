@@ -795,6 +795,10 @@ namespace Mokkosu.Lexing
                     throw new MError(_strm.Pos + ": Unicodeエスケープシーケンスが不正");
                 }
                 sb.Append(_strm.Char);
+                if (i < 3)
+                {
+                    _strm.NextChar();
+                }
             }
             var int_char = Convert.ToUInt32(sb.ToString(), 16);
             return Convert.ToChar(int_char);
