@@ -8,9 +8,9 @@ do println "====================";
 do println "   Mokkosu Test";
 do println "====================";
 
-include "List.mok";
-include "Print.mok";
-include "Graphics.mok";
+#include "List.mok";
+#include "Print.mok";
+#include "Graphics.mok";
 
 let assert expr =
   if expr -> ()
@@ -181,4 +181,178 @@ let ~VInt(result) = eval (Env []) test;
 assert <| result == 40;
 
 println "type文: OK";
+
+#----------------------------------------
+# 整数型
+#----------------------------------------
+
+let x = 123;
+assert <| 0xff == 255;
+assert <| 0XFF == 255;
+assert <| 0o33 == 27;
+assert <| 0O33 == 27;
+assert <| 0b1100 == 12;
+assert <| 0B1100 == 12;
+
+println "整数型: OK";
+
+#----------------------------------------
+# 浮動小数点数型
+#----------------------------------------
+
+let x = 3.;
+let x = 3.14;
+let x = 3.14e3;
+let x = 3.14e-3;
+let x = 3.14e+3;
+let x = 314e21;
+let x = 3.14e21;
+let x = 314E21;
+let x = 3.14E21;
+let x = 314e-21;
+let x = 314E-21;
+let x = 3.14e-21;
+let x = 3.14E-21;
+
+println "浮動小数点数型: OK";
+
+#----------------------------------------
+# 文字列型
+#----------------------------------------
+
+let s = "";
+let s = "abc";
+let s = @"abc";
+let s = @"abc\";
+let s = "\'\"\\\a\b\f\n\r\t\v";
+let s = "\0";
+let s = "\u0066";
+assert <| "abc\\def" == @"abc\def";
+
+println "文字列型: OK";
+
+#----------------------------------------
+# 文字型
+#----------------------------------------
+
+let c = 'A';
+let c = 'あ';
+let c = '\"';
+let c = '\u0066';
+
+println "文字型: OK";
+
+#----------------------------------------
+# 真偽値型
+#----------------------------------------
+
+let b = true;
+let b = false;
+
+println "真偽値型: OK";
+
+#----------------------------------------
+# ユニット型
+#----------------------------------------
+
+let x = ();
+
+println "ユニット型: OK";
+
+#----------------------------------------
+# リスト型
+#----------------------------------------
+
+let x = [];
+let x = [1,2,3];
+
+println "リスト型: OK";
+
+#----------------------------------------
+# タプル型
+#----------------------------------------
+
+let x = (1, "abc");
+let x = (1, 2, 3);
+
+println "タプル型: OK";
+
+#----------------------------------------
+# 関数型
+#----------------------------------------
+
+let f = \x -> \y -> x + y;
+assert <| f 10 20 == 30;
+
+let f = \x y -> x + y;
+assert <| f 10 20 == 30;
+
+let f = \x -> x;
+assert <| f 6 == 6;
+
+println "関数型: OK";
+
+#----------------------------------------
+# do式
+#----------------------------------------
+
+do do print "abc"; println "def" in ();
+do do print "abc"; println "def"; in ();
+do do print "abc"; println "def" end;
+do do print "abc"; println "def"; end;
+
+println "do式: OK";
+
+#----------------------------------------
+# let式
+#----------------------------------------
+
+do let x = 12 in assert <| (x * x) == 144;
+do let f x = x * x in assert <| (f 12) == 144;
+do let f x y = x * y in assert <| (f 5 6) == 30;
+
+println "let式: OK";
+
+#----------------------------------------
+# fun式
+#----------------------------------------
+
+do fun f x = x * 2 in
+   assert <| f 10 == 20;
+
+do fun f x y = x + y in
+   assert <| f 10 20 == 30;
+
+do fun fact n =
+     if n == 0 -> 1
+     else n * fact (n - 1)
+   in assert <| fact 5 == 120;
+
+do fun fact = {
+     0 -> 1;
+     n -> n * fact (n - 1);
+   } in
+   assert <| fact 5 == 120;
+
+do fun evan = { 0 -> true;  n -> odd (n - 1)  }
+   and odd  = { 0 -> false; n -> even (n - 1) }
+   in do
+     assert <| even 10 == true;
+     assert <| even 11 == false;
+     assert <| odd 10 == false;
+     assert <| odd 11 == true;
+   end;
+
+println "fun式: OK";
+
+#----------------------------------------
+# if式
+#----------------------------------------
+
+assert <| (if true -> 123 else 456) == 123;
+assert <| (if false -> 123 else 456) == 456;
+
+println "if式: OK";
+
+
 
