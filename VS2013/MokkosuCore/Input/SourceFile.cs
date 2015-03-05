@@ -8,6 +8,8 @@ namespace Mokkosu.Input
         int _line;
         TextReader _tr;
 
+        public string Name { get { return _name; } }
+
         public SourceFile(TextReader tr, string name)
         {
             _name = name;
