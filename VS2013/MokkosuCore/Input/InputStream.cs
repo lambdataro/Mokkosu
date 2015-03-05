@@ -37,7 +37,8 @@ namespace Mokkosu.Input
                 return;
             }
 
-            var path = Path.Combine(_exe_path, fname);
+            var root = fname.StartsWith("./") ? Path.GetDirectoryName(_current_srcfile.Name) : _exe_path;
+            var path = Path.Combine(root, Path.GetDirectoryName(fname.Substring(2)), Path.GetFileName(fname));
             if (File.Exists(path))
             {
                 _source_stack.Push(_current_srcfile);
