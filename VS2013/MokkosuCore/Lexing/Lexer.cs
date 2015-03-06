@@ -559,6 +559,7 @@ namespace Mokkosu.Lexing
                     _strm.NextChar();
                     if (_strm.Char == '=')
                     {
+                        _strm.NextChar();
                         return new Token(Pos, TokenType.GTGTEQ);
                     }
                     else
