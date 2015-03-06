@@ -487,7 +487,15 @@ namespace Mokkosu.Lexing
                 else if (_strm.Char == '|')
                 {
                     _strm.NextChar();
-                    return new Token(Pos, TokenType.LTBAR);
+                    if (_strm.Char == '>')
+                    {
+                        _strm.NextChar();
+                        return new Token(Pos, TokenType.LTBARGT);
+                    }
+                    else
+                    {
+                        return new Token(Pos, TokenType.LTBAR);
+                    }
                 }
                 else if (_strm.Char == '-')
                 {
@@ -539,6 +547,19 @@ namespace Mokkosu.Lexing
                     else
                     {
                         return new Token(Pos, TokenType.LTPLS);
+                    }
+                }
+                else if (_strm.Char == '$')
+                {
+                    _strm.NextChar();
+                    if (_strm.Char == '>')
+                    {
+                        _strm.NextChar();
+                        return new Token(Pos, TokenType.LTDOLLGT);
+                    }
+                    else
+                    {
+                        throw new MError(_strm.Pos + "構文エラー");
                     }
                 }
                 else
