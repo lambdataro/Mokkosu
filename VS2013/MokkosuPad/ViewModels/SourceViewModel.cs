@@ -79,7 +79,7 @@ namespace MokkosuPad.ViewModels
         {
             if (!loaded_flg)
             {
-                Text = Model.GetSampleProgramString();
+                Text = Model.GetSampleOrFileString();
                 DirtyFlag = false;
                 loaded_flg = true;
             }
