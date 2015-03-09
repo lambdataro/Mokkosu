@@ -14,6 +14,7 @@ using System.IO;
 using System.Xml;
 using System.Windows.Threading;
 using System.Threading;
+using System.Linq;
 
 namespace MokkosuPad.ViewModels
 {
@@ -31,6 +32,13 @@ namespace MokkosuPad.ViewModels
 
             Documents.Add(_source_vm);
             Documents.Add(_output_vm);
+
+            var name = Environment.GetCommandLineArgs().Skip(1).FirstOrDefault();
+            if (name != null)
+            {
+                _source_fname = name;
+                WindowTitle = ProgramName + " - " + Path.GetFileName(_source_fname);
+            }
 
             Model.OutputReceived += OutputReceived;
         }
