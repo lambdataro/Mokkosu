@@ -127,14 +127,25 @@ namespace MokkosuPad.Models
             return _mokkosu.GetVersionString();
         }
 
-        public static string GetSampleProgramString()
+        static string GetProgramString(string path)
         {
-            var exe_path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            using (var strm = new StreamReader(Path.Combine(exe_path, "Startup.mok")))
+            using (var strm = new StreamReader(path))
             {
                 var str = strm.ReadToEnd();
                 return str;
             }
+        }
+
+        public static string GetSampleProgramString()
+        {
+            var name = Environment.GetCommandLineArgs().Skip(1).SingleOrDefault();
+            if (name != null)
+            {
+                return GetProgramString(name);
+            }
+            
+            var exe_path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            return GetProgramString(Path.Combine(exe_path, "Startup.mok"));
         }
     }
 }
