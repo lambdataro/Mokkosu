@@ -535,13 +535,25 @@ namespace Mokkosu.CodeGenerate
                     {
                         var e = (MCallStatic)k.Expr;
 
-                        compiler_stack.Push(new ContMCallStatic1()
+                        if (e.Args.Count > 0)
                         {
-                            E = e,
-                            Env = k.Env,
-                            Idx = 1
-                        });
-                        compiler_stack.Push(new ContEval() { Expr = e.Args[0], Env = k.Env });
+                            compiler_stack.Push(new ContMCallStatic1()
+                            {
+                                E = e,
+                                Env = k.Env,
+                                Idx = 1
+                            });
+                            compiler_stack.Push(new ContEval() { Expr = e.Args[0], Env = k.Env });
+                        }
+                        else
+                        {
+                            compiler_stack.Push(new ContMCallStatic1()
+                            {
+                                E = e,
+                                Env = k.Env,
+                                Idx = 0
+                            });
+                        }
                     }
                     else if (k.Expr is MCast)
                     {
@@ -896,7 +908,7 @@ namespace Mokkosu.CodeGenerate
                     il.Emit(OpCodes.Stfld, _value_ref_field);
                     if (k.Idx < k.Locals.Length)
                     {
-                        il.Emit(OpCodes.Ldloc, k.Locals[k.Idx - 1]);
+                        il.Emit(OpCodes.Ldloc, k.Locals[k.Idx]);
                         compiler_stack.Push(new ContMFun1()
                         {
                             E = k.E,
@@ -963,29 +975,32 @@ namespace Mokkosu.CodeGenerate
                 {
                     var k = (ContMCallStatic1)cont;
 
-                    var t = Typeinf.ReduceType(k.E.Types[k.Idx - 1]);
-                    if (t is IntType)
+                    if (k.Idx != 0)
                     {
-                        il.Emit(OpCodes.Unbox_Any, typeof(int));
-                    }
-                    else if (t is DoubleType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, typeof(double));
-                    }
-                    else if (t is CharType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, typeof(char));
-                    }
-                    else if (t is BoolType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                    }
-                    else if (t is DotNetType)
-                    {
-                        var dotnettype = (DotNetType)t;
-                        if (dotnettype.Type.IsValueType)
+                        var t = Typeinf.ReduceType(k.E.Types[k.Idx - 1]);
+                        if (t is IntType)
                         {
-                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                            il.Emit(OpCodes.Unbox_Any, typeof(int));
+                        }
+                        else if (t is DoubleType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(double));
+                        }
+                        else if (t is CharType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(char));
+                        }
+                        else if (t is BoolType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                        }
+                        else if (t is DotNetType)
+                        {
+                            var dotnettype = (DotNetType)t;
+                            if (dotnettype.Type.IsValueType)
+                            {
+                                il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                            }
                         }
                     }
 
