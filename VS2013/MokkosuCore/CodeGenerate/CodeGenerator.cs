@@ -132,11 +132,11 @@ namespace Mokkosu.CodeGenerate
             foreach (var f in cc_result.FunctionTable)
             {
                 var il = _function_table[f.Key].GetILGenerator();
-                Compile(il, f.Value, new LEnv());
+                Compile(il, new ContEval() { Expr = f.Value, Env = new LEnv() });
                 il.Emit(OpCodes.Ret);
             }
             var ilgen = _function_table["MokkosuMain"].GetILGenerator();
-            Compile(ilgen, cc_result.Main, new LEnv());
+            Compile(ilgen, new ContEval() { Expr = cc_result.Main, Env = new LEnv() });
             ilgen.Emit(OpCodes.Ret);
 
             // MokkosuEntryPoint
@@ -242,417 +242,728 @@ namespace Mokkosu.CodeGenerate
             _function_table.Add(name, builder);
         }
 
-        static void Compile(ILGenerator il, MExpr expr, LEnv env)
+        static void Compile(ILGenerator il, CodeGeneratorCont start_cont)
         {
-            if (expr is MInt)
+            var compiler_stack = new Stack<CodeGeneratorCont>();
+            compiler_stack.Push(start_cont);
+
+            while (compiler_stack.Count > 0)
             {
-                var e = (MInt)expr;
-                il.Emit(OpCodes.Ldc_I4, e.Value);
-                il.Emit(OpCodes.Box, typeof(int));
-            }
-            else if (expr is MDouble)
-            {
-                var e = (MDouble)expr;
-                il.Emit(OpCodes.Ldc_R8, e.Value);
-                il.Emit(OpCodes.Box, typeof(double));
-            }
-            else if (expr is MString)
-            {
-                var e = (MString)expr;
-                il.Emit(OpCodes.Ldstr, e.Value);
-            }
-            else if (expr is MChar)
-            {
-                var e = (MChar)expr;
-                il.Emit(OpCodes.Ldc_I4, e.Value);
-                il.Emit(OpCodes.Box, typeof(char));
-            }
-            else if (expr is MUnit)
-            {
-                il.Emit(OpCodes.Ldc_I4_0);
-                il.Emit(OpCodes.Box, typeof(int));
-            }
-            else if (expr is MBool)
-            {
-                var e = (MBool)expr;
-                if (e.Value)
+                var cont = compiler_stack.Pop();
+
+                if (cont is ContEval)
                 {
-                    il.Emit(OpCodes.Ldc_I4_1);
+                    var k = (ContEval)cont;
+
+                    if (k.Expr is MInt)
+                    {
+                        var e = (MInt)k.Expr;
+                        il.Emit(OpCodes.Ldc_I4, e.Value);
+                        il.Emit(OpCodes.Box, typeof(int));
+                    }
+                    else if (k.Expr is MDouble)
+                    {
+                        var e = (MDouble)k.Expr;
+                        il.Emit(OpCodes.Ldc_R8, e.Value);
+                        il.Emit(OpCodes.Box, typeof(double));
+                    }
+                    else if (k.Expr is MString)
+                    {
+                        var e = (MString)k.Expr;
+                        il.Emit(OpCodes.Ldstr, e.Value);
+                    }
+                    else if (k.Expr is MChar)
+                    {
+                        var e = (MChar)k.Expr;
+                        il.Emit(OpCodes.Ldc_I4, e.Value);
+                        il.Emit(OpCodes.Box, typeof(char));
+                    }
+                    else if (k.Expr is MUnit)
+                    {
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Box, typeof(int));
+                    }
+                    else if (k.Expr is MBool)
+                    {
+                        var e = (MBool)k.Expr;
+                        if (e.Value)
+                        {
+                            il.Emit(OpCodes.Ldc_I4_1);
+                        }
+                        else
+                        {
+                            il.Emit(OpCodes.Ldc_I4_0);
+                        }
+                        il.Emit(OpCodes.Box, typeof(bool));
+                    }
+                    else if (k.Expr is MVar)
+                    {
+                        var e = (MVar)k.Expr;
+                        if (e.IsTag)
+                        {
+                            il.Emit(OpCodes.Newobj, _tag_type.GetConstructor(new Type[] { }));
+                            il.Emit(OpCodes.Dup);
+                            il.Emit(OpCodes.Dup);
+                            il.Emit(OpCodes.Ldc_I4, e.TagIndex);
+                            il.Emit(OpCodes.Stfld, _tag_id);
+                            il.Emit(OpCodes.Ldnull);
+                            il.Emit(OpCodes.Stfld, _tag_args);
+                        }
+                        else
+                        {
+                            var loc = k.Env.Lookup(e.Name);
+                            il.Emit(OpCodes.Ldloc, loc);
+                            var lbl1 = il.DefineLabel();
+                            var lbl2 = il.DefineLabel();
+                            il.MarkLabel(lbl1);
+                            il.Emit(OpCodes.Dup);
+                            il.Emit(OpCodes.Isinst, _value_ref_type);
+                            il.Emit(OpCodes.Brfalse, lbl2);
+                            il.Emit(OpCodes.Ldfld, _value_ref_field);
+                            il.Emit(OpCodes.Br, lbl1);
+                            il.MarkLabel(lbl2);
+                        }
+                    }
+                    else if (k.Expr is MApp)
+                    {
+                        var e = (MApp)k.Expr;
+                        compiler_stack.Push(new ContMApp1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.FunExpr, Env = k.Env });
+                    }
+                    else if (k.Expr is MIf)
+                    {
+                        var e = (MIf)k.Expr;
+                        compiler_stack.Push(new ContMIf1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.CondExpr, Env = k.Env });
+                    }
+                    else if (k.Expr is MMatch)
+                    {
+                        var e = (MMatch)k.Expr;
+                        compiler_stack.Push(new ContMatch1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
+                    }
+                    else if (k.Expr is MNil)
+                    {
+                        var e = (MNil)k.Expr;
+                        il.Emit(OpCodes.Newobj, _tag_type.GetConstructor(new Type[] { }));
+                        il.Emit(OpCodes.Dup);
+                        il.Emit(OpCodes.Dup);
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Stfld, _tag_id);
+                        il.Emit(OpCodes.Ldnull);
+                        il.Emit(OpCodes.Stfld, _tag_args);
+                    }
+                    else if (k.Expr is MCons)
+                    {
+                        var e = (MCons)k.Expr;
+                        il.Emit(OpCodes.Newobj, _tag_type.GetConstructor(new Type[] { }));
+                        il.Emit(OpCodes.Dup);
+                        il.Emit(OpCodes.Dup);
+
+                        il.Emit(OpCodes.Ldc_I4_1);
+                        il.Emit(OpCodes.Stfld, _tag_id);
+
+                        var arr = il.DeclareLocal(typeof(object[]));
+                        il.Emit(OpCodes.Ldc_I4_2);
+                        il.Emit(OpCodes.Newarr, typeof(object));
+                        il.Emit(OpCodes.Stloc, arr);
+
+                        il.Emit(OpCodes.Ldloc, arr);
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        compiler_stack.Push(new ContMCons1() { E = e, Env = k.Env, Arr = arr });
+                        compiler_stack.Push(new ContEval() { Expr = e.Head, Env = k.Env });
+                    }
+                    else if (k.Expr is MTuple)
+                    {
+                        var e = (MTuple)k.Expr;
+                        il.Emit(OpCodes.Ldc_I4, e.Size);
+                        il.Emit(OpCodes.Newarr, typeof(object));
+                        var arr = il.DeclareLocal(typeof(object[]));
+                        il.Emit(OpCodes.Stloc, arr);
+
+                        il.Emit(OpCodes.Ldloc, arr);
+                        il.Emit(OpCodes.Ldc_I4, 0);
+
+                        compiler_stack.Push(new ContMTuple1() { E = e, Env = k.Env, Arr = arr, Idx = 1 });
+                        compiler_stack.Push(new ContEval() { Expr = e.Items[0], Env = k.Env });
+                    }
+                    else if (k.Expr is MDo)
+                    {
+                        var e = (MDo)k.Expr;
+                        compiler_stack.Push(new ContMDo1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.E1, Env = k.Env });
+                    }
+                    else if (k.Expr is MLet)
+                    {
+                        var e = (MLet)k.Expr;
+                        compiler_stack.Push(new ContMLet1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.E1, Env = k.Env });
+                    }
+                    else if (k.Expr is MFun)
+                    {
+                        var e = (MFun)k.Expr;
+
+                        var locals = e.Items.Select(item => il.DeclareLocal(typeof(object))).ToArray();
+                        var env2 = k.Env;
+                        for (var i = 0; i < e.Items.Count; i++)
+                        {
+                            env2 = env2.Cons(e.Items[i].Name, locals[i]);
+                        }
+                        for (var i = 0; i < locals.Length; i++)
+                        {
+                            il.Emit(OpCodes.Newobj, _value_ref_type.GetConstructor(new Type[] { }));
+                            il.Emit(OpCodes.Stloc, locals[i]);
+                        }
+                        il.Emit(OpCodes.Ldloc, locals[0]);
+                        compiler_stack.Push(new ContMFun1()
+                        {
+                            E = e,
+                            Env = k.Env,
+                            Env2 = env2,
+                            Idx = 1,
+                            Locals = locals
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = e.Items[0].Expr, Env = env2 });
+                    }
+                    else if (k.Expr is MRuntimeError)
+                    {
+                        var e = (MRuntimeError)k.Expr;
+                        il.Emit(OpCodes.Ldstr, e.Pos + ": " + e.Message);
+                        il.Emit(OpCodes.Newobj, _application_exception);
+                        il.Emit(OpCodes.Throw);
+                    }
+                    else if (k.Expr is MPrim)
+                    {
+                        var e = (MPrim)k.Expr;
+                        if (e.Args.Count > 0)
+                        {
+                            compiler_stack.Push(new ContMPrim1() { E = e, Env = k.Env, Idx = 1 });
+                            compiler_stack.Push(new ContEval() { Expr = e.Args[0], Env = k.Env });
+                        }
+                        else
+                        {
+                            compiler_stack.Push(new ContMPrim1() { E = e, Env = k.Env, Idx = 0 });
+                        }
+                    }
+                    else if (k.Expr is MGetArg)
+                    {
+                        var e = (MGetArg)k.Expr;
+                        il.Emit(OpCodes.Ldarg_0);
+                        // deref
+                        var lbl1 = il.DefineLabel();
+                        var lbl2 = il.DefineLabel();
+                        il.MarkLabel(lbl1);
+                        il.Emit(OpCodes.Dup);
+                        il.Emit(OpCodes.Isinst, _value_ref_type);
+                        il.Emit(OpCodes.Brfalse, lbl2);
+                        il.Emit(OpCodes.Ldfld, _value_ref_field);
+                        il.Emit(OpCodes.Br, lbl1);
+                        il.MarkLabel(lbl2);
+                    }
+                    else if (k.Expr is MGetEnv)
+                    {
+                        var e = (MGetEnv)k.Expr;
+                        il.Emit(OpCodes.Ldarg_1);
+                        il.Emit(OpCodes.Ldc_I4, e.Index);
+                        il.Emit(OpCodes.Ldelem_Ref);
+                        // deref
+                        var lbl1 = il.DefineLabel();
+                        var lbl2 = il.DefineLabel();
+                        il.MarkLabel(lbl1);
+                        il.Emit(OpCodes.Dup);
+                        il.Emit(OpCodes.Isinst, _value_ref_type);
+                        il.Emit(OpCodes.Brfalse, lbl2);
+                        il.Emit(OpCodes.Ldfld, _value_ref_field);
+                        il.Emit(OpCodes.Br, lbl1);
+                        il.MarkLabel(lbl2);
+                    }
+                    else if (k.Expr is MMakeClos)
+                    {
+                        var e = (MMakeClos)k.Expr;
+
+                        // 2要素の配列を作る
+                        il.Emit(OpCodes.Ldc_I4_2);
+                        il.Emit(OpCodes.Newarr, typeof(object));
+                        var arr1 = il.DeclareLocal(typeof(object[]));
+                        il.Emit(OpCodes.Stloc, arr1);
+                        // 1要素目に関数へのポインタを代入
+                        il.Emit(OpCodes.Ldloc, arr1);
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Ldftn, _function_table[e.ClosName]);
+                        il.Emit(OpCodes.Stelem_Ref);
+                        // キャプチャされた値用の配列を作成
+                        il.Emit(OpCodes.Ldc_I4, e.Args.Length);
+                        il.Emit(OpCodes.Newarr, typeof(object));
+                        var arr2 = il.DeclareLocal(typeof(object[]));
+                        il.Emit(OpCodes.Stloc, arr2);
+
+                        if (e.Args.Length > 0)
+                        {
+                            // キャプチャされた値を配列に代入
+                            il.Emit(OpCodes.Ldloc, arr2);
+                            il.Emit(OpCodes.Ldc_I4, 0);
+
+                            compiler_stack.Push(new ContMMakeClos1()
+                            {
+                                E = e,
+                                Env = k.Env,
+                                Arr1 = arr1,
+                                Arr2 = arr2,
+                                Idx = 1
+                            });
+                            compiler_stack.Push(new ContEval() { Expr = e.Args[0], Env = k.Env });
+                        }
+                        else
+                        {
+                            compiler_stack.Push(new ContMMakeClos1()
+                            {
+                                E = e,
+                                Env = k.Env,
+                                Arr1 = arr1,
+                                Arr2 = arr2,
+                                Idx = 0
+                            });
+                        }
+                    }
+                    else if (k.Expr is MVarClos)
+                    {
+                        var e = (MVarClos)k.Expr;
+                        var loc = k.Env.Lookup(e.Name);
+                        il.Emit(OpCodes.Ldloc, loc);
+                    }
+                    else if (k.Expr is MCallStatic)
+                    {
+                        var e = (MCallStatic)k.Expr;
+
+                        compiler_stack.Push(new ContMCallStatic1()
+                        {
+                            E = e,
+                            Env = k.Env,
+                            Idx = 1
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = e.Args[0], Env = k.Env });
+                    }
+                    else if (k.Expr is MCast)
+                    {
+                        var e = (MCast)k.Expr;
+                        compiler_stack.Push(new ContMCast1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
+                    }
+                    else if (k.Expr is MIsType)
+                    {
+                        var e = (MIsType)k.Expr;
+                        compiler_stack.Push(new ContMIsType1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
+                    }
+                    else if (k.Expr is MNewClass)
+                    {
+                        var e = (MNewClass)k.Expr;
+                        if (e.Args.Count > 0)
+                        {
+                            compiler_stack.Push(new ContMNewClass1()
+                            {
+                                E = e,
+                                Env = k.Env,
+                                Idx = 1
+                            });
+                            compiler_stack.Push(new ContEval() { Expr = e.Args[0], Env = k.Env });
+                        }
+                        else
+                        {
+                            compiler_stack.Push(new ContMNewClass1()
+                            {
+                                E = e,
+                                Env = k.Env,
+                                Idx = 0
+                            });
+                        }
+                    }
+                    else if (k.Expr is MInvoke)
+                    {
+                        var e = (MInvoke)k.Expr;
+                        compiler_stack.Push(new ContMInvoke1()
+                        {
+                            E = e,
+                            Env = k.Env,
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
+                    }
+                    else if (k.Expr is MDelegate)
+                    {
+                        var e = (MDelegate)k.Expr;
+
+                        // メソッドを生成
+                        var method = _type_builder.DefineMethod(GenDelegateName(),
+                            MethodAttributes.Static, typeof(void), e.ParamType);
+                        var delil = method.GetILGenerator();
+
+                        var field = _type_builder.DefineField(GenFieldName(),
+                            typeof(object[]), FieldAttributes.Static);
+
+                        compiler_stack.Push(new ContMDelegate1()
+                        {
+                            E = e,
+                            Env = k.Env,
+                            Method = method, 
+                            Delil = delil,
+                            Field = field
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
+                    }
+                    else if (k.Expr is MSet)
+                    {
+                        var e = (MSet)k.Expr;
+                        compiler_stack.Push(new ContMSet1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
+                    }
+                    else if (k.Expr is MGet)
+                    {
+                        var e = (MGet)k.Expr;
+                        compiler_stack.Push(new ContMGet1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
+                    }
+                    else if (k.Expr is MSSet)
+                    {
+                        var e = (MSSet)k.Expr;
+                        compiler_stack.Push(new ContMSSet1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Arg, Env = k.Env });
+                    }
+                    else if (k.Expr is MSGet)
+                    {
+                        var e = (MSGet)k.Expr;
+                        if (e.Info.IsLiteral)
+                        {
+                            if (e.Info.FieldType == typeof(int))
+                            {
+                                il.Emit(OpCodes.Ldc_I4, (int)e.Info.GetRawConstantValue());
+                            }
+                            else if (e.Info.FieldType == typeof(double))
+                            {
+                                il.Emit(OpCodes.Ldc_R8, (double)e.Info.GetRawConstantValue());
+                            }
+                            else
+                            {
+                                var n = e.Info.GetValue(null);
+                                il.Emit(OpCodes.Ldc_I4, (int)n);
+                            }
+                        }
+                        else
+                        {
+                            il.Emit(OpCodes.Ldsfld, e.Info);
+                        }
+                        if (e.Info.FieldType.IsValueType)
+                        {
+                            il.Emit(OpCodes.Box, e.Info.FieldType);
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
-                else
+                else if (cont is ContMApp1)
                 {
-                    il.Emit(OpCodes.Ldc_I4_0);
-                }
-                il.Emit(OpCodes.Box, typeof(bool));
-            }
-            else if (expr is MVar)
-            {
-                var e = (MVar)expr;
-                if (e.IsTag)
-                {
-                    il.Emit(OpCodes.Newobj, _tag_type.GetConstructor(new Type[] { }));
-                    il.Emit(OpCodes.Dup);
-                    il.Emit(OpCodes.Dup);
-                    il.Emit(OpCodes.Ldc_I4, e.TagIndex);
-                    il.Emit(OpCodes.Stfld, _tag_id);
-                    il.Emit(OpCodes.Ldnull);
-                    il.Emit(OpCodes.Stfld, _tag_args);
-                }
-                else
-                {
-                    var loc = env.Lookup(e.Name);
-                    il.Emit(OpCodes.Ldloc, loc);
+                    var k = (ContMApp1)cont;
+                    var ary = il.DeclareLocal(typeof(object));
+                    il.Emit(OpCodes.Stloc, ary);
+
                     var lbl1 = il.DefineLabel();
                     var lbl2 = il.DefineLabel();
-                    il.MarkLabel(lbl1);
-                    il.Emit(OpCodes.Dup);
-                    il.Emit(OpCodes.Isinst, _value_ref_type);
-                    il.Emit(OpCodes.Brfalse, lbl2);
-                    il.Emit(OpCodes.Ldfld, _value_ref_field);
-                    il.Emit(OpCodes.Br, lbl1);
-                    il.MarkLabel(lbl2);
-                }
-            }
-            else if (expr is MApp)
-            {
-                var e = (MApp)expr;
-                Compile(il, e.FunExpr, env);
-                var ary = il.DeclareLocal(typeof(object));
-                il.Emit(OpCodes.Stloc, ary);
 
-                var lbl1 = il.DefineLabel();
-                var lbl2 = il.DefineLabel();
-
-                il.Emit(OpCodes.Ldloc, ary);
-                il.Emit(OpCodes.Isinst, _tag_type);
-                il.Emit(OpCodes.Brfalse, lbl1);
-                il.Emit(OpCodes.Ldloc, ary);
-                Compile(il, e.ArgExpr, env);
-                il.Emit(OpCodes.Stfld, _tag_args);
-                il.Emit(OpCodes.Ldloc, ary);
-                il.Emit(OpCodes.Br, lbl2);
-
-                il.MarkLabel(lbl1);
-                Compile(il, e.ArgExpr, env);
-                il.Emit(OpCodes.Ldloc, ary);
-                il.Emit(OpCodes.Ldc_I4_1);
-                il.Emit(OpCodes.Ldelem_Ref);
-                il.Emit(OpCodes.Ldloc, ary);
-                il.Emit(OpCodes.Ldc_I4_0);
-                il.Emit(OpCodes.Ldelem_Ref);
-                if (e.TailCall)
-                {
-                    il.Emit(OpCodes.Tailcall);
-                }
-                il.EmitCalli(OpCodes.Calli,
-                    CallingConventions.Standard,
-                    typeof(object),
-                    new Type[] { typeof(object), typeof(object[]) },
-                    null);
-                if (e.TailCall)
-                {
-                    il.Emit(OpCodes.Ret);
-                    il.MarkLabel(lbl2);
-                }
-                else
-                {
-                    il.MarkLabel(lbl2);
-                }
-            }
-            else if (expr is MIf)
-            {
-                var e = (MIf)expr;
-                Compile(il, e.CondExpr, env);
-                var lbl1 = il.DefineLabel();
-                var lbl2 = il.DefineLabel();
-                il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                il.Emit(OpCodes.Brfalse, lbl1);
-                Compile(il, e.ThenExpr, env);
-                il.Emit(OpCodes.Br, lbl2);
-                il.MarkLabel(lbl1);
-                Compile(il, e.ElseExpr, env);
-                il.MarkLabel(lbl2);
-            }
-            else if (expr is MMatch)
-            {
-                var e = (MMatch)expr;
-                var fail_label = il.DefineLabel();
-                var lbl1 = il.DefineLabel();
-                Compile(il, e.Expr, env);
-                var env2 = CompilePat(il, e.Pat, fail_label);
-                var env3 = env2.Append(env);
-                Compile(il, e.Guard, env3);
-                il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                il.Emit(OpCodes.Brfalse, fail_label);
-                Compile(il, e.ThenExpr, env3);
-                il.Emit(OpCodes.Br, lbl1);
-                il.MarkLabel(fail_label);
-                Compile(il, e.ElseExpr, env);
-                il.MarkLabel(lbl1);
-            }
-            else if (expr is MNil)
-            {
-                il.Emit(OpCodes.Newobj, _tag_type.GetConstructor(new Type[] { }));
-                il.Emit(OpCodes.Dup);
-                il.Emit(OpCodes.Dup);
-                il.Emit(OpCodes.Ldc_I4_0);
-                il.Emit(OpCodes.Stfld, _tag_id);
-                il.Emit(OpCodes.Ldnull);
-                il.Emit(OpCodes.Stfld, _tag_args);
-            }
-            else if (expr is MCons)
-            {
-                var e = (MCons)expr;
-
-                il.Emit(OpCodes.Newobj, _tag_type.GetConstructor(new Type[] { }));
-                il.Emit(OpCodes.Dup);
-                il.Emit(OpCodes.Dup);
-
-                il.Emit(OpCodes.Ldc_I4_1);
-                il.Emit(OpCodes.Stfld, _tag_id);
-                
-                var arr = il.DeclareLocal(typeof(object[]));
-                il.Emit(OpCodes.Ldc_I4_2);
-                il.Emit(OpCodes.Newarr, typeof(object));
-                il.Emit(OpCodes.Stloc, arr);
-
-                il.Emit(OpCodes.Ldloc, arr);
-                il.Emit(OpCodes.Ldc_I4_0);
-                Compile(il, e.Head, env);
-                il.Emit(OpCodes.Stelem_Ref);
-
-                il.Emit(OpCodes.Ldloc, arr);
-                il.Emit(OpCodes.Ldc_I4_1);
-                Compile(il, e.Tail, env);
-                il.Emit(OpCodes.Stelem_Ref);
-
-                il.Emit(OpCodes.Ldloc, arr);
-                il.Emit(OpCodes.Stfld, _tag_args);
-            }
-            else if (expr is MTuple)
-            {
-                var e = (MTuple)expr;
-                il.Emit(OpCodes.Ldc_I4, e.Size);
-                il.Emit(OpCodes.Newarr, typeof(object));
-                var arr = il.DeclareLocal(typeof(object[]));
-                il.Emit(OpCodes.Stloc, arr);
-                for (var i = 0; i < e.Size; i++)
-                {
-                    il.Emit(OpCodes.Ldloc, arr);
-                    il.Emit(OpCodes.Ldc_I4, i);
-                    Compile(il, e.Items[i], env);
-                    il.Emit(OpCodes.Stelem_Ref);
-                }
-                il.Emit(OpCodes.Ldloc, arr);
-            }
-            else if (expr is MDo)
-            {
-                var e = (MDo)expr;
-                Compile(il, e.E1, env);
-                il.Emit(OpCodes.Pop);
-                Compile(il, e.E2, env);
-            }
-            else if (expr is MLet)
-            {
-                var e = (MLet)expr;
-                var fail_label = il.DefineLabel();
-                var lbl = il.DefineLabel();
-                Compile(il, e.E1, env);
-                var env2 = CompilePat(il, e.Pat, fail_label);
-
-                il.Emit(OpCodes.Br, lbl);
-                il.MarkLabel(fail_label);
-                il.Emit(OpCodes.Ldstr, e.Pos + ": パターンマッチ失敗");
-                il.Emit(OpCodes.Newobj, _application_exception);
-                il.Emit(OpCodes.Throw);
-
-                il.MarkLabel(lbl);
-                Compile(il, e.E2, env2.Append(env));
-            }
-            else if (expr is MFun)
-            {
-                var e = (MFun)expr;
-                var locals = e.Items.Select(item => il.DeclareLocal(typeof(object))).ToArray();
-                var env2 = env;
-                for (var i = 0; i < e.Items.Count; i++)
-                {
-                    env2 = env2.Cons(e.Items[i].Name, locals[i]);
-                }
-                for (var i = 0; i < locals.Length; i++)
-                {
-                    il.Emit(OpCodes.Newobj, _value_ref_type.GetConstructor(new Type[] { }));
-                    il.Emit(OpCodes.Stloc, locals[i]);
-                }
-                for (var i = 0; i < locals.Length; i++)
-                {
-                    il.Emit(OpCodes.Ldloc, locals[i]);
-                    Compile(il, e.Items[i].Expr, env2);
-                    il.Emit(OpCodes.Stfld, _value_ref_field);
-                }
-                Compile(il, e.E2, env2);
-            }
-            else if (expr is MRuntimeError)
-            {
-                var e = (MRuntimeError)expr;
-                il.Emit(OpCodes.Ldstr, e.Pos + ": " + e.Message);
-                il.Emit(OpCodes.Newobj, _application_exception);
-                il.Emit(OpCodes.Throw);
-            }
-            else if (expr is MPrim)
-            {
-                var e = (MPrim)expr;
-                foreach (var arg in e.Args)
-                {
-                    Compile(il, arg, env);
-                }
-                CompilePrim(il, e.Name, e.ArgTypes, e.RetType);
-            }
-            else if (expr is MGetArg)
-            {
-                il.Emit(OpCodes.Ldarg_0);
-                // deref
-                var lbl1 = il.DefineLabel();
-                var lbl2 = il.DefineLabel();
-                il.MarkLabel(lbl1);
-                il.Emit(OpCodes.Dup);
-                il.Emit(OpCodes.Isinst, _value_ref_type);
-                il.Emit(OpCodes.Brfalse, lbl2);
-                il.Emit(OpCodes.Ldfld, _value_ref_field);
-                il.Emit(OpCodes.Br, lbl1);
-                il.MarkLabel(lbl2); 
-            }
-            else if (expr is MGetEnv)
-            {
-                var e = (MGetEnv)expr;
-                il.Emit(OpCodes.Ldarg_1);
-                il.Emit(OpCodes.Ldc_I4, e.Index);
-                il.Emit(OpCodes.Ldelem_Ref);
-                // deref
-                var lbl1 = il.DefineLabel();
-                var lbl2 = il.DefineLabel();
-                il.MarkLabel(lbl1);
-                il.Emit(OpCodes.Dup);
-                il.Emit(OpCodes.Isinst, _value_ref_type);
-                il.Emit(OpCodes.Brfalse, lbl2);
-                il.Emit(OpCodes.Ldfld, _value_ref_field);
-                il.Emit(OpCodes.Br, lbl1);
-                il.MarkLabel(lbl2);
-            }
-            else if (expr is MMakeClos)
-            {
-                var e = (MMakeClos)expr;
-                // 2要素の配列を作る
-                il.Emit(OpCodes.Ldc_I4_2);
-                il.Emit(OpCodes.Newarr, typeof(object));
-                var arr1 = il.DeclareLocal(typeof(object[]));
-                il.Emit(OpCodes.Stloc, arr1);
-                // 1要素目に関数へのポインタを代入
-                il.Emit(OpCodes.Ldloc, arr1);
-                il.Emit(OpCodes.Ldc_I4_0);
-                il.Emit(OpCodes.Ldftn, _function_table[e.ClosName]);
-                il.Emit(OpCodes.Stelem_Ref);
-                // キャプチャされた値用の配列を作成
-                il.Emit(OpCodes.Ldc_I4, e.Args.Length);
-                il.Emit(OpCodes.Newarr, typeof(object));
-                var arr2 = il.DeclareLocal(typeof(object[]));
-                il.Emit(OpCodes.Stloc, arr2);
-                // キャプチャされた値を配列に代入
-                for (var i = 0; i < e.Args.Length; i++)
-                {
-                    il.Emit(OpCodes.Ldloc, arr2);
-                    il.Emit(OpCodes.Ldc_I4, i);
-                    Compile(il, e.Args[i], env);
-                    il.Emit(OpCodes.Stelem_Ref);
-                }
-                // できた配列を最初の配列の2要素目に代入
-                il.Emit(OpCodes.Ldloc, arr1);
-                il.Emit(OpCodes.Ldc_I4_1);
-                il.Emit(OpCodes.Ldloc, arr2);
-                il.Emit(OpCodes.Stelem_Ref);
-                // 2要素の配列をロード
-                il.Emit(OpCodes.Ldloc, arr1);
-                
-            }
-            else if (expr is MVarClos)
-            {
-                var e = (MVarClos)expr;
-                var loc = env.Lookup(e.Name);
-                il.Emit(OpCodes.Ldloc, loc);
-            }
-            else if (expr is MCallStatic)
-            {
-                var e = (MCallStatic)expr;
-
-                for (int i = 0; i < e.Args.Count; i++)
-                {
-                    Compile(il, e.Args[i], env);
-                    var t = Typeinf.ReduceType(e.Types[i]);
-                    if (t is IntType)
+                    il.Emit(OpCodes.Ldloc, ary);
+                    il.Emit(OpCodes.Isinst, _tag_type);
+                    il.Emit(OpCodes.Brfalse, lbl1);
+                    il.Emit(OpCodes.Ldloc, ary);
+                    compiler_stack.Push(new ContMApp2()
                     {
-                        il.Emit(OpCodes.Unbox_Any, typeof(int));
-                    }
-                    else if (t is DoubleType)
+                        E = k.E,
+                        Env = k.Env,
+                        Ary = ary,
+                        Lbl1 = lbl1,
+                        Lbl2 = lbl2
+                    });
+                    compiler_stack.Push(new ContEval()
                     {
-                        il.Emit(OpCodes.Unbox_Any, typeof(double));
-                    }
-                    else if (t is CharType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, typeof(char));
-                    }
-                    else if (t is BoolType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                    }
-                    else if (t is DotNetType)
-                    {
-                        var dotnettype = (DotNetType)t;
-                        if (dotnettype.Type.IsValueType)
-                        {
-                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
-                        }
-                    }
+                        Expr = k.E.ArgExpr,
+                        Env = k.Env
+                    });
                 }
-
-                il.Emit(OpCodes.Call, e.Info);
-
-                if (e.Info.ReturnType == typeof(void))
+                else if (cont is ContMApp2)
                 {
+                    var k = (ContMApp2)cont;
+                    il.Emit(OpCodes.Stfld, _tag_args);
+                    il.Emit(OpCodes.Ldloc, k.Ary);
+                    il.Emit(OpCodes.Br, k.Lbl2);
+                    il.MarkLabel(k.Lbl1);
+                    compiler_stack.Push(new ContMApp3()
+                    {
+                        E = k.E,
+                        Env = k.Env,
+                        Ary = k.Ary,
+                        Lbl1 = k.Lbl1,
+                        Lbl2 = k.Lbl2
+                    });
+                    compiler_stack.Push(new ContEval()
+                    {
+                        Expr = k.E.ArgExpr,
+                        Env = k.Env
+                    });
+                }
+                else if (cont is ContMApp3)
+                {
+                    var k = (ContMApp3)cont;
+                    il.Emit(OpCodes.Ldloc, k.Ary);
+                    il.Emit(OpCodes.Ldc_I4_1);
+                    il.Emit(OpCodes.Ldelem_Ref);
+                    il.Emit(OpCodes.Ldloc, k.Ary);
                     il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Ldelem_Ref);
+                    if (k.E.TailCall)
+                    {
+                        il.Emit(OpCodes.Tailcall);
+                    }
+                    il.EmitCalli(OpCodes.Calli,
+                        CallingConventions.Standard,
+                        typeof(object),
+                        new Type[] { typeof(object), typeof(object[]) },
+                        null);
+                    if (k.E.TailCall)
+                    {
+                        il.Emit(OpCodes.Ret);
+                        il.MarkLabel(k.Lbl2);
+                    }
+                    else
+                    {
+                        il.MarkLabel(k.Lbl2);
+                    }
                 }
-                else if (e.Info.ReturnType.IsValueType)
+                else if (cont is ContMIf1)
                 {
-                    il.Emit(OpCodes.Box, e.Info.ReturnType);
+                    var k = (ContMIf1)cont;
+                    var lbl1 = il.DefineLabel();
+                    var lbl2 = il.DefineLabel();
+                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    il.Emit(OpCodes.Brfalse, lbl1);
+                    compiler_stack.Push(new ContMIf2()
+                    {
+                        E = k.E,
+                        Env = k.Env,
+                        Lbl1 = lbl1,
+                        Lbl2 = lbl2
+                    });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.ThenExpr, Env = k.Env });
                 }
-            }
-            else if (expr is MCast)
-            {
-                var e = (MCast)expr;
-                Compile(il, e.Expr, env);
-                il.Emit(OpCodes.Castclass, e.DstType);
-            }
-            else if (expr is MIsType)
-            {
-                var e = (MIsType)expr;
-                var lbl1 = il.DefineLabel();
-                var lbl2 = il.DefineLabel();
-                Compile(il, e.Expr, env);
-                il.Emit(OpCodes.Isinst, e.Type);
-                il.Emit(OpCodes.Brfalse, lbl1);
-                il.Emit(OpCodes.Ldc_I4_1);
-                il.Emit(OpCodes.Br, lbl2);
-                il.MarkLabel(lbl1);
-                il.Emit(OpCodes.Ldc_I4_0);
-                il.MarkLabel(lbl2);
-                il.Emit(OpCodes.Box, typeof(bool));
-            }
-            else if (expr is MNewClass)
-            {
-                var e = (MNewClass)expr;
+                else if (cont is ContMIf2)
+                {
+                    var k = (ContMIf2)cont;
+                    il.Emit(OpCodes.Br, k.Lbl2);
+                    il.MarkLabel(k.Lbl1);
+                    compiler_stack.Push(new ContMIf3()
+                    {
+                        E = k.E,
+                        Env = k.Env,
+                        Lbl1 = k.Lbl1,
+                        Lbl2 = k.Lbl2
+                    });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.ElseExpr, Env = k.Env });
+                }
+                else if (cont is ContMIf3)
+                {
+                    var k = (ContMIf3)cont;
+                    il.MarkLabel(k.Lbl2);
+                }
+                else if (cont is ContMatch1)
+                {
+                    var k = (ContMatch1)cont;
+                    var fail_label = il.DefineLabel();
+                    var lbl1 = il.DefineLabel();
+                    var env2 = CompilePat(il, k.E.Pat, fail_label);
+                    var env3 = env2.Append(k.Env);
+                    compiler_stack.Push(new ContMatch2()
+                    {
+                        E = k.E,
+                        Env = k.Env,
+                        Lbl1 = lbl1,
+                        FailLbl = fail_label,
+                        Env3 = env3
+                    });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.Guard, Env = env3 });
+                }
+                else if (cont is ContMatch2)
+                {
+                    var k = (ContMatch2)cont;
+                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    il.Emit(OpCodes.Brfalse, k.FailLbl);
+                    compiler_stack.Push(new ContMatch3()
+                    {
+                        E = k.E,
+                        Env = k.Env,
+                        Lbl1 = k.Lbl1,
+                        FailLbl = k.FailLbl,
+                        Env3 = k.Env3
+                    });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.ThenExpr, Env = k.Env3 });
+                }
+                else if (cont is ContMatch3)
+                {
+                    var k = (ContMatch3)cont;
+                    il.Emit(OpCodes.Br, k.Lbl1);
+                    il.MarkLabel(k.FailLbl);
+                    compiler_stack.Push(new ContMatch4()
+                    {
+                        E = k.E,
+                        Env = k.Env,
+                        Lbl1 = k.Lbl1,
+                        FailLbl = k.FailLbl,
+                        Env3 = k.Env3
+                    });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.ElseExpr, Env = k.Env });
+                }
+                else if (cont is ContMatch4)
+                {
+                    var k = (ContMatch4)cont;
+                    il.MarkLabel(k.Lbl1);
+                }
+                else if (cont is ContMCons1)
+                {
+                    var k = (ContMCons1)cont;
 
-                for (int i = 0; i < e.Args.Count; i++)
+                    il.Emit(OpCodes.Stelem_Ref);
+
+                    il.Emit(OpCodes.Ldloc, k.Arr);
+                    il.Emit(OpCodes.Ldc_I4_1);
+                    compiler_stack.Push(new ContMCons2() { E = k.E, Env = k.Env, Arr = k.Arr });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.Tail, Env = k.Env });
+                }
+                else if (cont is ContMCons2)
                 {
-                    Compile(il, e.Args[i], env);
-                    var t = Typeinf.ReduceType(e.Types[i]);
+                    var k = (ContMCons2)cont;
+                    il.Emit(OpCodes.Stelem_Ref);
+
+                    il.Emit(OpCodes.Ldloc, k.Arr);
+                    il.Emit(OpCodes.Stfld, _tag_args);
+                }
+                else if (cont is ContMTuple1)
+                {
+                    var k = (ContMTuple1)cont;
+                    il.Emit(OpCodes.Stelem_Ref);
+                    if (k.Idx < k.E.Size)
+                    {
+                        il.Emit(OpCodes.Ldloc, k.Arr);
+                        il.Emit(OpCodes.Ldc_I4, k.Idx);
+                        compiler_stack.Push(new ContMTuple1()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Arr = k.Arr,
+                            Idx = k.Idx + 1
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Items[k.Idx], Env = k.Env });
+                    }
+                    else
+                    {
+                        il.Emit(OpCodes.Ldloc, k.Arr);
+                    }
+                }
+                else if (cont is ContMDo1)
+                {
+                    var k = (ContMDo1)cont;
+                    il.Emit(OpCodes.Pop);
+                    compiler_stack.Push(new ContEval() { Expr = k.E.E2, Env = k.Env });
+                }
+                else if (cont is ContMLet1)
+                {
+                    var k = (ContMLet1)cont;
+                    var fail_label = il.DefineLabel();
+                    var lbl = il.DefineLabel();
+                    var env2 = CompilePat(il, k.E.Pat, fail_label);
+
+                    il.Emit(OpCodes.Br, lbl);
+                    il.MarkLabel(fail_label);
+                    il.Emit(OpCodes.Ldstr, k.E.Pos + ": パターンマッチ失敗");
+                    il.Emit(OpCodes.Newobj, _application_exception);
+                    il.Emit(OpCodes.Throw);
+
+                    il.MarkLabel(lbl);
+
+                    var env3 = env2.Append(k.Env);
+
+                    compiler_stack.Push(new ContEval() { Expr = k.E.E2, Env = env3 });
+                }
+                else if (cont is ContMFun1)
+                {
+                    var k = (ContMFun1)cont;
+                    il.Emit(OpCodes.Stfld, _value_ref_field);
+                    if (k.Idx < k.Locals.Length)
+                    {
+                        il.Emit(OpCodes.Ldloc, k.Locals[k.Idx - 1]);
+                        compiler_stack.Push(new ContMFun1()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Env2 = k.Env2,
+                            Idx = k.Idx + 1,
+                            Locals = k.Locals
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Items[k.Idx].Expr, Env = k.Env2 });
+                    }
+                    else
+                    {
+                        compiler_stack.Push(new ContEval() { Expr = k.E.E2, Env = k.Env2 });
+                    }
+                }
+                else if (cont is ContMPrim1)
+                {
+                    var k = (ContMPrim1)cont;
+                    if (k.Idx < k.E.Args.Count)
+                    {
+                        compiler_stack.Push(new ContMPrim1() { E = k.E, Env = k.Env, Idx = k.Idx + 1 });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Args[k.Idx], Env = k.Env });
+                    }
+                    else
+                    {
+                        CompilePrim(il, k.E.Name, k.E.ArgTypes, k.E.RetType);
+                    }
+                }
+                else if (cont is ContMMakeClos1)
+                {
+                    var k = (ContMMakeClos1)cont;
+
+                    if (k.Idx != 0)
+                    {
+                        il.Emit(OpCodes.Stelem_Ref);
+                    }
+
+                    if (k.Idx < k.E.Args.Length)
+                    {
+                        il.Emit(OpCodes.Ldloc, k.Arr2);
+                        il.Emit(OpCodes.Ldc_I4, k.Idx);
+                        compiler_stack.Push(new ContMMakeClos1()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Arr1 = k.Arr1,
+                            Arr2 = k.Arr2,
+                            Idx = k.Idx + 1
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Args[k.Idx], Env = k.Env });
+                    }
+                    else
+                    {
+                        // できた配列を最初の配列の2要素目に代入
+                        il.Emit(OpCodes.Ldloc, k.Arr1);
+                        il.Emit(OpCodes.Ldc_I4_1);
+                        il.Emit(OpCodes.Ldloc, k.Arr2);
+                        il.Emit(OpCodes.Stelem_Ref);
+                        // 2要素の配列をロード
+                        il.Emit(OpCodes.Ldloc, k.Arr1);
+                    }
+                }
+                else if (cont is ContMCallStatic1)
+                {
+                    var k = (ContMCallStatic1)cont;
+
+                    var t = Typeinf.ReduceType(k.E.Types[k.Idx - 1]);
                     if (t is IntType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(int));
@@ -677,52 +988,382 @@ namespace Mokkosu.CodeGenerate
                             il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
                         }
                     }
-                }
 
-                il.Emit(OpCodes.Newobj, e.Info);
-
-                if (e.Info.DeclaringType.IsValueType)
-                {
-                    il.Emit(OpCodes.Box, e.Info.DeclaringType);
-                }
-            }
-            else if (expr is MInvoke)
-            {
-                var e = (MInvoke)expr;
-
-                Compile(il, e.Expr, env);
-
-                var t = Typeinf.ReduceType(e.ExprType);
-
-                if (t is IntType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(int));
-                }
-                else if (t is DoubleType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(double));
-                }
-                else if (t is CharType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(char));
-                }
-                else if (t is BoolType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                }
-                else if (t is DotNetType)
-                {
-                    var dotnettype = (DotNetType)t;
-                    if (dotnettype.Type.IsValueType)
+                    if (k.Idx < k.E.Args.Count)
                     {
-                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        compiler_stack.Push(new ContMCallStatic1()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Idx = k.Idx + 1
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Args[k.Idx], Env = k.Env });
+                    }
+                    else
+                    {
+                        il.Emit(OpCodes.Call, k.E.Info);
+
+                        if (k.E.Info.ReturnType == typeof(void))
+                        {
+                            il.Emit(OpCodes.Ldc_I4_0);
+                        }
+                        else if (k.E.Info.ReturnType.IsValueType)
+                        {
+                            il.Emit(OpCodes.Box, k.E.Info.ReturnType);
+                        }
                     }
                 }
-
-                for (int i = 0; i < e.Args.Count; i++)
+                else if (cont is ContMCast1)
                 {
-                    Compile(il, e.Args[i], env);
-                    var tt = Typeinf.ReduceType(e.Types[i]);
+                    var k = (ContMCast1)cont;
+                    il.Emit(OpCodes.Castclass, k.E.DstType);
+                }
+                else if (cont is ContMIsType1)
+                {
+                    var k = (ContMIsType1)cont;
+                    var lbl1 = il.DefineLabel();
+                    var lbl2 = il.DefineLabel();
+                    il.Emit(OpCodes.Isinst, k.E.Type);
+                    il.Emit(OpCodes.Brfalse, lbl1);
+                    il.Emit(OpCodes.Ldc_I4_1);
+                    il.Emit(OpCodes.Br, lbl2);
+                    il.MarkLabel(lbl1);
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.MarkLabel(lbl2);
+                    il.Emit(OpCodes.Box, typeof(bool));
+                }
+                else if (cont is ContMNewClass1)
+                {
+                    var k = (ContMNewClass1)cont;
+
+                    if (k.Idx != 0)
+                    {
+                        var t = Typeinf.ReduceType(k.E.Types[k.Idx - 1]);
+                        if (t is IntType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(int));
+                        }
+                        else if (t is DoubleType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(double));
+                        }
+                        else if (t is CharType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(char));
+                        }
+                        else if (t is BoolType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                        }
+                        else if (t is DotNetType)
+                        {
+                            var dotnettype = (DotNetType)t;
+                            if (dotnettype.Type.IsValueType)
+                            {
+                                il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                            }
+                        }
+                    }
+
+                    if (k.Idx < k.E.Args.Count)
+                    {
+                        compiler_stack.Push(new ContMNewClass1()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Idx = k.Idx + 1
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Args[k.Idx], Env = k.Env });
+                    }
+                    else
+                    {
+                        il.Emit(OpCodes.Newobj, k.E.Info);
+
+                        if (k.E.Info.DeclaringType.IsValueType)
+                        {
+                            il.Emit(OpCodes.Box, k.E.Info.DeclaringType);
+                        }
+                    }
+                }
+                else if (cont is ContMInvoke1)
+                {
+                    var k = (ContMInvoke1)cont;
+
+                    var t = Typeinf.ReduceType(k.E.ExprType);
+
+                    if (t is IntType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    }
+                    else if (t is DoubleType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(double));
+                    }
+                    else if (t is CharType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(char));
+                    }
+                    else if (t is BoolType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                    else if (t is DotNetType)
+                    {
+                        var dotnettype = (DotNetType)t;
+                        if (dotnettype.Type.IsValueType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        }
+                    }
+
+                    if (k.E.Args.Count > 0)
+                    {
+                        compiler_stack.Push(new ContMInvoke2()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Idx = 1,
+                            T = t
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Args[0], Env = k.Env });
+                    }
+                    else
+                    {
+                        compiler_stack.Push(new ContMInvoke2()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Idx = 0,
+                            T = t
+                        });
+                    }
+                }
+                else if (cont is ContMInvoke2)
+                {
+                    var k = (ContMInvoke2)cont;
+
+                    if (k.E.Args.Count > 0)
+                    {
+                        var tt = Typeinf.ReduceType(k.E.Types[k.Idx - 1]);
+                        if (tt is IntType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(int));
+                        }
+                        else if (tt is DoubleType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(double));
+                        }
+                        else if (tt is CharType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(char));
+                        }
+                        else if (tt is BoolType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                        }
+                        else if (tt is DotNetType)
+                        {
+                            var dotnettype = (DotNetType)tt;
+                            if (dotnettype.Type.IsValueType)
+                            {
+                                il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                            }
+                        }
+                    }
+
+                    if (k.Idx < k.E.Args.Count)
+                    {
+                        compiler_stack.Push(new ContMInvoke2()
+                        {
+                            E = k.E,
+                            Env = k.Env,
+                            Idx = k.Idx + 1,
+                            T = k.T,
+                        });
+                        compiler_stack.Push(new ContEval() { Expr = k.E.Args[k.Idx], Env = k.Env });
+                    }
+                    else
+                    {
+                        var dotnet = TypeinfDotNet.MokkosuTypeToDotNetType("", k.T);
+                        if (dotnet.IsValueType)
+                        {
+                            var loc = il.DeclareLocal(dotnet);
+                            il.Emit(OpCodes.Stloc, loc);
+                            il.Emit(OpCodes.Ldloca, loc);
+                            il.Emit(OpCodes.Call, k.E.Info);
+                        }
+                        else
+                        {
+                            il.Emit(OpCodes.Callvirt, k.E.Info);
+                        }
+
+                        if (k.E.Info.ReturnType == typeof(void))
+                        {
+                            il.Emit(OpCodes.Ldc_I4_0);
+                        }
+                        else if (k.E.Info.ReturnType.IsValueType)
+                        {
+                            il.Emit(OpCodes.Box, k.E.Info.ReturnType);
+                        }
+                    }
+                }
+                else if (cont is ContMDelegate1)
+                {
+                    var k = (ContMDelegate1)cont;
+
+                    var delil = k.Delil;
+
+                    il.Emit(OpCodes.Stsfld, k.Field);
+
+                    delil.Emit(OpCodes.Ldsfld, k.Field);
+                    var fun = delil.DeclareLocal(typeof(object));
+                    delil.Emit(OpCodes.Stloc, fun);
+
+                    var ary = delil.DeclareLocal(typeof(object[]));
+                    delil.Emit(OpCodes.Ldc_I4, k.E.ParamType.Length);
+                    delil.Emit(OpCodes.Newarr, typeof(object));
+                    delil.Emit(OpCodes.Stloc, ary);
+                    for (int i = 0; i < k.E.ParamType.Length; i++)
+                    {
+                        delil.Emit(OpCodes.Ldloc, ary);
+                        delil.Emit(OpCodes.Ldc_I4, i);
+                        delil.Emit(OpCodes.Ldarg, i);
+                        delil.Emit(OpCodes.Stelem, typeof(object));
+                    }
+                    delil.Emit(OpCodes.Ldloc, ary);
+                    delil.Emit(OpCodes.Ldloc, fun);
+                    delil.Emit(OpCodes.Ldc_I4_1);
+                    delil.Emit(OpCodes.Ldelem_Ref);
+                    delil.Emit(OpCodes.Ldloc, fun);
+                    delil.Emit(OpCodes.Ldc_I4_0);
+                    delil.Emit(OpCodes.Ldelem_Ref);
+                    delil.EmitCalli(OpCodes.Calli,
+                        CallingConventions.Standard,
+                        typeof(object),
+                        new Type[] { typeof(object), typeof(object[]) },
+                        null);
+                    delil.Emit(OpCodes.Pop);
+                    delil.Emit(OpCodes.Ret);
+                    // メソッドここまで
+
+                    il.Emit(OpCodes.Ldnull);
+                    il.Emit(OpCodes.Ldftn, k.Method);
+                    il.Emit(OpCodes.Newobj, k.E.CstrInfo);
+                }
+                else if (cont is ContMSet1)
+                {
+                    var k = (ContMSet1)cont;
+
+                    var t = Typeinf.ReduceType(k.E.ExprType);
+
+                    if (t is IntType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    }
+                    else if (t is DoubleType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(double));
+                    }
+                    else if (t is CharType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(char));
+                    }
+                    else if (t is BoolType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                    else if (t is DotNetType)
+                    {
+                        var dotnettype = (DotNetType)t;
+                        if (dotnettype.Type.IsValueType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        }
+                    }
+
+                    compiler_stack.Push(new ContMSet2() { E = k.E, Env = k.Env });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.Arg, Env = k.Env });
+                }
+                else if (cont is ContMSet2)
+                {
+                    var k = (ContMSet2)cont;
+
+                    var tt = Typeinf.ReduceType(k.E.ArgType);
+
+                    if (tt is IntType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    }
+                    else if (tt is DoubleType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(double));
+                    }
+                    else if (tt is CharType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(char));
+                    }
+                    else if (tt is BoolType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                    else if (k.T is DotNetType)
+                    {
+                        var dotnettype = (DotNetType)tt;
+                        if (dotnettype.Type.IsValueType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        }
+                    }
+
+                    il.Emit(OpCodes.Stfld, k.E.Info);
+
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Box, typeof(int));
+                }
+                else if (cont is ContMGet1)
+                {
+                    var k = (ContMGet1)cont;
+
+                    var t = Typeinf.ReduceType(k.E.ExprType);
+
+                    if (t is IntType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    }
+                    else if (t is DoubleType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(double));
+                    }
+                    else if (t is CharType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(char));
+                    }
+                    else if (t is BoolType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, typeof(bool));
+                    }
+                    else if (t is DotNetType)
+                    {
+                        var dotnettype = (DotNetType)t;
+                        if (dotnettype.Type.IsValueType)
+                        {
+                            il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
+                        }
+                    }
+
+                    il.Emit(OpCodes.Ldfld, k.E.Info);
+
+                    if (k.E.Info.FieldType.IsValueType)
+                    {
+                        il.Emit(OpCodes.Box, k.E.Info.FieldType);
+                    }
+                }
+                else if (cont is ContMSSet1)
+                {
+                    var k = (ContMSSet1)cont;
+
+                    var tt = Typeinf.ReduceType(k.E.ArgType);
+
                     if (tt is IntType)
                     {
                         il.Emit(OpCodes.Unbox_Any, typeof(int));
@@ -747,256 +1388,16 @@ namespace Mokkosu.CodeGenerate
                             il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
                         }
                     }
-                }
 
-                var dotnet = TypeinfDotNet.MokkosuTypeToDotNetType("", t);
-                if (dotnet.IsValueType)
-                {
-                    var loc = il.DeclareLocal(dotnet);
-                    il.Emit(OpCodes.Stloc, loc);
-                    il.Emit(OpCodes.Ldloca, loc);
-                    il.Emit(OpCodes.Call, e.Info);
-                }
-                else
-                {
-                    il.Emit(OpCodes.Callvirt, e.Info);
-                }
+                    il.Emit(OpCodes.Stsfld, k.E.Info);
 
-                if (e.Info.ReturnType == typeof(void))
-                {
                     il.Emit(OpCodes.Ldc_I4_0);
-                }
-                else if (e.Info.ReturnType.IsValueType)
-                {
-                    il.Emit(OpCodes.Box, e.Info.ReturnType);
-                }
-            }
-            else if (expr is MDelegate)
-            {
-                var e = (MDelegate)expr;
-
-                // メソッドを生成
-                var method = _type_builder.DefineMethod(GenDelegateName(), 
-                    MethodAttributes.Static, typeof(void), e.ParamType);
-                var delil = method.GetILGenerator();
-
-                var field = _type_builder.DefineField(GenFieldName(), 
-                    typeof(object[]), FieldAttributes.Static);
-
-                Compile(il, e.Expr, env);
-                il.Emit(OpCodes.Stsfld, field);
-
-                delil.Emit(OpCodes.Ldsfld, field);
-                var fun = delil.DeclareLocal(typeof(object));
-                delil.Emit(OpCodes.Stloc, fun);
-
-                var ary = delil.DeclareLocal(typeof(object[]));
-                delil.Emit(OpCodes.Ldc_I4, e.ParamType.Length);
-                delil.Emit(OpCodes.Newarr, typeof(object));
-                delil.Emit(OpCodes.Stloc, ary);
-                for (int i = 0; i < e.ParamType.Length; i++)
-                {
-                    delil.Emit(OpCodes.Ldloc, ary);
-                    delil.Emit(OpCodes.Ldc_I4, i);
-                    delil.Emit(OpCodes.Ldarg, i);
-                    delil.Emit(OpCodes.Stelem, typeof(object));
-                }
-                delil.Emit(OpCodes.Ldloc, ary);
-                delil.Emit(OpCodes.Ldloc, fun);
-                delil.Emit(OpCodes.Ldc_I4_1);
-                delil.Emit(OpCodes.Ldelem_Ref);
-                delil.Emit(OpCodes.Ldloc, fun);
-                delil.Emit(OpCodes.Ldc_I4_0);
-                delil.Emit(OpCodes.Ldelem_Ref);
-                delil.EmitCalli(OpCodes.Calli,
-                    CallingConventions.Standard,
-                    typeof(object),
-                    new Type[] { typeof(object), typeof(object[]) },
-                    null);
-                delil.Emit(OpCodes.Pop);
-                delil.Emit(OpCodes.Ret);
-                // メソッドここまで
-
-                il.Emit(OpCodes.Ldnull);
-                il.Emit(OpCodes.Ldftn, method);
-                il.Emit(OpCodes.Newobj, e.CstrInfo);
-            }
-            else if (expr is MSet)
-            {
-                var e = (MSet)expr;
-
-                Compile(il, e.Expr, env);
-
-                var t = Typeinf.ReduceType(e.ExprType);
-
-                if (t is IntType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(int));
-                }
-                else if (t is DoubleType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(double));
-                }
-                else if (t is CharType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(char));
-                }
-                else if (t is BoolType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                }
-                else if (t is DotNetType)
-                {
-                    var dotnettype = (DotNetType)t;
-                    if (dotnettype.Type.IsValueType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
-                    }
-                }
-
-                Compile(il, e.Arg, env);
-
-                var tt = Typeinf.ReduceType(e.ArgType);
-
-                if (tt is IntType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(int));
-                }
-                else if (tt is DoubleType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(double));
-                }
-                else if (tt is CharType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(char));
-                }
-                else if (tt is BoolType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                }
-                else if (t is DotNetType)
-                {
-                    var dotnettype = (DotNetType)tt;
-                    if (dotnettype.Type.IsValueType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
-                    }
-                }
-
-                il.Emit(OpCodes.Stfld, e.Info);
-
-                il.Emit(OpCodes.Ldc_I4_0);
-                il.Emit(OpCodes.Box, typeof(int));
-            }
-            else if (expr is MGet)
-            {
-                var e = (MGet)expr;
-
-                Compile(il, e.Expr, env);
-
-                var t = Typeinf.ReduceType(e.ExprType);
-
-                if (t is IntType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(int));
-                }
-                else if (t is DoubleType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(double));
-                }
-                else if (t is CharType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(char));
-                }
-                else if (t is BoolType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                }
-                else if (t is DotNetType)
-                {
-                    var dotnettype = (DotNetType)t;
-                    if (dotnettype.Type.IsValueType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
-                    }
-                }
-
-                il.Emit(OpCodes.Ldfld, e.Info);
-
-                if (e.Info.FieldType.IsValueType)
-                {
-                    il.Emit(OpCodes.Box, e.Info.FieldType);
-                }
-            }
-            else if (expr is MSSet)
-            {
-                var e = (MSSet)expr;
-
-                Compile(il, e.Arg, env);
-
-                var tt = Typeinf.ReduceType(e.ArgType);
-
-                if (tt is IntType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(int));
-                }
-                else if (tt is DoubleType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(double));
-                }
-                else if (tt is CharType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(char));
-                }
-                else if (tt is BoolType)
-                {
-                    il.Emit(OpCodes.Unbox_Any, typeof(bool));
-                }
-                else if (tt is DotNetType)
-                {
-                    var dotnettype = (DotNetType)tt;
-                    if (dotnettype.Type.IsValueType)
-                    {
-                        il.Emit(OpCodes.Unbox_Any, dotnettype.Type);
-                    }
-                }
-
-                il.Emit(OpCodes.Stsfld, e.Info);
-
-                il.Emit(OpCodes.Ldc_I4_0);
-                il.Emit(OpCodes.Box, typeof(int));
-            }
-            else if (expr is MSGet)
-            {
-                var e = (MSGet)expr;
-                if (e.Info.IsLiteral)
-                {
-                    if (e.Info.FieldType == typeof(int))
-                    {
-                        il.Emit(OpCodes.Ldc_I4, (int)e.Info.GetRawConstantValue());
-                    }
-                    else if (e.Info.FieldType == typeof(double))
-                    {
-                        il.Emit(OpCodes.Ldc_R8, (double)e.Info.GetRawConstantValue());
-                    }
-                    else
-                    {
-                        var n = e.Info.GetValue(null);
-                        il.Emit(OpCodes.Ldc_I4, (int)n);
-                    }
+                    il.Emit(OpCodes.Box, typeof(int));
                 }
                 else
                 {
-                    il.Emit(OpCodes.Ldsfld, e.Info);
+                    throw new NotImplementedException();
                 }
-                if (e.Info.FieldType.IsValueType)
-                {
-                    il.Emit(OpCodes.Box, e.Info.FieldType);
-                }
-            }
-            else
-            {
-                throw new NotImplementedException();
             }
         }
 
@@ -1232,7 +1633,6 @@ namespace Mokkosu.CodeGenerate
             {
                 throw new NotImplementedException();
             }
-
         }
 
         static void CompilePrim(ILGenerator il, string name, List<MType> arg_types, MType ret_type)

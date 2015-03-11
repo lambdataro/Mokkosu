@@ -51,6 +51,7 @@
     <Compile Include="ClosureConversion\TopToExpr.cs" />
     <Compile Include="CodeGenerate\CodeGenerator.cs" />
     <Compile Include="CodeGenerate\CodeGeneratorCommon.cs" />
+    <Compile Include="CodeGenerate\CodeGeneratorCont.cs" />
     <Compile Include="CodeGenerate\IMokkosuProgram.cs" />
     <Compile Include="CodeGenerate\PrimitiveFunctions.cs" />
     <Compile Include="Input\InputStream.cs" />
