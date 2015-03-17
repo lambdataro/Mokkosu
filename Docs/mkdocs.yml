@@ -19,3 +19,4 @@ pages:
 - ['library/print.md', 'ライブラリ', '表示関数ライブラリ']
 - ['library/graphics.md', 'ライブラリ', 'グラフィックスライブラリ']
 - ['sample/user.md', 'サンプル', 'ユーザ作品']
+- ['sample/lambdataro.md', 'サンプル', 'lambdataro作品']
