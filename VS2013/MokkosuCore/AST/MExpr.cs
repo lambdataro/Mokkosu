@@ -1202,6 +1202,31 @@ namespace Mokkosu.AST
         }
     }
 
+    class MTry : MExpr
+    {
+        public MExpr Expr { get; private set; }
+        public MExpr Handler { get; private set; }
+
+        public MTry(string pos, MExpr expr, MExpr handler)
+            : base(pos)
+        {
+            Expr = expr;
+            Handler = handler;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("try({0}, {1})", Expr, Handler);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set1 = Expr.FreeVars();
+            var set2 = Handler.FreeVars();
+            return set1.Union(set2);
+        }
+    }
+
     /// <summary>
     /// 引数の値を取得する (クロージャ変換後に利用)
     /// </summary>

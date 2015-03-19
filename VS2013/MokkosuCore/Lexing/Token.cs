@@ -29,7 +29,7 @@
         AS, IN, PRIM, CALL, CAST, IMPORT,
         NEW, GET, SET, SGET, SSET, DELEGATE,
         DEFINE, UNDEFINE, USING, FOR, END,
-        ISTYPE, NEWARR, LDELEM, STELEM,
+        ISTYPE, NEWARR, LDELEM, STELEM, TRY,
         // 制御記号
         EOF
     }

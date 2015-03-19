@@ -285,6 +285,13 @@ namespace Mokkosu.ClosureConversion
                 var val = Conv(e.Val, ctx, locals, false);
                 return new MStElem(e.Pos, e.TypeName, e.Type, ary, idx, val);
             }
+            else if (expr is MTry)
+            {
+                var e = (MTry)expr;
+                var e2 = Conv(e.Expr, ctx, locals, false);
+                var e3 = Conv(e.Handler, ctx, locals, false);
+                return new MTry(e.Pos, e2, e3);
+            }
             else
             {
                 throw new NotImplementedException();

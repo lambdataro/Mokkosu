@@ -722,6 +722,12 @@ namespace Mokkosu.TypeInference
                 Inference(e.Val, new DotNetType(e.Type), tenv, ctx);
                 Unification(e.Pos, type, new UnitType());
             }
+            else if (expr is MTry)
+            {
+                var e = (MTry)expr;
+                Inference(e.Expr, type, tenv, ctx);
+                Inference(e.Handler, new FunType(new StringType(), type), tenv, ctx);
+            }
             else
             {
                 throw new NotImplementedException();

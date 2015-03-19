@@ -1364,6 +1364,16 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.RP);
                 return new MStElem(pos, name, ary, idx, val);
             }
+            else if (ctx.Tkn.Type == TokenType.TRY)
+            {
+                ctx.ReadToken(TokenType.TRY);
+                ctx.ReadToken(TokenType.LP);
+                var expr = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.COM);
+                var handler = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MTry(pos, expr, handler);
+            }
             else
             {
                 ctx.SyntaxError();

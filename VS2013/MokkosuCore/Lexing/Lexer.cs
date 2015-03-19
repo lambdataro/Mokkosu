@@ -55,7 +55,8 @@ namespace Mokkosu.Lexing
                 { "istype", TokenType.ISTYPE },
                 { "newarr", TokenType.NEWARR },
                 { "ldelem", TokenType.LDELEM },
-                { "stelem", TokenType.STELEM }
+                { "stelem", TokenType.STELEM },
+                { "try", TokenType.TRY }
             };
         }
 

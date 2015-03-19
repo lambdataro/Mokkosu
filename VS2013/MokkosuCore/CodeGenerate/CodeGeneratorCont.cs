@@ -272,5 +272,20 @@ namespace Mokkosu.CodeGenerate
         public MStElem E { get; set; }
         public LEnv Env { get; set; }
     }
+
+    class ContTry1 : ContApply
+    {
+        public MTry E { get; set; }
+        public LEnv Env { get; set; }
+        public LocalBuilder Result { get; set; }
+    }
+
+    class ContTry2 : ContApply
+    {
+        public MTry E { get; set; }
+        public LEnv Env { get; set; }
+        public LocalBuilder Result { get; set; }
+        public LocalBuilder Ex { get; set; }
+    }
 }
 

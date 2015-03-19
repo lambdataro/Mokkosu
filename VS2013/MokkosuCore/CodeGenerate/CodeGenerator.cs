@@ -46,6 +46,10 @@ namespace Mokkosu.CodeGenerate
             CodeGeneratorCommon.
                 SystemConstructor("mscorlib.dll", "System.ApplicationException", new Type[] { typeof(string) });
 
+        static MethodInfo _exception_message =
+            CodeGeneratorCommon.
+                SystemMethod("mscorlib.dll", "System.Exception", "get_Message", new Type[] { });
+
         static MethodInfo _println;
         static MethodInfo _print;
         static MethodInfo _tostring;
@@ -685,6 +689,14 @@ namespace Mokkosu.CodeGenerate
                         var e = (MStElem)k.Expr;
                         compiler_stack.Push(new ContMStElem1() { E = e, Env = k.Env });
                         compiler_stack.Push(new ContEval() { Expr = e.Ary, Env = k.Env });
+                    }
+                    else if (k.Expr is MTry)
+                    {
+                        var e = (MTry)k.Expr;
+                        var result = il.DeclareLocal(typeof(object));
+                        il.BeginExceptionBlock();
+                        compiler_stack.Push(new ContTry1() { E = e, Env = k.Env, Result = result });
+                        compiler_stack.Push(new ContEval() { Expr = e.Expr, Env = k.Env });
                     }
                     else
                     {
@@ -1472,6 +1484,66 @@ namespace Mokkosu.CodeGenerate
                     il.Emit(OpCodes.Stelem, k.E.Type);
                     il.Emit(OpCodes.Ldc_I4_0);
                     il.Emit(OpCodes.Box, typeof(int));
+                }
+                else if (cont is ContTry1)
+                {
+                    var k = (ContTry1)cont;
+                    il.Emit(OpCodes.Stloc, k.Result);
+                    il.BeginCatchBlock(typeof(Exception));
+                    var ex = il.DeclareLocal(typeof(Exception));
+                    il.Emit(OpCodes.Stloc, ex);
+
+                    compiler_stack.Push(new ContTry2() { E = k.E, Env = k.Env, Result = k.Result, Ex = ex });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.Handler, Env = k.Env });
+                }
+                else if (cont is ContTry2)
+                {
+                    var k = (ContTry2)cont;
+
+                    var ary = il.DeclareLocal(typeof(object));
+                    il.Emit(OpCodes.Stloc, ary);
+
+                    var lbl1 = il.DefineLabel();
+                    var lbl2 = il.DefineLabel();
+
+                    il.Emit(OpCodes.Ldloc, ary);
+                    il.Emit(OpCodes.Isinst, _tag_type);
+                    il.Emit(OpCodes.Brfalse, lbl1);
+                    il.Emit(OpCodes.Ldloc, ary);
+
+                    // App2
+
+                    il.Emit(OpCodes.Ldloc, k.Ex);
+                    il.Emit(OpCodes.Callvirt, _exception_message);
+
+                    il.Emit(OpCodes.Stfld, _tag_args);
+                    il.Emit(OpCodes.Ldloc, ary);
+                    il.Emit(OpCodes.Br, lbl2);
+                    il.MarkLabel(lbl1);
+                     
+                    // App3
+
+                    il.Emit(OpCodes.Ldloc, k.Ex);
+                    il.Emit(OpCodes.Callvirt, _exception_message);
+
+                    il.Emit(OpCodes.Ldloc, ary);
+                    il.Emit(OpCodes.Ldc_I4_1);
+                    il.Emit(OpCodes.Ldelem_Ref);
+                    il.Emit(OpCodes.Ldloc, ary);
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Ldelem_Ref);
+
+                    il.EmitCalli(OpCodes.Calli,
+                        CallingConventions.Standard,
+                        typeof(object),
+                        new Type[] { typeof(object), typeof(object[]) },
+                        null);
+
+                    il.MarkLabel(lbl2);
+                    il.Emit(OpCodes.Stloc, k.Result);
+
+                    il.EndExceptionBlock();
+                    il.Emit(OpCodes.Ldloc, k.Result);
                 }
                 else
                 {

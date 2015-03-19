@@ -53,6 +53,7 @@
       <Word>newarr</Word>
       <Word>ldelem</Word>
       <Word>stelem</Word>
+      <Word>try</Word>
     </Keywords>
 
     <!-- Digits -->
