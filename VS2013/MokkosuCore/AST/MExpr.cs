@@ -1089,6 +1089,119 @@ namespace Mokkosu.AST
         }
     }
 
+    class MNewArr : MExpr
+    {
+        public string TypeName { get; private set; }
+        public Type Type { get; set; }
+        public MExpr Size { get; private set; }
+
+        public MNewArr(string pos, string type_name, MExpr size)
+            : base(pos)
+        {
+            TypeName = type_name;
+            Type = null;
+            Size = size;
+        }
+
+        public MNewArr(string pos, string src_name, Type src_type, MExpr size)
+            : base(pos)
+        {
+            TypeName = src_name;
+            Type = src_type;
+            Size = size;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("newarr<{0}>({1})", TypeName, Size);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            return Size.FreeVars();
+        }
+    }
+
+    class MLdElem : MExpr
+    {
+        public string TypeName { get; private set; }
+        public Type Type { get; set; }
+        public MExpr Ary { get; private set; }
+        public MExpr Idx { get; private set; }
+
+        public MLdElem(string pos, string type_name, MExpr ary, MExpr idx)
+            : base(pos)
+        {
+            TypeName = type_name;
+            Type = null;
+            Ary = ary;
+            Idx = idx;
+        }
+
+        public MLdElem(string pos, string src_name, Type src_type, MExpr ary, MExpr idx)
+            : base(pos)
+        {
+            TypeName = src_name;
+            Type = src_type;
+            Ary = ary;
+            Idx = idx;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("newarr<{0}>({1}, {2})", TypeName, Ary, Idx);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set1 = Ary.FreeVars();
+            var set2 = Idx.FreeVars();
+            return set1.Union(set2);
+        }
+    }
+
+    class MStElem : MExpr
+    {
+        public string TypeName { get; private set; }
+        public Type Type { get; set; }
+        public MExpr Ary { get; private set; }
+        public MExpr Idx { get; private set; }
+        public MExpr Val { get; private set; }
+
+        public MStElem(string pos, string type_name, MExpr ary, MExpr idx, MExpr val)
+            : base(pos)
+        {
+            TypeName = type_name;
+            Type = null;
+            Ary = ary;
+            Idx = idx;
+            Val = val;
+        }
+
+        public MStElem(string pos, string src_name, Type src_type, MExpr ary, MExpr idx, MExpr val)
+            : base(pos)
+        {
+            TypeName = src_name;
+            Type = src_type;
+            Ary = ary;
+            Idx = idx;
+            Val = val;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("newarr<{0}>({1}, {2}, {3})", TypeName, Ary, Idx, Val);
+        }
+
+        public override MSet<string> FreeVars()
+        {
+            var set1 = Ary.FreeVars();
+            var set2 = Idx.FreeVars();
+            var set3 = Val.FreeVars();
+            return set1.Union(set2).Union(set3);
+        }
+    }
+
     /// <summary>
     /// 引数の値を取得する (クロージャ変換後に利用)
     /// </summary>

@@ -1325,6 +1325,45 @@ namespace Mokkosu.Parsing
                 var name = ctx.ReadStrToken(TokenType.ID);
                 return new MSGet(pos, cls, name);
             }
+            else if (ctx.Tkn.Type == TokenType.NEWARR)
+            {
+                ctx.ReadToken(TokenType.NEWARR);
+                ctx.ReadToken(TokenType.LT);
+                var name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.GT);
+                ctx.ReadToken(TokenType.LP);
+                var size = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MNewArr(pos, name, size);
+            }
+            else if (ctx.Tkn.Type == TokenType.LDELEM)
+            {
+                ctx.ReadToken(TokenType.LDELEM);
+                ctx.ReadToken(TokenType.LT);
+                var name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.GT);
+                ctx.ReadToken(TokenType.LP);
+                var ary = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.COM);
+                var idx = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MLdElem(pos, name, ary, idx);
+            }
+            else if (ctx.Tkn.Type == TokenType.STELEM)
+            {
+                ctx.ReadToken(TokenType.LDELEM);
+                ctx.ReadToken(TokenType.LT);
+                var name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.GT);
+                ctx.ReadToken(TokenType.LP);
+                var ary = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.COM);
+                var idx = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.COM);
+                var val = ParseExpr(ctx);
+                ctx.ReadToken(TokenType.RP);
+                return new MStElem(pos, name, ary, idx, val);
+            }
             else
             {
                 ctx.SyntaxError();
