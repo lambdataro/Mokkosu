@@ -1351,7 +1351,7 @@ namespace Mokkosu.Parsing
             }
             else if (ctx.Tkn.Type == TokenType.STELEM)
             {
-                ctx.ReadToken(TokenType.LDELEM);
+                ctx.ReadToken(TokenType.STELEM);
                 ctx.ReadToken(TokenType.LT);
                 var name = ParseDotNetName(ctx);
                 ctx.ReadToken(TokenType.GT);

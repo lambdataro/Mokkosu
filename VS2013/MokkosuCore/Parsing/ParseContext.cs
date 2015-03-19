@@ -157,6 +157,10 @@ namespace Mokkosu.Parsing
             { TokenType.USING, "using" },
             { TokenType.FOR, "for" },
             { TokenType.END, "end" },
+            { TokenType.ISTYPE, "istype" },
+            { TokenType.NEWARR, "newarr" },
+            { TokenType.LDELEM, "ldelem" },
+            { TokenType.STELEM, "stelem" }
         };
 
         string TypeToString(TokenType type)

@@ -275,7 +275,7 @@ namespace Mokkosu.ClosureConversion
                 var e = (MLdElem)expr;
                 var ary = Conv(e.Ary, ctx, locals, false);
                 var idx = Conv(e.Idx, ctx, locals, false);
-                return new MLdElem(e.Pos, e.TypeName, ary, idx);
+                return new MLdElem(e.Pos, e.TypeName, e.Type, ary, idx);
             }
             else if (expr is MStElem)
             {
@@ -283,7 +283,7 @@ namespace Mokkosu.ClosureConversion
                 var ary = Conv(e.Ary, ctx, locals, false);
                 var idx = Conv(e.Idx, ctx, locals, false);
                 var val = Conv(e.Val, ctx, locals, false);
-                return new MStElem(e.Pos, e.TypeName, ary, idx, val);
+                return new MStElem(e.Pos, e.TypeName, e.Type, ary, idx, val);
             }
             else
             {
