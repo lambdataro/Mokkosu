@@ -265,6 +265,26 @@ namespace Mokkosu.ClosureConversion
             {
                 return expr;
             }
+            else if (expr is MNewArr)
+            {
+                var e = (MNewArr)expr;
+                return new MNewArr(e.Pos, e.TypeName, e.Type, Conv(e.Size, ctx, locals, false));
+            }
+            else if (expr is MLdElem)
+            {
+                var e = (MLdElem)expr;
+                var ary = Conv(e.Ary, ctx, locals, false);
+                var idx = Conv(e.Idx, ctx, locals, false);
+                return new MLdElem(e.Pos, e.TypeName, ary, idx);
+            }
+            else if (expr is MStElem)
+            {
+                var e = (MStElem)expr;
+                var ary = Conv(e.Ary, ctx, locals, false);
+                var idx = Conv(e.Idx, ctx, locals, false);
+                var val = Conv(e.Val, ctx, locals, false);
+                return new MStElem(e.Pos, e.TypeName, ary, idx, val);
+            }
             else
             {
                 throw new NotImplementedException();
