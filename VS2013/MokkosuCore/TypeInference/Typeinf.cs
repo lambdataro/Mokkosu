@@ -698,6 +698,30 @@ namespace Mokkosu.TypeInference
                 var ret_type = TypeinfDotNet.DotNetTypeToMokkosuType(field.FieldType);
                 Unification(e.Pos, type, ret_type);
             }
+            else if (expr is MNewArr)
+            {
+                var e = (MNewArr)expr;
+                e.Type = TypeinfDotNet.LookupDotNetClass(e.Pos, e.TypeName);
+                Inference(e.Size, new IntType(), tenv, ctx);
+                Unification(e.Pos, type, new DotNetType(e.Type.MakeArrayType()));
+            }
+            else if (expr is MLdElem)
+            {
+                var e = (MLdElem)expr;
+                e.Type = TypeinfDotNet.LookupDotNetClass(e.Pos, e.TypeName);
+                Inference(e.Ary, new DotNetType(e.Type.MakeArrayType()), tenv, ctx);
+                Inference(e.Idx, new IntType(), tenv, ctx);
+                Unification(e.Pos, type, new DotNetType(e.Type));
+            }
+            else if (expr is MStElem)
+            {
+                var e = (MStElem)expr;
+                e.Type = TypeinfDotNet.LookupDotNetClass(e.Pos, e.TypeName);
+                Inference(e.Ary, new DotNetType(e.Type.MakeArrayType()), tenv, ctx);
+                Inference(e.Idx, new IntType(), tenv, ctx);
+                Inference(e.Val, new DotNetType(e.Type), tenv, ctx);
+                Unification(e.Pos, type, new UnitType());
+            }
             else
             {
                 throw new NotImplementedException();
