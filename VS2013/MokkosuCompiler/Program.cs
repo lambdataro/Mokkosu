@@ -11,9 +11,9 @@ namespace MokkosuCompiler
     {
         static int Main(string[] args)
         {
+            var mokkosu = new Mokkosu.Main.Mokkosu();
             try
             {
-                var mokkosu = new Mokkosu.Main.Mokkosu();
                 mokkosu.OutputVersion();
                 Console.WriteLine();
 
@@ -34,6 +34,7 @@ namespace MokkosuCompiler
             }
             catch (Mokkosu.Utils.MError e)
             {
+                Console.WriteLine(mokkosu.GetOutput());
                 Console.WriteLine(e.Message);
                 return 1;
             }

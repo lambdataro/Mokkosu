@@ -49,6 +49,10 @@
       <Word>using</Word>
       <Word>for</Word>
       <Word>end</Word>
+      <Word>istype</Word>
+      <Word>newarr</Word>
+      <Word>ldelem</Word>
+      <Word>stelem</Word>
     </Keywords>
 
     <!-- Digits -->
