@@ -236,5 +236,41 @@ namespace Mokkosu.CodeGenerate
         public MSSet E { get; set; }
         public LEnv Env { get; set; }
     }
+
+    class ContMNewArr1 : ContApply
+    {
+        public MNewArr E { get; set; }
+        public LEnv Env { get; set; }
+    }
+
+    class ContMLdElem1 : ContApply
+    {
+        public MLdElem E { get; set; }
+        public LEnv Env { get; set; }
+    }
+
+    class ContMLdElem2 : ContApply
+    {
+        public MLdElem E { get; set; }
+        public LEnv Env { get; set; }
+    }
+
+    class ContMStElem1 : ContApply
+    {
+        public MStElem E { get; set; }
+        public LEnv Env { get; set; }
+    }
+
+    class ContMStElem2 : ContApply
+    {
+        public MStElem E { get; set; }
+        public LEnv Env { get; set; }
+    }
+
+    class ContMStElem3 : ContApply
+    {
+        public MStElem E { get; set; }
+        public LEnv Env { get; set; }
+    }
 }
 

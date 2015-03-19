@@ -668,6 +668,24 @@ namespace Mokkosu.CodeGenerate
                             il.Emit(OpCodes.Box, e.Info.FieldType);
                         }
                     }
+                    else if (k.Expr is MNewArr)
+                    {
+                        var e = (MNewArr)k.Expr;
+                        compiler_stack.Push(new ContMNewArr1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Size, Env = k.Env });
+                    }
+                    else if (k.Expr is MLdElem)
+                    {
+                        var e = (MLdElem)k.Expr;
+                        compiler_stack.Push(new ContMLdElem1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Ary, Env = k.Env });
+                    }
+                    else if (k.Expr is MStElem)
+                    {
+                        var e = (MStElem)k.Expr;
+                        compiler_stack.Push(new ContMStElem1() { E = e, Env = k.Env });
+                        compiler_stack.Push(new ContEval() { Expr = e.Ary, Env = k.Env });
+                    }
                     else
                     {
                         throw new NotImplementedException();
@@ -1406,6 +1424,52 @@ namespace Mokkosu.CodeGenerate
 
                     il.Emit(OpCodes.Stsfld, k.E.Info);
 
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Box, typeof(int));
+                }
+                else if (cont is ContMNewArr1)
+                {
+                    var k = (ContMNewArr1)cont;
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    il.Emit(OpCodes.Newarr, k.E.Type);
+                }
+                else if (cont is ContMLdElem1)
+                {
+                    var k = (ContMLdElem1)cont;
+                    compiler_stack.Push(new ContMLdElem2() { E = k.E, Env = k.Env });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.Idx, Env = k.Env });
+                }
+                else if (cont is ContMLdElem2)
+                {
+                    var k = (ContMLdElem2)cont;
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    il.Emit(OpCodes.Ldelem, k.E.Type);
+                    if (k.E.Type.IsValueType)
+                    {
+                        il.Emit(OpCodes.Box, k.E.Type);
+                    }
+                }
+                else if (cont is ContMStElem1)
+                {
+                    var k = (ContMStElem1)cont;
+                    compiler_stack.Push(new ContMStElem2() { E = k.E, Env = k.Env });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.Idx, Env = k.Env });
+                }
+                else if (cont is ContMStElem2)
+                {
+                    var k = (ContMStElem2)cont;
+                    il.Emit(OpCodes.Unbox_Any, typeof(int));
+                    compiler_stack.Push(new ContMStElem3() { E = k.E, Env = k.Env });
+                    compiler_stack.Push(new ContEval() { Expr = k.E.Val, Env = k.Env });
+                }
+                else if (cont is ContMStElem3)
+                {
+                    var k = (ContMStElem3)cont;
+                    if (k.E.Type.IsValueType)
+                    {
+                        il.Emit(OpCodes.Unbox_Any, k.E.Type);
+                    }
+                    il.Emit(OpCodes.Stelem, k.E.Type);
                     il.Emit(OpCodes.Ldc_I4_0);
                     il.Emit(OpCodes.Box, typeof(int));
                 }
