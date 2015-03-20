@@ -127,7 +127,7 @@ namespace Mokkosu.Parsing
                 else if (ctx.Tkn.Type == TokenType.USING)
                 {
                     ctx.ReadToken(TokenType.USING);
-                    var name = ParseDotNetName(ctx);
+                    var name = ParseDotNetName(ctx, false);
                     TypeinfDotNet.AddUsing(name);
                     ctx.ReadToken(TokenType.SC);
                 }
@@ -270,7 +270,7 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.LBR)
             {
                 ctx.ReadToken(TokenType.LBR);
-                var name = ParseDotNetName(ctx);
+                var name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.RBR);
                 var t = TypeinfDotNet.LookupDotNetClass(ctx.Tkn.Pos, name);
                 return new DotNetType(t);
@@ -1223,7 +1223,7 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.CALL)
             {
                 ctx.ReadToken(TokenType.CALL);
-                var cls_name = ParseDotNetName(ctx);
+                var cls_name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.COLCOL);
                 var met_name = ctx.ReadStrToken(TokenType.ID);
                 ctx.ReadToken(TokenType.LP);
@@ -1244,9 +1244,9 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.CAST);
                 ctx.ReadToken(TokenType.LT);
-                var src = ParseDotNetName(ctx);
+                var src = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.COM);
-                var dst = ParseDotNetName(ctx);
+                var dst = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.GT);
                 ctx.ReadToken(TokenType.LP);
                 var expr = ParseExpr(ctx);
@@ -1257,7 +1257,7 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.ISTYPE);
                 ctx.ReadToken(TokenType.LT);
-                var name = ParseDotNetName(ctx);
+                var name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.GT);
                 ctx.ReadToken(TokenType.LP);
                 var expr = ParseExpr(ctx);
@@ -1267,7 +1267,7 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.NEW)
             {
                 ctx.ReadToken(TokenType.NEW);
-                var cls_name = ParseDotNetName(ctx);
+                var cls_name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.LP);
                 List<MExpr> args;
                 if (ctx.Tkn.Type == TokenType.RP)
@@ -1285,7 +1285,7 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.DELEGATE)
             {
                 ctx.ReadToken(TokenType.DELEGATE);
-                var cls_name = ParseDotNetName(ctx);
+                var cls_name = ParseDotNetName(ctx, true);
                 var expr = ParseFactor(ctx);
                 return new MDelegate(pos, cls_name, expr);
             }
@@ -1310,7 +1310,7 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.SSET)
             {
                 ctx.ReadToken(TokenType.SSET);
-                var cls = ParseDotNetName(ctx);
+                var cls = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.COLCOL);
                 var name = ctx.ReadStrToken(TokenType.ID);
                 ctx.ReadToken(TokenType.EQ);
@@ -1320,7 +1320,7 @@ namespace Mokkosu.Parsing
             else if (ctx.Tkn.Type == TokenType.SGET)
             {
                 ctx.ReadToken(TokenType.SGET);
-                var cls = ParseDotNetName(ctx);
+                var cls = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.COLCOL);
                 var name = ctx.ReadStrToken(TokenType.ID);
                 return new MSGet(pos, cls, name);
@@ -1329,7 +1329,7 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.NEWARR);
                 ctx.ReadToken(TokenType.LT);
-                var name = ParseDotNetName(ctx);
+                var name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.GT);
                 ctx.ReadToken(TokenType.LP);
                 var size = ParseExpr(ctx);
@@ -1340,7 +1340,7 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.LDELEM);
                 ctx.ReadToken(TokenType.LT);
-                var name = ParseDotNetName(ctx);
+                var name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.GT);
                 ctx.ReadToken(TokenType.LP);
                 var ary = ParseExpr(ctx);
@@ -1353,7 +1353,7 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.STELEM);
                 ctx.ReadToken(TokenType.LT);
-                var name = ParseDotNetName(ctx);
+                var name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.GT);
                 ctx.ReadToken(TokenType.LP);
                 var ary = ParseExpr(ctx);
@@ -1378,7 +1378,7 @@ namespace Mokkosu.Parsing
             {
                 ctx.ReadToken(TokenType.ARRAY);
                 ctx.ReadToken(TokenType.LT);
-                var name = ParseDotNetName(ctx);
+                var name = ParseDotNetName(ctx, true);
                 ctx.ReadToken(TokenType.GT);
                 ctx.ReadToken(TokenType.LP);
                 var list = ParseExprList(ctx);
@@ -1541,7 +1541,7 @@ namespace Mokkosu.Parsing
             return ret_expr;
         }
 
-        static string ParseDotNetName(ParseContext ctx)
+        static string ParseDotNetName(ParseContext ctx, bool may_array)
         {
             var sb = new StringBuilder();
             sb.Append(ctx.ReadStrToken(TokenType.ID));
@@ -1552,7 +1552,7 @@ namespace Mokkosu.Parsing
                 sb.Append(ctx.ReadStrToken(TokenType.ID));
             }
 
-            if (ctx.Tkn.Type == TokenType.LBK)
+            if (may_array && ctx.Tkn.Type == TokenType.LBK)
             {
                 ctx.ReadToken(TokenType.LBK);
                 ctx.ReadToken(TokenType.RBK);
