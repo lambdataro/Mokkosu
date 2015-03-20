@@ -1392,7 +1392,7 @@ namespace Mokkosu.Parsing
                     list2.Add(new MStElem(pos, name, v, new MInt(pos, i), list[i]));
                 }
 
-                MExpr ret = new MUnit(pos);
+                var ret = (MExpr)v;
 
                 list2.Reverse();
                 foreach (var e in list2)
