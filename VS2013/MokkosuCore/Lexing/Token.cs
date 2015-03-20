@@ -30,6 +30,7 @@
         NEW, GET, SET, SGET, SSET, DELEGATE,
         DEFINE, UNDEFINE, USING, FOR, END,
         ISTYPE, NEWARR, LDELEM, STELEM, TRY,
+        ARRAY,
         // 制御記号
         EOF
     }

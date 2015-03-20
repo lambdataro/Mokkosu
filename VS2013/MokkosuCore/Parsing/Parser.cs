@@ -1374,6 +1374,37 @@ namespace Mokkosu.Parsing
                 ctx.ReadToken(TokenType.RP);
                 return new MTry(pos, expr, handler);
             }
+            else if (ctx.Tkn.Type == TokenType.ARRAY)
+            {
+                ctx.ReadToken(TokenType.ARRAY);
+                ctx.ReadToken(TokenType.LT);
+                var name = ParseDotNetName(ctx);
+                ctx.ReadToken(TokenType.GT);
+                ctx.ReadToken(TokenType.LP);
+                var list = ParseExprList(ctx);
+                ctx.ReadToken(TokenType.RP);
+
+                var v_name = GenVarName();
+                var v = new MVar(pos, v_name);
+                var list2 = new List<MExpr>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list2.Add(new MStElem(pos, name, v, new MInt(pos, i), list[i]));
+                }
+
+                MExpr ret = new MUnit(pos);
+
+                list2.Reverse();
+                foreach (var e in list2)
+                {
+                    ret = new MDo(pos, e, ret);
+                }
+
+                ret = new MLet(pos, new PVar(pos, v_name),
+                    new MNewArr(pos, name, new MInt(pos, list.Count)),
+                    ret);
+                return ret;
+            }
             else
             {
                 ctx.SyntaxError();

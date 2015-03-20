@@ -161,7 +161,8 @@ namespace Mokkosu.Parsing
             { TokenType.NEWARR, "newarr" },
             { TokenType.LDELEM, "ldelem" },
             { TokenType.STELEM, "stelem" },
-            { TokenType.TRY, "try" }
+            { TokenType.TRY, "try" },
+            { TokenType.ARRAY, "array" }
         };
 
         string TypeToString(TokenType type)
