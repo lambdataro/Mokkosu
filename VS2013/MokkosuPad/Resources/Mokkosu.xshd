@@ -54,6 +54,7 @@
       <Word>ldelem</Word>
       <Word>stelem</Word>
       <Word>try</Word>
+      <Word>array</Word>
     </Keywords>
 
     <!-- Digits -->
