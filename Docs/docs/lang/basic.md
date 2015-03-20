@@ -39,6 +39,7 @@
 `false` `for` `fun` `get` `if` `import` `in` `include`
 `let` `new` `pat` `set` `sget` `sset` `true` `type`
 `using` `__define` `__prim` `__undefine`
+`istype` `newarr` `ldelem` `stelem` `try` `array`
 
 ## プログラムの構成
 Mokkosu のプログラムは文の列として表現されます。
