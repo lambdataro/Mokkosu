@@ -1551,6 +1551,14 @@ namespace Mokkosu.Parsing
                 sb.Append(".");
                 sb.Append(ctx.ReadStrToken(TokenType.ID));
             }
+
+            if (ctx.Tkn.Type == TokenType.LBK)
+            {
+                ctx.ReadToken(TokenType.LBK);
+                ctx.ReadToken(TokenType.RBK);
+                sb.Append("[]");
+            }
+
             return sb.ToString();
         }
 

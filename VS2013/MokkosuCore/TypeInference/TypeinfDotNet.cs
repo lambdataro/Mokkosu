@@ -44,6 +44,14 @@ namespace Mokkosu.TypeInference
         public static Type LookupDotNetClass(string pos, string class_name)
         {
             Type type = null;
+            var is_array = false;
+
+            var name_len = class_name.Length;
+            if (class_name.Substring(name_len - 3) == "[]")
+            {
+                is_array = true;
+            }
+
             foreach (var asm in _assembly_list)
             {
                 type = asm.GetType(class_name);
@@ -69,6 +77,12 @@ namespace Mokkosu.TypeInference
             {
                 throw new MError(pos + ": クラス" + class_name + "が見つかりません。");
             }
+
+            if (is_array)
+            {
+                type = type.MakeArrayType();
+            }
+
             return type;
         }
 
