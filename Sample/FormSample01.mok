@@ -37,7 +37,7 @@ do form.GetType().InvokeMember("DoubleBuffered",
       (sget BindingFlags::SetProperty)) : {BindingFlags}),
   cast<Object,Binder>(null),
   form,
-  list_to_array [bool_to_object true]) |> ignore;
+  list_to_array [box true]) |> ignore;
   
 do form.set_ClientSize(new Size(screenWidth,screenHeight));
 do form.set_SizeGripStyle(sget SizeGripStyle::Hide);
