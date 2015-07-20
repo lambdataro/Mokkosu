@@ -1,2 +1,6 @@
 language: csharp
 solution: VS2013/Mokkosu.sln
+install:
+  - nuget restore VS2013/Mokkosu.sln
+  - nuget install AvalonDock
+  - nuget install AvalonEdit
