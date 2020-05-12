@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>型とリテラル - プログラミング言語 Mokkosu</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/prettify-1.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../css\extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">プログラミング言語 Mokkosu</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">始め方 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../start/install">インストールと実行</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/beginner">プログラミング初心者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/programmer">プログラミング経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/fptomok">関数型言語経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/tutorial">チュートリアル</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">言語 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../basic">基本事項</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../statement">文</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href=".">型とリテラル</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../expression">式</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../pattern">パターン</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../dotnet">.NET関連の式</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ライブラリ <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../library/corelib">コアライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/list">リストライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/print">表示関数ライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/graphics">グラフィックスライブラリ</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">サンプル <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../sample/user">ユーザ作品</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../sample/lambdataro">lambdataro作品</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li >
+                    <a rel="next" href="../statement">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../expression">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/lambdataro/Mokkosu">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#_1">型とリテラル</a></li>
+        
+            <li><a href="#int">整数型 (Int型)</a></li>
+        
+            <li><a href="#double">浮動小数点数型 (Double型)</a></li>
+        
+            <li><a href="#string">文字列型 (String型)</a></li>
+        
+            <li><a href="#char">文字型 (Char型)</a></li>
+        
+            <li><a href="#bool">真偽値型 (Bool型)</a></li>
+        
+            <li><a href="#_4">ユニット型 (()型)</a></li>
+        
+            <li><a href="#_5">リスト型 ([α]型)</a></li>
+        
+            <li><a href="#_7">タプル型</a></li>
+        
+            <li><a href="#-">関数型 ((α -&gt; β)型)</a></li>
+        
+            <li><a href="#_10">ユーザ定義型</a></li>
+        
+            <li><a href="#net">.NET型</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="_1">型とリテラル</h1>
+<p>型は値をその種類に応じて分類したものです。
+リテラルは値を直接表現する記法のことです。</p>
+<h2 id="int">整数型 (Int型)</h2>
+<p>Int型は32ビット長の符号付整数を表す型です。</p>
+<h3 id="int_1">Int型リテラル</h3>
+<p>整数リテラルは<code>123</code>のように数字を並べて10進数で表現します。</p>
+<p>整数リテラルを16進数で表現するには<code>0x</code>または<code>0X</code>で数値を始めます。
+例えば<code>0xff</code>は16進数整数リテラルです。他にも、<code>0o</code>または<code>0O</code>で
+始まる8進数リテラル、<code>0b</code>または<code>0B</code>で始まる2進数リテラルが
+利用できます。</p>
+<h2 id="double">浮動小数点数型 (Double型)</h2>
+<p>Double型は倍精度の浮動小数点数を表す型です。</p>
+<h3 id="double_1">Double型リテラル</h3>
+<p>Double型リテラルは<code>3.14</code>のような小数表示、<code>6.626e-34</code>のような指数表記
+が可能です。
+`</p>
+<h2 id="string">文字列型 (String型)</h2>
+<p>String型は文字列の型です。</p>
+<h3 id="string_1">String型リテラル</h3>
+<p>String型リテラルは<code>"abc"</code>のように文字列をダブルクォーテーション
+で文字列を囲んで表します。</p>
+<p>ダブルクォーテーション自体や特殊文字を表すために、
+以下のエスケープシーケンスが定義されています。</p>
+<table>
+<thead>
+<tr>
+<th>エスケープシーケンス</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\'</code></td>
+<td>単一引用符</td>
+</tr>
+<tr>
+<td><code>\"</code></td>
+<td>二重引用符</td>
+</tr>
+<tr>
+<td><code>\\</code></td>
+<td>円記号</td>
+</tr>
+<tr>
+<td><code>\0</code></td>
+<td>ヌル</td>
+</tr>
+<tr>
+<td><code>\a</code></td>
+<td>警告</td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>バックスペース</td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>フォームフィード</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>改行</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>キャリッジリターン</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>水平タブ</td>
+</tr>
+<tr>
+<td><code>\uxxxx</code></td>
+<td>ユニコード文字</td>
+</tr>
+<tr>
+<td><code>\v</code></td>
+<td>垂直タブ</td>
+</tr>
+</tbody>
+</table>
+<p>逐次文字列は<code>@"\n"</code>のように文字列リテラルの先頭に<code>@</code>を付けて表します。
+逐次文字列内では、エスケープシーケンスは処理されません。</p>
+<h2 id="char">文字型 (Char型)</h2>
+<p>Char型は文字の型です。</p>
+<h3 id="_2">文字リテラル</h3>
+<p>文字リテラルは<code>'A'</code>のように文字をシングルクォーテーションで
+文字を囲んで表します。文字列の内部同様エスケープシーケンスが
+利用できます。</p>
+<h2 id="bool">真偽値型 (Bool型)</h2>
+<p>Bool型は真偽値の型です。</p>
+<h3 id="_3">真偽値リテラル</h3>
+<p>真であることを表す<code>true</code>と偽であることを表す<code>false</code>が
+定義されています。</p>
+<h2 id="_4">ユニット型 (()型)</h2>
+<p>()型はユニット型です、唯一の値<code>()</code>を持ちます。
+これは副作用をもつ関数の戻り値として利用します。</p>
+<h2 id="_5">リスト型 ([α]型)</h2>
+<p>リストは同じ型の値を並べたデータ構造です。
+要素の型を<code>α</code>とすると、リストの型は<code>[α]</code>と表します。</p>
+<h3 id="_6">リストリテラル</h3>
+<p>リストリテラルは<code>[1,2,3]</code>のように、
+<code>[</code>と<code>]</code>の間に要素をカンマで区切って並べます。
+空のリストは<code>[]</code>で表します。</p>
+<h2 id="_7">タプル型</h2>
+<p>タプルは異なる型の2つ以上の値を一つにまとめたデータ構造です。
+例えば、整数型と文字列型の要素を格納可能なタプルの型は、
+<code>(Int, String)</code>のように、括弧で型名をカンマで区切って指定します。
+タプルの長さに制限はありません。</p>
+<h3 id="_8">タプルリテラル ((α, β, ...)型)</h3>
+<p>タプルリテラルは<code>(1, "abc")</code>のように、
+括弧の間に要素をカンマで区切って並べます。</p>
+<h2 id="-">関数型 ((α -&gt; β)型)</h2>
+<p>関数型は関数の型です。引数の型がα、
+戻り値の型がβの関数の型は、
+(α -&gt; β)型になります。</p>
+<h3 id="_9">関数リテラル (ラムダ式)</h3>
+<p>関数リテラル(ラムダ式)は以下の構文で表します。</p>
+<pre><code>\パターン -&gt; 式
+</code></pre>
+
+<p>パターンは以下のように複数並べることができ、
+その場合は複数のラムダ式に展開されます。</p>
+<pre><code>\パターン1 パターン2 ... -&gt; 式
+</code></pre>
+
+<h2 id="_10">ユーザ定義型</h2>
+<p>type文で導入した型は、型が要求される場所で自由に使えます。</p>
+<h2 id="net">.NET型</h2>
+<p>.NETの型は<code>{System.Object}</code>のように、<code>{</code>と<code>}</code>の間にクラス名を
+指定して表します。</p>
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

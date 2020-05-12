@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>コアライブラリ - プログラミング言語 Mokkosu</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/prettify-1.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../css\extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">プログラミング言語 Mokkosu</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">始め方 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../start/install">インストールと実行</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/beginner">プログラミング初心者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/programmer">プログラミング経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/fptomok">関数型言語経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/tutorial">チュートリアル</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">言語 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../lang/basic">基本事項</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../lang/statement">文</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../lang/type">型とリテラル</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../lang/expression">式</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../lang/pattern">パターン</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../lang/dotnet">.NET関連の式</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ライブラリ <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li class="active">
+                            <a href=".">コアライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../list">リストライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../print">表示関数ライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../graphics">グラフィックスライブラリ</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">サンプル <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../sample/user">ユーザ作品</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../sample/lambdataro">lambdataro作品</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li >
+                    <a rel="next" href="../../lang/dotnet">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../list">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/lambdataro/Mokkosu">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#_1">コアライブラリ</a></li>
+        
+            <li><a href="#_2">システム関数</a></li>
+        
+            <li><a href="#_3">比較演算</a></li>
+        
+            <li><a href="#_10">整数演算</a></li>
+        
+            <li><a href="#_15">ビット演算</a></li>
+        
+            <li><a href="#_16">浮動小数点数演算</a></li>
+        
+            <li><a href="#_20">文字列演算</a></li>
+        
+            <li><a href="#_22">文字演算</a></li>
+        
+            <li><a href="#_23">論理演算</a></li>
+        
+            <li><a href="#_24">変換</a></li>
+        
+            <li><a href="#_25">関数</a></li>
+        
+            <li><a href="#_30">タプル</a></li>
+        
+            <li><a href="#_31">リファレンスセル</a></li>
+        
+            <li><a href="#_34">リスト</a></li>
+        
+            <li><a href="#maybe">Maybe</a></li>
+        
+            <li><a href="#_37">文字のリスト</a></li>
+        
+            <li><a href="#either">Either</a></li>
+        
+            <li><a href="#_38">配列</a></li>
+        
+            <li><a href="#_39">リフレクション</a></li>
+        
+            <li><a href="#_40">メッセージ</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="_1">コアライブラリ</h1>
+<h2 id="_2">システム関数</h2>
+<h3 id="println">println関数</h3>
+<pre><code>println : α -&gt; ()
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字の値を表示して改行します。</p>
+<h3 id="print">print関数</h3>
+<pre><code>print : α -&gt; ()
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字の値を表示します。</p>
+<h3 id="error">error関数</h3>
+<pre><code>error : String -&gt; α
+</code></pre>
+
+<p>実行時エラーを発生させます。
+引数にはエラー内容を記述します。</p>
+<h3 id="undefined">undefined関数</h3>
+<pre><code>undefined : α -&gt; β
+</code></pre>
+
+<p>変数や関数が未定義であることを示します。</p>
+<h3 id="ignore">ignore関数</h3>
+<pre><code>ignore : α -&gt; ()
+</code></pre>
+
+<p>引数を無視して<code>()</code>を返します。</p>
+<h2 id="_3">比較演算</h2>
+<h3 id="_4">(==)演算子</h3>
+<pre><code>__operator_eqeq : α -&gt; α -&gt; Bool
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字、真偽値、ユニットの値を比較し、
+等しければ<code>true</code>をそうでなければ<code>false</code>を返します。</p>
+<h3 id="_5">(&lt;&gt;)演算子</h3>
+<pre><code>__operator_ltgt : α -&gt; α -&gt; Bool
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字、真偽値、ユニットの値を比較し、
+等しければ<code>false</code>をそうでなければ<code>true</code>を返します。</p>
+<h3 id="_6">(&lt;)演算子</h3>
+<pre><code>__operator_lt : α -&gt; α -&gt; Bool
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字、真偽値、ユニットの値を比較し、
+左辺の方が右辺の値より小さい場合に<code>true</code>を、
+そうでない場合に<code>false</code>を返します。</p>
+<h3 id="_7">(&gt;)演算子</h3>
+<pre><code>__operator_gt : α -&gt; α -&gt; Bool
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字、真偽値、ユニットの値を比較し、
+左辺の方が右辺の値より大きい場合に<code>true</code>を、
+そうでない場合に<code>false</code>を返します。</p>
+<h3 id="_8">(&lt;=)演算子</h3>
+<pre><code>__operator_le : α -&gt; α -&gt; Bool
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字、真偽値、ユニットの値を比較し、
+左辺の方が右辺の値以下の場合に<code>true</code>を、
+そうでない場合に<code>false</code>を返します。</p>
+<h3 id="_9">(&gt;=)演算子</h3>
+<pre><code>__operator_le : α -&gt; α -&gt; Bool
+</code></pre>
+
+<p>整数、浮動小数点数、文字列、文字、真偽値、ユニットの値を比較し、
+左辺の方が右辺の値以上の場合に<code>true</code>を、
+そうでない場合に<code>false</code>を返します。</p>
+<h3 id="intequal">intequal関数</h3>
+<pre><code>intequal : Int -&gt; Int -&gt; Bool
+</code></pre>
+
+<p>2つの値を整数として比較して、等しい場合に<code>true</code>を、
+そうでない場合に<code>false</code>を返します。
+列挙体の値を等しさを判定する場合に使います。</p>
+<h3 id="max">max関数</h3>
+<pre><code>max : α -&gt; α -&gt; α
+</code></pre>
+
+<p>2つの引数のうち大きい方の値を返します。
+値は、整数、浮動小数点数、文字列、文字、真偽値、ユニットの値の
+いずれかである必要があります。</p>
+<h3 id="min">min関数</h3>
+<pre><code>min : α -&gt; α -&gt; α
+</code></pre>
+
+<p>2つの引数のうち小さい方の値を返します。
+値は、整数、浮動小数点数、文字列、文字、真偽値、ユニットの値の
+いずれかである必要があります。</p>
+<h2 id="_10">整数演算</h2>
+<h3 id="_11">(+)演算子</h3>
+<pre><code>__operator_pls : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数同士の加算です。</p>
+<h3 id="-">(-)演算子</h3>
+<pre><code>__operator_mns : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数同士の減算です。</p>
+<h3 id="_12">(*)演算子</h3>
+<pre><code>__operator_ast : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数同士の乗算です。</p>
+<h3 id="_13">(/)演算子</h3>
+<pre><code>__operator_sls : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数同士の除算です。</p>
+<h3 id="_14">(%)演算子</h3>
+<pre><code>__operator_per : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数同士の剰余です。</p>
+<h3 id="-_1">(~-)演算子</h3>
+<pre><code>__operator_neg : Int -&gt; Int
+</code></pre>
+
+<p>整数の符号を反転します。</p>
+<h3 id="succ">succ関数</h3>
+<pre><code>succ : Int -&gt; Int
+</code></pre>
+
+<p>引数の値に1足した値を返します。</p>
+<h3 id="pred">pred関数</h3>
+<pre><code>pred : Int -&gt; Int
+</code></pre>
+
+<p>引数の値から1引いた値を返します。</p>
+<h3 id="abs">abs関数</h3>
+<pre><code>abs : Int -&gt; Int
+</code></pre>
+
+<p>引数の整数の絶対値を求めます。</p>
+<h2 id="_15">ビット演算</h2>
+<h3 id="band">band関数</h3>
+<pre><code>band : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>2つの整数のビットごとの論理積を求めます。</p>
+<h3 id="bor">bor関数</h3>
+<pre><code>bor : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>2つの整数のビットごとの論理和を求めます。</p>
+<h3 id="bxor">bxor関数</h3>
+<pre><code>bxor : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>2つの整数のビットごとの排他的論理和を求めます。</p>
+<h3 id="bnot">bnot関数</h3>
+<pre><code>bnot : Int -&gt; Int
+</code></pre>
+
+<p>整数のすべてのビットを反転した値を返します。</p>
+<h3 id="bshr">bshr関数</h3>
+<pre><code>bshr : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数を指定した値分だけ右に算術シフトします。</p>
+<h3 id="bshl">bshl関数</h3>
+<pre><code>bshl : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数を指定した値分だけ左にシフトします。</p>
+<h3 id="bshrun">bshrun関数</h3>
+<pre><code>bshrun : Int -&gt; Int -&gt; Int
+</code></pre>
+
+<p>整数を指定した値分だけ右に論理シフトします。</p>
+<h2 id="_16">浮動小数点数演算</h2>
+<h3 id="_17">(+.)演算子</h3>
+<pre><code>__operator_plsdot : Double -&gt; Double -&gt; Double
+</code></pre>
+
+<p>浮動小数点数同士の和を求めます。</p>
+<h3 id="-_2">(-.)演算子</h3>
+<pre><code>__operator_mnsdot : Double -&gt; Double -&gt; Double
+</code></pre>
+
+<p>浮動小数点数同士の差を求めます。</p>
+<h3 id="_18">(*.)演算子</h3>
+<pre><code>__operator_astdot : Double -&gt; Double -&gt; Double
+</code></pre>
+
+<p>浮動小数点数同士の積を求めます。</p>
+<h3 id="_19">(/.)演算子</h3>
+<pre><code>__operator_astdot : Double -&gt; Double -&gt; Double
+</code></pre>
+
+<p>浮動小数点数の左辺の値を右辺の値で割った値を求めます。</p>
+<h3 id="-_3">(~-.)演算子</h3>
+<pre><code>__operator_negdot : Double -&gt; Double
+</code></pre>
+
+<p>浮動小数点数の符号を反転します。</p>
+<h3 id="fabs">fabs関数</h3>
+<pre><code>fabs : Double -&gt; Double
+</code></pre>
+
+<h3 id="pi">pi定数</h3>
+<pre><code>pi : Double
+</code></pre>
+
+<p>円周率です。</p>
+<h3 id="pi2">pi2定数</h3>
+<pre><code>pi2 : Double
+</code></pre>
+
+<p>円周率の2倍です。</p>
+<h3 id="e">e定数</h3>
+<pre><code>e : Double
+</code></pre>
+
+<p>自然対数の底です。</p>
+<h3 id="sqrt">sqrt関数</h3>
+<pre><code>sqrt : Double -&gt; Double
+</code></pre>
+
+<p>平方根を求めます。</p>
+<h3 id="exp">exp関数</h3>
+<pre><code>exp : Double -&gt; Double
+</code></pre>
+
+<p>自然対数の底の累乗を求めます。</p>
+<h3 id="log">log関数</h3>
+<pre><code>log : Double -&gt; Double
+</code></pre>
+
+<p>自然対数です。</p>
+<h3 id="log10">log10関数</h3>
+<pre><code>log10 : Double -&gt; Double
+</code></pre>
+
+<p>常用対数です。</p>
+<h3 id="logn">logn関数</h3>
+<pre><code>logn : Double -&gt; Double -&gt; Double
+</code></pre>
+
+<p><code>logn x base</code>で対数の底<code>base</code>を指定して<code>x</code>の対数を求めます。</p>
+<h3 id="pow">pow関数</h3>
+<pre><code>pow : Double -&gt; Double -&gt; Double
+</code></pre>
+
+<p><code>pow x y</code>で<code>x</code>の<code>y</code>乗を求めます。</p>
+<h3 id="sin-cos-tan">sin関数, cos関数, tan関数</h3>
+<pre><code>sin : Double -&gt; Double
+cos : Double -&gt; Double
+tan : Double -&gt; Double
+</code></pre>
+
+<p>三角関数です。単位はラジアンです。</p>
+<h3 id="asin-acos-atan">asin関数, acos関数, atan関数</h3>
+<pre><code>asin : Double -&gt; Double
+acos : Double -&gt; Double
+atan : Double -&gt; Double
+</code></pre>
+
+<p>逆三角関数です。</p>
+<h3 id="atan2">atan2関数</h3>
+<pre><code>atan2 : Double -&gt; Double -&gt; Double
+</code></pre>
+
+<p><code>atan2 x y</code>で<code>x/y</code>の逆正接を求めます。</p>
+<h3 id="sinhcoshtanh">sinh関数、cosh関数、tanh関数</h3>
+<pre><code>双曲線関数です。
+</code></pre>
+
+<h3 id="ceiling">ceiling関数</h3>
+<pre><code>ceiling : Double -&gt; Double
+</code></pre>
+
+<p>指定した数以上の数のうち最小の整数値を返します。</p>
+<h3 id="truncate">truncate関数</h3>
+<pre><code>truncate : Double -&gt; Double
+</code></pre>
+
+<p>指定した数の整数部を返します。</p>
+<h3 id="round">round関数</h3>
+<pre><code>round : Double -&gt; Double
+</code></pre>
+
+<p>指定した数を最も近い整数に丸めます。</p>
+<h3 id="floor">floor関数</h3>
+<pre><code>floor : Double -&gt; Double
+</code></pre>
+
+<p>指定した数以下の数のうち最大の整数値を返します。</p>
+<h2 id="_20">文字列演算</h2>
+<h3 id="_21">(^)演算子</h3>
+<pre><code>__operator_hat : String -&gt; String -&gt; String
+</code></pre>
+
+<p>2つの文字列を連結します。</p>
+<h3 id="to_string">to_string関数</h3>
+<pre><code>to_string : α -&gt; String
+</code></pre>
+
+<p>引数の値を文字列化します。
+値は、整数、浮動小数点数、文字列、文字のいずれかである必要があります。</p>
+<h3 id="strlen">strlen関数</h3>
+<pre><code>strlen : String -&gt; Int
+</code></pre>
+
+<p>文字列の長さを求めます。</p>
+<h3 id="strnth">strnth関数</h3>
+<pre><code>strnth : String -&gt; Int -&gt; Char
+</code></pre>
+
+<p>文字列のn番目の文字を返します。</p>
+<h2 id="_22">文字演算</h2>
+<h3 id="is_control">is_control関数</h3>
+<pre><code>is_control : Char -&gt; Bool
+</code></pre>
+
+<p>文字が制御文字であれば真を返します。</p>
+<h3 id="is_digit">is_digit関数</h3>
+<pre><code>is_digit : Char -&gt; Bool
+</code></pre>
+
+<p>文字が十進数字であれば真を返します。</p>
+<h3 id="is_letter">is_letter関数</h3>
+<pre><code>is_letter : Char -&gt; Bool
+</code></pre>
+
+<p>文字がUnicode文字であれば真を返します。</p>
+<h3 id="is_letter_or_digit">is_letter_or_digit関数</h3>
+<pre><code>is_letter_or_digit : Char -&gt; Bool
+</code></pre>
+
+<p>文字がUnicode文字か十進数字であれば真を返します。</p>
+<h3 id="is_lower">is_lower関数</h3>
+<pre><code>is_lower : Char -&gt; Bool
+</code></pre>
+
+<p>文字が小文字であれば真を返します。</p>
+<h3 id="is_symbol">is_symbol関数</h3>
+<pre><code>is_symbol : Char -&gt; Bool
+</code></pre>
+
+<p>文字が記号であれば真を返します。</p>
+<h3 id="is_upper">is_upper関数</h3>
+<pre><code>is_upper : Char -&gt; Bool
+</code></pre>
+
+<p>文字が大文字であれば真を返します。</p>
+<h3 id="is_control_1">is_control関数</h3>
+<pre><code>is_whitespace : Char -&gt; Bool
+</code></pre>
+
+<p>文字が空白文字であれば真を返します。</p>
+<h3 id="to_lower">to_lower関数</h3>
+<pre><code>to_lower : Char -&gt; Char
+</code></pre>
+
+<p>文字を小文字に変換します。</p>
+<h3 id="to_upper">to_upper関数</h3>
+<pre><code>to_upper : Char -&gt; Char
+</code></pre>
+
+<p>文字を大文字に変換します。</p>
+<h2 id="_23">論理演算</h2>
+<h3 id="not">not関数</h3>
+<pre><code>not : Bool -&gt; Bool
+</code></pre>
+
+<p>真偽値の反転です。</p>
+<pre><code>xor : Bool -&gt; Bool -&gt; Bool
+</code></pre>
+
+<p>真偽値の排他的論理和です。</p>
+<h2 id="_24">変換</h2>
+<h3 id="parse_int">parse_int関数</h3>
+<pre><code>parse_int : String -&gt; Int
+</code></pre>
+
+<p>整数を表す文字列を整数値に変換します。</p>
+<h3 id="parse_double">parse_double関数</h3>
+<pre><code>parse_double : String -&gt; Double
+</code></pre>
+
+<p>浮動小数点数を表す文字列を浮動小数点数値に変換します。</p>
+<h3 id="int_to_double">int_to_double関数</h3>
+<pre><code>int_to_double : Int -&gt; Double
+</code></pre>
+
+<p>整数を浮動小数点数値に変換します。</p>
+<h3 id="double_to_int">double_to_int関数</h3>
+<pre><code>double_to_int : Double -&gt; Int
+</code></pre>
+
+<p>浮動小数点数値を整数に変換します。</p>
+<h3 id="int_to_char">int_to_char関数</h3>
+<pre><code>int_to_char : Int -&gt; Char
+</code></pre>
+
+<p>文字コードを文字に変換します。</p>
+<h3 id="char_to_int">char_to_int関数</h3>
+<pre><code>char_to_int : Char -&gt; Int
+</code></pre>
+
+<p>文字の文字コードを返します。</p>
+<h3 id="int_to_single">int_to_single関数</h3>
+<pre><code>int_to_single : Int -&gt; {System.Single}
+</code></pre>
+
+<p>整数を単精度浮動小数点数に変換します。</p>
+<h3 id="single_to_int">single_to_int関数</h3>
+<pre><code>single_to_int : {System.Single} -&gt; Int
+</code></pre>
+
+<p>単精度浮動小数点数を整数に変換します。</p>
+<h3 id="double_to_single">double_to_single関数</h3>
+<pre><code>double_to_single : Double -&gt; {System.Single}
+</code></pre>
+
+<p>倍精度浮動小数点数を単精度浮動小数点数に変換します。</p>
+<h3 id="single_to_double">single_to_double関数</h3>
+<pre><code>single_to_double : {System.Single} -&gt; Double
+</code></pre>
+
+<p>単精度浮動小数点数を倍精度浮動小数点数に変換します。</p>
+<h3 id="box">box関数</h3>
+<pre><code>box : α -&gt; {System.Object}
+</code></pre>
+
+<p>値をObject型にキャストします。</p>
+<h2 id="_25">関数</h2>
+<h3 id="_26">(&lt;|)演算子</h3>
+<pre><code>__operator_ltbar : (α -&gt; β) -&gt; α -&gt; β
+</code></pre>
+
+<p>関数適用演算子。</p>
+<h3 id="_27">(|&gt;)演算子</h3>
+<pre><code>__operator_bargt : α -&gt; (α -&gt; β) -&gt; β
+</code></pre>
+
+<p>逆方向関数適用演算子</p>
+<h3 id="_28">(&lt;&lt;)演算子</h3>
+<pre><code>__operator_ltlt : (α -&gt; β) -&gt; (γ -&gt; α) -&gt; γ -&gt; β
+</code></pre>
+
+<p>関数合成。</p>
+<h3 id="_29">(&gt;&gt;)演算子</h3>
+<pre><code>__operator_gtgt : (α -&gt; β) -&gt; (β -&gt; γ) -&gt; α -&gt; γ
+</code></pre>
+
+<p>逆方向関数合成。</p>
+<h3 id="match">match関数</h3>
+<pre><code>match : α -&gt; (α -&gt; β) -&gt; β
+</code></pre>
+
+<p>第1引数の値を第2引数の関数に適用する。</p>
+<h3 id="id">id関数</h3>
+<pre><code>id : α -&gt; α
+</code></pre>
+
+<p>恒等関数。</p>
+<h3 id="const">const関数</h3>
+<pre><code>const : α -&gt; β -&gt; α
+</code></pre>
+
+<p>2引数受け取って、1引数目を返す。</p>
+<h3 id="flip">flip関数</h3>
+<pre><code>flip : (α -&gt; β -&gt; γ) -&gt; β -&gt; α -&gt; γ
+</code></pre>
+
+<p>関数の引数順を入れ替える。</p>
+<h2 id="_30">タプル</h2>
+<h3 id="fst">fst関数</h3>
+<pre><code>fst : (α, β) -&gt; α
+</code></pre>
+
+<p>2要素タプルの最初の要素を返す。</p>
+<h3 id="snd">snd関数</h3>
+<pre><code>snd : (α, β) -&gt; β
+</code></pre>
+
+<p>2要素タプルの2番目の要素を返す。</p>
+<h3 id="curry">curry関数</h3>
+<pre><code>curry : ((α, β) -&gt; γ) -&gt; α -&gt; β -&gt; γ
+</code></pre>
+
+<p>関数をカリー化する。</p>
+<h3 id="uncurry">uncurry関数</h3>
+<pre><code>uncurry : (α -&gt; β -&gt; γ) -&gt; (α, β) -&gt; γ
+</code></pre>
+
+<p>関数のカリー化を解除する。</p>
+<h2 id="_31">リファレンスセル</h2>
+<h3 id="ref">ref関数</h3>
+<pre><code>ref : α -&gt; Ref&lt;α&gt;
+</code></pre>
+
+<p>リファレンスセルを作る。</p>
+<h3 id="_32">(!)演算子</h3>
+<pre><code>__operator_bang : Ref&lt;α&gt; -&gt; α
+</code></pre>
+
+<p>参照を剥がす。</p>
+<h3 id="_33">(:=)演算子</h3>
+<pre><code>__operator_coleq : Ref&lt;α&gt; -&gt; α -&gt; ()
+</code></pre>
+
+<p>参照に代入する。</p>
+<h3 id="incr">incr関数</h3>
+<pre><code>incr : Ref&lt;Int&gt; -&gt; ()
+</code></pre>
+
+<p>参照の値を1増やす。</p>
+<h3 id="decr">decr関数</h3>
+<pre><code>decr : Ref&lt;Int&gt; -&gt; ()
+</code></pre>
+
+<p>参照の値を1減らす</p>
+<h2 id="_34">リスト</h2>
+<h3 id="_35">(..)演算子</h3>
+<pre><code>__operator_dotdot : Int -&gt; Int -&gt; [Int]
+</code></pre>
+
+<p>指定した範囲の整数を含むリストを生成する。</p>
+<h3 id="_36">(++)演算子</h3>
+<pre><code>__operator_plspls : [α] -&gt; [α] -&gt; [α]
+</code></pre>
+
+<p>2つのリストを連結する。</p>
+<h3 id="length">length関数</h3>
+<pre><code>length : [α] -&gt; Int
+</code></pre>
+
+<p>リストの長さを返す。</p>
+<h3 id="reverse">reverse関数</h3>
+<pre><code>reverse : [α] -&gt; [α]
+</code></pre>
+
+<p>反転したリストを返す。</p>
+<h3 id="map">map関数</h3>
+<pre><code>map : (α -&gt; β) -&gt; [α] -&gt; [β]
+</code></pre>
+
+<p>リストの各要素に関数を適用したリストを返す。</p>
+<h3 id="is_nil">is_nil関数</h3>
+<pre><code>is_nil : [α] -&gt; Bool
+</code></pre>
+
+<p>リストが空リストであれば真を返します。</p>
+<h3 id="head">head関数</h3>
+<pre><code>head : [α] -&gt; α
+</code></pre>
+
+<p>リストの先頭要素を返す。</p>
+<h3 id="tail">tail関数</h3>
+<pre><code>tail : [α] -&gt; [α]
+</code></pre>
+
+<p>リストの先頭を取り除いたリストを返す。</p>
+<h3 id="nth">nth関数</h3>
+<pre><code>nth : [α] -&gt; Int -&gt; α
+</code></pre>
+
+<p>リストのn番目の要素を返す</p>
+<h3 id="foldl">foldl関数</h3>
+<pre><code>foldl : (α -&gt; β -&gt; α) -&gt; α -&gt; [β] -&gt; α
+</code></pre>
+
+<p>リストを左から右に向かって畳み込みする。</p>
+<h3 id="foldr">foldr関数</h3>
+<pre><code>foldr : (α -&gt; β -&gt; β) -&gt; β -&gt; [α] -&gt; β
+</code></pre>
+
+<p>リストを右から左に向かって畳み込みする。</p>
+<h3 id="lookup">lookup関数</h3>
+<pre><code>lookup : α -&gt; [(α, β)] -&gt; Maybe&lt;β&gt;
+</code></pre>
+
+<p>連想リストから対応する値を探索する。
+見つからなければ<code>Nothing</code>を見つかった場合は<code>Just</code>でくるんだ値を返す。</p>
+<h3 id="concat">concat関数</h3>
+<pre><code>concat : [[α]] -&gt; [α]
+</code></pre>
+
+<p>リストのリストをリストに変換する。</p>
+<h3 id="concat_map">concat_map関数</h3>
+<pre><code>concat_map : (α -&gt; [β]) -&gt; [α] -&gt; [β]
+</code></pre>
+
+<p><code>map</code>してその結果を<code>concat</code>する。</p>
+<h2 id="maybe">Maybe</h2>
+<pre><code>type Maybe&lt;T&gt; = Nothing | Just(T);
+</code></pre>
+
+<h3 id="maybe_1">maybe関数</h3>
+<pre><code>maybe : α -&gt; (β -&gt; α) -&gt; Maybe&lt;β&gt; -&gt; α
+</code></pre>
+
+<p><code>Maybe</code>値に関数を適用する。<code>Nothing</code>のときはデフォルト値を返す。</p>
+<h3 id="map_maybe">map_maybe関数</h3>
+<pre><code>map_maybe : (α -&gt; β) -&gt; Maybe&lt;α&gt; -&gt; Maybe&lt;β&gt;
+</code></pre>
+
+<p><code>Maybe</code>値に関数を適用する。<code>Nothing</code>のときは<code>Nothing</code>を返す。</p>
+<h3 id="is_just">is_just関数</h3>
+<pre><code>is_just : Maybe&lt;α&gt; -&gt; Bool
+</code></pre>
+
+<p><code>Just(_)</code>であれば<code>true</code>を返し、そうでなければ<code>false</code>を返す。</p>
+<h3 id="is_nothing">is_nothing関数</h3>
+<pre><code>is_nothing : Maybe&lt;α&gt; -&gt; Bool
+</code></pre>
+
+<p><code>Nothing</code>であれば<code>true</code>を返し、そうでなければ<code>false</code>を返す。</p>
+<h3 id="from_just">from_just関数</h3>
+<pre><code>from_just : Maybe&lt;α&gt; -&gt; α
+</code></pre>
+
+<p><code>Maybe</code>値から値を取り出す。<code>Nothing</code>の場合はエラー</p>
+<h2 id="_37">文字のリスト</h2>
+<h3 id="string_to_list">string_to_list</h3>
+<pre><code>string_to_list : String -&gt; [Char]
+</code></pre>
+
+<p>文字列を文字のリストに変換します。</p>
+<pre><code>list_to_string : [Char] -&gt; String
+</code></pre>
+
+<p>文字のリストを文字列に変換します。</p>
+<h2 id="either">Either</h2>
+<pre><code>type Either&lt;T, U&gt; = Left(T) | Right(U);
+</code></pre>
+
+<h3 id="either_1">either関数</h3>
+<pre><code>either : (α -&gt; β) -&gt; (γ -&gt; β) -&gt; Either&lt;α, γ&gt; -&gt; β
+</code></pre>
+
+<p><code>Either</code>値に関数を適用する。</p>
+<h2 id="_38">配列</h2>
+<h3 id="list_to_array">list_to_array関数</h3>
+<pre><code>list_to_array : [{System.Object}] -&gt; {System.Object[]}
+</code></pre>
+
+<p><code>Object</code>のリストを<code>Object[]</code>に変換する。</p>
+<h3 id="format">format関数</h3>
+<pre><code>format : String -&gt; [{System.Object}] -&gt; String
+</code></pre>
+
+<p>フォーマット文字列に従って、値を文字列に変換する。</p>
+<h2 id="_39">リフレクション</h2>
+<h3 id="get_type">get_type関数</h3>
+<pre><code>get_type : String -&gt; {System.Type}
+</code></pre>
+
+<p>指定した名前の<code>Type</code>オブジェクトを返す。</p>
+<h3 id="null">null定数</h3>
+<pre><code>null : {System.Object}
+</code></pre>
+
+<p>null値。</p>
+<h2 id="_40">メッセージ</h2>
+<h3 id="msgbox">msgbox関数</h3>
+<pre><code>msgbox : α -&gt; ()
+</code></pre>
+
+<p>メッセージボックスに値を表示する。
+値は整数、浮動小数点数、文字列、文字のいずれか。</p>
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

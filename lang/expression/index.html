@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>式 - プログラミング言語 Mokkosu</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/prettify-1.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../css\extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">プログラミング言語 Mokkosu</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">始め方 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../start/install">インストールと実行</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/beginner">プログラミング初心者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/programmer">プログラミング経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/fptomok">関数型言語経験者向け</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../start/tutorial">チュートリアル</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">言語 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../basic">基本事項</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../statement">文</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../type">型とリテラル</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href=".">式</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../pattern">パターン</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../dotnet">.NET関連の式</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ライブラリ <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../library/corelib">コアライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/list">リストライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/print">表示関数ライブラリ</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../library/graphics">グラフィックスライブラリ</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">サンプル <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../sample/user">ユーザ作品</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../sample/lambdataro">lambdataro作品</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li >
+                    <a rel="next" href="../type">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../pattern">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/lambdataro/Mokkosu">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#_1">式</a></li>
+        
+            <li><a href="#_2">関数適用式</a></li>
+        
+            <li><a href="#do">do式</a></li>
+        
+            <li><a href="#let">let式</a></li>
+        
+            <li><a href="#fun">fun式</a></li>
+        
+            <li><a href="#if">if式</a></li>
+        
+            <li><a href="#pat">pat式</a></li>
+        
+            <li><a href="#_7">ブロック式</a></li>
+        
+            <li><a href="#for">for式</a></li>
+        
+            <li><a href="#_8">型強制式</a></li>
+        
+            <li><a href="#_9">コンス式</a></li>
+        
+            <li><a href="#_10">論理積</a></li>
+        
+            <li><a href="#_11">論理和</a></li>
+        
+            <li><a href="#_12">中値演算子式</a></li>
+        
+            <li><a href="#_13">前置演算子式</a></li>
+        
+            <li><a href="#_14">演算子の関数化</a></li>
+        
+            <li><a href="#_15">関数の中置</a></li>
+        
+            <li><a href="#_16">演算子優先順位</a></li>
+        
+            <li><a href="#_17">プリミティブ関数呼び出し</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="_1">式</h1>
+<p>式は計算すると値になるものです。</p>
+<h2 id="_2">関数適用式</h2>
+<pre><code>式1 式2
+</code></pre>
+
+<p>式2の計算結果を式1に適用します。</p>
+<h2 id="do">do式</h2>
+<h3 id="_3">基本形</h3>
+<pre><code>do 式1; 式2; ...; 式n; in 式
+</code></pre>
+
+<p>do式は式1から式nまでの式をを評価してそれぞれの結果を捨てて、
+式の評価結果を返します。
+それぞれの式は<code>()</code>型である必要があります。
+式nの後ろのセミコロンは省略できます。</p>
+<h3 id="_4">特殊形式</h3>
+<pre><code>do 式1; 式2; ...; 式n; end
+</code></pre>
+
+<p>上の式は以下の式と等価です。</p>
+<pre><code>do 式1; 式2; ...; 式n; in ()
+</code></pre>
+
+<h2 id="let">let式</h2>
+<h3 id="_5">基本形</h3>
+<pre><code>let パターン = 式1 in 式2
+</code></pre>
+
+<p>let式は式1を評価してパターンにマッチさせ式2を評価しその結果を返します。</p>
+<h3 id="_6">特殊形式</h3>
+<pre><code>let パターン パターン1 パターン2 ... = 式1 in 式2;
+</code></pre>
+
+<p>上の式は以下の式と等価です。</p>
+<pre><code>let パターン = \パターン1 パターン2 ... -&gt; 式1 in 式2;
+</code></pre>
+
+<h2 id="fun">fun式</h2>
+<pre><code>fun 関数名1 パターン11 パターン12 ... = 式1
+and 関数名2 パターン21 パターン22 ... = 式2
+...
+and 関数名n パターンn1 パターンn2 ... = 式n
+in 式
+</code></pre>
+
+<p>fun式は相互再帰関数を定義して式を評価します。
+<code>=</code>の後ろの式がブロック式の場合は、
+パターンの列を省略できます。</p>
+<h2 id="if">if式</h2>
+<pre><code>if 式1 -&gt; 式2 else 式3
+</code></pre>
+
+<p>if式は式1が true であれば式2を評価した結果を返し、
+式1が false であれば式3を評価した結果を返します。</p>
+<h2 id="pat">pat式</h2>
+<pre><code>pat パターン ? ガード = 式1 -&gt; 式2 else 式3
+</code></pre>
+
+<p>pat文は式1を評価しパターンとマッチさせ、ガードを満たした場合は式2を評価した結果を返し、
+パターンマッチに失敗するかガードを満たさなかった場合は式3を評価します。
+? ガード の部分は省略可能です。</p>
+<h2 id="_7">ブロック式</h2>
+<pre><code>{ ブロック構成子1; ブロック構成子2; ... ブロック構成子n; }
+</code></pre>
+
+<p>ブロック式は<code>{</code>と<code>}</code>で囲まれたブロック構成子の列です。
+最後のブロック構成子nの後ろのセミコロンは省略できます。</p>
+<p>ブロック構成子には、パターンマッチ式の</p>
+<pre><code>パターン ? ガード -&gt; 式
+</code></pre>
+
+<p>もしくは、以下のいずれかの形式がきます。</p>
+<pre><code>do 式
+</code></pre>
+
+<pre><code>let パターン = 式
+</code></pre>
+
+<pre><code>let パターン パターン1 パターン2 ... = 式
+</code></pre>
+
+<pre><code>fun 関数名1 パターン11 パターン12 ... = 式1
+and 関数名2 パターン21 パターン22 ... = 式2
+...
+and 関数名n パターンn1 パターンn2 ... = 式n
+</code></pre>
+
+<p>ブロック式は引数を受け取って、中に含まれるパターンマッチ式を
+上から順番に試していきます。
+その際、途中にdo式があったらそのdo式の式を評価して、
+let式やfun式があったら、新しい変数や関数が定義されます。</p>
+<h2 id="for">for式</h2>
+<p>for式はリストの各値に対して新しい値を生成して、
+その値を含む新しいリストを生成する構文です。</p>
+<pre><code>for 列挙子1; 列挙子2; ...; 列挙子n; in 式
+</code></pre>
+
+<p>という構文をしており、列挙子には、</p>
+<pre><code>パターン &lt;- 式
+</code></pre>
+
+<p>もしくは</p>
+<pre><code>if 式;
+</code></pre>
+
+<p>を指定します。</p>
+<p><code>パターン &lt;- 式</code>はリストになる式の各要素をパターンに束縛します。</p>
+<p><code>if式</code>はリストの要素になれる値の条件を指定します。</p>
+<h2 id="_8">型強制式</h2>
+<pre><code>(式 : 型)
+</code></pre>
+
+<p>で式が指定した型を持つことを強制します。</p>
+<h2 id="_9">コンス式</h2>
+<pre><code>式1 :: 式2
+</code></pre>
+
+<p>評価するとリストになる式2の先頭に式1の評価結果を連結します。</p>
+<h2 id="_10">論理積</h2>
+<pre><code>式1 &amp;&amp; 式2
+</code></pre>
+
+<p>式1と式2が両方ともtrueであればtrueを返します。
+式1がfalseの場合、式2は評価されません。</p>
+<h2 id="_11">論理和</h2>
+<pre><code>式1 || 式2
+</code></pre>
+
+<p>式1と式2のいずれかがtrueであればtrueを返します。
+式1がtrueの場合、式2は評価されません。</p>
+<h2 id="_12">中値演算子式</h2>
+<pre><code>式1 中値演算子 式2
+</code></pre>
+
+<p>演算子にはそれぞれ対応する名前がついており、
+中値演算子の場合は、</p>
+<pre><code>演算子名 式1 式2
+</code></pre>
+
+<p>という式に展開されます。</p>
+<p>中値演算子と演算子名の対応は以下の通りです。</p>
+<table>
+<thead>
+<tr>
+<th>演算子</th>
+<th>演算子名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(**)</td>
+<td>__operator_astast</td>
+</tr>
+<tr>
+<td>(&lt;&lt;)</td>
+<td>__operator_ltlt</td>
+</tr>
+<tr>
+<td>(&gt;&gt;)</td>
+<td>__operator_gtgt</td>
+</tr>
+<tr>
+<td>(..)</td>
+<td>__operator_dotdot</td>
+</tr>
+<tr>
+<td>(*)</td>
+<td>__operator_ast</td>
+</tr>
+<tr>
+<td>(/)</td>
+<td>__operator_sls</td>
+</tr>
+<tr>
+<td>(%)</td>
+<td>__operator_per</td>
+</tr>
+<tr>
+<td>(/.)</td>
+<td>__operator_slsdot</td>
+</tr>
+<tr>
+<td>(*.)</td>
+<td>__operator_astdot</td>
+</tr>
+<tr>
+<td>(+)</td>
+<td>__operator_pls</td>
+</tr>
+<tr>
+<td>(-)</td>
+<td>__operator_mns</td>
+</tr>
+<tr>
+<td>(+.)</td>
+<td>__operator_plsdot</td>
+</tr>
+<tr>
+<td>(-.)</td>
+<td>__operator_mnsdot</td>
+</tr>
+<tr>
+<td>(++)</td>
+<td>__operator_plspls</td>
+</tr>
+<tr>
+<td>(^)</td>
+<td>__operator_hat</td>
+</tr>
+<tr>
+<td>(&lt;)</td>
+<td>__operator_lt</td>
+</tr>
+<tr>
+<td>(&gt;)</td>
+<td>__operator_gt</td>
+</tr>
+<tr>
+<td>(&lt;=)</td>
+<td>__operator_le</td>
+</tr>
+<tr>
+<td>(&gt;=)</td>
+<td>__operator_ge</td>
+</tr>
+<tr>
+<td>(==)</td>
+<td>__operator_eqeq</td>
+</tr>
+<tr>
+<td>(&lt;&gt;)</td>
+<td>__operator_ltgt</td>
+</tr>
+<tr>
+<td>(:=)</td>
+<td>__operator_coleq</td>
+</tr>
+<tr>
+<td>(&lt;&#124;)</td>
+<td>__operator_ltbar</td>
+</tr>
+<tr>
+<td>(&#124;&gt;)</td>
+<td>__operator_bargt</td>
+</tr>
+<tr>
+<td>($)</td>
+<td>__operator_doll</td>
+</tr>
+<tr>
+<td>(&gt;&gt;=)</td>
+<td>__operator_gtgteq</td>
+</tr>
+<tr>
+<td>(=&lt;&lt;)</td>
+<td>__operator_eqltlt</td>
+</tr>
+<tr>
+<td>(=&lt;)</td>
+<td>__operator_eqlt</td>
+</tr>
+<tr>
+<td>(&lt;*&gt;)</td>
+<td>__operator_ltastgt</td>
+</tr>
+<tr>
+<td>(&lt;*)</td>
+<td>__operator_ltast</td>
+</tr>
+<tr>
+<td>(*&gt;)</td>
+<td>__operator_astgt</td>
+</tr>
+<tr>
+<td>(&lt;+&gt;)</td>
+<td>__operator_ltplsgt</td>
+</tr>
+<tr>
+<td>(&lt;+)</td>
+<td>__operator_ltpls</td>
+</tr>
+<tr>
+<td>(+&gt;)</td>
+<td>__operator_plsgt</td>
+</tr>
+<tr>
+<td>(&lt;-&gt;)</td>
+<td>__operator_ltmnsgt</td>
+</tr>
+<tr>
+<td>(&lt;&#124;&gt;)</td>
+<td>__operator_ltbargt</td>
+</tr>
+<tr>
+<td>(&lt;$&gt;)</td>
+<td>__operator_ltdollgt</td>
+</tr>
+<tr>
+<td>(&lt;**&gt;)</td>
+<td>__operator_ltastastgt</td>
+</tr>
+<tr>
+<td>(&lt;**)</td>
+<td>__operator_ltastast</td>
+</tr>
+<tr>
+<td>(**&gt;)</td>
+<td>__operator_astastgt</td>
+</tr>
+<tr>
+<td>(!!)</td>
+<td>__operator_bangbang</td>
+</tr>
+<tr>
+<td>(??)</td>
+<td>__operator_queque</td>
+</tr>
+<tr>
+<td>(***)</td>
+<td>__operator_astastast</td>
+</tr>
+<tr>
+<td>(&amp;&amp;&amp;)</td>
+<td>__operator_ampampamp</td>
+</tr>
+<tr>
+<td>(+++)</td>
+<td>__operator_plsplspls</td>
+</tr>
+<tr>
+<td>(&#124;&#124;&#124;)</td>
+<td>__operator_barbarbar</td>
+</tr>
+<tr>
+<td>(--)</td>
+<td>__operator_mnsmns</td>
+</tr>
+<tr>
+<td>(---)</td>
+<td>__operator_mnsmnsmns</td>
+</tr>
+</tbody>
+</table>
+<p>対応する名前の変数に値を束縛することで、
+演算子の意味を定義できます。
+いくつかの演算子は標準ライブラリで意味があらかじめ
+決められています。</p>
+<h2 id="_13">前置演算子式</h2>
+<pre><code>前置演算子 式
+</code></pre>
+
+<p>演算子にはそれぞれ対応する名前がついており、
+前置演算子の場合は、</p>
+<pre><code>演算子名 式
+</code></pre>
+
+<p>という式に展開されます。</p>
+<p>前置演算子と演算子名の対応は以下の通りです。</p>
+<table>
+<thead>
+<tr>
+<th>演算子</th>
+<th>演算子名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(~-)</td>
+<td>__operator_neg</td>
+</tr>
+<tr>
+<td>(~-.)</td>
+<td>__operator_negdot</td>
+</tr>
+<tr>
+<td>(!)</td>
+<td>__operator_bang</td>
+</tr>
+</tbody>
+</table>
+<p>対応する名前の変数に値を束縛することで、
+演算子の意味を定義できます。
+いくつかの演算子は標準ライブラリで意味があらかじめ
+決められています。</p>
+<h2 id="_14">演算子の関数化</h2>
+<pre><code>(演算子)
+</code></pre>
+
+<p>と書くと、対応する演算子を関数として扱うことができます。</p>
+<p>以下の3つは演算子ではありませんが、括弧で囲むことで関数にできます。</p>
+<pre><code>(&amp;&amp;)
+(||)
+(::)
+</code></pre>
+
+<h2 id="_15">関数の中置</h2>
+<pre><code>式1 `関数名` 式2
+</code></pre>
+
+<p>という式は、以下の式に展開されます。</p>
+<pre><code>関数名 式1 式2
+</code></pre>
+
+<h2 id="_16">演算子優先順位</h2>
+<p>演算子の結合と優先順位は以下のようになっています。
+表の下から上に向かって優先度が高くなっています。</p>
+<table>
+<thead>
+<tr>
+<th>結合</th>
+<th>演算子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>右</td>
+<td>(~-), (~-.), (!)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>メソッド呼び出し</td>
+</tr>
+<tr>
+<td>左</td>
+<td>関数適用</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(**), (&lt;&lt;), (&gt;&gt;), (..)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(*), (/), (%), (*.), (/.)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(+), (-), (+.), (-.)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(++), (^), (::)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(&lt;), (&gt;), (&lt;=), (&gt;=), (==), (&lt;&gt;)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(&amp;&amp;)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(&#124;&#124;)</td>
+</tr>
+<tr>
+<td>左</td>
+<td>`関数名`</td>
+</tr>
+<tr>
+<td>左</td>
+<td>(:=), (&lt;&#124;), (&#124;&gt;), ($), (&gt;&gt;=), (=&lt;&lt;), (=&lt;), <br/> (&lt;*&gt;), (&lt;*), (*&gt;), (&lt;+&gt;), (&lt;+), (+&gt;), (&lt;-&gt;),<br/> (&lt;&#124;&gt;), (&lt;$&gt;), (&lt;**&gt;), (&lt;**), (**&gt;), (!!), (??), <br/>(***), (&amp;&amp;&amp;),(+++), (&#124;&#124;&#124;), (--), (---)</td>
+</tr>
+<tr>
+<td>右</td>
+<td>(&lt;</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_17">プリミティブ関数呼び出し</h2>
+<pre><code>__prim &quot;プリミティブ名&quot; (式1, 式2, ...)
+</code></pre>
+
+<p>言語にあらかじめ備わっているプリミティブ関数を呼び出します。</p>
+<p>プリミティブ関数には以下のものがあります。</p>
+<table>
+<thead>
+<tr>
+<th>プリミティブ関数名</th>
+<th>機能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add</td>
+<td>整数加算</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>整数減算</td>
+</tr>
+<tr>
+<td>mul</td>
+<td>整数乗算</td>
+</tr>
+<tr>
+<td>div</td>
+<td>整数除算</td>
+</tr>
+<tr>
+<td>mod</td>
+<td>整数剰余</td>
+</tr>
+<tr>
+<td>band</td>
+<td>ビットごとのAND</td>
+</tr>
+<tr>
+<td>bor</td>
+<td>ビットごとのOR</td>
+</tr>
+<tr>
+<td>bxor</td>
+<td>ビットごとのXOR</td>
+</tr>
+<tr>
+<td>bshr</td>
+<td>算術右シフト</td>
+</tr>
+<tr>
+<td>bshrun</td>
+<td>論理右シフト</td>
+</tr>
+<tr>
+<td>bshl</td>
+<td>左シフト</td>
+</tr>
+<tr>
+<td>bnot</td>
+<td>ビットの反転</td>
+</tr>
+<tr>
+<td>fadd</td>
+<td>浮動小数点数加算</td>
+</tr>
+<tr>
+<td>fsub</td>
+<td>浮動小数点数減算</td>
+</tr>
+<tr>
+<td>fmul</td>
+<td>浮動小数点数乗算</td>
+</tr>
+<tr>
+<td>fdiv</td>
+<td>浮動小数点数除算</td>
+</tr>
+<tr>
+<td>eq</td>
+<td>比較(等しい)</td>
+</tr>
+<tr>
+<td>ne</td>
+<td>比較(等しくない)</td>
+</tr>
+<tr>
+<td>lt</td>
+<td>比較(より小さい)</td>
+</tr>
+<tr>
+<td>gt</td>
+<td>比較(より大きい)</td>
+</tr>
+<tr>
+<td>le</td>
+<td>比較(以下)</td>
+</tr>
+<tr>
+<td>ge</td>
+<td>比較(以上)</td>
+</tr>
+<tr>
+<td>concat</td>
+<td>文字列連結</td>
+</tr>
+<tr>
+<td>print</td>
+<td>値の表示</td>
+</tr>
+<tr>
+<td>println</td>
+<td>値を表示して改行</td>
+</tr>
+<tr>
+<td>tostring</td>
+<td>値の文字列化</td>
+</tr>
+<tr>
+<td>error</td>
+<td>実行時エラーを発生させる</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>リファレンスセルを作る</td>
+</tr>
+<tr>
+<td>deref</td>
+<td>リファレンスセルの値を取り出す</td>
+</tr>
+<tr>
+<td>assign</td>
+<td>リファレンスセルへの代入</td>
+</tr>
+<tr>
+<td>loadnull</td>
+<td>null値を生成する</td>
+</tr>
+<tr>
+<td>intequal</td>
+<td>強制的に整数として値の等しさを調べる</td>
+</tr>
+</tbody>
+</table>
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

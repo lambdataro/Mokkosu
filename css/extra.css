@@ -1,0 +1,59 @@
+div.col-md-9 img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.col-md-9 p {
+    margin: 20px 0;
+    font-size: medium;
+    line-height: 1.5;
+    font-size: 11pt;
+}
+
+div.col-md-9 h1 {
+    margin: 50px 0 30px;
+    font-size: 30pt;
+    color: DimGray;
+}
+
+div.col-md-9 h2 {
+    border-top: solid 2px;
+    border-bottom: solid 2px;
+    border-color: DimGray;
+    padding: 8px;
+    margin: 40px 0 20px;
+    font-size: 24pt;
+    text-align: center;
+    color: DimGray;
+}
+
+div.col-md-9 h3 {
+    margin: 35px 0 15px;
+    font-size: 18pt;
+    color: DimGray;
+}
+
+div.col-md-9 table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+div.col-md-9 th {
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+div.col-md-9 td {
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+div.col-md-9 code {
+  background-color: WhiteSmoke;
+  color: black;
+}
+
+body {
+  margin-bottom: 80px;
+}
